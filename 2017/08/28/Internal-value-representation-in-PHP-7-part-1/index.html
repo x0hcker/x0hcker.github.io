@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="//www.zwting.com">
+  <title>PHP7扩展开发官方译文[1] | 醉翁亭</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="附加一段文章摘要，字数最好在140字以内，会出现在meta的description里面">
+<meta name="keywords" content="PHP7扩展开发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP7扩展开发官方译文[1]">
+<meta property="og:url" content="//www.zwting.com/2017/08/28/Internal-value-representation-in-PHP-7-part-1/index.html">
+<meta property="og:site_name" content="醉翁亭">
+<meta property="og:description" content="附加一段文章摘要，字数最好在140字以内，会出现在meta的description里面">
+<meta property="og:updated_time" content="2017-08-30T06:49:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP7扩展开发官方译文[1]">
+<meta name="twitter:description" content="附加一段文章摘要，字数最好在140字以内，会出现在meta的description里面">
+  
+    <link rel="alternative" href="/atom.xml" title="醉翁亭" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" type="text/css" href="/./main.234bc0.css">
+  <style type="text/css">
+  
+    #container.show {
+      background: linear-gradient(200deg,#a0cfe4,#e8c37e);
+    }
+  </style>
+  
+
+  
+
+</head>
+
+<body>
+  <div id="container" q-class="show:isCtnShow">
+    <canvas id="anm-canvas" class="anm-canvas"></canvas>
+    <div class="left-col" q-class="show:isShow">
+      
+<div class="overlay" style="background: #4d4d4d"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="/img/head.jpeg" class="js-avatar">
+		</a>
+		<hgroup>
+		  <h1 class="header-author"><a href="/">醉翁亭</a></h1>
+		</hgroup>
+		
+		<p class="header-subtitle">穷则独善其身，达则兼济天下</p>
+		
+
+	<nav class="header-menu">
+	
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
+	
+	</nav>
+		<nav class="header-smart-menu">
+    		
+    			
+    			<a q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
+    			
+            
+    			
+    			<a q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
+    			
+            
+    			
+    			<a q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+		        
+					<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
+		        
+					<a class="rss" target="_blank" href="#" title="rss"><i class="icon-rss"></i></a>
+		        
+					<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+		        
+			</div>
+		</nav>
+
+
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
+      
+<nav id="mobile-nav">
+  	<div class="overlay js-overlay" style="background: #4d4d4d"></div>
+	<div class="btnctn js-mobile-btnctn">
+  		<div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
+	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="/img/head.jpeg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author js-header-author">醉翁亭</h1>
+			</hgroup>
+			
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>穷则独善其身，达则兼济天下<i class="icon icon-quo-right"></i></p>
+			
+			
+			
+				
+			
+				
+			
+			
+			
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
+			        
+						<a class="rss" target="_blank" href="#" title="rss"><i class="icon-rss"></i></a>
+			        
+						<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+			        
+				</div>
+			</nav>
+
+			<nav class="header-menu js-header-menu">
+				<ul style="width: 50%">
+				
+				
+					<li style="width: 50%"><a href="/">主页</a></li>
+		        
+					<li style="width: 50%"><a href="/tags/随笔/">随笔</a></li>
+		        
+				</ul>
+			</nav>
+		</header>				
+	</div>
+	<div class="mobile-mask" style="display:none" q-show="isShow"></div>
+</nav>
+
+      <div id="wrapper" class="body-wrap">
+        <div class="menu-l">
+          <div class="canvas-wrap">
+            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
+          </div>
+          <div id="js-content" class="content-ll">
+            <article id="post-Internal-value-representation-in-PHP-7-part-1" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      PHP7扩展开发官方译文[1]
+    </h1>
+  
+
+        
+        <a href="/2017/08/28/Internal-value-representation-in-PHP-7-part-1/" class="archive-article-date">
+  	<time datetime="2017-08-28T07:51:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><em>本文第一部分和第二均翻译自Nikita Popov(nikic，PHP 官方开发组成员，柏林科技大学的学生) 的<a href="http://nikic.github.io/" target="_blank" rel="external">博客</a>。为了更符合汉语的阅读习惯，文中并不会逐字逐句的翻译。</em></p>
+<p><em>要理解本文，你应该对 PHP5 中变量的实现有了一些了解，本文重点在于解释 PHP7 中 zval 的变化。</em></p>
+<p>由于大量的细节描述，本文将会分成两个部分：第一部分主要描述 zval(zend value) 的实现在 PHP5 和 PHP7 中有何不同以及引用的实现。第二部分将会分析单独类型（strings、objects）的细节。</p>
+<h2 id="PHP5-中的-zval"><a href="#PHP5-中的-zval" class="headerlink" title="PHP5 中的 zval"></a>PHP5 中的 zval</h2><p>PHP5 中 zval 结构体定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">zval_struct</span> &#123;</span></div><div class="line">    zvalue_value value;</div><div class="line">    zend_uint refcount__gc;</div><div class="line">    zend_uchar type;</div><div class="line">    zend_uchar is_ref__gc;</div><div class="line">&#125; zval;</div></pre></td></tr></table></figure>
+<p>如上，zval 包含一个 <code>value</code>、一个 <code>type</code> 以及两个 <code>__gc</code> 后缀的字段。<code>value</code> 是个联合体，用于存储不同类型的值：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">union</span> _zvalue_value &#123;</div><div class="line">    <span class="keyword">long</span> lval;                 <span class="comment">// 用于 bool 类型、整型和资源类型</span></div><div class="line">    <span class="keyword">double</span> dval;               <span class="comment">// 用于浮点类型</span></div><div class="line">    <span class="class"><span class="keyword">struct</span> &#123;</span>                   <span class="comment">// 用于字符串</span></div><div class="line">        <span class="keyword">char</span> *val;</div><div class="line">        <span class="keyword">int</span> len;</div><div class="line">    &#125; str;</div><div class="line">    HashTable *ht;             <span class="comment">// 用于数组</span></div><div class="line">    zend_object_value obj;     <span class="comment">// 用于对象</span></div><div class="line">    zend_ast *ast;             <span class="comment">// 用于常量表达式(PHP5.6 才有)</span></div><div class="line">&#125; zvalue_value;</div></pre></td></tr></table></figure>
+<p>C 语言联合体的特征是一次只有一个成员是有效的并且分配的内存与需要内存最多的成员匹配（也要考虑内存对齐）。所有成员都存储在内存的同一个位置，根据需要存储不同的值。当你需要 <code>lval</code> 的时候，它存储的是有符号整形，需要 <code>dval</code> 时，会存储双精度浮点数。</p>
+<p>需要指出的是是联合体中当前存储的数据类型会记录到 <code>type</code> 字段，用一个整型来标记：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_NULL     0      <span class="comment">/* Doesn't use value */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_LONG     1      <span class="comment">/* Uses lval */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_DOUBLE   2      <span class="comment">/* Uses dval */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_BOOL     3      <span class="comment">/* Uses lval with values 0 and 1 */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_ARRAY    4      <span class="comment">/* Uses ht */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_OBJECT   5      <span class="comment">/* Uses obj */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_STRING   6      <span class="comment">/* Uses str */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_RESOURCE 7      <span class="comment">/* Uses lval, which is the resource ID */</span></span></div><div class="line"></div><div class="line"><span class="comment">/* Special types used for late-binding of constants */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_CONSTANT 8</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_CONSTANT_AST 9</span></div></pre></td></tr></table></figure>
+<h2 id="PHP5-中的引用计数"><a href="#PHP5-中的引用计数" class="headerlink" title="PHP5 中的引用计数"></a>PHP5 中的引用计数</h2><p>在PHP5中，zval 的内存是单独从堆（heap）中分配的（有少数例外情况），PHP 需要知道哪些 zval 是正在使用的，哪些是需要释放的。所以这就需要用到引用计数：zval 中 <code>refcount__gc</code> 的值用于保存 zval 本身被引用的次数，比如 <code>$a = $b = 42</code> 语句中，<code>42</code> 被两个变量引用，所以它的引用计数就是 2。如果引用计数变成 0，就意味着这个变量已经没有用了，内存也就可以释放了。</p>
+<p>注意这里提及到的引用计数指的不是 PHP 代码中的引用（使用 <code>&amp;</code>），而是变量的使用次数。后面两者需要同时出现时会使用『PHP 引用』和『引用』来区分两个概念，这里先忽略掉 PHP 的部分。</p>
+<p>一个和引用计数紧密相关的概念是『写时复制』：对于多个引用来说，zaval 只有在没有变化的情况下才是共享的，一旦其中一个引用改变 zval 的值，就需要复制（”separated”）一份 zval，然后修改复制后的 zval。</p>
+<p>下面是一个关于『写时复制』和 zval 的销毁的例子：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$a = <span class="number">42</span>;   <span class="comment">// $a         -&gt; zval_1(type=IS_LONG, value=42, refcount=1)</span></div><div class="line">$b = $a;   <span class="comment">// $a, $b     -&gt; zval_1(type=IS_LONG, value=42, refcount=2)</span></div><div class="line">$c = $b;   <span class="comment">// $a, $b, $c -&gt; zval_1(type=IS_LONG, value=42, refcount=3)</span></div><div class="line"></div><div class="line"><span class="comment">// 下面几行是关于 zval 分离的</span></div><div class="line">$a += <span class="number">1</span>;   <span class="comment">// $b, $c -&gt; zval_1(type=IS_LONG, value=42, refcount=2)</span></div><div class="line">           <span class="comment">// $a     -&gt; zval_2(type=IS_LONG, value=43, refcount=1)</span></div><div class="line"></div><div class="line"><span class="keyword">unset</span>($b); <span class="comment">// $c -&gt; zval_1(type=IS_LONG, value=42, refcount=1)</span></div><div class="line">           <span class="comment">// $a -&gt; zval_2(type=IS_LONG, value=43, refcount=1)</span></div><div class="line"></div><div class="line"><span class="keyword">unset</span>($c); <span class="comment">// zval_1 is destroyed, because refcount=0</span></div><div class="line">           <span class="comment">// $a -&gt; zval_2(type=IS_LONG, value=43, refcount=1)</span></div></pre></td></tr></table></figure>
+<p>引用计数有个致命的问题：无法检查并释放<a href="http://derickrethans.nl/circular-references.html" target="_blank" rel="external">循环引用</a>（使用的内存）。为了解决这问题，PHP 使用了<a href="http://php.net/manual/zh/features.gc.collecting-cycles.php" target="_blank" rel="external">循环回收</a>的方法。当一个 zval 的计数减一时，就有可能属于循环的一部分，这时将 zval 写入到『根缓冲区』中。当缓冲区满时，潜在的循环会被打上标记并进行回收。</p>
+<p>因为要支持循环回收，实际使用的 zval 的结构实际上如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">zval_gc_info</span> &#123;</span></div><div class="line">    zval z;</div><div class="line">    <span class="keyword">union</span> &#123;</div><div class="line">        gc_root_buffer       *buffered;</div><div class="line">        <span class="class"><span class="keyword">struct</span> _<span class="title">zval_gc_info</span> *<span class="title">next</span>;</span></div><div class="line">    &#125; u;</div><div class="line">&#125; zval_gc_info;</div></pre></td></tr></table></figure>
+<p><code>zval_gc_info</code> 结构体中嵌入了一个正常的 zval 结构，同时也增加了两个指针参数，但是共属于同一个联合体 <code>u</code>，所以实际使用中只有一个指针是有用的。<code>buffered</code> 指针用于存储 zval 在根缓冲区的引用地址，所以如果在循环回收执行之前 zval 已经被销毁了，这个字段就可能被移除了。<code>next</code> 在回收销毁值的时候使用，这里不会深入。</p>
+<h2 id="修改动机"><a href="#修改动机" class="headerlink" title="修改动机"></a>修改动机</h2><p>下面说说关于内存使用上的情况，这里说的都是指在 64 位的系统上。首先，由于 <code>str</code> 和 <code>obj</code> 占用的大小一样， <code>zvalue_value</code> 这个联合体占用 16 个字节（bytes）的内存。整个 <code>zval</code> 结构体占用的内存是 24 个字节（考虑到内存对齐），<code>zval_gc_info</code> 的大小是 32 个字节。综上，在堆（相对于栈）分配给 zval 的内存需要额外的 16 个字节，所以每个 zval 在不同的地方一共需要用到 48 个字节（要理解上面的计算方式需要注意每个指针在 64 位的系统上也需要占用 8 个字节）。</p>
+<p>在这点上不管从什么方面去考虑都可以认为 zval 的这种设计效率是很低的。比如 zval 在存储整型的时候本身只需要 8 个字节，即使考虑到需要存一些附加信息以及内存对齐，额外 8 个字节应该也是足够的。</p>
+<p>在存储整型时本来确实需要 16 个字节，但是实际上还有 16 个字节用于引用计数、16 个字节用于循环回收。所以说 zval 的内存分配和释放都是消耗很大的操作，我们有必要对其进行优化。</p>
+<p>从这个角度思考：一个整型数据真的需要存储引用计数、循环回收的信息并且单独在堆上分配内存吗？答案是当然不，这种处理方式一点都不好。</p>
+<p>这里总结一下 PHP5 中 zval 实现方式存在的主要问题：</p>
+<ul>
+<li>zval 总是单独从堆中分配内存；</li>
+<li>zval 总是存储引用计数和循环回收的信息，即使是整型这种可能并不需要此类信息的数据；</li>
+<li>在使用对象或者资源时，直接引用会导致两次计数（原因会在下一部分讲）；</li>
+<li>某些间接访问需要一个更好的处理方式。比如现在访问存储在变量中的对象间接使用了四个指针（指针链的长度为四）。这个问题也放到下一部分讨论；</li>
+<li>直接计数也就意味着数值只能在 zval 之间共享。如果想在 zval 和 hashtable key 之间共享一个字符串就不行（除非 hashtable key 也是 zval）。</li>
+</ul>
+<h2 id="PHP7-中的-zval"><a href="#PHP7-中的-zval" class="headerlink" title="PHP7 中的 zval"></a>PHP7 中的 zval</h2><p>在 PHP7 中 zval 有了新的实现方式。最基础的变化就是 zval 需要的内存不再是单独从堆上分配，不再自己存储引用计数。复杂数据类型（比如字符串、数组和对象）的引用计数由其自身来存储。这种实现方式有以下好处：</p>
+<ul>
+<li>简单数据类型不需要单独分配内存，也不需要计数；</li>
+<li>不会再有两次计数的情况。在对象中，只有对象自身存储的计数是有效的；</li>
+<li>由于现在计数由数值自身存储，所以也就可以和非 zval 结构的数据共享，比如 zval 和 hashtable key 之间；</li>
+<li>间接访问需要的指针数减少了。</li>
+</ul>
+<p>我们看看现在 zval 结构体的定义（现在在 zend_types.h 文件中）：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">zval_struct</span> &#123;</span></div><div class="line">	zend_value        value;			<span class="comment">/* value */</span></div><div class="line">	<span class="keyword">union</span> &#123;</div><div class="line">		<span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">			ZEND_ENDIAN_LOHI_4(</div><div class="line">				zend_uchar    type,			<span class="comment">/* active type */</span></div><div class="line">				zend_uchar    type_flags,</div><div class="line">				zend_uchar    const_flags,</div><div class="line">				zend_uchar    reserved)	    <span class="comment">/* call info for EX(This) */</span></div><div class="line">		&#125; v;</div><div class="line">		<span class="keyword">uint32_t</span> type_info;</div><div class="line">	&#125; u1;</div><div class="line">	<span class="keyword">union</span> &#123;</div><div class="line">		<span class="keyword">uint32_t</span>     var_flags;</div><div class="line">		<span class="keyword">uint32_t</span>     next;                 <span class="comment">/* hash collision chain */</span></div><div class="line">		<span class="keyword">uint32_t</span>     cache_slot;           <span class="comment">/* literal cache slot */</span></div><div class="line">		<span class="keyword">uint32_t</span>     lineno;               <span class="comment">/* line number (for ast nodes) */</span></div><div class="line">		<span class="keyword">uint32_t</span>     num_args;             <span class="comment">/* arguments number for EX(This) */</span></div><div class="line">		<span class="keyword">uint32_t</span>     fe_pos;               <span class="comment">/* foreach position */</span></div><div class="line">		<span class="keyword">uint32_t</span>     fe_iter_idx;          <span class="comment">/* foreach iterator index */</span></div><div class="line">	&#125; u2;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>结构体的第一个元素没太大变化，仍然是一个 <code>value</code> 联合体。第二个成员是由一个表示类型信息的整型和一个包含四个字符变量的结构体组成的联合体（可以忽略 <code>ZEND_ENDIAN_LOHI_4</code> 宏，它只是用来解决跨平台大小端问题的）。这个子结构中比较重要的部分是 <code>type</code>（和以前类似）和 <code>type_flags</code>，这个接下来会解释。</p>
+<p>上面这个地方也有一点小问题：<code>value</code> 本来应该占 8 个字节，但是由于内存对齐，哪怕只增加一个字节，实际上也是占用 16 个字节（使用一个字节就意味着需要额外的 8 个字节）。但是显然我们并不需要 8 个字节来存储一个 type 字段，所以我们在 <code>u1</code> 的后面增加了了一个名为 <code>u2</code> 的联合体。默认情况下是用不到的，需要使用的时候可以用来存储 4 个字节的数据。这个联合体可以满足不同场景下的需求。</p>
+<p>PHP7 中 <code>value</code> 的结构定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">union</span> _zend_value &#123;</div><div class="line">	zend_long         lval;				<span class="comment">/* long value */</span></div><div class="line">	<span class="keyword">double</span>            dval;				<span class="comment">/* double value */</span></div><div class="line">	zend_refcounted  *counted;</div><div class="line">	zend_string      *str;</div><div class="line">	zend_array       *arr;</div><div class="line">	zend_object      *obj;</div><div class="line">	zend_resource    *res;</div><div class="line">	zend_reference   *ref;</div><div class="line">	zend_ast_ref     *ast;</div><div class="line">	zval             *zv;</div><div class="line">	<span class="keyword">void</span>             *ptr;</div><div class="line">	zend_class_entry *ce;</div><div class="line">	zend_function    *func;</div><div class="line">	<span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">		<span class="keyword">uint32_t</span> w1;</div><div class="line">		<span class="keyword">uint32_t</span> w2;</div><div class="line">	&#125; ww;</div><div class="line">&#125; zend_value;</div></pre></td></tr></table></figure>
+<p>首先需要注意的是现在 value 联合体需要的内存是 8 个字节而不是 16。它只会直接存储整型（<code>lval</code>）或者浮点型（<code>dval</code>）数据，其他情况下都是指针（上面提到过，指针占用 8 个字节，最下面的结构体由两个 4 字节的无符号整型组成）。上面所有的指针类型（除了特殊标记的）都有一个同样的头（<code>zend_refcounted</code>）用来存储引用计数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">zend_refcounted_h</span> &#123;</span></div><div class="line">	<span class="keyword">uint32_t</span>         refcount;			<span class="comment">/* reference counter 32-bit */</span></div><div class="line">	<span class="keyword">union</span> &#123;</div><div class="line">		<span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">			ZEND_ENDIAN_LOHI_3(</div><div class="line">				zend_uchar    type,</div><div class="line">				zend_uchar    flags,    <span class="comment">/* used for strings &amp; objects */</span></div><div class="line">				<span class="keyword">uint16_t</span>      gc_info)  <span class="comment">/* keeps GC root number (or 0) and color */</span></div><div class="line">		&#125; v;</div><div class="line">		<span class="keyword">uint32_t</span> type_info;</div><div class="line">	&#125; u;</div><div class="line">&#125; zend_refcounted_h;</div></pre></td></tr></table></figure>
+<p>现在，这个结构体肯定会包含一个存储引用计数的字段。除此之外还有 <code>type</code>、<code>flags</code> 和 <code>gc_info</code>。<code>type</code> 存储的和 zval 中的 type 相同的内容，这样 GC 在不存储 zval 的情况下单独使用引用计数。<code>flags</code> 在不同的数据类型中有不同的用途，这个放到下一部分讲。</p>
+<p><code>gc_info</code> 和 PHP5 中的 <code>buffered</code> 作用相同，不过不再是位于根缓冲区的指针，而是一个索引数字。因为以前根缓冲区的大小是固定的（10000 个元素），所以使用一个 16 位（2 字节）的数字代替 64 位（8 字节）的指针足够了。<code>gc_info</code> 中同样包含一个『颜色』位用于回收时标记结点。</p>
+<h2 id="zval-内存管理"><a href="#zval-内存管理" class="headerlink" title="zval 内存管理"></a>zval 内存管理</h2><p>上文提到过 zval 需要的内存不再单独从堆上分配。但是显然总要有地方来存储它，所以会存在哪里呢？实际上大多时候它还是位于堆中（所以前文中提到的地方重点不是<code>堆</code>，而是<code>单独分配</code>），只不过是嵌入到其他的数据结构中的，比如 hashtable 和 bucket 现在就会直接有一个 zval 字段而不是指针。所以函数表编译变量和对象属性在存储时会是一个 zval 数组并得到一整块内存而不是散落在各处的 zval 指针。之前的 <code>zval *</code> 现在都变成了 <code>zval</code>。</p>
+<p>之前当 zval 在一个新的地方使用时会复制一份 <code>zval *</code> 并增加一次引用计数。现在就直接复制 zval 的值（忽略 <code>u2</code>），某些情况下<em>可能</em>会增加其结构指针指向的引用计数（如果在进行计数）。</p>
+<p>那么 PHP 怎么知道 zval 是否正在计数呢？不是所有的数据类型都能知道，因为有些类型（比如字符串或数组）并不是总需要进行引用计数。所以 <code>type_info</code> 字段就是用来记录 zval 是否在进行计数的，这个字段的值有以下几种情况：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_TYPE_CONSTANT            (1&lt;&lt;0)   <span class="comment">/* special */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_TYPE_IMMUTABLE           (1&lt;&lt;1)   <span class="comment">/* special */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_TYPE_REFCOUNTED          (1&lt;&lt;2)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_TYPE_COLLECTABLE         (1&lt;&lt;3)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_TYPE_COPYABLE            (1&lt;&lt;4)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_TYPE_SYMBOLTABLE         (1&lt;&lt;5)   <span class="comment">/* special */</span></span></div></pre></td></tr></table></figure>
+<p><em>注：在 7.0.0 的正式版本中，上面这一段宏定义的注释这几个宏是供 <code>zval.u1.v.type_flags</code> 使用的。这应该是注释的错误，因为这个上述字段是 <code>zend_uchar</code> 类型。</em></p>
+<p><code>type_info</code> 的三个主要的属性就是『可计数』（refcounted）、『可回收』（collectable）和『可复制』（copyable）。计数的问题上面已经提过了。『可回收』用于标记 zval 是否参与循环，不如字符串通常是可计数的，但是你却没办法给字符串制造一个循环引用的情况。</p>
+<p>是否可复制用于表示在复制时是否需要在复制时制造（原文用的 “duplication” 来表述，用中文表达出来可能不是很好理解）一份一模一样的实体。”duplication” 属于深度复制，比如在复制数组时，不仅仅是简单增加数组的引用计数，而是制造一份全新值一样的数组。但是某些类型（比如对象和资源）即使 “duplication” 也只能是增加引用计数，这种就属于不可复制的类型。这也和对象和资源现有的语义匹配（现有，PHP7 也是这样，不单是 PHP5）。</p>
+<p>下面的表格上标明了不同的类型会使用哪些标记（<code>x</code> 标记的都是有的特性）。『简单类型』（simple types）指的是整型或布尔类型这些不使用指针指向一个结构体的类型。下表中也有『不可变』（immutable）的标记，它用来标记不可变数组的，这个在下一部分再详述。</p>
+<p><em>interned string（保留字符）在这之前没有提过，其实就是函数名、变量名等无需计数、不可重复的字符串。</em></p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">                |<span class="string"> refcounted </span>|<span class="string"> collectable </span>|<span class="string"> copyable </span>|<span class="string"> immutable</span></div><div class="line"><span class="string">----------------+------------+-------------+----------+----------</span></div><div class="line"><span class="string">simple types    </span>|<span class="string">            </span>|<span class="string">             </span>|<span class="string">          </span>|</div><div class="line">string          |<span class="string">      x     </span>|<span class="string">             </span>|<span class="string">     x    </span>|</div><div class="line">interned string |<span class="string">            </span>|<span class="string">             </span>|<span class="string">          </span>|</div><div class="line">array           |<span class="string">      x     </span>|<span class="string">      x      </span>|<span class="string">     x    </span>|</div><div class="line">immutable array |<span class="string">            </span>|<span class="string">             </span>|<span class="string">          </span>|<span class="string">     x</span></div><div class="line"><span class="string">object          </span>|<span class="string">      x     </span>|<span class="string">      x      </span>|<span class="string">          </span>|</div><div class="line">resource        |<span class="string">      x     </span>|<span class="string">             </span>|<span class="string">          </span>|</div><div class="line">reference       |<span class="string">      x     </span>|<span class="string">             </span>|<span class="string">          </span>|</div></pre></td></tr></table></figure>
+<p>要理解这一点，我们可以来看几个例子，这样可以更好的认识 zval 内存管理是怎么工作的。</p>
+<p>下面是整数行为模式，在上文中 PHP5 的例子的基础上进行了一些简化 ：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$a = <span class="number">42</span>;   <span class="comment">// $a = zval_1(type=IS_LONG, value=42)</span></div><div class="line"></div><div class="line">$b = $a;   <span class="comment">// $a = zval_1(type=IS_LONG, value=42)</span></div><div class="line">           <span class="comment">// $b = zval_2(type=IS_LONG, value=42)</span></div><div class="line"></div><div class="line">$a += <span class="number">1</span>;   <span class="comment">// $a = zval_1(type=IS_LONG, value=43)</span></div><div class="line">           <span class="comment">// $b = zval_2(type=IS_LONG, value=42)</span></div><div class="line"></div><div class="line"><span class="keyword">unset</span>($a); <span class="comment">// $a = zval_1(type=IS_UNDEF)</span></div><div class="line">           <span class="comment">// $b = zval_2(type=IS_LONG, value=42)</span></div></pre></td></tr></table></figure>
+<p>这个过程其实挺简单的。现在整数不再是共享的，变量直接就会分离成两个单独的 zval，由于现在 zval 是内嵌的所以也不需要单独分配内存，所以这里的注释中使用 <code>=</code> 来表示的而不是指针符号 <code>-&gt;</code>，unset 时变量会被标记为 <code>IS_UNDEF</code>。下面看一下更复杂的情况：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$a = [];   <span class="comment">// $a = zval_1(type=IS_ARRAY) -&gt; zend_array_1(refcount=1, value=[])</span></div><div class="line"></div><div class="line">$b = $a;   <span class="comment">// $a = zval_1(type=IS_ARRAY) -&gt; zend_array_1(refcount=2, value=[])</span></div><div class="line">           <span class="comment">// $b = zval_2(type=IS_ARRAY) ---^</span></div><div class="line"></div><div class="line"><span class="comment">// zval 分离在这里进行</span></div><div class="line">$a[] = <span class="number">1</span>   <span class="comment">// $a = zval_1(type=IS_ARRAY) -&gt; zend_array_2(refcount=1, value=[1])</span></div><div class="line">           <span class="comment">// $b = zval_2(type=IS_ARRAY) -&gt; zend_array_1(refcount=1, value=[])</span></div><div class="line"></div><div class="line"><span class="keyword">unset</span>($a); <span class="comment">// $a = zval_1(type=IS_UNDEF),   zend_array_2 被销毁</span></div><div class="line">           <span class="comment">// $b = zval_2(type=IS_ARRAY) -&gt; zend_array_1(refcount=1, value=[])</span></div></pre></td></tr></table></figure>
+<p>这种情况下每个变量变量有一个单独的 zval，但是是指向同一个（有引用计数） <code>zend_array</code> 的结构体。修改其中一个数组的值时才会进行复制。这点和 PHP5 的情况类似。</p>
+<h2 id="类型（Types）"><a href="#类型（Types）" class="headerlink" title="类型（Types）"></a>类型（Types）</h2><p>我们大概看一下 PHP7 支持哪些类型（zval 使用的类型标记）：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* regular data types */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_UNDEF					0</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_NULL						1</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_FALSE					2</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_TRUE						3</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_LONG						4</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_DOUBLE					5</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_STRING					6</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_ARRAY					7</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_OBJECT					8</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_RESOURCE					9</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_REFERENCE				10</span></div><div class="line"></div><div class="line"><span class="comment">/* constant expressions */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_CONSTANT					11</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_CONSTANT_AST				12</span></div><div class="line"></div><div class="line"><span class="comment">/* internal types */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_INDIRECT					15</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_PTR						17</span></div></pre></td></tr></table></figure>
+<p>这个列表和 PHP5 使用的类似，不过增加了几项：</p>
+<ul>
+<li><code>IS_UNDEF</code> 用来标记之前为 <code>NULL</code> 的 zval 指针（和 <code>IS_NULL</code> 并不冲突）。比如在上面的例子中使用 <code>unset</code> 注销变量；</li>
+<li><code>IS_BOOL</code> 现在分割成了 <code>IS_FALSE</code> 和 <code>IS_TRUE</code> 两项。现在布尔类型的标记是直接记录到 type 中，这么做可以优化类型检查。不过这个变化对用户是透明的，还是只有一个『布尔』类型的数据（PHP 脚本中）。</li>
+<li>PHP 引用不再使用 <code>is_ref</code> 来标记，而是使用 <code>IS_REFERENCE</code> 类型。这个也要放到下一部分讲；</li>
+<li><code>IS_INDIRECT</code>  和  <code>IS_PTR</code> 是特殊的内部标记。</li>
+</ul>
+<p><em>实际上上面的列表中应该还存在两个 fake types，这里忽略了。</em></p>
+<p><code>IS_LONG</code> 类型表示的是一个 <code>zend_long</code> 的值，而不是原生的 C 语言的 long 类型。原因是 Windows 的 64 位系统（LLP64）上的 <code>long</code> 类型只有 32 位的位深度。所以 PHP5 在 Windows 上只能使用 32 位的数字。PHP7 允许你在 64 位的操作系统上使用 64 位的数字，即使是在 Windows 上面也可以。</p>
+<p><code>zend_refcounted</code> 的内容会在下一部分讲。下面看看 PHP 引用的实现。</p>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><p>PHP7 使用了和 PHP5 中完全不同的方法来处理 PHP <code>&amp;</code> 符号引用的问题（这个改动也是 PHP7 开发过程中大量 bug 的根源）。我们先从 PHP5 中 PHP 引用的实现方式说起。</p>
+<p>通常情况下， 写时复制原则意味着当你修改一个 zval 之前需要对其进行分离来保证始终修改的只是某一个 PHP 变量的值。这就是传值调用的含义。</p>
+<p>但是使用 PHP 引用时这条规则就不适用了。如果一个 PHP 变量是 PHP 引用，就意味着你<em>想要</em>在将多个 PHP 变量指向同一个值。PHP5 中的 <code>is_ref</code> 标记就是用来注明一个 PHP 变量是不是 PHP 引用，在修改时需不需要进行分离的。比如：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$a = [];  <span class="comment">// $a     -&gt; zval_1(type=IS_ARRAY, refcount=1, is_ref=0) -&gt; HashTable_1(value=[])</span></div><div class="line">$b =&amp; $a; <span class="comment">// $a, $b -&gt; zval_1(type=IS_ARRAY, refcount=2, is_ref=1) -&gt; HashTable_1(value=[])</span></div><div class="line"></div><div class="line">$b[] = <span class="number">1</span>; <span class="comment">// $a = $b = zval_1(type=IS_ARRAY, refcount=2, is_ref=1) -&gt; HashTable_1(value=[1])</span></div><div class="line">          <span class="comment">// 因为 is_ref 的值是 1, 所以 PHP 不会对 zval 进行分离</span></div></pre></td></tr></table></figure>
+<p>但是这个设计的一个很大的问题在于它无法在一个 PHP 引用变量和 PHP 非引用变量之间共享同一个值。比如下面这种情况：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$a = [];  <span class="comment">// $a         -&gt; zval_1(type=IS_ARRAY, refcount=1, is_ref=0) -&gt; HashTable_1(value=[])</span></div><div class="line">$b = $a;  <span class="comment">// $a, $b     -&gt; zval_1(type=IS_ARRAY, refcount=2, is_ref=0) -&gt; HashTable_1(value=[])</span></div><div class="line">$c = $b   <span class="comment">// $a, $b, $c -&gt; zval_1(type=IS_ARRAY, refcount=3, is_ref=0) -&gt; HashTable_1(value=[])</span></div><div class="line"></div><div class="line">$d =&amp; $c; <span class="comment">// $a, $b -&gt; zval_1(type=IS_ARRAY, refcount=2, is_ref=0) -&gt; HashTable_1(value=[])</span></div><div class="line">          <span class="comment">// $c, $d -&gt; zval_1(type=IS_ARRAY, refcount=2, is_ref=1) -&gt; HashTable_2(value=[])</span></div><div class="line">          <span class="comment">// $d 是 $c 的引用, 但却不是 $a 的 $b, 所以这里 zval 还是需要进行复制</span></div><div class="line">          <span class="comment">// 这样我们就有了两个 zval, 一个 is_ref 的值是 0, 一个 is_ref 的值是 1.</span></div><div class="line"></div><div class="line">$d[] = <span class="number">1</span>; <span class="comment">// $a, $b -&gt; zval_1(type=IS_ARRAY, refcount=2, is_ref=0) -&gt; HashTable_1(value=[])</span></div><div class="line">          <span class="comment">// $c, $d -&gt; zval_1(type=IS_ARRAY, refcount=2, is_ref=1) -&gt; HashTable_2(value=[1])</span></div><div class="line">          <span class="comment">// 因为有两个分离了的 zval, $d[] = 1 的语句就不会修改 $a 和 $b 的值.</span></div></pre></td></tr></table></figure>
+<p>这种行为方式也导致在 PHP 中使用引用比普通的值要慢。比如下面这个例子：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$array = range(<span class="number">0</span>, <span class="number">1000000</span>);</div><div class="line">$ref =&amp; $array;</div><div class="line">var_dump(count($array)); <span class="comment">// &lt;-- 这里会进行分离</span></div></pre></td></tr></table></figure>
+<p>因为 <code>count()</code> 只接受传值调用，但是 <code>$array</code> 是一个 PHP 引用，所以 <code>count()</code> 在执行之前实际上会有一个对数组进行完整的复制的过程。如果 <code>$array</code> 不是引用，这种情况就不会发生了。</p>
+<p>现在我们来看看 PHP7 中 PHP 引用的实现。因为 zval 不再单独分配内存，也就没办法再使用和 PHP5 中相同的实现了。所以增加了一个 <code>IS_REFERENCE</code> 类型，并且专门使用 <code>zend_reference</code> 来存储引用值：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">zend_reference</span> &#123;</span></div><div class="line">    zend_refcounted   gc;</div><div class="line">    zval              val;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>本质上 <code>zend_reference</code> 只是增加了引用计数的 zval。所有引用变量都会存储一个 zval 指针并且被标记为 <code>IS_REFERENCE</code>。<code>val</code> 和其他的 zval 的行为一样，尤其是它也可以在共享其所存储的复杂变量的指针，比如数组可以在引用变量和值变量之间共享。</p>
+<p>我们还是看例子，这次是 PHP7 中的语义。为了简洁明了这里不再单独写出 zval，只展示它们指向的结构体：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$a = [];  <span class="comment">// $a                                     -&gt; zend_array_1(refcount=1, value=[])</span></div><div class="line">$b =&amp; $a; <span class="comment">// $a, $b -&gt; zend_reference_1(refcount=2) -&gt; zend_array_1(refcount=1, value=[])</span></div><div class="line"></div><div class="line">$b[] = <span class="number">1</span>; <span class="comment">// $a, $b -&gt; zend_reference_1(refcount=2) -&gt; zend_array_1(refcount=1, value=[1])</span></div></pre></td></tr></table></figure>
+<p>上面的例子中进行引用传递时会创建一个 <code>zend_reference</code>，注意它的引用计数是 2（因为有两个变量在使用这个 PHP 引用）。但是值本身的引用计数是 1（因为 <code>zend_reference</code> 只是有一个指针指向它）。下面看看引用和非引用混合的情况：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$a = [];  <span class="comment">// $a         -&gt; zend_array_1(refcount=1, value=[])</span></div><div class="line">$b = $a;  <span class="comment">// $a, $b,    -&gt; zend_array_1(refcount=2, value=[])</span></div><div class="line">$c = $b   <span class="comment">// $a, $b, $c -&gt; zend_array_1(refcount=3, value=[])</span></div><div class="line"></div><div class="line">$d =&amp; $c; <span class="comment">// $a, $b                                 -&gt; zend_array_1(refcount=3, value=[])</span></div><div class="line">          <span class="comment">// $c, $d -&gt; zend_reference_1(refcount=2) ---^</span></div><div class="line">          <span class="comment">// 注意所有变量共享同一个 zend_array, 即使有的是 PHP 引用有的不是</span></div><div class="line"></div><div class="line">$d[] = <span class="number">1</span>; <span class="comment">// $a, $b                                 -&gt; zend_array_1(refcount=2, value=[])</span></div><div class="line">          <span class="comment">// $c, $d -&gt; zend_reference_1(refcount=2) -&gt; zend_array_2(refcount=1, value=[1])</span></div><div class="line">          <span class="comment">// 只有在这时进行赋值的时候才会对 zend_array 进行赋值</span></div></pre></td></tr></table></figure>
+<p>这里和 PHP5 最大的不同就是所有的变量都可以共享同一个数组，即使有的是 PHP 引用有的不是。只有当其中某一部分被修改的时候才会对数组进行分离。这也意味着使用 <code>count()</code> 时即使给其传递一个很大的引用数组也是安全的，不会再进行复制。不过引用仍然会比普通的数值慢，因为存在需要为 <code>zend_reference</code> 结构体分配内存（间接）并且引擎本身处理这一块儿也不快的的原因。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>总结一下 PHP7 中最重要的改变就是 zval 不再单独从堆上分配内存并且不自己存储引用计数。需要使用 zval 指针的复杂类型（比如字符串、数组和对象）会自己存储引用计数。这样就可以有更少的内存分配操作、更少的间接指针使用以及更少的内存分配。</p>
+<p>文章的第二部分我们会讨论复杂类型的问题。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixindashang.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.zwting.com/2017/08/28/Internal-value-representation-in-PHP-7-part-1/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2017/08/29/Internal-value-representation-in-PHP-7-part-2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          PHP7扩展开发官方译文[2]
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/08/12/2016-02-12-php-ext-12/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">php7扩展开发[12] autoload机制实现</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+  <div class="duoshuo">
+	<div class="ds-thread" data-thread-key="Internal-value-representation-in-PHP-7-part-1" data-title="PHP7扩展开发官方译文[1]" data-url="//www.zwting.com/2017/08/28/Internal-value-representation-in-PHP-7-part-1/"></div>
+
+	<div id="uyan_frame"></div>
+	<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2023055"></script>
+</div>
+
+
+  
+
+
+
+
+          </div>
+        </div>
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 醉翁亭
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		mathjax: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true,
+		showTags: false
+	}
+</script>
+
+<script>!function(t){function n(r){if(e[r])return e[r].exports;var o=e[r]={exports:{},id:r,loaded:!1};return t[r].call(o.exports,o,o.exports,n),o.loaded=!0,o.exports}var e={};return n.m=t,n.c=e,n.p="./",n(0)}([function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}function o(t,n){var e=/\/|index.html/g;return t.replace(e,"")===n.replace(e,"")}function i(){for(var t=document.querySelectorAll(".js-header-menu li a"),n=window.location.pathname,e=0,r=t.length;e<r;e++){var i=t[e];o(n,i.getAttribute("href"))&&(0,d.default)(i,"active")}}function u(t){for(var n=t.offsetLeft,e=t.offsetParent;null!==e;)n+=e.offsetLeft,e=e.offsetParent;return n}function f(t){for(var n=t.offsetTop,e=t.offsetParent;null!==e;)n+=e.offsetTop,e=e.offsetParent;return n}function c(t,n,e,r,o){var i=u(t),c=f(t)-n;if(c-e<=o){var a=t.$newDom;a||(a=t.cloneNode(!0),(0,h.default)(t,a),t.$newDom=a,a.style.position="fixed",a.style.top=(e||c)+"px",a.style.left=i+"px",a.style.zIndex=r||2,a.style.width="100%",a.style.color="#fff"),a.style.visibility="visible",t.style.visibility="hidden"}else{t.style.visibility="visible";var s=t.$newDom;s&&(s.style.visibility="hidden")}}function a(){var t=document.querySelector(".js-overlay"),n=document.querySelector(".js-header-menu");c(t,document.body.scrollTop,-63,2,0),c(n,document.body.scrollTop,1,3,0)}function s(){document.querySelector("#container").addEventListener("scroll",function(t){a()}),window.addEventListener("scroll",function(t){a()}),a()}function l(){x.default.versions.mobile&&window.screen.width<800&&(i(),s())}var p=e(71),d=r(p),v=e(72),y=(r(v),e(84)),h=r(y),b=e(69),x=r(b),m=e(75),g=r(m),w=e(70);l(),(0,w.addLoadEvent)(function(){g.default.init()}),t.exports={}},function(t,n){var e=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=e)},function(t,n){var e={}.hasOwnProperty;t.exports=function(t,n){return e.call(t,n)}},function(t,n,e){var r=e(49),o=e(15);t.exports=function(t){return r(o(t))}},function(t,n,e){t.exports=!e(8)(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})},function(t,n,e){var r=e(6),o=e(12);t.exports=e(4)?function(t,n,e){return r.f(t,n,o(1,e))}:function(t,n,e){return t[n]=e,t}},function(t,n,e){var r=e(10),o=e(30),i=e(24),u=Object.defineProperty;n.f=e(4)?Object.defineProperty:function(t,n,e){if(r(t),n=i(n,!0),r(e),o)try{return u(t,n,e)}catch(t){}if("get"in e||"set"in e)throw TypeError("Accessors not supported!");return"value"in e&&(t[n]=e.value),t}},function(t,n,e){var r=e(22)("wks"),o=e(13),i=e(1).Symbol,u="function"==typeof i,f=t.exports=function(t){return r[t]||(r[t]=u&&i[t]||(u?i:o)("Symbol."+t))};f.store=r},function(t,n){t.exports=function(t){try{return!!t()}catch(t){return!0}}},function(t,n,e){var r=e(35),o=e(16);t.exports=Object.keys||function(t){return r(t,o)}},function(t,n,e){var r=e(11);t.exports=function(t){if(!r(t))throw TypeError(t+" is not an object!");return t}},function(t,n){t.exports=function(t){return"object"==typeof t?null!==t:"function"==typeof t}},function(t,n){t.exports=function(t,n){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:n}}},function(t,n){var e=0,r=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++e+r).toString(36))}},function(t,n){var e=t.exports={version:"2.4.0"};"number"==typeof __e&&(__e=e)},function(t,n){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}},function(t,n){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",")},function(t,n){t.exports={}},function(t,n){t.exports=!0},function(t,n){n.f={}.propertyIsEnumerable},function(t,n,e){var r=e(6).f,o=e(2),i=e(7)("toStringTag");t.exports=function(t,n,e){t&&!o(t=e?t:t.prototype,i)&&r(t,i,{configurable:!0,value:n})}},function(t,n,e){var r=e(22)("keys"),o=e(13);t.exports=function(t){return r[t]||(r[t]=o(t))}},function(t,n,e){var r=e(1),o="__core-js_shared__",i=r[o]||(r[o]={});t.exports=function(t){return i[t]||(i[t]={})}},function(t,n){var e=Math.ceil,r=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?r:e)(t)}},function(t,n,e){var r=e(11);t.exports=function(t,n){if(!r(t))return t;var e,o;if(n&&"function"==typeof(e=t.toString)&&!r(o=e.call(t)))return o;if("function"==typeof(e=t.valueOf)&&!r(o=e.call(t)))return o;if(!n&&"function"==typeof(e=t.toString)&&!r(o=e.call(t)))return o;throw TypeError("Can't convert object to primitive value")}},function(t,n,e){var r=e(1),o=e(14),i=e(18),u=e(26),f=e(6).f;t.exports=function(t){var n=o.Symbol||(o.Symbol=i?{}:r.Symbol||{});"_"==t.charAt(0)||t in n||f(n,t,{value:u.f(t)})}},function(t,n,e){n.f=e(7)},function(t,n,e){var r=e(1),o=e(14),i=e(46),u=e(5),f="prototype",c=function(t,n,e){var a,s,l,p=t&c.F,d=t&c.G,v=t&c.S,y=t&c.P,h=t&c.B,b=t&c.W,x=d?o:o[n]||(o[n]={}),m=x[f],g=d?r:v?r[n]:(r[n]||{})[f];d&&(e=n);for(a in e)s=!p&&g&&void 0!==g[a],s&&a in x||(l=s?g[a]:e[a],x[a]=d&&"function"!=typeof g[a]?e[a]:h&&s?i(l,r):b&&g[a]==l?function(t){var n=function(n,e,r){if(this instanceof t){switch(arguments.length){case 0:return new t;case 1:return new t(n);case 2:return new t(n,e)}return new t(n,e,r)}return t.apply(this,arguments)};return n[f]=t[f],n}(l):y&&"function"==typeof l?i(Function.call,l):l,y&&((x.virtual||(x.virtual={}))[a]=l,t&c.R&&m&&!m[a]&&u(m,a,l)))};c.F=1,c.G=2,c.S=4,c.P=8,c.B=16,c.W=32,c.U=64,c.R=128,t.exports=c},function(t,n){var e={}.toString;t.exports=function(t){return e.call(t).slice(8,-1)}},function(t,n,e){var r=e(11),o=e(1).document,i=r(o)&&r(o.createElement);t.exports=function(t){return i?o.createElement(t):{}}},function(t,n,e){t.exports=!e(4)&&!e(8)(function(){return 7!=Object.defineProperty(e(29)("div"),"a",{get:function(){return 7}}).a})},function(t,n,e){"use strict";var r=e(18),o=e(27),i=e(36),u=e(5),f=e(2),c=e(17),a=e(51),s=e(20),l=e(58),p=e(7)("iterator"),d=!([].keys&&"next"in[].keys()),v="@@iterator",y="keys",h="values",b=function(){return this};t.exports=function(t,n,e,x,m,g,w){a(e,n,x);var O,S,_,j=function(t){if(!d&&t in A)return A[t];switch(t){case y:return function(){return new e(this,t)};case h:return function(){return new e(this,t)}}return function(){return new e(this,t)}},P=n+" Iterator",E=m==h,M=!1,A=t.prototype,T=A[p]||A[v]||m&&A[m],L=T||j(m),N=m?E?j("entries"):L:void 0,C="Array"==n?A.entries||T:T;if(C&&(_=l(C.call(new t)),_!==Object.prototype&&(s(_,P,!0),r||f(_,p)||u(_,p,b))),E&&T&&T.name!==h&&(M=!0,L=function(){return T.call(this)}),r&&!w||!d&&!M&&A[p]||u(A,p,L),c[n]=L,c[P]=b,m)if(O={values:E?L:j(h),keys:g?L:j(y),entries:N},w)for(S in O)S in A||i(A,S,O[S]);else o(o.P+o.F*(d||M),n,O);return O}},function(t,n,e){var r=e(10),o=e(55),i=e(16),u=e(21)("IE_PROTO"),f=function(){},c="prototype",a=function(){var t,n=e(29)("iframe"),r=i.length,o="<",u=">";for(n.style.display="none",e(48).appendChild(n),n.src="javascript:",t=n.contentWindow.document,t.open(),t.write(o+"script"+u+"document.F=Object"+o+"/script"+u),t.close(),a=t.F;r--;)delete a[c][i[r]];return a()};t.exports=Object.create||function(t,n){var e;return null!==t?(f[c]=r(t),e=new f,f[c]=null,e[u]=t):e=a(),void 0===n?e:o(e,n)}},function(t,n,e){var r=e(35),o=e(16).concat("length","prototype");n.f=Object.getOwnPropertyNames||function(t){return r(t,o)}},function(t,n){n.f=Object.getOwnPropertySymbols},function(t,n,e){var r=e(2),o=e(3),i=e(45)(!1),u=e(21)("IE_PROTO");t.exports=function(t,n){var e,f=o(t),c=0,a=[];for(e in f)e!=u&&r(f,e)&&a.push(e);for(;n.length>c;)r(f,e=n[c++])&&(~i(a,e)||a.push(e));return a}},function(t,n,e){t.exports=e(5)},function(t,n,e){var r=e(15);t.exports=function(t){return Object(r(t))}},function(t,n,e){t.exports={default:e(41),__esModule:!0}},function(t,n,e){t.exports={default:e(42),__esModule:!0}},function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}n.__esModule=!0;var o=e(39),i=r(o),u=e(38),f=r(u),c="function"==typeof f.default&&"symbol"==typeof i.default?function(t){return typeof t}:function(t){return t&&"function"==typeof f.default&&t.constructor===f.default&&t!==f.default.prototype?"symbol":typeof t};n.default="function"==typeof f.default&&"symbol"===c(i.default)?function(t){return"undefined"==typeof t?"undefined":c(t)}:function(t){return t&&"function"==typeof f.default&&t.constructor===f.default&&t!==f.default.prototype?"symbol":"undefined"==typeof t?"undefined":c(t)}},function(t,n,e){e(65),e(63),e(66),e(67),t.exports=e(14).Symbol},function(t,n,e){e(64),e(68),t.exports=e(26).f("iterator")},function(t,n){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}},function(t,n){t.exports=function(){}},function(t,n,e){var r=e(3),o=e(61),i=e(60);t.exports=function(t){return function(n,e,u){var f,c=r(n),a=o(c.length),s=i(u,a);if(t&&e!=e){for(;a>s;)if(f=c[s++],f!=f)return!0}else for(;a>s;s++)if((t||s in c)&&c[s]===e)return t||s||0;return!t&&-1}}},function(t,n,e){var r=e(43);t.exports=function(t,n,e){if(r(t),void 0===n)return t;switch(e){case 1:return function(e){return t.call(n,e)};case 2:return function(e,r){return t.call(n,e,r)};case 3:return function(e,r,o){return t.call(n,e,r,o)}}return function(){return t.apply(n,arguments)}}},function(t,n,e){var r=e(9),o=e(34),i=e(19);t.exports=function(t){var n=r(t),e=o.f;if(e)for(var u,f=e(t),c=i.f,a=0;f.length>a;)c.call(t,u=f[a++])&&n.push(u);return n}},function(t,n,e){t.exports=e(1).document&&document.documentElement},function(t,n,e){var r=e(28);t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==r(t)?t.split(""):Object(t)}},function(t,n,e){var r=e(28);t.exports=Array.isArray||function(t){return"Array"==r(t)}},function(t,n,e){"use strict";var r=e(32),o=e(12),i=e(20),u={};e(5)(u,e(7)("iterator"),function(){return this}),t.exports=function(t,n,e){t.prototype=r(u,{next:o(1,e)}),i(t,n+" Iterator")}},function(t,n){t.exports=function(t,n){return{value:n,done:!!t}}},function(t,n,e){var r=e(9),o=e(3);t.exports=function(t,n){for(var e,i=o(t),u=r(i),f=u.length,c=0;f>c;)if(i[e=u[c++]]===n)return e}},function(t,n,e){var r=e(13)("meta"),o=e(11),i=e(2),u=e(6).f,f=0,c=Object.isExtensible||function(){return!0},a=!e(8)(function(){return c(Object.preventExtensions({}))}),s=function(t){u(t,r,{value:{i:"O"+ ++f,w:{}}})},l=function(t,n){if(!o(t))return"symbol"==typeof t?t:("string"==typeof t?"S":"P")+t;if(!i(t,r)){if(!c(t))return"F";if(!n)return"E";s(t)}return t[r].i},p=function(t,n){if(!i(t,r)){if(!c(t))return!0;if(!n)return!1;s(t)}return t[r].w},d=function(t){return a&&v.NEED&&c(t)&&!i(t,r)&&s(t),t},v=t.exports={KEY:r,NEED:!1,fastKey:l,getWeak:p,onFreeze:d}},function(t,n,e){var r=e(6),o=e(10),i=e(9);t.exports=e(4)?Object.defineProperties:function(t,n){o(t);for(var e,u=i(n),f=u.length,c=0;f>c;)r.f(t,e=u[c++],n[e]);return t}},function(t,n,e){var r=e(19),o=e(12),i=e(3),u=e(24),f=e(2),c=e(30),a=Object.getOwnPropertyDescriptor;n.f=e(4)?a:function(t,n){if(t=i(t),n=u(n,!0),c)try{return a(t,n)}catch(t){}if(f(t,n))return o(!r.f.call(t,n),t[n])}},function(t,n,e){var r=e(3),o=e(33).f,i={}.toString,u="object"==typeof window&&window&&Object.getOwnPropertyNames?Object.getOwnPropertyNames(window):[],f=function(t){try{return o(t)}catch(t){return u.slice()}};t.exports.f=function(t){return u&&"[object Window]"==i.call(t)?f(t):o(r(t))}},function(t,n,e){var r=e(2),o=e(37),i=e(21)("IE_PROTO"),u=Object.prototype;t.exports=Object.getPrototypeOf||function(t){return t=o(t),r(t,i)?t[i]:"function"==typeof t.constructor&&t instanceof t.constructor?t.constructor.prototype:t instanceof Object?u:null}},function(t,n,e){var r=e(23),o=e(15);t.exports=function(t){return function(n,e){var i,u,f=String(o(n)),c=r(e),a=f.length;return c<0||c>=a?t?"":void 0:(i=f.charCodeAt(c),i<55296||i>56319||c+1===a||(u=f.charCodeAt(c+1))<56320||u>57343?t?f.charAt(c):i:t?f.slice(c,c+2):(i-55296<<10)+(u-56320)+65536)}}},function(t,n,e){var r=e(23),o=Math.max,i=Math.min;t.exports=function(t,n){return t=r(t),t<0?o(t+n,0):i(t,n)}},function(t,n,e){var r=e(23),o=Math.min;t.exports=function(t){return t>0?o(r(t),9007199254740991):0}},function(t,n,e){"use strict";var r=e(44),o=e(52),i=e(17),u=e(3);t.exports=e(31)(Array,"Array",function(t,n){this._t=u(t),this._i=0,this._k=n},function(){var t=this._t,n=this._k,e=this._i++;return!t||e>=t.length?(this._t=void 0,o(1)):"keys"==n?o(0,e):"values"==n?o(0,t[e]):o(0,[e,t[e]])},"values"),i.Arguments=i.Array,r("keys"),r("values"),r("entries")},function(t,n){},function(t,n,e){"use strict";var r=e(59)(!0);e(31)(String,"String",function(t){this._t=String(t),this._i=0},function(){var t,n=this._t,e=this._i;return e>=n.length?{value:void 0,done:!0}:(t=r(n,e),this._i+=t.length,{value:t,done:!1})})},function(t,n,e){"use strict";var r=e(1),o=e(2),i=e(4),u=e(27),f=e(36),c=e(54).KEY,a=e(8),s=e(22),l=e(20),p=e(13),d=e(7),v=e(26),y=e(25),h=e(53),b=e(47),x=e(50),m=e(10),g=e(3),w=e(24),O=e(12),S=e(32),_=e(57),j=e(56),P=e(6),E=e(9),M=j.f,A=P.f,T=_.f,L=r.Symbol,N=r.JSON,C=N&&N.stringify,k="prototype",F=d("_hidden"),q=d("toPrimitive"),I={}.propertyIsEnumerable,B=s("symbol-registry"),D=s("symbols"),W=s("op-symbols"),H=Object[k],K="function"==typeof L,R=r.QObject,J=!R||!R[k]||!R[k].findChild,U=i&&a(function(){return 7!=S(A({},"a",{get:function(){return A(this,"a",{value:7}).a}})).a})?function(t,n,e){var r=M(H,n);r&&delete H[n],A(t,n,e),r&&t!==H&&A(H,n,r)}:A,G=function(t){var n=D[t]=S(L[k]);return n._k=t,n},$=K&&"symbol"==typeof L.iterator?function(t){return"symbol"==typeof t}:function(t){return t instanceof L},z=function(t,n,e){return t===H&&z(W,n,e),m(t),n=w(n,!0),m(e),o(D,n)?(e.enumerable?(o(t,F)&&t[F][n]&&(t[F][n]=!1),e=S(e,{enumerable:O(0,!1)})):(o(t,F)||A(t,F,O(1,{})),t[F][n]=!0),U(t,n,e)):A(t,n,e)},Y=function(t,n){m(t);for(var e,r=b(n=g(n)),o=0,i=r.length;i>o;)z(t,e=r[o++],n[e]);return t},Q=function(t,n){return void 0===n?S(t):Y(S(t),n)},X=function(t){var n=I.call(this,t=w(t,!0));return!(this===H&&o(D,t)&&!o(W,t))&&(!(n||!o(this,t)||!o(D,t)||o(this,F)&&this[F][t])||n)},V=function(t,n){if(t=g(t),n=w(n,!0),t!==H||!o(D,n)||o(W,n)){var e=M(t,n);return!e||!o(D,n)||o(t,F)&&t[F][n]||(e.enumerable=!0),e}},Z=function(t){for(var n,e=T(g(t)),r=[],i=0;e.length>i;)o(D,n=e[i++])||n==F||n==c||r.push(n);return r},tt=function(t){for(var n,e=t===H,r=T(e?W:g(t)),i=[],u=0;r.length>u;)!o(D,n=r[u++])||e&&!o(H,n)||i.push(D[n]);return i};K||(L=function(){if(this instanceof L)throw TypeError("Symbol is not a constructor!");var t=p(arguments.length>0?arguments[0]:void 0),n=function(e){this===H&&n.call(W,e),o(this,F)&&o(this[F],t)&&(this[F][t]=!1),U(this,t,O(1,e))};return i&&J&&U(H,t,{configurable:!0,set:n}),G(t)},f(L[k],"toString",function(){return this._k}),j.f=V,P.f=z,e(33).f=_.f=Z,e(19).f=X,e(34).f=tt,i&&!e(18)&&f(H,"propertyIsEnumerable",X,!0),v.f=function(t){return G(d(t))}),u(u.G+u.W+u.F*!K,{Symbol:L});for(var nt="hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables".split(","),et=0;nt.length>et;)d(nt[et++]);for(var nt=E(d.store),et=0;nt.length>et;)y(nt[et++]);u(u.S+u.F*!K,"Symbol",{for:function(t){return o(B,t+="")?B[t]:B[t]=L(t)},keyFor:function(t){if($(t))return h(B,t);throw TypeError(t+" is not a symbol!")},useSetter:function(){J=!0},useSimple:function(){J=!1}}),u(u.S+u.F*!K,"Object",{create:Q,defineProperty:z,defineProperties:Y,getOwnPropertyDescriptor:V,getOwnPropertyNames:Z,getOwnPropertySymbols:tt}),N&&u(u.S+u.F*(!K||a(function(){var t=L();return"[null]"!=C([t])||"{}"!=C({a:t})||"{}"!=C(Object(t))})),"JSON",{stringify:function(t){if(void 0!==t&&!$(t)){for(var n,e,r=[t],o=1;arguments.length>o;)r.push(arguments[o++]);return n=r[1],"function"==typeof n&&(e=n),!e&&x(n)||(n=function(t,n){if(e&&(n=e.call(this,t,n)),!$(n))return n}),r[1]=n,C.apply(N,r)}}}),L[k][q]||e(5)(L[k],q,L[k].valueOf),l(L,"Symbol"),l(Math,"Math",!0),l(r.JSON,"JSON",!0)},function(t,n,e){e(25)("asyncIterator")},function(t,n,e){e(25)("observable")},function(t,n,e){e(62);for(var r=e(1),o=e(5),i=e(17),u=e(7)("toStringTag"),f=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],c=0;c<5;c++){var a=f[c],s=r[a],l=s&&s.prototype;l&&!l[u]&&o(l,u,a),i[a]=i.Array}},function(t,n){"use strict";var e={versions:function(){var t=window.navigator.userAgent;return{trident:t.indexOf("Trident")>-1,presto:t.indexOf("Presto")>-1,webKit:t.indexOf("AppleWebKit")>-1,gecko:t.indexOf("Gecko")>-1&&t.indexOf("KHTML")==-1,mobile:!!t.match(/AppleWebKit.*Mobile.*/),ios:!!t.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),android:t.indexOf("Android")>-1||t.indexOf("Linux")>-1,iPhone:t.indexOf("iPhone")>-1||t.indexOf("Mac")>-1,iPad:t.indexOf("iPad")>-1,webApp:t.indexOf("Safari")==-1,weixin:t.indexOf("MicroMessenger")==-1}}()};t.exports=e},function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}var o=e(40),i=r(o),u=function(){function t(t,n,e){return n||e?String.fromCharCode(n||e):o[t]||t}function n(t){return l[t]}var e=/&quot;|&lt;|&gt;|&amp;|&nbsp;|&apos;|&#(\d+);|&#(\d+)/g,r=/['<> "&]/g,o={"&quot;":'"',"&lt;":"<","&gt;":">","&amp;":"&","&nbsp;":" "},f=/\u00a0/g,c=/<br\s*\/?>/gi,a=/\r?\n/g,s=/\s/g,l={};for(var p in o)l[o[p]]=p;return o["&apos;"]="'",l["'"]="&#39;",{encode:function(t){return t?(""+t).replace(r,n).replace(a,"<br/>").replace(s,"&nbsp;"):""},decode:function(n){return n?(""+n).replace(c,"\n").replace(e,t).replace(f," "):""},encodeBase16:function(t){if(!t)return t;t+="";for(var n=[],e=0,r=t.length;r>e;e++)n.push(t.charCodeAt(e).toString(16).toUpperCase());return n.join("")},encodeBase16forJSON:function(t){if(!t)return t;t=t.replace(/[\u4E00-\u9FBF]/gi,function(t){return escape(t).replace("%u","\\u")});for(var n=[],e=0,r=t.length;r>e;e++)n.push(t.charCodeAt(e).toString(16).toUpperCase());return n.join("")},decodeBase16:function(t){if(!t)return t;t+="";for(var n=[],e=0,r=t.length;r>e;e+=2)n.push(String.fromCharCode("0x"+t.slice(e,e+2)));return n.join("")},encodeObject:function(t){if(t instanceof Array)for(var n=0,e=t.length;e>n;n++)t[n]=u.encodeObject(t[n]);else if("object"==("undefined"==typeof t?"undefined":(0,i.default)(t)))for(var r in t)t[r]=u.encodeObject(t[r]);else if("string"==typeof t)return u.encode(t);return t},loadScript:function(t){var n=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(n),n.setAttribute("src",t)},addLoadEvent:function(t){var n=window.onload;"function"!=typeof window.onload?window.onload=t:window.onload=function(){n(),t()}}}}();t.exports=u},function(t,n){function e(t,n){t.classList?t.classList.add(n):t.className+=" "+n}t.exports=e},function(t,n){function e(t,n){if(t.classList)t.classList.remove(n);else{var e=new RegExp("(^|\\b)"+n.split(" ").join("|")+"(\\b|$)","gi");t.className=t.className.replace(e," ")}}t.exports=e},,,function(t,n){"use strict";function e(){var t=document.querySelector("#page-nav");if(t&&!document.querySelector("#page-nav .extend.prev")&&(t.innerHTML='<a class="extend prev disabled" rel="prev">&laquo; Prev</a>'+t.innerHTML),t&&!document.querySelector("#page-nav .extend.next")&&(t.innerHTML=t.innerHTML+'<a class="extend next disabled" rel="next">Next &raquo;</a>'),yiliaConfig&&yiliaConfig.open_in_new){var n=document.querySelectorAll(".article-entry a:not(.article-more-a)");n.forEach(function(t){t.setAttribute("target","_blank")})}var e=document.querySelector("#js-aboutme");e&&0!==e.length&&(e.innerHTML=e.innerText)}t.exports={init:e}},,,,,,,,,function(t,n){function e(t,n){if("string"==typeof n)return t.insertAdjacentHTML("afterend",n);var e=t.nextSibling;return e?t.parentNode.insertBefore(n,e):t.parentNode.appendChild(n)}t.exports=e}])</script><script src="/./main.234bc0.js"></script><script>!function(){var e=function(e){var t=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(t),t.setAttribute("src",e)};e("/slider.885efe.js")}()</script>
+
+
+    
+<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
+  <div class="tools-nav header-menu">
+    
+    
+      
+      
+      
+    
+      
+      
+      
+    
+      
+      
+      
+    
+    
+
+    <ul style="width: 70%">
+    
+    
+      
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
+      
+        
+      
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'friends')"><a href="javascript:void(0)" q-class="active:friends">友链</a></li>
+      
+        
+      
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
+      
+        
+    </ul>
+  </div>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all" q-show="innerArchive">
+        <div class="search-wrap">
+          <input class="search-ipt" q-model="search" type="text" placeholder="find something…">
+          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
+          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
+        </div>
+        <div class="widget tagcloud search-tag">
+          <p class="search-tag-wording">tag:</p>
+          <label class="search-switch">
+            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
+          </label>
+          <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">python技术分享</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PHP7扩展开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">集群搭建</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">phpmongodb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">QA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SDK开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">技术管理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
+              </li>
+            
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <ul class="search-ul">
+          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
+            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            2、在根目录_config.yml里添加配置：
+<pre style="font-size: 12px;" q-show="jsonFail">
+  jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: true
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
+</pre>
+          </p>
+          <li class="search-li" q-repeat="items" q-show="isShow">
+            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
+            <p class="search-time">
+              <i class="icon-calendar icon"></i>
+              <span q-text="date|dateformat"></span>
+            </p>
+            <p class="search-tag">
+              <i class="icon-price-tags icon"></i>
+              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+            </p>
+          </li>
+        </ul>
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="https://lankors.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>大侠</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://www.heyyezi.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>强仔</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://baiyibing123.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>小白</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://yx5198.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>杨兴</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://taoyak.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>族长</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://mingmings.org/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>熊大</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://successfuljian.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>小健</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://nick-weixx.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>星星</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://lezhimeng.coding.me/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>材乐</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://obeyconquer.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>高洋</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://dolinks.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>张张</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://happyoldguys.github.io" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>苏旭</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://fpp.coding.me/fpp/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>志腾</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://biubiubiu666.coding.me" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>浩亮</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://simonchyi.coding.me" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>西朋</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://big-chief.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>酋长</a>
+            </li>
+          
+        </ul>
+  		
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-me" q-show="aboutme">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">我的征途是星辰大海</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>

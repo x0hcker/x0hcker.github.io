@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="//www.zwting.com">
+  <title>PHP7扩展开发官方译文[2] | 醉翁亭</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="附加一段文章摘要，字数最好在140字以内，会出现在meta的description里面">
+<meta name="keywords" content="PHP7扩展开发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP7扩展开发官方译文[2]">
+<meta property="og:url" content="//www.zwting.com/2017/08/29/Internal-value-representation-in-PHP-7-part-2/index.html">
+<meta property="og:site_name" content="醉翁亭">
+<meta property="og:description" content="附加一段文章摘要，字数最好在140字以内，会出现在meta的description里面">
+<meta property="og:updated_time" content="2017-08-30T07:02:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP7扩展开发官方译文[2]">
+<meta name="twitter:description" content="附加一段文章摘要，字数最好在140字以内，会出现在meta的description里面">
+  
+    <link rel="alternative" href="/atom.xml" title="醉翁亭" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" type="text/css" href="/./main.234bc0.css">
+  <style type="text/css">
+  
+    #container.show {
+      background: linear-gradient(200deg,#a0cfe4,#e8c37e);
+    }
+  </style>
+  
+
+  
+
+</head>
+
+<body>
+  <div id="container" q-class="show:isCtnShow">
+    <canvas id="anm-canvas" class="anm-canvas"></canvas>
+    <div class="left-col" q-class="show:isShow">
+      
+<div class="overlay" style="background: #4d4d4d"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="/img/head.jpeg" class="js-avatar">
+		</a>
+		<hgroup>
+		  <h1 class="header-author"><a href="/">醉翁亭</a></h1>
+		</hgroup>
+		
+		<p class="header-subtitle">穷则独善其身，达则兼济天下</p>
+		
+
+	<nav class="header-menu">
+	
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
+	
+	</nav>
+		<nav class="header-smart-menu">
+    		
+    			
+    			<a q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
+    			
+            
+    			
+    			<a q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
+    			
+            
+    			
+    			<a q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+		        
+					<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
+		        
+					<a class="rss" target="_blank" href="#" title="rss"><i class="icon-rss"></i></a>
+		        
+					<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+		        
+			</div>
+		</nav>
+
+
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
+      
+<nav id="mobile-nav">
+  	<div class="overlay js-overlay" style="background: #4d4d4d"></div>
+	<div class="btnctn js-mobile-btnctn">
+  		<div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
+	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="/img/head.jpeg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author js-header-author">醉翁亭</h1>
+			</hgroup>
+			
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>穷则独善其身，达则兼济天下<i class="icon icon-quo-right"></i></p>
+			
+			
+			
+				
+			
+				
+			
+			
+			
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
+			        
+						<a class="rss" target="_blank" href="#" title="rss"><i class="icon-rss"></i></a>
+			        
+						<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+			        
+				</div>
+			</nav>
+
+			<nav class="header-menu js-header-menu">
+				<ul style="width: 50%">
+				
+				
+					<li style="width: 50%"><a href="/">主页</a></li>
+		        
+					<li style="width: 50%"><a href="/tags/随笔/">随笔</a></li>
+		        
+				</ul>
+			</nav>
+		</header>				
+	</div>
+	<div class="mobile-mask" style="display:none" q-show="isShow"></div>
+</nav>
+
+      <div id="wrapper" class="body-wrap">
+        <div class="menu-l">
+          <div class="canvas-wrap">
+            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
+          </div>
+          <div id="js-content" class="content-ll">
+            <article id="post-Internal-value-representation-in-PHP-7-part-2" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      PHP7扩展开发官方译文[2]
+    </h1>
+  
+
+        
+        <a href="/2017/08/29/Internal-value-representation-in-PHP-7-part-2/" class="archive-article-date">
+  	<time datetime="2017-08-29T11:51:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><em>本文第一部分和第二均翻译自Nikita Popov(nikic，PHP 官方开发组成员，柏林科技大学的学生) 的<a href="http://nikic.github.io/" target="_blank" rel="external">博客</a>。为了更符合汉语的阅读习惯，文中并不会逐字逐句的翻译。</em></p>
+<p><em>要理解本文，你应该对 PHP5 中变量的实现有了一些了解，本文重点在于解释 PHP7 中 zval 的变化。</em></p>
+<p>第一部分讲了 PHP5 和 PHP7 中关于变量最基础的实现和变化。这里再重复一下，主要的变化就是 zval 不再单独分配内存，不自己存储引用计数。整型浮点型等简单类型直接存储在 zval 中。复杂类型则通过指针指向一个独立的结构体。</p>
+<p>复杂的 zval 数据值有一个共同的头，其结构由 <code>zend_refcounted</code> 定义：</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">_zend_refcounted</span> &#123;</span></div><div class="line">    uint32_t refcount;</div><div class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></div><div class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">            ZEND_ENDIAN_LOHI_3(</div><div class="line">                zend_uchar    <span class="keyword">type</span>,</div><div class="line">                zend_uchar    flags,</div><div class="line">                uint16_t      gc_info)</div><div class="line">        &#125; v;</div><div class="line">        uint32_t type_info;</div><div class="line">    &#125; u;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>这个头存储有 <code>refcount</code>（引用计数），值的类型 <code>type</code> 和循环回收的相关信息 <code>gc_info</code> 以及类型标志位 <code>flags</code>。</p>
+<p>接下来会对每种复杂类型的实现单独进行分析并和 PHP5 的实现进行比较。引用虽然也属于复杂类型，但是上一部分已经介绍过了，这里就不再赘述。另外这里也不会讲到资源类型（因为作者觉得资源类型没什么好讲的）。</p>
+<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><p>PHP7 中定义了一个新的结构体 <code>zend_string</code> 用于存储字符串变量：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">struct _zend_string &#123;</div><div class="line">    zend_refcounted   gc<span class="comment">;</span></div><div class="line">    zend_ulong        h<span class="comment">;        /* hash value */</span></div><div class="line">    size_t            len<span class="comment">;</span></div><div class="line">    char              val[<span class="number">1</span>]<span class="comment">;</span></div><div class="line">&#125;<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>除了引用计数的头以外，字符串还包含哈希缓存 <code>h</code>，字符串长度 <code>len</code> 以及字符串的值 <code>val</code>。哈希缓存的存在是为了防止使用字符串做为 hashtable 的 key 在查找时需要重复计算其哈希值，所以这个在使用之前就对其进行初始化。</p>
+<p>如果你对 C 语言了解的不是很深入的话，可能会觉得 <code>val</code> 的定义有些奇怪：这个声明只有一个元素，但是显然我们想存储的字符串偿付肯定大于一个字符的长度。这里其实使用的是结构体的一个『黑』方法：在声明数组时只定义一个元素，但是实际创建 <code>zend_string</code> 时再分配足够的内存来存储整个字符串。这样我们还是可以通过 <code>val</code> 访问完整的字符串。</p>
+<p>当然这属于非常规的实现手段，因为我们实际的读和写的内容都超过了单字符数组的边界。但是 C 语言编译器却不知道你是这么做的。虽然 C99 也曾明确规定过支持『柔性数组』，但是感谢我们的好朋友微软，没人能在不同的平台上保证 C99 的一致性（所以这种手段是为了解决 Windows 平台下柔性数组的支持问题）。</p>
+<p>新的字符串类型的结构比原生的 C 字符串更方便使用：第一是因为直接存储了字符串的长度，这样就不用每次使用时都去计算。第二是字符串也有引用计数的头，这样也就可以在不同的地方共享字符串本身而无需使用 zval。一个经常使用的地方就是共享 hashtable 的 key。</p>
+<p>但是新的字符串类型也有一个很不好的地方：虽然可以很方便的从 zend_string 中取出 C 字符串（使用 <code>str-&gt;val</code> 即可），但反过来，如果将 C 字符串变成 zend_string 就需要先分配 zend_string 需要的内存，再将字符串复制到 zend_string 中。这在实际使用的过程中并不是很方便。</p>
+<p>字符串也有一些特有的标志（存储在 GC 的标志位中的）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_STR_PERSISTENT           (1&lt;&lt;0) <span class="comment">/* allocated using malloc */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_STR_INTERNED             (1&lt;&lt;1) <span class="comment">/* interned string */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_STR_PERMANENT            (1&lt;&lt;2) <span class="comment">/* interned string surviving request boundary */</span></span></div></pre></td></tr></table></figure>
+<p>持久化的字符串需要的内存直接从系统本身分配而不是 zend 内存管理器（ZMM），这样它就可以一直存在而不是只在单次请求中有效。给这种特殊的分配打上标记便于 zval 使用持久化字符串。在 PHP5 中并不是这样处理的，是在使用前复制一份到 ZMM 中。</p>
+<p>保留字符（interned strings）有点特殊，它会一直存在直到请求结束时才销毁，所以也就无需进行引用计数。保留字符串也不可重复（duplicate），所以在创建新的保留字符时也会先检查是否有同样字符的已经存在。所有 PHP 源码中不可变的字符串都是保留字符（包括字符串常量、变量名函数名等）。持久化字符串也是请求开始之前已经创建好的保留字符。但普通的保留字符在请求结束后会销毁，持久化字符串却始终存在。</p>
+<p>如果使用了 opcache 的话保留字符会被存储在共享内存（SHM）中这样就可以在所有 PHP 进程质检共享。这种情况下持久化字符串也就没有存在的意义了，因为保留字符也是不会被销毁的。</p>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>因为<a href="http://nikic.github.io/2014/12/22/PHPs-new-hashtable-implementation.html" target="_blank" rel="external">之前的文章</a>有讲过新的数组实现，所以这里就不再详细描述了。虽然最近有些变化导致之前的描述不是十分准确了，但是基本的概念还是一致的。</p>
+<p>这里要说的是之前的文章中没有提到的数组相关的概念：不可变数组。其本质上和保留字符类似：没有引用计数且在请求结束之前一直存在（也可能在请求结束之后还存在）。</p>
+<p>因为某些内存管理方便的原因，不可变数组只会在开启 opcache 时会使用到。我们来看看实际使用的例子，先看以下的脚本：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?php</span></span></div><div class="line"><span class="php"><span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; <span class="number">1000000</span>; ++$i) &#123;</span></div><div class="line"><span class="php">    $array[] = [<span class="string">'foo'</span>];</span></div><div class="line"><span class="php">&#125;</span></div><div class="line"><span class="php">var_dump(memory_get_usage());</span></div></pre></td></tr></table></figure>
+<p>开启 opcache 时，以上代码会使用 32MB 的内存，不开启的情况下因为 <code>$array</code> 每个元素都会复制一份 <code>[&#39;foo&#39;]</code> ，所以需要 390MB。这里会进行完整的复制而不是增加引用计数值的原因是防止 zend 虚拟机操作符执行的时候出现共享内存出错的情况。我希望不使用 opcache 时内存暴增的问题以后能得到改善。</p>
+<h2 id="PHP5-中的对象"><a href="#PHP5-中的对象" class="headerlink" title="PHP5 中的对象"></a>PHP5 中的对象</h2><p>在了解 PHP7 中的对象实现直线我们先看一下 PHP5 的并且看一下有什么效率上的问题。PHP5 中的 zval 会存储一个 <code>zend_object_value</code> 结构，其定义如下：</p>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">typedef struct <span class="number">_</span>zend<span class="number">_</span><span class="keyword">object</span><span class="number">_</span><span class="keyword">value</span> &#123;</div><div class="line">    zend<span class="number">_</span><span class="keyword">object</span><span class="number">_</span>handle handle;</div><div class="line">    const zend<span class="number">_</span><span class="keyword">object</span><span class="number">_</span>handlers *handlers;</div><div class="line">&#125; zend<span class="number">_</span><span class="keyword">object</span><span class="number">_</span><span class="keyword">value</span>;</div></pre></td></tr></table></figure>
+<p><code>handle</code> 是对象的唯一 ID，可以用于查找对象数据。<code>handles</code> 是保存对象各种属性方法的虚函数表指针。通常情况下 PHP 对象都有着同样的 handler 表，但是 PHP 扩展创建的对象也可以通过操作符重载等方式对其行为自定义。</p>
+<p>对象句柄（handler）是作为索引用于『对象存储』，对象存储本身是一个存储容器（bucket）的数组，bucket 定义如下：</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">typedef <span class="class"><span class="keyword">struct</span> <span class="title">_zend_object_store_bucket</span> &#123;</span></div><div class="line">    zend_bool destructor_called;</div><div class="line">    zend_bool valid;</div><div class="line">    zend_uchar apply_count;</div><div class="line">    <span class="class"><span class="keyword">union</span> <span class="title">_store_bucket</span> &#123;</span></div><div class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">_store_object</span> &#123;</span></div><div class="line">            void *object;</div><div class="line">            zend_objects_store_dtor_t dtor;</div><div class="line">            zend_objects_free_object_storage_t free_storage;</div><div class="line">            zend_objects_store_clone_t clone;</div><div class="line">            const zend_object_handlers *handlers;</div><div class="line">            zend_uint refcount;</div><div class="line">            gc_root_buffer *buffered;</div><div class="line">        &#125; obj;</div><div class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">            int <span class="keyword">next</span>;</div><div class="line">        &#125; free_list;</div><div class="line">    &#125; bucket;</div><div class="line">&#125; zend_object_store_bucket;</div></pre></td></tr></table></figure>
+<p>这个结构体包含了很多东西。前三个成员只是些普通的元数据（对象的析构函数是否被调用过、bucke 是否被使用过以及对象被递归调用过多少次）。接下来的联合体用于区分 bucket 是处于使用中的状态还是空闲状态。上面的结构中最重要的是 <code>struct _store_object</code> 子结构体：</p>
+<p>第一个成员 <code>object</code> 是指向实际对象（也就是对象最终存储的位置）的指针。对象实际并不是直接嵌入到对象存储的 bucket 中的，因为对象不是定长的。对象指针下面是三个用于管理对象销毁、释放与克隆的操作句柄（handler）。这里要注意的是 PHP 销毁和释放对象是不同的步骤，前者在某些情况下有可能会被跳过（不完全释放）。克隆操作实际上几乎几乎不会被用到，因为这里包含的操作不是普通对象本身的一部分，所以（任何时候）他们在每个对象中他们都会被单独复制（duplicate）一份而不是共享。</p>
+<p>这些对象存储操作句柄后面是一个普通的对象 <code>handlers</code> 指针。存储这几个数据是因为有时候可能会在 zval 未知的情况下销毁对象（通常情况下这些操作都是针对 zval 进行的）。</p>
+<p>bucket 也包含了 <code>refcount</code> 的字段，不过这种行为在 PHP5 中显得有些奇怪，因为 zval 本身已经存储了引用计数。为什么还需要一个多余的计数呢？问题在于虽然通常情况下 zval 的『复制』行为都是简单的增加引用计数即可，但是偶尔也会有深度复制的情况出现，比如创建一个全新的 zval 但是保存同样的 <code>zend_object_value</code>。这种情况下两个不同的 zval 就用到了同一个对象存储的 bucket，所以 bucket 自身也需要进行引用计数。这种『双重计数』的方式是 PHP5 的实现内在的问题。GC 根缓冲区中的 <code>buffered</code> 指针也是由于同样的原因才需要进行完全复制（duplicate）。</p>
+<p>现在看看对象存储中指针指向的实际的 <code>object</code> 的结构，通常情况下用户层面的对象定义如下：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">typedef struct _zend_object &#123;</div><div class="line">    zend_class_entry *ce<span class="comment">;</span></div><div class="line">    HashTable *properties<span class="comment">;</span></div><div class="line">    zval **properties_table<span class="comment">;</span></div><div class="line">    HashTable *guards<span class="comment">;</span></div><div class="line">&#125; zend_object<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p><code>zend_class_entry</code> 指针指向的是对象实现的类原型。接下来的两个元素是使用不同的方式存储对象属性。动态属性（运行时添加的而不是在类中定义的）全部存在 <code>properties</code> 中，不过只是属性名和值的简单匹配。</p>
+<p>不过这里有针对已经声明的属性的一个优化：编译期间每个属性都会被指定一个索引并且属性本身是存储在 <code>properties_table</code> 的索引中。属性名称和索引的匹配存储在类原型的 hashtable 中。这样就可以防止每个对象使用的内存超过 hashtable 的上限，并且属性的索引会在运行时有多处缓存。</p>
+<p><code>guards</code> 的哈希表是用于实现魔术方法的递归行为的，比如 <code>__get</code>，这里我们不深入讨论。</p>
+<p>除了上文提到过的双重计数的问题，这种实现还有一个问题是一个最小的只有一个属性的对象也需要 136 个字节的内存（这还不算 zval 需要的内存）。而且中间存在很多间接访问动作：比如要从对象 zval 中取出一个元素，先需要取出对象存储 bucket，然后是 <code>zend object</code>，然后才能通过指针找到对象属性表和 zval。这样这里至少就有 4 层间接访问（并且实际使用中可能最少需要七层）。</p>
+<h2 id="PHP7-中的对象"><a href="#PHP7-中的对象" class="headerlink" title="PHP7 中的对象"></a>PHP7 中的对象</h2><p>PHP7 的实现中试图解决上面这些问题，包括去掉双重引用计数、减少内存使用以及间接访问。新的 <code>zend_object</code> 结构体如下：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">struct _zend_object &#123;</div><div class="line">    zend_refcounted   gc<span class="comment">;</span></div><div class="line">    uint32_t          handle<span class="comment">;</span></div><div class="line">    zend_class_entry *ce<span class="comment">;</span></div><div class="line">    const zend_object_handlers *handlers<span class="comment">;</span></div><div class="line">    HashTable        *properties<span class="comment">;</span></div><div class="line">    zval              properties_table[<span class="number">1</span>]<span class="comment">;</span></div><div class="line">&#125;<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>可以看到现在这个结构体几乎就是一个对象的全部内容了：<code>zend_object_value</code> 已经被替换成一个直接指向对象和对象存储的指针，虽然没有完全移除，但已经是很大的提升了。</p>
+<p>除了 PHP7 中惯用的 <code>zend_refcounted</code> 头以外，<code>handle</code> 和 对象的 <code>handlers</code> 现在也被放到了 <code>zend_object</code> 中。这里的 <code>properties_table</code> 同样用到了 C 结构体的小技巧，这样 <code>zend_object</code> 和属性表就会得到一整块内存。当然，现在属性表是直接嵌入到 zval 中的而不是指针。</p>
+<p>现在对象结构体中没有了 <code>guards</code> 表，现在如果需要的话这个字段的值会被存储在 <code>properties_table</code> 的第一位中，也就是使用 <code>__get</code> 等方法的时候。不过如果没有使用魔术方法的话，guards 表会被省略。</p>
+<p><code>dtor</code>、<code>free_storage</code>  和  <code>clone</code> 三个操作句柄之前是存储在对象操作 bucket 中，现在直接存在 <code>handlers</code> 表中，其结构体定义如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">zend_object_handlers</span> &#123;</span></div><div class="line">    <span class="comment">/* offset of real object header (usually zero) */</span></div><div class="line">    <span class="keyword">int</span>                                     offset;</div><div class="line">    <span class="comment">/* general object functions */</span></div><div class="line">    <span class="keyword">zend_object_free_obj_t</span>                  free_obj;</div><div class="line">    <span class="keyword">zend_object_dtor_obj_t</span>                  dtor_obj;</div><div class="line">    <span class="keyword">zend_object_clone_obj_t</span>                 clone_obj;</div><div class="line">    <span class="comment">/* individual object functions */</span></div><div class="line">    <span class="comment">// ... rest is about the same in PHP 5</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>handler 表的第一个成员是 <code>offset</code>，很显然这不是一个操作句柄。这个 offset 是现在的实现中必须存在的，因为虽然内部的对象总是嵌入到标准的 <code>zend_object</code> 中，但是也总会有添加一些成员进去的需求。在 PHP5 中解决这个问题的方法是添加一些内容到标准的对象后面：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">custom_object</span> &#123;</span></div><div class="line">    zend_object <span class="built_in">std</span>;</div><div class="line">    <span class="keyword">uint32_t</span> something;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>这样如果你可以轻易的将 <code>zend_object*</code> 添加到 <code>struct custom_object*</code> 中。这也是 C 语言中常用的结构体继承的做法。但是在 PHP7 中这种实现会有一个问题：因为 <code>zend_object</code> 在存储属性表时用了结构体 hack 的技巧，<code>zend_object</code> 尾部存储的 PHP 属性会覆盖掉后续添加进去的内部成员。所以 PHP7 的实现中会把自己添加的成员添加到标准对象结构的前面：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">custom_object</span> &#123;</span></div><div class="line">    <span class="keyword">uint32_t</span> something;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    zend_object <span class="built_in">std</span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>不过这样也就意味着现在无法直接在 <code>zend_object*</code> 和 <code>struct custom_object*</code> 进行简单的转换了，因为两者都一个偏移分割开了。所以这个偏移量就需要被存储在对象 handler 表中的第一个元素中，这样在编译时通过 <code>offsetof()</code> 宏就能确定具体的偏移值。</p>
+<p>也许你会好奇既然现在已经直接（在 <code>zend_value</code> 中）存储了 <code>zend_object</code> 的指针，那现在就不需要再到对象存储中去查找对象了，为什么 PHP7 的对象者还保留着 <code>handle</code> 字段呢？</p>
+<p>这是因为现在对象存储仍然存在，虽然得到了极大的简化，所以保留 handle 仍然是有必要的。现在它只是一个指向对象的指针数组。当对象被创建时，会有一个指针插入到对象存储中并且其索引会保存在 <code>handle</code> 中，当对象被释放时，索引也会被移除。</p>
+<p>那么为什么现在还需要对象存储呢？因为在请求结束的阶段会在存在某个节点，在这之后再去执行用户代码并且取指针数据时就不安全了。为了避免这种情况出现 PHP 会在更早的节点上执行所有对象的析构函数并且之后就不再有此类操作，所以就需要一个活跃对象的列表。</p>
+<p>并且 handle 对于调试也是很有用的，它让每个对象都有了一个唯一的 ID，这样就很容易区分两个对象是同一个还是只是有相同的内容。虽然 HHVM 没有对象存储的概念，但它也存了对象的 handle。</p>
+<p>和 PHP5 相比，现在的实现中只有一个引用计数（zval 自身不计数），并且内存的使用量有了很大的缩减：40 个字节用于基础对象，每个属性需要 16 个字节，并且这还是算了 zval 之后的。间接访问的情况也有了显著的改善，因为现在中间层的结构体要么被去掉了，要么就是直接嵌入的，所以现在读取一个属性只有一层访问而不再是四层。</p>
+<h2 id="间接-zval"><a href="#间接-zval" class="headerlink" title="间接 zval"></a>间接 zval</h2><p>到现在我们已经基本提到过了所有正常的 zval 类型，但是也有一对特殊类型用于某些特定的情况的，其中之一就是 PHP7 新添加的 <code>IS_INDIRECT</code>。</p>
+<p>间接 zval 指的就是其真正的值是存储在其他地方的。注意这个 <code>IS_REFERENCE</code> 类型是不同的，间接 zval 是直接指向另外一个 zval 而不是像 <code>zend_reference</code> 结构体一样嵌入 zval。</p>
+<p>为了理解在什么时候会出现这种情况，我们来看一下 PHP 中变量的实现（实际上对象属性的存储也是一样的情况）。</p>
+<p>所有在编译过程中已知的变量都会被指定一个索引并且其值会被存在编译变量（CV）表的相应位置中。但是 PHP 也允许你动态的引用变量，不管是局部变量还是全局变量（比如 <code>$GLOBALS</code>），只要出现这种情况，PHP 就会为脚本或者函数创建一个符号表，这其中包含了变量名和它们的值之间的映射关系。</p>
+<p>但是问题在于：怎么样才能实现两个表的同时访问呢？我们需要在 CV 表中能够访问普通变量，也需要能在符号表中访问编译变量。在 PHP5 中 CV 表用了双重指针 <code>zval**</code>，通常这些指针指向中间的 <code>zval*</code> 的表，<code>zval*</code> 最终指向的才是实际的 zval:</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">+------ CV_ptr_ptr[0]</div><div class="line">|<span class="string"> +---- CV_ptr_ptr[1]</span></div><div class="line">|<span class="string"> </span>|<span class="string"> +-- CV_ptr_ptr[2]</span></div><div class="line">|<span class="string"> </span>|<span class="string"> </span>|</div><div class="line">|<span class="string"> </span>|<span class="string"> +-&gt; CV_ptr[0] --&gt; some zval</span></div><div class="line">|<span class="string"> +---&gt; CV_ptr[1] --&gt; some zval</span></div><div class="line"><span class="string">+-----&gt; CV_ptr[2] --&gt; some zval</span></div></pre></td></tr></table></figure>
+<p>当需要使用符号表时存储 <code>zval*</code> 的中间表其实是没有用到的而 <code>zval**</code> 指针会被更新到 hashtable buckets 的响应位置中。我们假定有 <code>$a</code>、<code>$b</code> 和 <code>$c</code> 三个变量，下面是简单的示意图：</p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">CV_<span class="function"><span class="title">ptr_ptr</span>[0] --&gt;</span> S<span class="function"><span class="title">ymbolTable</span>["a"].pDataPtr --&gt;</span> some zval</div><div class="line">CV_<span class="function"><span class="title">ptr_ptr</span>[1] --&gt;</span> S<span class="function"><span class="title">ymbolTable</span>["b"].pDataPtr --&gt;</span> some zval</div><div class="line">CV_<span class="function"><span class="title">ptr_ptr</span>[2] --&gt;</span> S<span class="function"><span class="title">ymbolTable</span>["c"].pDataPtr --&gt;</span> some zval</div></pre></td></tr></table></figure>
+<p>但是 PHP7 的用法中已经没有这个问题了，因为 PHP7 中的 hashtable 大小发生变化时 hashtable bucket 就失效了。所以 PHP7 用了一个相反的策略：为了访问 CV 表中存储的变量，符号表中存储 <code>INDIRECT</code> 来指向 CV 表。CV 表在符号表的生命周期内不会重新分配，所以也就不会存在有无效指针的问题了。</p>
+<p>所以加入你有一个函数并且在 CV 表中有 <code>$a</code>、<code>$b</code> 和 <code>$c</code>，同时还有一个动态分配的变量 <code>$d</code>，符号表的结构看起来大概就是这个样子：</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="type">SymbolTable</span>[<span class="string">"a"</span>].<span class="keyword">value</span> = <span class="type">INDIRECT</span> --&gt; <span class="type">CV</span>[<span class="number">0</span>] = <span class="type">LONG</span> <span class="number">42</span></div><div class="line"><span class="type">SymbolTable</span>[<span class="string">"b"</span>].<span class="keyword">value</span> = <span class="type">INDIRECT</span> --&gt; <span class="type">CV</span>[<span class="number">1</span>] = <span class="type">DOUBLE</span> <span class="number">42.0</span></div><div class="line"><span class="type">SymbolTable</span>[<span class="string">"c"</span>].<span class="keyword">value</span> = <span class="type">INDIRECT</span> --&gt; <span class="type">CV</span>[<span class="number">2</span>] = <span class="type">STRING</span> --&gt; zend_string(<span class="string">"42"</span>)</div><div class="line"><span class="type">SymbolTable</span>[<span class="string">"d"</span>].<span class="keyword">value</span> = <span class="type">ARRAY</span> --&gt; zend_array([<span class="number">4</span>, <span class="number">2</span>])</div></pre></td></tr></table></figure>
+<p>间接 zval 也可以是一个指向 <code>IS_UNDEF</code> 类型 zval 的指针，当 hashtable 没有和它关联的 key 时就会出现这种情况。所以当使用 <code>unset($a)</code> 将 <code>CV[0]</code> 的类型标记为 <code>UNDEF</code> 时就会判定符号表不存在键值为 <code>a</code> 的数据。</p>
+<h2 id="常量和-AST"><a href="#常量和-AST" class="headerlink" title="常量和 AST"></a>常量和 AST</h2><p>还有两个需要说一下的在 PHP5 和 PHP7 中都存在的特殊类型 <code>IS_CONSTANT</code> 和 <code>IS_CONSTANT_AST</code>。要了解他们我们还是先看以下的例子：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">($a = ANSWER,</span></span></div><div class="line"><span class="function"><span class="params">              $b = ANSWER * ANSWER)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> $a + $b;</div><div class="line">&#125;</div><div class="line"></div><div class="line">define(<span class="string">'ANSWER'</span>, <span class="number">42</span>);</div><div class="line">var_dump(test()); <span class="comment">// int(42 + 42 * 42)·</span></div></pre></td></tr></table></figure>
+<p><code>test()</code> 函数的两个参数的默认值都是由常量 <code>ANSWER</code>构成，但是函数声明时常量的值尚未定义。常量的具体值只有通过 <code>define()</code> 定义时才知道。</p>
+<p>由于以上问题的存在，参数和属性的默认值、常量以及其他接受『静态表达式』的东西都支持『延时绑定』直到首次使用时。</p>
+<p>常量（或者类的静态属性）这些需要『延时绑定』的数据就是最常需要用到 <code>IS_CONSTANT</code> 类型 zval 的地方。如果这个值是表达式，就会使用 <code>IS_CONSTANT_AST</code> 类型的 zval 指向表达式的抽象语法树（AST）。</p>
+<p>到这里我们就结束了对 PHP7 中变量实现的分析。后面我可能还会写两篇文章来介绍一些虚拟机优化、新的命名约定以及一些编译器基础结构的优化的内容（这是作者原话）。</p>
+<p><em>译者注：两篇文章篇幅较长，翻译中可能有疏漏或不正确的地方，如果发现了请及时指正。</em></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixindashang.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.zwting.com/2017/08/29/Internal-value-representation-in-PHP-7-part-2/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2017/09/11/2017-09-11-cluster-kafka-1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          kafka-flume集群环境搭建【1】
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/08/28/Internal-value-representation-in-PHP-7-part-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">PHP7扩展开发官方译文[1]</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+  <div class="duoshuo">
+	<div class="ds-thread" data-thread-key="Internal-value-representation-in-PHP-7-part-2" data-title="PHP7扩展开发官方译文[2]" data-url="//www.zwting.com/2017/08/29/Internal-value-representation-in-PHP-7-part-2/"></div>
+
+	<div id="uyan_frame"></div>
+	<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2023055"></script>
+</div>
+
+
+  
+
+
+
+
+          </div>
+        </div>
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 醉翁亭
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		mathjax: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true,
+		showTags: false
+	}
+</script>
+
+<script>!function(t){function n(r){if(e[r])return e[r].exports;var o=e[r]={exports:{},id:r,loaded:!1};return t[r].call(o.exports,o,o.exports,n),o.loaded=!0,o.exports}var e={};return n.m=t,n.c=e,n.p="./",n(0)}([function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}function o(t,n){var e=/\/|index.html/g;return t.replace(e,"")===n.replace(e,"")}function i(){for(var t=document.querySelectorAll(".js-header-menu li a"),n=window.location.pathname,e=0,r=t.length;e<r;e++){var i=t[e];o(n,i.getAttribute("href"))&&(0,d.default)(i,"active")}}function u(t){for(var n=t.offsetLeft,e=t.offsetParent;null!==e;)n+=e.offsetLeft,e=e.offsetParent;return n}function f(t){for(var n=t.offsetTop,e=t.offsetParent;null!==e;)n+=e.offsetTop,e=e.offsetParent;return n}function c(t,n,e,r,o){var i=u(t),c=f(t)-n;if(c-e<=o){var a=t.$newDom;a||(a=t.cloneNode(!0),(0,h.default)(t,a),t.$newDom=a,a.style.position="fixed",a.style.top=(e||c)+"px",a.style.left=i+"px",a.style.zIndex=r||2,a.style.width="100%",a.style.color="#fff"),a.style.visibility="visible",t.style.visibility="hidden"}else{t.style.visibility="visible";var s=t.$newDom;s&&(s.style.visibility="hidden")}}function a(){var t=document.querySelector(".js-overlay"),n=document.querySelector(".js-header-menu");c(t,document.body.scrollTop,-63,2,0),c(n,document.body.scrollTop,1,3,0)}function s(){document.querySelector("#container").addEventListener("scroll",function(t){a()}),window.addEventListener("scroll",function(t){a()}),a()}function l(){x.default.versions.mobile&&window.screen.width<800&&(i(),s())}var p=e(71),d=r(p),v=e(72),y=(r(v),e(84)),h=r(y),b=e(69),x=r(b),m=e(75),g=r(m),w=e(70);l(),(0,w.addLoadEvent)(function(){g.default.init()}),t.exports={}},function(t,n){var e=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=e)},function(t,n){var e={}.hasOwnProperty;t.exports=function(t,n){return e.call(t,n)}},function(t,n,e){var r=e(49),o=e(15);t.exports=function(t){return r(o(t))}},function(t,n,e){t.exports=!e(8)(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})},function(t,n,e){var r=e(6),o=e(12);t.exports=e(4)?function(t,n,e){return r.f(t,n,o(1,e))}:function(t,n,e){return t[n]=e,t}},function(t,n,e){var r=e(10),o=e(30),i=e(24),u=Object.defineProperty;n.f=e(4)?Object.defineProperty:function(t,n,e){if(r(t),n=i(n,!0),r(e),o)try{return u(t,n,e)}catch(t){}if("get"in e||"set"in e)throw TypeError("Accessors not supported!");return"value"in e&&(t[n]=e.value),t}},function(t,n,e){var r=e(22)("wks"),o=e(13),i=e(1).Symbol,u="function"==typeof i,f=t.exports=function(t){return r[t]||(r[t]=u&&i[t]||(u?i:o)("Symbol."+t))};f.store=r},function(t,n){t.exports=function(t){try{return!!t()}catch(t){return!0}}},function(t,n,e){var r=e(35),o=e(16);t.exports=Object.keys||function(t){return r(t,o)}},function(t,n,e){var r=e(11);t.exports=function(t){if(!r(t))throw TypeError(t+" is not an object!");return t}},function(t,n){t.exports=function(t){return"object"==typeof t?null!==t:"function"==typeof t}},function(t,n){t.exports=function(t,n){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:n}}},function(t,n){var e=0,r=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++e+r).toString(36))}},function(t,n){var e=t.exports={version:"2.4.0"};"number"==typeof __e&&(__e=e)},function(t,n){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}},function(t,n){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",")},function(t,n){t.exports={}},function(t,n){t.exports=!0},function(t,n){n.f={}.propertyIsEnumerable},function(t,n,e){var r=e(6).f,o=e(2),i=e(7)("toStringTag");t.exports=function(t,n,e){t&&!o(t=e?t:t.prototype,i)&&r(t,i,{configurable:!0,value:n})}},function(t,n,e){var r=e(22)("keys"),o=e(13);t.exports=function(t){return r[t]||(r[t]=o(t))}},function(t,n,e){var r=e(1),o="__core-js_shared__",i=r[o]||(r[o]={});t.exports=function(t){return i[t]||(i[t]={})}},function(t,n){var e=Math.ceil,r=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?r:e)(t)}},function(t,n,e){var r=e(11);t.exports=function(t,n){if(!r(t))return t;var e,o;if(n&&"function"==typeof(e=t.toString)&&!r(o=e.call(t)))return o;if("function"==typeof(e=t.valueOf)&&!r(o=e.call(t)))return o;if(!n&&"function"==typeof(e=t.toString)&&!r(o=e.call(t)))return o;throw TypeError("Can't convert object to primitive value")}},function(t,n,e){var r=e(1),o=e(14),i=e(18),u=e(26),f=e(6).f;t.exports=function(t){var n=o.Symbol||(o.Symbol=i?{}:r.Symbol||{});"_"==t.charAt(0)||t in n||f(n,t,{value:u.f(t)})}},function(t,n,e){n.f=e(7)},function(t,n,e){var r=e(1),o=e(14),i=e(46),u=e(5),f="prototype",c=function(t,n,e){var a,s,l,p=t&c.F,d=t&c.G,v=t&c.S,y=t&c.P,h=t&c.B,b=t&c.W,x=d?o:o[n]||(o[n]={}),m=x[f],g=d?r:v?r[n]:(r[n]||{})[f];d&&(e=n);for(a in e)s=!p&&g&&void 0!==g[a],s&&a in x||(l=s?g[a]:e[a],x[a]=d&&"function"!=typeof g[a]?e[a]:h&&s?i(l,r):b&&g[a]==l?function(t){var n=function(n,e,r){if(this instanceof t){switch(arguments.length){case 0:return new t;case 1:return new t(n);case 2:return new t(n,e)}return new t(n,e,r)}return t.apply(this,arguments)};return n[f]=t[f],n}(l):y&&"function"==typeof l?i(Function.call,l):l,y&&((x.virtual||(x.virtual={}))[a]=l,t&c.R&&m&&!m[a]&&u(m,a,l)))};c.F=1,c.G=2,c.S=4,c.P=8,c.B=16,c.W=32,c.U=64,c.R=128,t.exports=c},function(t,n){var e={}.toString;t.exports=function(t){return e.call(t).slice(8,-1)}},function(t,n,e){var r=e(11),o=e(1).document,i=r(o)&&r(o.createElement);t.exports=function(t){return i?o.createElement(t):{}}},function(t,n,e){t.exports=!e(4)&&!e(8)(function(){return 7!=Object.defineProperty(e(29)("div"),"a",{get:function(){return 7}}).a})},function(t,n,e){"use strict";var r=e(18),o=e(27),i=e(36),u=e(5),f=e(2),c=e(17),a=e(51),s=e(20),l=e(58),p=e(7)("iterator"),d=!([].keys&&"next"in[].keys()),v="@@iterator",y="keys",h="values",b=function(){return this};t.exports=function(t,n,e,x,m,g,w){a(e,n,x);var O,S,_,j=function(t){if(!d&&t in A)return A[t];switch(t){case y:return function(){return new e(this,t)};case h:return function(){return new e(this,t)}}return function(){return new e(this,t)}},P=n+" Iterator",E=m==h,M=!1,A=t.prototype,T=A[p]||A[v]||m&&A[m],L=T||j(m),N=m?E?j("entries"):L:void 0,C="Array"==n?A.entries||T:T;if(C&&(_=l(C.call(new t)),_!==Object.prototype&&(s(_,P,!0),r||f(_,p)||u(_,p,b))),E&&T&&T.name!==h&&(M=!0,L=function(){return T.call(this)}),r&&!w||!d&&!M&&A[p]||u(A,p,L),c[n]=L,c[P]=b,m)if(O={values:E?L:j(h),keys:g?L:j(y),entries:N},w)for(S in O)S in A||i(A,S,O[S]);else o(o.P+o.F*(d||M),n,O);return O}},function(t,n,e){var r=e(10),o=e(55),i=e(16),u=e(21)("IE_PROTO"),f=function(){},c="prototype",a=function(){var t,n=e(29)("iframe"),r=i.length,o="<",u=">";for(n.style.display="none",e(48).appendChild(n),n.src="javascript:",t=n.contentWindow.document,t.open(),t.write(o+"script"+u+"document.F=Object"+o+"/script"+u),t.close(),a=t.F;r--;)delete a[c][i[r]];return a()};t.exports=Object.create||function(t,n){var e;return null!==t?(f[c]=r(t),e=new f,f[c]=null,e[u]=t):e=a(),void 0===n?e:o(e,n)}},function(t,n,e){var r=e(35),o=e(16).concat("length","prototype");n.f=Object.getOwnPropertyNames||function(t){return r(t,o)}},function(t,n){n.f=Object.getOwnPropertySymbols},function(t,n,e){var r=e(2),o=e(3),i=e(45)(!1),u=e(21)("IE_PROTO");t.exports=function(t,n){var e,f=o(t),c=0,a=[];for(e in f)e!=u&&r(f,e)&&a.push(e);for(;n.length>c;)r(f,e=n[c++])&&(~i(a,e)||a.push(e));return a}},function(t,n,e){t.exports=e(5)},function(t,n,e){var r=e(15);t.exports=function(t){return Object(r(t))}},function(t,n,e){t.exports={default:e(41),__esModule:!0}},function(t,n,e){t.exports={default:e(42),__esModule:!0}},function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}n.__esModule=!0;var o=e(39),i=r(o),u=e(38),f=r(u),c="function"==typeof f.default&&"symbol"==typeof i.default?function(t){return typeof t}:function(t){return t&&"function"==typeof f.default&&t.constructor===f.default&&t!==f.default.prototype?"symbol":typeof t};n.default="function"==typeof f.default&&"symbol"===c(i.default)?function(t){return"undefined"==typeof t?"undefined":c(t)}:function(t){return t&&"function"==typeof f.default&&t.constructor===f.default&&t!==f.default.prototype?"symbol":"undefined"==typeof t?"undefined":c(t)}},function(t,n,e){e(65),e(63),e(66),e(67),t.exports=e(14).Symbol},function(t,n,e){e(64),e(68),t.exports=e(26).f("iterator")},function(t,n){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}},function(t,n){t.exports=function(){}},function(t,n,e){var r=e(3),o=e(61),i=e(60);t.exports=function(t){return function(n,e,u){var f,c=r(n),a=o(c.length),s=i(u,a);if(t&&e!=e){for(;a>s;)if(f=c[s++],f!=f)return!0}else for(;a>s;s++)if((t||s in c)&&c[s]===e)return t||s||0;return!t&&-1}}},function(t,n,e){var r=e(43);t.exports=function(t,n,e){if(r(t),void 0===n)return t;switch(e){case 1:return function(e){return t.call(n,e)};case 2:return function(e,r){return t.call(n,e,r)};case 3:return function(e,r,o){return t.call(n,e,r,o)}}return function(){return t.apply(n,arguments)}}},function(t,n,e){var r=e(9),o=e(34),i=e(19);t.exports=function(t){var n=r(t),e=o.f;if(e)for(var u,f=e(t),c=i.f,a=0;f.length>a;)c.call(t,u=f[a++])&&n.push(u);return n}},function(t,n,e){t.exports=e(1).document&&document.documentElement},function(t,n,e){var r=e(28);t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==r(t)?t.split(""):Object(t)}},function(t,n,e){var r=e(28);t.exports=Array.isArray||function(t){return"Array"==r(t)}},function(t,n,e){"use strict";var r=e(32),o=e(12),i=e(20),u={};e(5)(u,e(7)("iterator"),function(){return this}),t.exports=function(t,n,e){t.prototype=r(u,{next:o(1,e)}),i(t,n+" Iterator")}},function(t,n){t.exports=function(t,n){return{value:n,done:!!t}}},function(t,n,e){var r=e(9),o=e(3);t.exports=function(t,n){for(var e,i=o(t),u=r(i),f=u.length,c=0;f>c;)if(i[e=u[c++]]===n)return e}},function(t,n,e){var r=e(13)("meta"),o=e(11),i=e(2),u=e(6).f,f=0,c=Object.isExtensible||function(){return!0},a=!e(8)(function(){return c(Object.preventExtensions({}))}),s=function(t){u(t,r,{value:{i:"O"+ ++f,w:{}}})},l=function(t,n){if(!o(t))return"symbol"==typeof t?t:("string"==typeof t?"S":"P")+t;if(!i(t,r)){if(!c(t))return"F";if(!n)return"E";s(t)}return t[r].i},p=function(t,n){if(!i(t,r)){if(!c(t))return!0;if(!n)return!1;s(t)}return t[r].w},d=function(t){return a&&v.NEED&&c(t)&&!i(t,r)&&s(t),t},v=t.exports={KEY:r,NEED:!1,fastKey:l,getWeak:p,onFreeze:d}},function(t,n,e){var r=e(6),o=e(10),i=e(9);t.exports=e(4)?Object.defineProperties:function(t,n){o(t);for(var e,u=i(n),f=u.length,c=0;f>c;)r.f(t,e=u[c++],n[e]);return t}},function(t,n,e){var r=e(19),o=e(12),i=e(3),u=e(24),f=e(2),c=e(30),a=Object.getOwnPropertyDescriptor;n.f=e(4)?a:function(t,n){if(t=i(t),n=u(n,!0),c)try{return a(t,n)}catch(t){}if(f(t,n))return o(!r.f.call(t,n),t[n])}},function(t,n,e){var r=e(3),o=e(33).f,i={}.toString,u="object"==typeof window&&window&&Object.getOwnPropertyNames?Object.getOwnPropertyNames(window):[],f=function(t){try{return o(t)}catch(t){return u.slice()}};t.exports.f=function(t){return u&&"[object Window]"==i.call(t)?f(t):o(r(t))}},function(t,n,e){var r=e(2),o=e(37),i=e(21)("IE_PROTO"),u=Object.prototype;t.exports=Object.getPrototypeOf||function(t){return t=o(t),r(t,i)?t[i]:"function"==typeof t.constructor&&t instanceof t.constructor?t.constructor.prototype:t instanceof Object?u:null}},function(t,n,e){var r=e(23),o=e(15);t.exports=function(t){return function(n,e){var i,u,f=String(o(n)),c=r(e),a=f.length;return c<0||c>=a?t?"":void 0:(i=f.charCodeAt(c),i<55296||i>56319||c+1===a||(u=f.charCodeAt(c+1))<56320||u>57343?t?f.charAt(c):i:t?f.slice(c,c+2):(i-55296<<10)+(u-56320)+65536)}}},function(t,n,e){var r=e(23),o=Math.max,i=Math.min;t.exports=function(t,n){return t=r(t),t<0?o(t+n,0):i(t,n)}},function(t,n,e){var r=e(23),o=Math.min;t.exports=function(t){return t>0?o(r(t),9007199254740991):0}},function(t,n,e){"use strict";var r=e(44),o=e(52),i=e(17),u=e(3);t.exports=e(31)(Array,"Array",function(t,n){this._t=u(t),this._i=0,this._k=n},function(){var t=this._t,n=this._k,e=this._i++;return!t||e>=t.length?(this._t=void 0,o(1)):"keys"==n?o(0,e):"values"==n?o(0,t[e]):o(0,[e,t[e]])},"values"),i.Arguments=i.Array,r("keys"),r("values"),r("entries")},function(t,n){},function(t,n,e){"use strict";var r=e(59)(!0);e(31)(String,"String",function(t){this._t=String(t),this._i=0},function(){var t,n=this._t,e=this._i;return e>=n.length?{value:void 0,done:!0}:(t=r(n,e),this._i+=t.length,{value:t,done:!1})})},function(t,n,e){"use strict";var r=e(1),o=e(2),i=e(4),u=e(27),f=e(36),c=e(54).KEY,a=e(8),s=e(22),l=e(20),p=e(13),d=e(7),v=e(26),y=e(25),h=e(53),b=e(47),x=e(50),m=e(10),g=e(3),w=e(24),O=e(12),S=e(32),_=e(57),j=e(56),P=e(6),E=e(9),M=j.f,A=P.f,T=_.f,L=r.Symbol,N=r.JSON,C=N&&N.stringify,k="prototype",F=d("_hidden"),q=d("toPrimitive"),I={}.propertyIsEnumerable,B=s("symbol-registry"),D=s("symbols"),W=s("op-symbols"),H=Object[k],K="function"==typeof L,R=r.QObject,J=!R||!R[k]||!R[k].findChild,U=i&&a(function(){return 7!=S(A({},"a",{get:function(){return A(this,"a",{value:7}).a}})).a})?function(t,n,e){var r=M(H,n);r&&delete H[n],A(t,n,e),r&&t!==H&&A(H,n,r)}:A,G=function(t){var n=D[t]=S(L[k]);return n._k=t,n},$=K&&"symbol"==typeof L.iterator?function(t){return"symbol"==typeof t}:function(t){return t instanceof L},z=function(t,n,e){return t===H&&z(W,n,e),m(t),n=w(n,!0),m(e),o(D,n)?(e.enumerable?(o(t,F)&&t[F][n]&&(t[F][n]=!1),e=S(e,{enumerable:O(0,!1)})):(o(t,F)||A(t,F,O(1,{})),t[F][n]=!0),U(t,n,e)):A(t,n,e)},Y=function(t,n){m(t);for(var e,r=b(n=g(n)),o=0,i=r.length;i>o;)z(t,e=r[o++],n[e]);return t},Q=function(t,n){return void 0===n?S(t):Y(S(t),n)},X=function(t){var n=I.call(this,t=w(t,!0));return!(this===H&&o(D,t)&&!o(W,t))&&(!(n||!o(this,t)||!o(D,t)||o(this,F)&&this[F][t])||n)},V=function(t,n){if(t=g(t),n=w(n,!0),t!==H||!o(D,n)||o(W,n)){var e=M(t,n);return!e||!o(D,n)||o(t,F)&&t[F][n]||(e.enumerable=!0),e}},Z=function(t){for(var n,e=T(g(t)),r=[],i=0;e.length>i;)o(D,n=e[i++])||n==F||n==c||r.push(n);return r},tt=function(t){for(var n,e=t===H,r=T(e?W:g(t)),i=[],u=0;r.length>u;)!o(D,n=r[u++])||e&&!o(H,n)||i.push(D[n]);return i};K||(L=function(){if(this instanceof L)throw TypeError("Symbol is not a constructor!");var t=p(arguments.length>0?arguments[0]:void 0),n=function(e){this===H&&n.call(W,e),o(this,F)&&o(this[F],t)&&(this[F][t]=!1),U(this,t,O(1,e))};return i&&J&&U(H,t,{configurable:!0,set:n}),G(t)},f(L[k],"toString",function(){return this._k}),j.f=V,P.f=z,e(33).f=_.f=Z,e(19).f=X,e(34).f=tt,i&&!e(18)&&f(H,"propertyIsEnumerable",X,!0),v.f=function(t){return G(d(t))}),u(u.G+u.W+u.F*!K,{Symbol:L});for(var nt="hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables".split(","),et=0;nt.length>et;)d(nt[et++]);for(var nt=E(d.store),et=0;nt.length>et;)y(nt[et++]);u(u.S+u.F*!K,"Symbol",{for:function(t){return o(B,t+="")?B[t]:B[t]=L(t)},keyFor:function(t){if($(t))return h(B,t);throw TypeError(t+" is not a symbol!")},useSetter:function(){J=!0},useSimple:function(){J=!1}}),u(u.S+u.F*!K,"Object",{create:Q,defineProperty:z,defineProperties:Y,getOwnPropertyDescriptor:V,getOwnPropertyNames:Z,getOwnPropertySymbols:tt}),N&&u(u.S+u.F*(!K||a(function(){var t=L();return"[null]"!=C([t])||"{}"!=C({a:t})||"{}"!=C(Object(t))})),"JSON",{stringify:function(t){if(void 0!==t&&!$(t)){for(var n,e,r=[t],o=1;arguments.length>o;)r.push(arguments[o++]);return n=r[1],"function"==typeof n&&(e=n),!e&&x(n)||(n=function(t,n){if(e&&(n=e.call(this,t,n)),!$(n))return n}),r[1]=n,C.apply(N,r)}}}),L[k][q]||e(5)(L[k],q,L[k].valueOf),l(L,"Symbol"),l(Math,"Math",!0),l(r.JSON,"JSON",!0)},function(t,n,e){e(25)("asyncIterator")},function(t,n,e){e(25)("observable")},function(t,n,e){e(62);for(var r=e(1),o=e(5),i=e(17),u=e(7)("toStringTag"),f=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],c=0;c<5;c++){var a=f[c],s=r[a],l=s&&s.prototype;l&&!l[u]&&o(l,u,a),i[a]=i.Array}},function(t,n){"use strict";var e={versions:function(){var t=window.navigator.userAgent;return{trident:t.indexOf("Trident")>-1,presto:t.indexOf("Presto")>-1,webKit:t.indexOf("AppleWebKit")>-1,gecko:t.indexOf("Gecko")>-1&&t.indexOf("KHTML")==-1,mobile:!!t.match(/AppleWebKit.*Mobile.*/),ios:!!t.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),android:t.indexOf("Android")>-1||t.indexOf("Linux")>-1,iPhone:t.indexOf("iPhone")>-1||t.indexOf("Mac")>-1,iPad:t.indexOf("iPad")>-1,webApp:t.indexOf("Safari")==-1,weixin:t.indexOf("MicroMessenger")==-1}}()};t.exports=e},function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}var o=e(40),i=r(o),u=function(){function t(t,n,e){return n||e?String.fromCharCode(n||e):o[t]||t}function n(t){return l[t]}var e=/&quot;|&lt;|&gt;|&amp;|&nbsp;|&apos;|&#(\d+);|&#(\d+)/g,r=/['<> "&]/g,o={"&quot;":'"',"&lt;":"<","&gt;":">","&amp;":"&","&nbsp;":" "},f=/\u00a0/g,c=/<br\s*\/?>/gi,a=/\r?\n/g,s=/\s/g,l={};for(var p in o)l[o[p]]=p;return o["&apos;"]="'",l["'"]="&#39;",{encode:function(t){return t?(""+t).replace(r,n).replace(a,"<br/>").replace(s,"&nbsp;"):""},decode:function(n){return n?(""+n).replace(c,"\n").replace(e,t).replace(f," "):""},encodeBase16:function(t){if(!t)return t;t+="";for(var n=[],e=0,r=t.length;r>e;e++)n.push(t.charCodeAt(e).toString(16).toUpperCase());return n.join("")},encodeBase16forJSON:function(t){if(!t)return t;t=t.replace(/[\u4E00-\u9FBF]/gi,function(t){return escape(t).replace("%u","\\u")});for(var n=[],e=0,r=t.length;r>e;e++)n.push(t.charCodeAt(e).toString(16).toUpperCase());return n.join("")},decodeBase16:function(t){if(!t)return t;t+="";for(var n=[],e=0,r=t.length;r>e;e+=2)n.push(String.fromCharCode("0x"+t.slice(e,e+2)));return n.join("")},encodeObject:function(t){if(t instanceof Array)for(var n=0,e=t.length;e>n;n++)t[n]=u.encodeObject(t[n]);else if("object"==("undefined"==typeof t?"undefined":(0,i.default)(t)))for(var r in t)t[r]=u.encodeObject(t[r]);else if("string"==typeof t)return u.encode(t);return t},loadScript:function(t){var n=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(n),n.setAttribute("src",t)},addLoadEvent:function(t){var n=window.onload;"function"!=typeof window.onload?window.onload=t:window.onload=function(){n(),t()}}}}();t.exports=u},function(t,n){function e(t,n){t.classList?t.classList.add(n):t.className+=" "+n}t.exports=e},function(t,n){function e(t,n){if(t.classList)t.classList.remove(n);else{var e=new RegExp("(^|\\b)"+n.split(" ").join("|")+"(\\b|$)","gi");t.className=t.className.replace(e," ")}}t.exports=e},,,function(t,n){"use strict";function e(){var t=document.querySelector("#page-nav");if(t&&!document.querySelector("#page-nav .extend.prev")&&(t.innerHTML='<a class="extend prev disabled" rel="prev">&laquo; Prev</a>'+t.innerHTML),t&&!document.querySelector("#page-nav .extend.next")&&(t.innerHTML=t.innerHTML+'<a class="extend next disabled" rel="next">Next &raquo;</a>'),yiliaConfig&&yiliaConfig.open_in_new){var n=document.querySelectorAll(".article-entry a:not(.article-more-a)");n.forEach(function(t){t.setAttribute("target","_blank")})}var e=document.querySelector("#js-aboutme");e&&0!==e.length&&(e.innerHTML=e.innerText)}t.exports={init:e}},,,,,,,,,function(t,n){function e(t,n){if("string"==typeof n)return t.insertAdjacentHTML("afterend",n);var e=t.nextSibling;return e?t.parentNode.insertBefore(n,e):t.parentNode.appendChild(n)}t.exports=e}])</script><script src="/./main.234bc0.js"></script><script>!function(){var e=function(e){var t=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(t),t.setAttribute("src",e)};e("/slider.885efe.js")}()</script>
+
+
+    
+<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
+  <div class="tools-nav header-menu">
+    
+    
+      
+      
+      
+    
+      
+      
+      
+    
+      
+      
+      
+    
+    
+
+    <ul style="width: 70%">
+    
+    
+      
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
+      
+        
+      
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'friends')"><a href="javascript:void(0)" q-class="active:friends">友链</a></li>
+      
+        
+      
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
+      
+        
+    </ul>
+  </div>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all" q-show="innerArchive">
+        <div class="search-wrap">
+          <input class="search-ipt" q-model="search" type="text" placeholder="find something…">
+          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
+          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
+        </div>
+        <div class="widget tagcloud search-tag">
+          <p class="search-tag-wording">tag:</p>
+          <label class="search-switch">
+            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
+          </label>
+          <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">python技术分享</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PHP7扩展开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">集群搭建</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">phpmongodb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">QA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SDK开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">技术管理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
+              </li>
+            
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <ul class="search-ul">
+          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
+            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            2、在根目录_config.yml里添加配置：
+<pre style="font-size: 12px;" q-show="jsonFail">
+  jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: true
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
+</pre>
+          </p>
+          <li class="search-li" q-repeat="items" q-show="isShow">
+            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
+            <p class="search-time">
+              <i class="icon-calendar icon"></i>
+              <span q-text="date|dateformat"></span>
+            </p>
+            <p class="search-tag">
+              <i class="icon-price-tags icon"></i>
+              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+            </p>
+          </li>
+        </ul>
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="https://lankors.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>大侠</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://www.heyyezi.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>强仔</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://baiyibing123.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>小白</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://yx5198.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>杨兴</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://taoyak.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>族长</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://mingmings.org/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>熊大</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://successfuljian.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>小健</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://nick-weixx.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>星星</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://lezhimeng.coding.me/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>材乐</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://obeyconquer.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>高洋</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://dolinks.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>张张</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://happyoldguys.github.io" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>苏旭</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://fpp.coding.me/fpp/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>志腾</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://biubiubiu666.coding.me" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>浩亮</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://simonchyi.coding.me" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>西朋</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://big-chief.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>酋长</a>
+            </li>
+          
+        </ul>
+  		
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-me" q-show="aboutme">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">我的征途是星辰大海</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>
