@@ -157,19 +157,19 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-2015-05-14-training-python-10" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2015-04-10-training-python-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-05-14-training-python-10/">python技术分享[10]－ 日志－记文件log</a>
+      <a class="article-title" href="/2017/09/15/2015-04-10-training-python-1/">python技术分享[1]－python初步感观</a>
     </h1>
   
 
         
-        <a href="/2017/09/15/2015-05-14-training-python-10/" class="archive-article-date">
+        <a href="/2017/09/15/2015-04-10-training-python-1/" class="archive-article-date">
   	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
 </a>
         
@@ -177,9 +177,90 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="1-日志操作："><a href="#1-日志操作：" class="headerlink" title="1.日志操作："></a>1.日志操作：</h4><p>&gt;<br>    日志文件操作在工作中最常用的操作类库之一，今天贴出来我常用的文件操作类，一直在用，也一直在不断优化，暂时可以满足业务</p>
-<h4 id="2-日志操作代码："><a href="#2-日志操作代码：" class="headerlink" title="2.日志操作代码："></a>2.日志操作代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/python</span></div><div class="line"><span class="comment">#coding:utf-8</span></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="string">mail:wuqichao@gyyx.com</span></div><div class="line"><span class="string">createtime:2011-3-1下午12:24:29</span></div><div class="line"><span class="string">usege:</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">"""</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> sys, os, re</div><div class="line"><span class="keyword">import</span> logging</div><div class="line"><span class="keyword">import</span> logging.handlers</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LogFactory</span>:</span></div><div class="line">    </div><div class="line">    <span class="string">'''日志工厂'''</span></div><div class="line">    </div><div class="line">    ilog = <span class="keyword">None</span> <span class="comment">#信息日志</span></div><div class="line">    elog = <span class="keyword">None</span> <span class="comment">#错误日志</span></div><div class="line">    root = os.path.abspath(<span class="string">'.'</span>)</div><div class="line">    ilogfile = root+<span class="string">'/logs/mtask_info_%s.log'</span> <span class="comment">#信息日志文件</span></div><div class="line">    elogfile = root+<span class="string">'/logs/mtask_err_%s.log'</span> <span class="comment">#错误日志文件</span></div><div class="line">    ERROR = <span class="string">'err'</span></div><div class="line">    INFO = <span class="string">'info'</span></div><div class="line"></div><div class="line"><span class="meta">    @staticmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init_log</span><span class="params">(logtype, p = <span class="string">""</span>)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        初始化日志对像</span></div><div class="line"><span class="string">        @param logtype:info 和 err分别是信息日志和错误日志</span></div><div class="line"><span class="string">        @param p :日志文件名后缀</span></div><div class="line"><span class="string">        '''</span></div><div class="line"></div><div class="line">        logfile = LogFactory.ilogfile % p</div><div class="line">        <span class="keyword">if</span> logtype == LogFactory.ERROR: logfile = LogFactory.elogfile % p</div><div class="line">        logger = logging.getLogger(logtype)</div><div class="line">        logger.setLevel(logging.INFO)</div><div class="line">        handler = logging.handlers.RotatingFileHandler(logfile, maxBytes=<span class="number">1024</span>*<span class="number">1024</span>*<span class="number">1024</span>, backupCount=<span class="number">5</span>)</div><div class="line"></div><div class="line">        formatter = logging.Formatter(<span class="string">'%(asctime)s %(levelname)-8s %(filename)s %(lineno)d %(message)s'</span>)</div><div class="line"></div><div class="line">        handler.setFormatter(formatter)</div><div class="line">        logger.addHandler(handler)</div><div class="line"></div><div class="line">        <span class="keyword">return</span> logger</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">    @staticmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_err_logger</span><span class="params">(p=<span class="string">""</span>)</span>:</span></div><div class="line">        <span class="string">'''初使化错误日志'''</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> LogFactory.elog :</div><div class="line">            LogFactory.elog = LogFactory.init_log(LogFactory.ERROR, p)</div><div class="line">        <span class="keyword">return</span> LogFactory.elog</div><div class="line"></div><div class="line"><span class="meta">    @staticmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_info_logger</span><span class="params">(p=<span class="string">""</span>)</span>:</span></div><div class="line">        <span class="string">'''初使化错误日志'''</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> LogFactory.ilog :</div><div class="line">            LogFactory.ilog = LogFactory.init_log(LogFactory.INFO, p)</div><div class="line">        <span class="keyword">return</span> LogFactory.ilog</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">w_info</span><span class="params">(msg,p=<span class="string">''</span>)</span>:</span></div><div class="line">    <span class="string">'''</span></div><div class="line"><span class="string">    写信息日志</span></div><div class="line"><span class="string">    @param msg:信息</span></div><div class="line"><span class="string">    '''</span></div><div class="line">    ilogger = LogFactory.get_info_logger(p=p)</div><div class="line">    ilogger.info(msg)</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">w_err</span><span class="params">(msg,p=<span class="string">''</span>)</span>:</span></div><div class="line">    <span class="string">'''</span></div><div class="line"><span class="string">    写错误日志</span></div><div class="line"><span class="string">    @param msg : 错误信息</span></div><div class="line"><span class="string">    '''</span></div><div class="line">    elogger = LogFactory.get_err_logger(p=p)</div><div class="line">    elogger.error(msg)</div></pre></td></tr></table></figure>
+        <p>###1、环境简介</p>
+<ul>
+<li>os系统：centos6.5</li>
+<li>python:2.7.7 或者 2.7.8</li>
+<li>扩展要求:<pre><code>setuptools ,pip     ,MySQL-python    
+</code></pre></li>
+<li>如果你的python版本过低，可以用下面的脚本升级为2.7.7</li>
+<li><p>脚本下载：<a href="http://pan.baidu.com/s/1jGDvFzo" target="_blank" rel="external">http://pan.baidu.com/s/1jGDvFzo</a>      </p>
+</li>
+<li><p>###1.1 python使用方式</p>
+<ul>
+<li>进入python shell环境</li>
+<li>执行脚本模式 python demo.py</li>
+</ul>
+</li>
+</ul>
+<p>###2、初步感观<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"><span class="comment">#!/usr/bin/python2.7</span></div><div class="line"></div><div class="line"><span class="comment">###################################################</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#      python 第一个显示程序，用于初步感观</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">###################################################</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">()</span>:</span></div><div class="line">  <span class="string">'''</span></div><div class="line"><span class="string">  a generator that produces the fibonacci series's elements</span></div><div class="line"><span class="string">  '''</span></div><div class="line"> </div><div class="line">  a = <span class="number">1</span></div><div class="line">  b = <span class="number">1</span></div><div class="line">  <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">    a, b = a + b, a</div><div class="line">    <span class="keyword">yield</span> a</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">nth</span><span class="params">(series, n)</span>:</span></div><div class="line">  <span class="string">'''</span></div><div class="line"><span class="string">  returns the nth element of a series,</span></div><div class="line"><span class="string">  consuming the series' earlier elements.</span></div><div class="line"><span class="string">  '''</span></div><div class="line"> </div><div class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> series:</div><div class="line">    n -= <span class="number">1</span></div><div class="line">    <span class="keyword">if</span> n &lt;= <span class="number">0</span>: <span class="keyword">return</span> x</div><div class="line"> </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	print(<span class="string">'Executed from the command line'</span>)</div><div class="line">	<span class="keyword">print</span> nth(fib(), <span class="number">10</span>)</div></pre></td></tr></table></figure></p>
+<ul>
+<li>执行 </li>
+<li>python demo.py </li>
+<li>输出</li>
+<li>Executed from the command line</li>
+<li>144</li>
+</ul>
+<p>###3、Python格言</p>
+<ul>
+<li>输入python 进入python shell环境</li>
+<li>import this </li>
+<li><p>显示python之禅</p>
+</li>
+<li><h5 id="3-1-Python之禅"><a href="#3-1-Python之禅" class="headerlink" title="3.1 Python之禅"></a>3.1 Python之禅</h5><ul>
+<li>Beautiful is better than ugly.  </li>
+<li>漂亮的代码要比丑陋的代码要好得多。  </li>
+<li>Explicit is better than implicit.  </li>
+<li>明确的定义比 隐式定义更好。  </li>
+<li>Simple is better than complex.  </li>
+<li>简单比负责要好。  </li>
+<li>Complex is better than complicated.  </li>
+<li>负责要比搞复杂要好。  </li>
+<li>Flat is better than nested.  </li>
+<li>扁平结构要比嵌套结构好。  </li>
+<li>Sparse is better than dense.  </li>
+<li>简洁明了的代码要比稠密的代码要好。  </li>
+<li>Readability counts.  </li>
+<li>可读写的计数。  </li>
+<li>Special cases aren’t special enough to break the rules.  </li>
+<li>专门的用例不是特殊到足以违反规则。  </li>
+<li>Although practicality beats purity.  </li>
+<li>是的，实用性练就纯度。  </li>
+<li>Errors should never pass silently.  </li>
+<li>错误永远都不会沉默。  </li>
+<li>Unless explicitly silenced.  </li>
+<li>除非明确啥也不干。  </li>
+<li>In the face of ambiguity, refuse the temptation to guess.  </li>
+<li>面对模糊定义、拒绝视图拍脑袋猜。  </li>
+<li>There should be one– and preferably only one –obvious way to do it.  </li>
+<li>Although that way may not be obvious at first unless you’re Dutch.  </li>
+<li>虽然一开始不那面明确,我们会选择更清晰一条到走。  </li>
+<li>Now is better than never.  </li>
+<li>现在开始总比不开始的要好。  </li>
+<li>Although never is often better than <em>right</em> now.  </li>
+<li>虽然从不尝试总比现在开始尝试好。  </li>
+<li>If the implementation is hard to explain, it’s a bad idea.  </li>
+<li>如果实现难以说明，那它是个坏主意。  </li>
+<li>If the implementation is easy to explain, it may be a good idea.  </li>
+<li>如果实现容易说明，那它是个好主意。  </li>
+<li>Namespaces are one honking great idea – let’s do more of those!  </li>
+<li>名称空间是一个好东西——让我们做更多那样的东西!  </li>
+</ul>
+</li>
+<li><h5 id="3-2-Python“八荣八耻”"><a href="#3-2-Python“八荣八耻”" class="headerlink" title="3.2 Python“八荣八耻”"></a>3.2 Python“八荣八耻”</h5><ul>
+<li>以动手实践为荣 , 以只看不练为耻;</li>
+<li>以打印日志为荣 , 以单步跟踪为耻;</li>
+<li>以空格缩进为荣 , 以制表缩进为耻;</li>
+<li>以单元测试为荣 , 以人工测试为耻;</li>
+<li>以模块复用为荣 , 以复制粘贴为耻;</li>
+<li>以多态应用为荣 , 以分支判断为耻;</li>
+<li>以Pythonic为荣 , 以冗余拖沓为耻;</li>
+<li>以总结分享为荣 , 以跪求其解为耻;</li>
+</ul>
+</li>
+</ul>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
       
 
       
@@ -213,86 +294,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-05-14-training-python-10/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2017-04-20-training-python-15" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2017-04-20-training-python-15/">python技术分享[15]－ 视频教程</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/15/2017-04-20-training-python-15/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>###为了培训python录的视频，每周更新，欢迎拍砖！</p>
-<h3 id="请用无线观看，每个约200M大小"><a href="#请用无线观看，每个约200M大小" class="headerlink" title="请用无线观看，每个约200M大小"></a>请用无线观看，每个约200M大小</h3><embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=z0395naxllw&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
-
-<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=n0395xrwzdg&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
-
-<p>&gt;</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2017-04-20-training-python-15/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/09/15/2015-04-10-training-python-1/">展开全文 >></a>
         </p>
       
 
@@ -373,6 +375,85 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/09/15/2016-12-06-training-python-14/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2017-04-20-training-python-15" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/15/2017-04-20-training-python-15/">python技术分享[15]－ 视频教程</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/15/2017-04-20-training-python-15/" class="archive-article-date">
+  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>###为了培训python录的视频，每周更新，欢迎拍砖！</p>
+<h3 id="请用无线观看，每个约200M大小"><a href="#请用无线观看，每个约200M大小" class="headerlink" title="请用无线观看，每个约200M大小"></a>请用无线观看，每个约200M大小</h3><embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=z0395naxllw&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
+
+<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=n0395xrwzdg&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
+
+<p>&gt;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/15/2017-04-20-training-python-15/">展开全文 >></a>
         </p>
       
 

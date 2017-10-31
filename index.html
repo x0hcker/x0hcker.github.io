@@ -1363,6 +1363,191 @@
 
 
   
+    <article id="post-2017-09-21-flume-kafka-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/20/2017-09-21-flume-kafka-1/">kafka-flume集群环境搭建【3】</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/20/2017-09-21-flume-kafka-1/" class="archive-article-date">
+  	<time datetime="2017-09-20T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h3 id="1-Flume与Kafka整合-把flume中的数据sink到Kafka"><a href="#1-Flume与Kafka整合-把flume中的数据sink到Kafka" class="headerlink" title="1.  Flume与Kafka整合 把flume中的数据sink到Kafka"></a>1.  Flume与Kafka整合 把flume中的数据sink到Kafka</h3><ol>
+<li>kafka 集群已经完成</li>
+<li>flume 集群已经完成</li>
+<li>flume 的数据存入kafka</li>
+</ol>
+<p>flume client -&gt; flume server -&gt; kafka 这样也是说只要改flume server中sink配置即可</p>
+<h3 id="2-配置flume"><a href="#2-配置flume" class="headerlink" title="2. 配置flume"></a>2. 配置flume</h3><h5 id="flume-client-conf"><a href="#flume-client-conf" class="headerlink" title="flume-client.conf"></a>flume-client.conf</h5><pre><code>[root@yaliceshi-1-2 ~]# cat /usr/local/flume/conf/flume-client.conf 
+#Agent
+flumeAgent.channels = c1
+flumeAgent.sources  = s1
+flumeAgent.sinks    = k1 
+#flumeAgent Spooling Directory Source
+#注(1)
+flumeAgent.sources.s1.type = spooldir
+flumeAgent.sources.s1.spoolDir  =/data/logs/
+flumeAgent.sources.s1.fileHeader = true
+flumeAgent.sources.s1.deletePolicy =immediate
+flumeAgent.sources.s1.batchSize =1000
+flumeAgent.sources.s1.channels =c1
+flumeAgent.sources.s1.deserializer.maxLineLength =1048576
+#flumeAgent FileChannel
+#注(2)
+flumeAgent.channels.c1.type = file
+flumeAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
+flumeAgent.channels.c1.dataDirs = /data/flume/spool/data
+flumeAgent.channels.c1.capacity = 200000000
+flumeAgent.channels.c1.keep-alive = 30
+flumeAgent.channels.c1.write-timeout = 30
+flumeAgent.channels.c1.checkpoint-timeout=600
+# flumeAgent Sinks
+#注(3)
+flumeAgent.sinks.k1.channel = c1
+flumeAgent.sinks.k1.type = avro
+# connect to CollectorMainAgent
+flumeAgent.sinks.k1.hostname = kafka103
+flumeAgent.sinks.k1.port = 44444
+</code></pre><font style="color:red">  sources 采用 spooldir 类型，监控/data/logs/目录中文件的变化 </font>
+
+<h5 id="flume-server-conf"><a href="#flume-server-conf" class="headerlink" title="flume-server.conf"></a>flume-server.conf</h5><pre><code>[root@yaliceshi-1-3 ~]# cat  /usr/local/flume/conf/flume-server.conf
+#flumeConsolidationAgent
+flumeConsolidationAgent.channels = c1
+flumeConsolidationAgent.sources  = s1
+flumeConsolidationAgent.sinks    = k1 
+
+#flumeConsolidationAgent Avro Source
+#注(4)
+flumeConsolidationAgent.sources.s1.type = avro
+flumeConsolidationAgent.sources.s1.channels = c1
+flumeConsolidationAgent.sources.s1.bind = kafka103
+flumeConsolidationAgent.sources.s1.port = 44444
+
+#flumeConsolidationAgent FileChannel
+flumeConsolidationAgent.channels.c1.type = file
+flumeConsolidationAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
+flumeConsolidationAgent.channels.c1.dataDirs = /data/flume/spool/data
+flumeConsolidationAgent.channels.c1.capacity = 200000000
+flumeConsolidationAgent.channels.c1.keep-alive = 30
+flumeConsolidationAgent.channels.c1.write-timeout = 30
+flumeConsolidationAgent.channels.c1.checkpoint-timeout=600
+
+##flumeConsolidationAgent Memory Channel
+#flumeConsolidationAgent.channels.c1.type = memory
+#flumeConsolidationAgent.channels.c1.capacity = 10000
+#flumeConsolidationAgent.channels.c1.transactionCapacity = 10000
+#flumeConsolidationAgent.channels.c1.byteCapacityBufferPercentage = 20
+#flumeConsolidationAgent.channels.c1.byteCapacity = 800000
+
+#flumeConsolidationAgent Sinks
+#注(5)
+flumeConsolidationAgent.sinks.k1.channel= c1
+flumeConsolidationAgent.sinks.k1.type = file_roll
+flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
+flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
+flumeConsolidationAgent.sinks.k1.batchSize = 10000
+</code></pre><font style="color:red">  sinks 采用 file_roll 类型，数据保存到 /data/tmp目录中 </font>
+
+
+
+<h5 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h5><pre><code>#flumeConsolidationAgent Sinks
+#注(5)
+#flumeConsolidationAgent.sinks.k1.channel= c1
+#flumeConsolidationAgent.sinks.k1.type = file_roll
+#flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
+#flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
+#flumeConsolidationAgent.sinks.k1.batchSize = 10000
+</code></pre><p>上面的注释掉加上下面的内容</p>
+<pre><code>#set sink to hdfs
+flumeConsolidationAgent.sinks.k1.type=org.apache.flume.sink.kafka.KafkaSink
+flumeConsolidationAgent.sinks.k1.topic = ScalaTopic
+flumeConsolidationAgent.sinks.k1.brokerList = kafka102:9092, kafka103:9092, kafka104:9092
+flumeConsolidationAgent.sinks.k1.requiredAcks = 1
+flumeConsolidationAgent.sinks.k1.batchSize = 20
+flumeConsolidationAgent.sinks.k1.channel=c1
+</code></pre><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>启动flume server</p>
+<pre><code>[root@yaliceshi-1-3 ~]#/usr/local/flume/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-server.conf --name flumeConsolidationAgent -Dflume.root.logger=INFO,console
+</code></pre><p>启动flume client</p>
+<pre><code>[root@yaliceshi-1-2 ~]#/usr/local/apache-flume-1.7.0-bin/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-client.conf --name flumeAgent -Dflume.root.logger=INFO,console
+</code></pre><p>启动 kafka 的消费者</p>
+<pre><code>[root@yaliceshi-1-1 ~]/usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
+</code></pre><p>拷个文件到flume客户端监听目录</p>
+<pre><code>[root@yaliceshi-1-2 ~]# echo &quot;test wqc&quot; &gt; test.log;cp test.log  /data/logs
+</code></pre><p>拷个文件到flume客户端监听目录</p>
+<pre><code>[root@yaliceshi-1-1 ~]#  /usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
+
+test wqc
+</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>&gt;</p>
+<ul>
+<li><a href="http://blog.csdn.net/strongyoung88/article/details/52937835" target="_blank" rel="external">http://blog.csdn.net/strongyoung88/article/details/52937835</a></li>
+<li><a href="http://blog.csdn.net/minicto/article/details/53643496" target="_blank" rel="external">http://blog.csdn.net/minicto/article/details/53643496</a></li>
+<li><a href="http://blog.csdn.net/shouhuzhezhishen/article/details/64904848" target="_blank" rel="external">http://blog.csdn.net/shouhuzhezhishen/article/details/64904848</a></li>
+<li><a href="http://blog.csdn.net/candysleep/article/details/53241268" target="_blank" rel="external">http://blog.csdn.net/candysleep/article/details/53241268</a></li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/20/2017-09-21-flume-kafka-1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2017-09-18-cluster-flume-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1698,139 +1883,29 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 
 
   
-    <article id="post-2017-09-21-flume-kafka-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2015-04-23-training-python-6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/20/2017-09-21-flume-kafka-1/">kafka-flume集群环境搭建【3】</a>
+      <a class="article-title" href="/2017/09/15/2015-04-23-training-python-6/">python技术分享[6]－ 自定义数据库连接池</a>
     </h1>
   
 
         
-        <a href="/2017/09/20/2017-09-21-flume-kafka-1/" class="archive-article-date">
-  	<time datetime="2017-09-20T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-20</time>
+        <a href="/2017/09/15/2015-04-23-training-python-6/" class="archive-article-date">
+  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<h3 id="1-Flume与Kafka整合-把flume中的数据sink到Kafka"><a href="#1-Flume与Kafka整合-把flume中的数据sink到Kafka" class="headerlink" title="1.  Flume与Kafka整合 把flume中的数据sink到Kafka"></a>1.  Flume与Kafka整合 把flume中的数据sink到Kafka</h3><ol>
-<li>kafka 集群已经完成</li>
-<li>flume 集群已经完成</li>
-<li>flume 的数据存入kafka</li>
-</ol>
-<p>flume client -&gt; flume server -&gt; kafka 这样也是说只要改flume server中sink配置即可</p>
-<h3 id="2-配置flume"><a href="#2-配置flume" class="headerlink" title="2. 配置flume"></a>2. 配置flume</h3><h5 id="flume-client-conf"><a href="#flume-client-conf" class="headerlink" title="flume-client.conf"></a>flume-client.conf</h5><pre><code>[root@yaliceshi-1-2 ~]# cat /usr/local/flume/conf/flume-client.conf 
-#Agent
-flumeAgent.channels = c1
-flumeAgent.sources  = s1
-flumeAgent.sinks    = k1 
-#flumeAgent Spooling Directory Source
-#注(1)
-flumeAgent.sources.s1.type = spooldir
-flumeAgent.sources.s1.spoolDir  =/data/logs/
-flumeAgent.sources.s1.fileHeader = true
-flumeAgent.sources.s1.deletePolicy =immediate
-flumeAgent.sources.s1.batchSize =1000
-flumeAgent.sources.s1.channels =c1
-flumeAgent.sources.s1.deserializer.maxLineLength =1048576
-#flumeAgent FileChannel
-#注(2)
-flumeAgent.channels.c1.type = file
-flumeAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
-flumeAgent.channels.c1.dataDirs = /data/flume/spool/data
-flumeAgent.channels.c1.capacity = 200000000
-flumeAgent.channels.c1.keep-alive = 30
-flumeAgent.channels.c1.write-timeout = 30
-flumeAgent.channels.c1.checkpoint-timeout=600
-# flumeAgent Sinks
-#注(3)
-flumeAgent.sinks.k1.channel = c1
-flumeAgent.sinks.k1.type = avro
-# connect to CollectorMainAgent
-flumeAgent.sinks.k1.hostname = kafka103
-flumeAgent.sinks.k1.port = 44444
-</code></pre><font style="color:red">  sources 采用 spooldir 类型，监控/data/logs/目录中文件的变化 </font>
-
-<h5 id="flume-server-conf"><a href="#flume-server-conf" class="headerlink" title="flume-server.conf"></a>flume-server.conf</h5><pre><code>[root@yaliceshi-1-3 ~]# cat  /usr/local/flume/conf/flume-server.conf
-#flumeConsolidationAgent
-flumeConsolidationAgent.channels = c1
-flumeConsolidationAgent.sources  = s1
-flumeConsolidationAgent.sinks    = k1 
-
-#flumeConsolidationAgent Avro Source
-#注(4)
-flumeConsolidationAgent.sources.s1.type = avro
-flumeConsolidationAgent.sources.s1.channels = c1
-flumeConsolidationAgent.sources.s1.bind = kafka103
-flumeConsolidationAgent.sources.s1.port = 44444
-
-#flumeConsolidationAgent FileChannel
-flumeConsolidationAgent.channels.c1.type = file
-flumeConsolidationAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
-flumeConsolidationAgent.channels.c1.dataDirs = /data/flume/spool/data
-flumeConsolidationAgent.channels.c1.capacity = 200000000
-flumeConsolidationAgent.channels.c1.keep-alive = 30
-flumeConsolidationAgent.channels.c1.write-timeout = 30
-flumeConsolidationAgent.channels.c1.checkpoint-timeout=600
-
-##flumeConsolidationAgent Memory Channel
-#flumeConsolidationAgent.channels.c1.type = memory
-#flumeConsolidationAgent.channels.c1.capacity = 10000
-#flumeConsolidationAgent.channels.c1.transactionCapacity = 10000
-#flumeConsolidationAgent.channels.c1.byteCapacityBufferPercentage = 20
-#flumeConsolidationAgent.channels.c1.byteCapacity = 800000
-
-#flumeConsolidationAgent Sinks
-#注(5)
-flumeConsolidationAgent.sinks.k1.channel= c1
-flumeConsolidationAgent.sinks.k1.type = file_roll
-flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
-flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
-flumeConsolidationAgent.sinks.k1.batchSize = 10000
-</code></pre><font style="color:red">  sinks 采用 file_roll 类型，数据保存到 /data/tmp目录中 </font>
-
-
-
-<h5 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h5><pre><code>#flumeConsolidationAgent Sinks
-#注(5)
-#flumeConsolidationAgent.sinks.k1.channel= c1
-#flumeConsolidationAgent.sinks.k1.type = file_roll
-#flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
-#flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
-#flumeConsolidationAgent.sinks.k1.batchSize = 10000
-</code></pre><p>上面的注释掉加上下面的内容</p>
-<pre><code>#set sink to hdfs
-flumeConsolidationAgent.sinks.k1.type=org.apache.flume.sink.kafka.KafkaSink
-flumeConsolidationAgent.sinks.k1.topic = ScalaTopic
-flumeConsolidationAgent.sinks.k1.brokerList = kafka102:9092, kafka103:9092, kafka104:9092
-flumeConsolidationAgent.sinks.k1.requiredAcks = 1
-flumeConsolidationAgent.sinks.k1.batchSize = 20
-flumeConsolidationAgent.sinks.k1.channel=c1
-</code></pre><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>启动flume server</p>
-<pre><code>[root@yaliceshi-1-3 ~]#/usr/local/flume/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-server.conf --name flumeConsolidationAgent -Dflume.root.logger=INFO,console
-</code></pre><p>启动flume client</p>
-<pre><code>[root@yaliceshi-1-2 ~]#/usr/local/apache-flume-1.7.0-bin/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-client.conf --name flumeAgent -Dflume.root.logger=INFO,console
-</code></pre><p>启动 kafka 的消费者</p>
-<pre><code>[root@yaliceshi-1-1 ~]/usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
-</code></pre><p>拷个文件到flume客户端监听目录</p>
-<pre><code>[root@yaliceshi-1-2 ~]# echo &quot;test wqc&quot; &gt; test.log;cp test.log  /data/logs
-</code></pre><p>拷个文件到flume客户端监听目录</p>
-<pre><code>[root@yaliceshi-1-1 ~]#  /usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
-
-test wqc
-</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>&gt;</p>
-<ul>
-<li><a href="http://blog.csdn.net/strongyoung88/article/details/52937835" target="_blank" rel="external">http://blog.csdn.net/strongyoung88/article/details/52937835</a></li>
-<li><a href="http://blog.csdn.net/minicto/article/details/53643496" target="_blank" rel="external">http://blog.csdn.net/minicto/article/details/53643496</a></li>
-<li><a href="http://blog.csdn.net/shouhuzhezhishen/article/details/64904848" target="_blank" rel="external">http://blog.csdn.net/shouhuzhezhishen/article/details/64904848</a></li>
-<li><a href="http://blog.csdn.net/candysleep/article/details/53241268" target="_blank" rel="external">http://blog.csdn.net/candysleep/article/details/53241268</a></li>
-</ul>
+        <h4 id="1-数据库连接池原理："><a href="#1-数据库连接池原理：" class="headerlink" title="1.数据库连接池原理："></a>1.数据库连接池原理：</h4><p>&gt;<br>连接池基本的思想是在系统初始化的时候，将数据库连接作为对象存储在内存中，当用户需要访问数据库时，并非建立一个新的连接，而是从连接池中取出一个已建立的空闲连接对象。使用完毕后，用户也并非将连接关闭，而是将连接放回连接池中，以供下一个请求访问使用。而连接的建立、断开都由连接池自身来管理。同时，还可以通过设置连接池的参数来控制连接池中的初始连接数、连接的上下限数以及每个连接的最大使用次数、最大空闲时间等等。也可以通过其自身的管理机制来监视数据库连接的数量、使用情况等。</p>
+<h4 id="2-代码："><a href="#2-代码：" class="headerlink" title="2.代码："></a>2.代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/python</span></div><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> MySQLdb</div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">import</span> string</div><div class="line"> </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PooledConnection</span>:</span></div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, maxconnections, connstr,dbtype)</span>:</span></div><div class="line">        <span class="keyword">from</span> Queue <span class="keyword">import</span> Queue</div><div class="line">        self._pool = Queue(maxconnections) <span class="comment"># create the queue</span></div><div class="line">        self.connstr = connstr</div><div class="line">        self.dbtype=dbtype</div><div class="line">        self.maxconnections=maxconnections</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(maxconnections):</div><div class="line">                self.fillConnection(self.CreateConnection(connstr,dbtype))</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> e</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fillConnection</span><span class="params">(self,conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.put(conn)</div><div class="line"> </div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"fillConnection error:"</span>+str(e)</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">returnConnection</span><span class="params">(self, conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.put(conn)</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"returnConnection error:"</span>+str(e)</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getConnection</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">return</span> self._pool.get()</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"getConnection error:"</span>+str(e)</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ColseConnection</span><span class="params">(self,conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.get().close()</div><div class="line">            self.fillConnection(self.CreateConnection(connstr,dbtype))</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"CloseConnection error:"</span>+str(e)</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">CreateConnection</span><span class="params">(self,connstr,dbtype)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            conndb=MySQLdb.connect(db=<span class="string">'test'</span>,host=<span class="string">'127.0.0.1'</span>,user=<span class="string">'root'</span>,passwd=<span class="string">''</span>);</div><div class="line">            conndb.clientinfo = <span class="string">'datasync connection pool from datasync.py'</span>;</div><div class="line">            conndb.ping();</div><div class="line">            <span class="keyword">return</span> conndb</div><div class="line">        <span class="keyword">except</span> Exception, e:</div><div class="line">            <span class="keyword">print</span> <span class="string">'ssssssssss'</span></div><div class="line">            <span class="keyword">raise</span> <span class="string">'conn targetdb datasource Excepts,%s!!!(%s).'</span>%(<span class="string">'127.0.0.1'</span>,str(e))</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"> </div><div class="line"><span class="comment">#创建连接池：</span></div><div class="line">connstring=<span class="string">"rooot#' '#127.0.0.1:3306/test"</span></div><div class="line">pool=PooledConnection(<span class="number">10</span>,connstring,<span class="string">"mysql"</span>);</div><div class="line"><span class="comment">#获取连接：</span></div><div class="line">conn = pool.getConnection()</div><div class="line">time.sleep(<span class="number">15</span>)</div><div class="line">cursor = conn.cursor()</div><div class="line">cursor.execute(<span class="string">"""select * from emp"""</span>)</div><div class="line">result = cursor.fetchall();</div><div class="line"><span class="keyword">print</span>  cursor.description</div><div class="line">conn.close();</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
 
       
 
@@ -1844,7 +1919,7 @@ test wqc
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
         		</li>
       		
 		</ul>
@@ -1856,7 +1931,7 @@ test wqc
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
         		</li>
       		
 		</ul>
@@ -1865,7 +1940,82 @@ test wqc
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/20/2017-09-21-flume-kafka-1/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/09/15/2015-04-23-training-python-6/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2015-04-27-training-python-7" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/15/2015-04-27-training-python-7/">python技术分享[7]－ 自定义数据库连接池</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/15/2015-04-27-training-python-7/" class="archive-article-date">
+  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-数据库连接池原理："><a href="#1-数据库连接池原理：" class="headerlink" title="1.数据库连接池原理："></a>1.数据库连接池原理：</h4><p>&gt;<br>连接池基本的思想是在系统初始化的时候，将数据库连接作为对象存储在内存中，当用户需要访问数据库时，并非建立一个新的连接，而是从连接池中取出一个已建立的空闲连接对象。使用完毕后，用户也并非将连接关闭，而是将连接放回连接池中，以供下一个请求访问使用。而连接的建立、断开都由连接池自身来管理。同时，还可以通过设置连接池的参数来控制连接池中的初始连接数、连接的上下限数以及每个连接的最大使用次数、最大空闲时间等等。也可以通过其自身的管理机制来监视数据库连接的数量、使用情况等。</p>
+<h4 id="2-代码："><a href="#2-代码：" class="headerlink" title="2.代码："></a>2.代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"> </div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PooledConnection</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, maxconnections, dbtype)</span>:</span></div><div class="line">        <span class="keyword">from</span> Queue <span class="keyword">import</span> Queue</div><div class="line">        self._pool = Queue(maxconnections) <span class="comment"># create the queue</span></div><div class="line">    </div><div class="line">        self.dbtype=dbtype</div><div class="line">        self.maxconnections=maxconnections</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(maxconnections):</div><div class="line">                self.fillConnection(self.CreateConnection(dbtype))</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> e</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fillConnection</span><span class="params">(self,conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.put(conn)</div><div class="line"></div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"fillConnection error:"</span>+str(e)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">returnConnection</span><span class="params">(self, conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.put(conn)</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"returnConnection error:"</span>+str(e)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getConnection</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">return</span> self._pool.get()</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"getConnection error:"</span>+str(e)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ColseConnection</span><span class="params">(self,conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.get().close()</div><div class="line">            self.fillConnection(self.CreateConnection(dbtype))</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"CloseConnection error:"</span>+str(e)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">CreateConnection</span><span class="params">(self, dbtype)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            conndb=MySQLdb.connect(db=<span class="string">'test'</span>,host=<span class="string">'127.0.0.1'</span>,user=<span class="string">'root'</span>,passwd=<span class="string">''</span>);</div><div class="line">            conndb.clientinfo = <span class="string">'datasync connection pool from datasync.py'</span>;</div><div class="line">            conndb.ping();</div><div class="line">            <span class="keyword">return</span> conndb</div><div class="line">        <span class="keyword">except</span> Exception, e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">'conn targetdb datasource Excepts,%s!!!(%s).'</span>%(<span class="string">'127.0.0.1'</span>,str(e))</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">			</div><div class="line">DB = PooledConnection(<span class="number">10</span>,<span class="string">"mysql"</span>)</div><div class="line">    </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sub_mod</span><span class="params">( ip, data)</span>:</span></div><div class="line">	</div><div class="line">	<span class="keyword">global</span> DB</div><div class="line">	conn = DB.getConnection()</div><div class="line">	cursor = conn.cursor()</div><div class="line">	cursor.execute(<span class="string">"""insert into pool (name) values('wwwww')"""</span>)</div><div class="line">	<span class="comment">#result = cursor.fetchall();</span></div><div class="line">	<span class="comment">#print  cursor.description</span></div><div class="line">	</div><div class="line"></div><div class="line">    </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MtaskConnection</span><span class="params">(object)</span>:</span></div><div class="line">     </div><div class="line">     </div><div class="line">    stream_set = set([])</div><div class="line">    </div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,stream, address)</span>:</span></div><div class="line">        </div><div class="line">        self.stream = stream</div><div class="line">        self.address = address</div><div class="line">        self.stream_set.add(self.stream)</div><div class="line">        self.stream.set_close_callback(self._on_close)</div><div class="line">        self.stream.read_until(<span class="string">'\n'</span>, self._on_read_line)</div><div class="line">        </div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_on_read_line</span><span class="params">(self, data)</span>:</span></div><div class="line"> </div><div class="line"></div><div class="line">        sub_mod(self.address[<span class="number">0</span>], data)</div><div class="line">      </div><div class="line">        </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_on_close</span><span class="params">(self)</span>:</span></div><div class="line">   </div><div class="line">        MtaskConnection.stream_set.remove(self.stream)</div><div class="line">         </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MonitorTCPServer</span><span class="params">(TCPServer)</span>:</span></div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        TCPServer.__init__(self)  </div><div class="line">		</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_stream</span><span class="params">(self, stream, address)</span>:</span></div><div class="line">        MtaskConnection(stream,address)</div><div class="line">		</div><div class="line">	<span class="comment">#def __del__(self):</span></div><div class="line">	<span class="comment">#	self.pool.ColseConnection()</span></div><div class="line">         </div><div class="line"></div><div class="line">     </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    </div><div class="line">    <span class="keyword">from</span> tornado <span class="keyword">import</span> process</div><div class="line">	<span class="keyword">from</span> tornado <span class="keyword">import</span> web,netutil</div><div class="line">	<span class="keyword">from</span> tornado.tcpserver <span class="keyword">import</span> TCPServer</div><div class="line">	<span class="keyword">from</span> tornado <span class="keyword">import</span> ioloop</div><div class="line"></div><div class="line">	<span class="keyword">import</span> MySQLdb</div><div class="line">	<span class="keyword">import</span> json,time</div><div class="line">	<span class="keyword">import</span> sys,os,string</div><div class="line">	<span class="keyword">import</span> socket, select</div><div class="line">	<span class="keyword">import</span> syslog</div><div class="line">	<span class="keyword">import</span> base64</div><div class="line"></div><div class="line">    sockets = netutil.bind_sockets(<span class="number">32777</span>)</div><div class="line">    process.fork_processes(<span class="number">0</span>)</div><div class="line">    server = MonitorTCPServer()</div><div class="line">    server.add_sockets(sockets)</div><div class="line">    ioloop.IOLoop.instance().start()</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#经两次fork实现脱终端，成为守护进程</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">daemon</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        pid = os.fork()</div><div class="line">        <span class="keyword">if</span> pid &gt; <span class="number">0</span>:</div><div class="line">            sys.exit(<span class="number">0</span>)</div><div class="line">        os.setsid()</div><div class="line">        os.umask(<span class="number">0</span>)</div><div class="line">        pid = os.fork()</div><div class="line">        <span class="keyword">if</span> pid &gt; <span class="number">0</span>: <span class="comment"># exit from second parent</span></div><div class="line">            sys.exit(<span class="number">0</span>)</div><div class="line"></div><div class="line"></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">65</span>):</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                os.close(i)</div><div class="line">            <span class="keyword">except</span>:</div><div class="line">                <span class="keyword">continue</span></div><div class="line"></div><div class="line">        sys.stdin = open(<span class="string">"/dev/null"</span>, <span class="string">"r+"</span>)</div><div class="line">        sys.stdout = sys.stdin</div><div class="line">        sys.stderr = sys.stdin</div><div class="line"></div><div class="line">    <span class="keyword">except</span> OSError, e:</div><div class="line">        syslog.syslog(syslog.LOG_ERR, <span class="string">"fork failed: (%s)"</span> % e)</div><div class="line">        sys.exit(<span class="number">1</span>)</div><div class="line"></div><div class="line">    </div><div class="line">     </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	 main()</div><div class="line">     <span class="comment">#syslog.openlog("monitor_svr", 0, syslog.LOG_LOCAL6)</span></div><div class="line">     <span class="comment">#daemon()</span></div><div class="line">     <span class="comment">#syslog.closelog()</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/15/2015-04-27-training-python-7/">展开全文 >></a>
         </p>
       
 
@@ -2031,19 +2181,19 @@ test wqc
 
 
   
-    <article id="post-2015-04-23-training-python-6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2015-05-14-training-python-10" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-04-23-training-python-6/">python技术分享[6]－ 自定义数据库连接池</a>
+      <a class="article-title" href="/2017/09/15/2015-05-14-training-python-10/">python技术分享[10]－ 日志－记文件log</a>
     </h1>
   
 
         
-        <a href="/2017/09/15/2015-04-23-training-python-6/" class="archive-article-date">
+        <a href="/2017/09/15/2015-05-14-training-python-10/" class="archive-article-date">
   	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
 </a>
         
@@ -2051,160 +2201,8 @@ test wqc
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="1-数据库连接池原理："><a href="#1-数据库连接池原理：" class="headerlink" title="1.数据库连接池原理："></a>1.数据库连接池原理：</h4><p>&gt;<br>连接池基本的思想是在系统初始化的时候，将数据库连接作为对象存储在内存中，当用户需要访问数据库时，并非建立一个新的连接，而是从连接池中取出一个已建立的空闲连接对象。使用完毕后，用户也并非将连接关闭，而是将连接放回连接池中，以供下一个请求访问使用。而连接的建立、断开都由连接池自身来管理。同时，还可以通过设置连接池的参数来控制连接池中的初始连接数、连接的上下限数以及每个连接的最大使用次数、最大空闲时间等等。也可以通过其自身的管理机制来监视数据库连接的数量、使用情况等。</p>
-<h4 id="2-代码："><a href="#2-代码：" class="headerlink" title="2.代码："></a>2.代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/python</span></div><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> MySQLdb</div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">import</span> string</div><div class="line"> </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PooledConnection</span>:</span></div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, maxconnections, connstr,dbtype)</span>:</span></div><div class="line">        <span class="keyword">from</span> Queue <span class="keyword">import</span> Queue</div><div class="line">        self._pool = Queue(maxconnections) <span class="comment"># create the queue</span></div><div class="line">        self.connstr = connstr</div><div class="line">        self.dbtype=dbtype</div><div class="line">        self.maxconnections=maxconnections</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(maxconnections):</div><div class="line">                self.fillConnection(self.CreateConnection(connstr,dbtype))</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> e</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fillConnection</span><span class="params">(self,conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.put(conn)</div><div class="line"> </div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"fillConnection error:"</span>+str(e)</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">returnConnection</span><span class="params">(self, conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.put(conn)</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"returnConnection error:"</span>+str(e)</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getConnection</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">return</span> self._pool.get()</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"getConnection error:"</span>+str(e)</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ColseConnection</span><span class="params">(self,conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.get().close()</div><div class="line">            self.fillConnection(self.CreateConnection(connstr,dbtype))</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"CloseConnection error:"</span>+str(e)</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">CreateConnection</span><span class="params">(self,connstr,dbtype)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            conndb=MySQLdb.connect(db=<span class="string">'test'</span>,host=<span class="string">'127.0.0.1'</span>,user=<span class="string">'root'</span>,passwd=<span class="string">''</span>);</div><div class="line">            conndb.clientinfo = <span class="string">'datasync connection pool from datasync.py'</span>;</div><div class="line">            conndb.ping();</div><div class="line">            <span class="keyword">return</span> conndb</div><div class="line">        <span class="keyword">except</span> Exception, e:</div><div class="line">            <span class="keyword">print</span> <span class="string">'ssssssssss'</span></div><div class="line">            <span class="keyword">raise</span> <span class="string">'conn targetdb datasource Excepts,%s!!!(%s).'</span>%(<span class="string">'127.0.0.1'</span>,str(e))</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"> </div><div class="line"><span class="comment">#创建连接池：</span></div><div class="line">connstring=<span class="string">"rooot#' '#127.0.0.1:3306/test"</span></div><div class="line">pool=PooledConnection(<span class="number">10</span>,connstring,<span class="string">"mysql"</span>);</div><div class="line"><span class="comment">#获取连接：</span></div><div class="line">conn = pool.getConnection()</div><div class="line">time.sleep(<span class="number">15</span>)</div><div class="line">cursor = conn.cursor()</div><div class="line">cursor.execute(<span class="string">"""select * from emp"""</span>)</div><div class="line">result = cursor.fetchall();</div><div class="line"><span class="keyword">print</span>  cursor.description</div><div class="line">conn.close();</div></pre></td></tr></table></figure>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-04-23-training-python-6/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2015-04-27-training-python-7" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-04-27-training-python-7/">python技术分享[7]－ 自定义数据库连接池</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/15/2015-04-27-training-python-7/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="1-数据库连接池原理："><a href="#1-数据库连接池原理：" class="headerlink" title="1.数据库连接池原理："></a>1.数据库连接池原理：</h4><p>&gt;<br>连接池基本的思想是在系统初始化的时候，将数据库连接作为对象存储在内存中，当用户需要访问数据库时，并非建立一个新的连接，而是从连接池中取出一个已建立的空闲连接对象。使用完毕后，用户也并非将连接关闭，而是将连接放回连接池中，以供下一个请求访问使用。而连接的建立、断开都由连接池自身来管理。同时，还可以通过设置连接池的参数来控制连接池中的初始连接数、连接的上下限数以及每个连接的最大使用次数、最大空闲时间等等。也可以通过其自身的管理机制来监视数据库连接的数量、使用情况等。</p>
-<h4 id="2-代码："><a href="#2-代码：" class="headerlink" title="2.代码："></a>2.代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"> </div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PooledConnection</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, maxconnections, dbtype)</span>:</span></div><div class="line">        <span class="keyword">from</span> Queue <span class="keyword">import</span> Queue</div><div class="line">        self._pool = Queue(maxconnections) <span class="comment"># create the queue</span></div><div class="line">    </div><div class="line">        self.dbtype=dbtype</div><div class="line">        self.maxconnections=maxconnections</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(maxconnections):</div><div class="line">                self.fillConnection(self.CreateConnection(dbtype))</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> e</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fillConnection</span><span class="params">(self,conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.put(conn)</div><div class="line"></div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"fillConnection error:"</span>+str(e)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">returnConnection</span><span class="params">(self, conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.put(conn)</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"returnConnection error:"</span>+str(e)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getConnection</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">return</span> self._pool.get()</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"getConnection error:"</span>+str(e)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ColseConnection</span><span class="params">(self,conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.get().close()</div><div class="line">            self.fillConnection(self.CreateConnection(dbtype))</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"CloseConnection error:"</span>+str(e)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">CreateConnection</span><span class="params">(self, dbtype)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            conndb=MySQLdb.connect(db=<span class="string">'test'</span>,host=<span class="string">'127.0.0.1'</span>,user=<span class="string">'root'</span>,passwd=<span class="string">''</span>);</div><div class="line">            conndb.clientinfo = <span class="string">'datasync connection pool from datasync.py'</span>;</div><div class="line">            conndb.ping();</div><div class="line">            <span class="keyword">return</span> conndb</div><div class="line">        <span class="keyword">except</span> Exception, e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">'conn targetdb datasource Excepts,%s!!!(%s).'</span>%(<span class="string">'127.0.0.1'</span>,str(e))</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">			</div><div class="line">DB = PooledConnection(<span class="number">10</span>,<span class="string">"mysql"</span>)</div><div class="line">    </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sub_mod</span><span class="params">( ip, data)</span>:</span></div><div class="line">	</div><div class="line">	<span class="keyword">global</span> DB</div><div class="line">	conn = DB.getConnection()</div><div class="line">	cursor = conn.cursor()</div><div class="line">	cursor.execute(<span class="string">"""insert into pool (name) values('wwwww')"""</span>)</div><div class="line">	<span class="comment">#result = cursor.fetchall();</span></div><div class="line">	<span class="comment">#print  cursor.description</span></div><div class="line">	</div><div class="line"></div><div class="line">    </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MtaskConnection</span><span class="params">(object)</span>:</span></div><div class="line">     </div><div class="line">     </div><div class="line">    stream_set = set([])</div><div class="line">    </div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,stream, address)</span>:</span></div><div class="line">        </div><div class="line">        self.stream = stream</div><div class="line">        self.address = address</div><div class="line">        self.stream_set.add(self.stream)</div><div class="line">        self.stream.set_close_callback(self._on_close)</div><div class="line">        self.stream.read_until(<span class="string">'\n'</span>, self._on_read_line)</div><div class="line">        </div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_on_read_line</span><span class="params">(self, data)</span>:</span></div><div class="line"> </div><div class="line"></div><div class="line">        sub_mod(self.address[<span class="number">0</span>], data)</div><div class="line">      </div><div class="line">        </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_on_close</span><span class="params">(self)</span>:</span></div><div class="line">   </div><div class="line">        MtaskConnection.stream_set.remove(self.stream)</div><div class="line">         </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MonitorTCPServer</span><span class="params">(TCPServer)</span>:</span></div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        TCPServer.__init__(self)  </div><div class="line">		</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_stream</span><span class="params">(self, stream, address)</span>:</span></div><div class="line">        MtaskConnection(stream,address)</div><div class="line">		</div><div class="line">	<span class="comment">#def __del__(self):</span></div><div class="line">	<span class="comment">#	self.pool.ColseConnection()</span></div><div class="line">         </div><div class="line"></div><div class="line">     </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    </div><div class="line">    <span class="keyword">from</span> tornado <span class="keyword">import</span> process</div><div class="line">	<span class="keyword">from</span> tornado <span class="keyword">import</span> web,netutil</div><div class="line">	<span class="keyword">from</span> tornado.tcpserver <span class="keyword">import</span> TCPServer</div><div class="line">	<span class="keyword">from</span> tornado <span class="keyword">import</span> ioloop</div><div class="line"></div><div class="line">	<span class="keyword">import</span> MySQLdb</div><div class="line">	<span class="keyword">import</span> json,time</div><div class="line">	<span class="keyword">import</span> sys,os,string</div><div class="line">	<span class="keyword">import</span> socket, select</div><div class="line">	<span class="keyword">import</span> syslog</div><div class="line">	<span class="keyword">import</span> base64</div><div class="line"></div><div class="line">    sockets = netutil.bind_sockets(<span class="number">32777</span>)</div><div class="line">    process.fork_processes(<span class="number">0</span>)</div><div class="line">    server = MonitorTCPServer()</div><div class="line">    server.add_sockets(sockets)</div><div class="line">    ioloop.IOLoop.instance().start()</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#经两次fork实现脱终端，成为守护进程</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">daemon</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        pid = os.fork()</div><div class="line">        <span class="keyword">if</span> pid &gt; <span class="number">0</span>:</div><div class="line">            sys.exit(<span class="number">0</span>)</div><div class="line">        os.setsid()</div><div class="line">        os.umask(<span class="number">0</span>)</div><div class="line">        pid = os.fork()</div><div class="line">        <span class="keyword">if</span> pid &gt; <span class="number">0</span>: <span class="comment"># exit from second parent</span></div><div class="line">            sys.exit(<span class="number">0</span>)</div><div class="line"></div><div class="line"></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">65</span>):</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                os.close(i)</div><div class="line">            <span class="keyword">except</span>:</div><div class="line">                <span class="keyword">continue</span></div><div class="line"></div><div class="line">        sys.stdin = open(<span class="string">"/dev/null"</span>, <span class="string">"r+"</span>)</div><div class="line">        sys.stdout = sys.stdin</div><div class="line">        sys.stderr = sys.stdin</div><div class="line"></div><div class="line">    <span class="keyword">except</span> OSError, e:</div><div class="line">        syslog.syslog(syslog.LOG_ERR, <span class="string">"fork failed: (%s)"</span> % e)</div><div class="line">        sys.exit(<span class="number">1</span>)</div><div class="line"></div><div class="line">    </div><div class="line">     </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	 main()</div><div class="line">     <span class="comment">#syslog.openlog("monitor_svr", 0, syslog.LOG_LOCAL6)</span></div><div class="line">     <span class="comment">#daemon()</span></div><div class="line">     <span class="comment">#syslog.closelog()</span></div></pre></td></tr></table></figure>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-04-27-training-python-7/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2015-05-12-training-python-9" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-05-12-training-python-9/">python技术分享[9]－ 数据库操作之MongoDB</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/15/2015-05-12-training-python-9/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="1-数据库操作："><a href="#1-数据库操作：" class="headerlink" title="1.数据库操作："></a>1.数据库操作：</h4><p>&gt;<br>    数据操作在工作中最常用的操作类库之一，今天贴出来我常用的pymongo操作类，一直在用，也一直在不断优化，暂时可以满足业务</p>
-<h4 id="2-接口代码："><a href="#2-接口代码：" class="headerlink" title="2.接口代码："></a>2.接口代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">from</span> abc <span class="keyword">import</span> ABCMeta  </div><div class="line"><span class="keyword">from</span> abc <span class="keyword">import</span> abstractproperty</div><div class="line"><span class="keyword">from</span> abc <span class="keyword">import</span> abstractmethod </div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Custom_Interface</span><span class="params">(object)</span>:</span></div><div class="line">    </div><div class="line">    __metaclass__ = ABCMeta</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">    @abstractmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        关闭当前数据库句柄</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">return</span></div><div class="line"><span class="meta">    @abstractmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">query</span><span class="params">(self, query, *parameters)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        @return: 返回一个list，多个结果。</span></div><div class="line"><span class="string">        @param query:SQL语句</span></div><div class="line"><span class="string">        @param parameters:SQL语句参数</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">return</span></div><div class="line">       </div><div class="line"><span class="meta">    @abstractmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, query, *parameters)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        @return: 返回单个结果</span></div><div class="line"><span class="string">        @param query:SQL语句</span></div><div class="line"><span class="string">        @param parameters:SQL语句参数</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">return</span></div><div class="line">       </div><div class="line"><span class="meta">    @abstractmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">count</span><span class="params">(self,query, *parameters)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        @return: 返回单个结果</span></div><div class="line"><span class="string">        @param query:SQL语句</span></div><div class="line"><span class="string">        @param parameters:SQL语句参数</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">return</span></div><div class="line">       </div><div class="line"><span class="meta">    @abstractmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">insert</span><span class="params">(self,table,**datas)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        @param table:表名</span></div><div class="line"><span class="string">        @param datas:｛字段：值｝</span></div><div class="line"><span class="string">        '''</span></div><div class="line">        <span class="keyword">return</span></div><div class="line">       </div><div class="line"><span class="meta">    @abstractmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self,table,where,**datas)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        @param table:表名</span></div><div class="line"><span class="string">        @param datas:｛字段：值｝</span></div><div class="line"><span class="string">        '''</span></div><div class="line">        <span class="keyword">return</span></div><div class="line">        </div><div class="line"><span class="meta">    @abstractmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self,table,where)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        @param table:表名</span></div><div class="line"><span class="string">        @param datas:｛字段：值｝</span></div><div class="line"><span class="string">        '''</span></div><div class="line">        <span class="keyword">return</span></div></pre></td></tr></table></figure>
-<h4 id="2-类实现代码："><a href="#2-类实现代码：" class="headerlink" title="2.类实现代码："></a>2.类实现代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#/usr/bin/python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="string">auth:.启</span></div><div class="line"><span class="string">createtime:2014-6-17下午12:13:07</span></div><div class="line"><span class="string">usege:</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">"""</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> sys</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">    <span class="keyword">import</span> pymongo</div><div class="line"></div><div class="line"><span class="keyword">except</span> ImportError:</div><div class="line">    <span class="keyword">print</span> &gt;&gt; sys.stderr,<span class="string">"""\</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">There was a problem importing Python modules(pymongo) required.</span></div><div class="line"><span class="string">The error leading to this problem was:</span></div><div class="line"><span class="string">%s Please install a package which provides this module, or</span></div><div class="line"><span class="string">verify that the module is installed correctly.</span></div><div class="line"><span class="string">you can use this cmd :pip install pymongo</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">It's possible that the above module doesn't match the current version of Python,</span></div><div class="line"><span class="string">which is:</span></div><div class="line"><span class="string">%s</span></div><div class="line"><span class="string">"""</span> % (sys.exc_info(), sys.version)</div><div class="line"></div><div class="line"><span class="keyword">from</span> interface <span class="keyword">import</span> Custom_Interface</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Custom_Mongo</span><span class="params">(Custom_Interface)</span>:</span></div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,using=<span class="string">''</span>)</span>:</span></div><div class="line"></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        @param cursor_hander:数据库句柄</span></div><div class="line"><span class="string">        """</span></div><div class="line">        self.cursor = <span class="keyword">None</span></div><div class="line">        self.cursor_hander = using</div><div class="line">        self.connections = <span class="keyword">None</span></div><div class="line">        self.conn  = <span class="keyword">None</span></div><div class="line">        </div><div class="line">        <span class="keyword">if</span> str(self.cursor_hander).rstrip() == <span class="string">''</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">'please write Custom_MySQL`s using param'</span></div><div class="line">            exit(<span class="number">0</span>)</div><div class="line">   </div><div class="line">            </div><div class="line"></div><div class="line">        databases =&#123;</div><div class="line">            <span class="string">'logs'</span>:&#123;<span class="string">'host'</span>:<span class="string">'127.0.0.1'</span>, <span class="string">'user'</span>:<span class="string">'readonly'</span>,<span class="string">'password'</span>:<span class="string">'readonly'</span>, <span class="string">'database'</span>:<span class="string">'local'</span>,<span class="string">'charset'</span>:<span class="string">'utf8'</span>,<span class="string">'port'</span>:<span class="number">27017</span>,<span class="string">'connect_timeout'</span>:<span class="number">50</span>&#125;,</div><div class="line">            </div><div class="line">            &#125;</div><div class="line">        </div><div class="line">        database = databases[self.cursor_hander]</div><div class="line">        </div><div class="line">        <span class="comment">#建立和数据库系统的连接,创建Connection时，指定host及port参数</span></div><div class="line">        self.conn   = pymongo.Connection(host=database[<span class="string">'host'</span>],port=database[<span class="string">'port'</span>])</div><div class="line">        self.database = self.conn[database[<span class="string">'database'</span>]]</div><div class="line">        <span class="comment">#admin 数据库有帐号，连接-认证-切换库</span></div><div class="line">        <span class="comment">#db_auth = conn.admin</span></div><div class="line">        <span class="comment">#db_auth.authenticate('sa','sa')</span></div><div class="line"></div><div class="line">        </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__del__</span><span class="params">(self)</span>:</span></div><div class="line">        </div><div class="line">        self.close()</div><div class="line">        </div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        关闭当前数据库句柄</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">if</span> self.conn != <span class="keyword">None</span>:</div><div class="line">            <span class="keyword">return</span> self.conn.disconnect()</div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">query</span><span class="params">(self, table_name, parameters,skip=None,limit=None)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        @return: 返回一个list，多个结果。</span></div><div class="line"><span class="string">        @param table_name:表名</span></div><div class="line"><span class="string">        @param parameters:SQL语句参数</span></div><div class="line"><span class="string">        """</span></div><div class="line">        result = self.database[table_name].find(parameters)</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> skip !=<span class="keyword">None</span>:</div><div class="line">            result.skip(skip)</div><div class="line">        <span class="keyword">if</span> limit !=<span class="keyword">None</span>:</div><div class="line">                </div><div class="line">            result.limit(limit) </div><div class="line">            </div><div class="line">        <span class="keyword">return</span> result</div><div class="line">       </div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, table_name,**parameters)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        @return: 返回单个结果</span></div><div class="line"><span class="string">        @param table_name:表名</span></div><div class="line"><span class="string">        @param parameters:SQL语句参数</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">return</span> self.database[table_name].find_one(parameters)</div><div class="line">       </div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">count</span><span class="params">(self,table_name, **parameters)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        @return: 返回单个结果</span></div><div class="line"><span class="string">        @param table_name:表名</span></div><div class="line"><span class="string">        @param parameters:SQL语句参数</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">return</span> self.database[table_name].find(parameters).count()</div><div class="line">       </div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">insert</span><span class="params">(self,table,**datas)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        @param table:表名</span></div><div class="line"><span class="string">        @param datas:｛字段：值｝</span></div><div class="line"><span class="string">        '''</span></div><div class="line">        <span class="keyword">return</span> self.database[table].insert(datas)</div><div class="line">       </div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self,table,where,**datas)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        @param table:表名</span></div><div class="line"><span class="string">        @param datas:｛字段：值｝</span></div><div class="line"><span class="string">        '''</span></div><div class="line">        <span class="keyword">return</span> self.database[table].update(where,datas)</div><div class="line">        </div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self,table,where)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        @param table:表名</span></div><div class="line"><span class="string">        @param datas:｛字段：值｝</span></div><div class="line"><span class="string">        '''</span></div><div class="line">        <span class="keyword">return</span> self.database[table].remove(where)</div></pre></td></tr></table></figure>
-<h4 id="3-用例代码："><a href="#3-用例代码：" class="headerlink" title="3.用例代码："></a>3.用例代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#/usr/bin/python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="string">date:2014-06-17 12:00</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="keyword">from</span> custom.db.mongo <span class="keyword">import</span> Custom_Mongo</div><div class="line"></div><div class="line">n = Custom_Mongo(using=<span class="string">'logs'</span>)</div><div class="line"></div><div class="line">param = &#123;<span class="string">'sex'</span>:<span class="string">'man'</span>,<span class="string">'name'</span>:<span class="string">'wuqichao'</span>&#125;</div><div class="line"><span class="keyword">print</span> n.insert(<span class="string">'users'</span>,**param)</div><div class="line"></div><div class="line">param = &#123;<span class="string">'sex'</span>:<span class="string">'man'</span>,<span class="string">'name'</span>:<span class="string">'wuqichao'</span>&#125;</div><div class="line"><span class="keyword">print</span> n.get(<span class="string">'users'</span>,**param)</div><div class="line"></div><div class="line">param = &#123;<span class="string">'sex'</span>:<span class="string">'man'</span>,<span class="string">'name'</span>:<span class="string">'wuqichao'</span>&#125;</div><div class="line"><span class="keyword">print</span> n.count(<span class="string">'users'</span>, **param)</div><div class="line"></div><div class="line">n.update(<span class="string">'users'</span>,&#123;<span class="string">'sex'</span>:<span class="string">'man'</span>,<span class="string">'name'</span>:<span class="string">'wuqichao'</span>&#125;,**&#123;<span class="string">'sex'</span>:<span class="string">'wman'</span>,<span class="string">'name'</span>:<span class="string">'wuqichao'</span>&#125;)</div><div class="line"></div><div class="line">param = &#123;<span class="string">'sex'</span>:<span class="string">'man'</span>,<span class="string">'name'</span>:<span class="string">'wuqichao'</span>&#125;</div><div class="line">res =  n.query(<span class="string">'users'</span>,param,skip=<span class="number">2</span>,limit=<span class="number">2</span>)</div><div class="line"><span class="keyword">for</span> r <span class="keyword">in</span> res:</div><div class="line">    <span class="keyword">print</span> r</div></pre></td></tr></table></figure>
+        <h4 id="1-日志操作："><a href="#1-日志操作：" class="headerlink" title="1.日志操作："></a>1.日志操作：</h4><p>&gt;<br>    日志文件操作在工作中最常用的操作类库之一，今天贴出来我常用的文件操作类，一直在用，也一直在不断优化，暂时可以满足业务</p>
+<h4 id="2-日志操作代码："><a href="#2-日志操作代码：" class="headerlink" title="2.日志操作代码："></a>2.日志操作代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/python</span></div><div class="line"><span class="comment">#coding:utf-8</span></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="string">mail:wuqichao@gyyx.com</span></div><div class="line"><span class="string">createtime:2011-3-1下午12:24:29</span></div><div class="line"><span class="string">usege:</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">"""</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> sys, os, re</div><div class="line"><span class="keyword">import</span> logging</div><div class="line"><span class="keyword">import</span> logging.handlers</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LogFactory</span>:</span></div><div class="line">    </div><div class="line">    <span class="string">'''日志工厂'''</span></div><div class="line">    </div><div class="line">    ilog = <span class="keyword">None</span> <span class="comment">#信息日志</span></div><div class="line">    elog = <span class="keyword">None</span> <span class="comment">#错误日志</span></div><div class="line">    root = os.path.abspath(<span class="string">'.'</span>)</div><div class="line">    ilogfile = root+<span class="string">'/logs/mtask_info_%s.log'</span> <span class="comment">#信息日志文件</span></div><div class="line">    elogfile = root+<span class="string">'/logs/mtask_err_%s.log'</span> <span class="comment">#错误日志文件</span></div><div class="line">    ERROR = <span class="string">'err'</span></div><div class="line">    INFO = <span class="string">'info'</span></div><div class="line"></div><div class="line"><span class="meta">    @staticmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init_log</span><span class="params">(logtype, p = <span class="string">""</span>)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        初始化日志对像</span></div><div class="line"><span class="string">        @param logtype:info 和 err分别是信息日志和错误日志</span></div><div class="line"><span class="string">        @param p :日志文件名后缀</span></div><div class="line"><span class="string">        '''</span></div><div class="line"></div><div class="line">        logfile = LogFactory.ilogfile % p</div><div class="line">        <span class="keyword">if</span> logtype == LogFactory.ERROR: logfile = LogFactory.elogfile % p</div><div class="line">        logger = logging.getLogger(logtype)</div><div class="line">        logger.setLevel(logging.INFO)</div><div class="line">        handler = logging.handlers.RotatingFileHandler(logfile, maxBytes=<span class="number">1024</span>*<span class="number">1024</span>*<span class="number">1024</span>, backupCount=<span class="number">5</span>)</div><div class="line"></div><div class="line">        formatter = logging.Formatter(<span class="string">'%(asctime)s %(levelname)-8s %(filename)s %(lineno)d %(message)s'</span>)</div><div class="line"></div><div class="line">        handler.setFormatter(formatter)</div><div class="line">        logger.addHandler(handler)</div><div class="line"></div><div class="line">        <span class="keyword">return</span> logger</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">    @staticmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_err_logger</span><span class="params">(p=<span class="string">""</span>)</span>:</span></div><div class="line">        <span class="string">'''初使化错误日志'''</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> LogFactory.elog :</div><div class="line">            LogFactory.elog = LogFactory.init_log(LogFactory.ERROR, p)</div><div class="line">        <span class="keyword">return</span> LogFactory.elog</div><div class="line"></div><div class="line"><span class="meta">    @staticmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_info_logger</span><span class="params">(p=<span class="string">""</span>)</span>:</span></div><div class="line">        <span class="string">'''初使化错误日志'''</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> LogFactory.ilog :</div><div class="line">            LogFactory.ilog = LogFactory.init_log(LogFactory.INFO, p)</div><div class="line">        <span class="keyword">return</span> LogFactory.ilog</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">w_info</span><span class="params">(msg,p=<span class="string">''</span>)</span>:</span></div><div class="line">    <span class="string">'''</span></div><div class="line"><span class="string">    写信息日志</span></div><div class="line"><span class="string">    @param msg:信息</span></div><div class="line"><span class="string">    '''</span></div><div class="line">    ilogger = LogFactory.get_info_logger(p=p)</div><div class="line">    ilogger.info(msg)</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">w_err</span><span class="params">(msg,p=<span class="string">''</span>)</span>:</span></div><div class="line">    <span class="string">'''</span></div><div class="line"><span class="string">    写错误日志</span></div><div class="line"><span class="string">    @param msg : 错误信息</span></div><div class="line"><span class="string">    '''</span></div><div class="line">    elogger = LogFactory.get_err_logger(p=p)</div><div class="line">    elogger.error(msg)</div></pre></td></tr></table></figure>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
       
 
@@ -2239,7 +2237,7 @@ test wqc
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-05-12-training-python-9/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/09/15/2015-05-14-training-python-10/">展开全文 >></a>
         </p>
       
 

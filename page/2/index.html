@@ -157,6 +157,82 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2015-05-12-training-python-9" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/15/2015-05-12-training-python-9/">python技术分享[9]－ 数据库操作之MongoDB</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/15/2015-05-12-training-python-9/" class="archive-article-date">
+  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-数据库操作："><a href="#1-数据库操作：" class="headerlink" title="1.数据库操作："></a>1.数据库操作：</h4><p>&gt;<br>    数据操作在工作中最常用的操作类库之一，今天贴出来我常用的pymongo操作类，一直在用，也一直在不断优化，暂时可以满足业务</p>
+<h4 id="2-接口代码："><a href="#2-接口代码：" class="headerlink" title="2.接口代码："></a>2.接口代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">from</span> abc <span class="keyword">import</span> ABCMeta  </div><div class="line"><span class="keyword">from</span> abc <span class="keyword">import</span> abstractproperty</div><div class="line"><span class="keyword">from</span> abc <span class="keyword">import</span> abstractmethod </div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Custom_Interface</span><span class="params">(object)</span>:</span></div><div class="line">    </div><div class="line">    __metaclass__ = ABCMeta</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">    @abstractmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        关闭当前数据库句柄</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">return</span></div><div class="line"><span class="meta">    @abstractmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">query</span><span class="params">(self, query, *parameters)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        @return: 返回一个list，多个结果。</span></div><div class="line"><span class="string">        @param query:SQL语句</span></div><div class="line"><span class="string">        @param parameters:SQL语句参数</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">return</span></div><div class="line">       </div><div class="line"><span class="meta">    @abstractmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, query, *parameters)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        @return: 返回单个结果</span></div><div class="line"><span class="string">        @param query:SQL语句</span></div><div class="line"><span class="string">        @param parameters:SQL语句参数</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">return</span></div><div class="line">       </div><div class="line"><span class="meta">    @abstractmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">count</span><span class="params">(self,query, *parameters)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        @return: 返回单个结果</span></div><div class="line"><span class="string">        @param query:SQL语句</span></div><div class="line"><span class="string">        @param parameters:SQL语句参数</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">return</span></div><div class="line">       </div><div class="line"><span class="meta">    @abstractmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">insert</span><span class="params">(self,table,**datas)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        @param table:表名</span></div><div class="line"><span class="string">        @param datas:｛字段：值｝</span></div><div class="line"><span class="string">        '''</span></div><div class="line">        <span class="keyword">return</span></div><div class="line">       </div><div class="line"><span class="meta">    @abstractmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self,table,where,**datas)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        @param table:表名</span></div><div class="line"><span class="string">        @param datas:｛字段：值｝</span></div><div class="line"><span class="string">        '''</span></div><div class="line">        <span class="keyword">return</span></div><div class="line">        </div><div class="line"><span class="meta">    @abstractmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self,table,where)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        @param table:表名</span></div><div class="line"><span class="string">        @param datas:｛字段：值｝</span></div><div class="line"><span class="string">        '''</span></div><div class="line">        <span class="keyword">return</span></div></pre></td></tr></table></figure>
+<h4 id="2-类实现代码："><a href="#2-类实现代码：" class="headerlink" title="2.类实现代码："></a>2.类实现代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#/usr/bin/python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="string">auth:.启</span></div><div class="line"><span class="string">createtime:2014-6-17下午12:13:07</span></div><div class="line"><span class="string">usege:</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">"""</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> sys</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">    <span class="keyword">import</span> pymongo</div><div class="line"></div><div class="line"><span class="keyword">except</span> ImportError:</div><div class="line">    <span class="keyword">print</span> &gt;&gt; sys.stderr,<span class="string">"""\</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">There was a problem importing Python modules(pymongo) required.</span></div><div class="line"><span class="string">The error leading to this problem was:</span></div><div class="line"><span class="string">%s Please install a package which provides this module, or</span></div><div class="line"><span class="string">verify that the module is installed correctly.</span></div><div class="line"><span class="string">you can use this cmd :pip install pymongo</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">It's possible that the above module doesn't match the current version of Python,</span></div><div class="line"><span class="string">which is:</span></div><div class="line"><span class="string">%s</span></div><div class="line"><span class="string">"""</span> % (sys.exc_info(), sys.version)</div><div class="line"></div><div class="line"><span class="keyword">from</span> interface <span class="keyword">import</span> Custom_Interface</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Custom_Mongo</span><span class="params">(Custom_Interface)</span>:</span></div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,using=<span class="string">''</span>)</span>:</span></div><div class="line"></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        @param cursor_hander:数据库句柄</span></div><div class="line"><span class="string">        """</span></div><div class="line">        self.cursor = <span class="keyword">None</span></div><div class="line">        self.cursor_hander = using</div><div class="line">        self.connections = <span class="keyword">None</span></div><div class="line">        self.conn  = <span class="keyword">None</span></div><div class="line">        </div><div class="line">        <span class="keyword">if</span> str(self.cursor_hander).rstrip() == <span class="string">''</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">'please write Custom_MySQL`s using param'</span></div><div class="line">            exit(<span class="number">0</span>)</div><div class="line">   </div><div class="line">            </div><div class="line"></div><div class="line">        databases =&#123;</div><div class="line">            <span class="string">'logs'</span>:&#123;<span class="string">'host'</span>:<span class="string">'127.0.0.1'</span>, <span class="string">'user'</span>:<span class="string">'readonly'</span>,<span class="string">'password'</span>:<span class="string">'readonly'</span>, <span class="string">'database'</span>:<span class="string">'local'</span>,<span class="string">'charset'</span>:<span class="string">'utf8'</span>,<span class="string">'port'</span>:<span class="number">27017</span>,<span class="string">'connect_timeout'</span>:<span class="number">50</span>&#125;,</div><div class="line">            </div><div class="line">            &#125;</div><div class="line">        </div><div class="line">        database = databases[self.cursor_hander]</div><div class="line">        </div><div class="line">        <span class="comment">#建立和数据库系统的连接,创建Connection时，指定host及port参数</span></div><div class="line">        self.conn   = pymongo.Connection(host=database[<span class="string">'host'</span>],port=database[<span class="string">'port'</span>])</div><div class="line">        self.database = self.conn[database[<span class="string">'database'</span>]]</div><div class="line">        <span class="comment">#admin 数据库有帐号，连接-认证-切换库</span></div><div class="line">        <span class="comment">#db_auth = conn.admin</span></div><div class="line">        <span class="comment">#db_auth.authenticate('sa','sa')</span></div><div class="line"></div><div class="line">        </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__del__</span><span class="params">(self)</span>:</span></div><div class="line">        </div><div class="line">        self.close()</div><div class="line">        </div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        关闭当前数据库句柄</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">if</span> self.conn != <span class="keyword">None</span>:</div><div class="line">            <span class="keyword">return</span> self.conn.disconnect()</div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">query</span><span class="params">(self, table_name, parameters,skip=None,limit=None)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        @return: 返回一个list，多个结果。</span></div><div class="line"><span class="string">        @param table_name:表名</span></div><div class="line"><span class="string">        @param parameters:SQL语句参数</span></div><div class="line"><span class="string">        """</span></div><div class="line">        result = self.database[table_name].find(parameters)</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> skip !=<span class="keyword">None</span>:</div><div class="line">            result.skip(skip)</div><div class="line">        <span class="keyword">if</span> limit !=<span class="keyword">None</span>:</div><div class="line">                </div><div class="line">            result.limit(limit) </div><div class="line">            </div><div class="line">        <span class="keyword">return</span> result</div><div class="line">       </div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, table_name,**parameters)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        @return: 返回单个结果</span></div><div class="line"><span class="string">        @param table_name:表名</span></div><div class="line"><span class="string">        @param parameters:SQL语句参数</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">return</span> self.database[table_name].find_one(parameters)</div><div class="line">       </div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">count</span><span class="params">(self,table_name, **parameters)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        @return: 返回单个结果</span></div><div class="line"><span class="string">        @param table_name:表名</span></div><div class="line"><span class="string">        @param parameters:SQL语句参数</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">return</span> self.database[table_name].find(parameters).count()</div><div class="line">       </div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">insert</span><span class="params">(self,table,**datas)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        @param table:表名</span></div><div class="line"><span class="string">        @param datas:｛字段：值｝</span></div><div class="line"><span class="string">        '''</span></div><div class="line">        <span class="keyword">return</span> self.database[table].insert(datas)</div><div class="line">       </div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(self,table,where,**datas)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        @param table:表名</span></div><div class="line"><span class="string">        @param datas:｛字段：值｝</span></div><div class="line"><span class="string">        '''</span></div><div class="line">        <span class="keyword">return</span> self.database[table].update(where,datas)</div><div class="line">        </div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self,table,where)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        @param table:表名</span></div><div class="line"><span class="string">        @param datas:｛字段：值｝</span></div><div class="line"><span class="string">        '''</span></div><div class="line">        <span class="keyword">return</span> self.database[table].remove(where)</div></pre></td></tr></table></figure>
+<h4 id="3-用例代码："><a href="#3-用例代码：" class="headerlink" title="3.用例代码："></a>3.用例代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#/usr/bin/python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="string">date:2014-06-17 12:00</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="keyword">from</span> custom.db.mongo <span class="keyword">import</span> Custom_Mongo</div><div class="line"></div><div class="line">n = Custom_Mongo(using=<span class="string">'logs'</span>)</div><div class="line"></div><div class="line">param = &#123;<span class="string">'sex'</span>:<span class="string">'man'</span>,<span class="string">'name'</span>:<span class="string">'wuqichao'</span>&#125;</div><div class="line"><span class="keyword">print</span> n.insert(<span class="string">'users'</span>,**param)</div><div class="line"></div><div class="line">param = &#123;<span class="string">'sex'</span>:<span class="string">'man'</span>,<span class="string">'name'</span>:<span class="string">'wuqichao'</span>&#125;</div><div class="line"><span class="keyword">print</span> n.get(<span class="string">'users'</span>,**param)</div><div class="line"></div><div class="line">param = &#123;<span class="string">'sex'</span>:<span class="string">'man'</span>,<span class="string">'name'</span>:<span class="string">'wuqichao'</span>&#125;</div><div class="line"><span class="keyword">print</span> n.count(<span class="string">'users'</span>, **param)</div><div class="line"></div><div class="line">n.update(<span class="string">'users'</span>,&#123;<span class="string">'sex'</span>:<span class="string">'man'</span>,<span class="string">'name'</span>:<span class="string">'wuqichao'</span>&#125;,**&#123;<span class="string">'sex'</span>:<span class="string">'wman'</span>,<span class="string">'name'</span>:<span class="string">'wuqichao'</span>&#125;)</div><div class="line"></div><div class="line">param = &#123;<span class="string">'sex'</span>:<span class="string">'man'</span>,<span class="string">'name'</span>:<span class="string">'wuqichao'</span>&#125;</div><div class="line">res =  n.query(<span class="string">'users'</span>,param,skip=<span class="number">2</span>,limit=<span class="number">2</span>)</div><div class="line"><span class="keyword">for</span> r <span class="keyword">in</span> res:</div><div class="line">    <span class="keyword">print</span> r</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/15/2015-05-12-training-python-9/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2015-05-10-training-python-8" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -216,6 +292,114 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/09/15/2015-05-10-training-python-8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2015-04-14-training-python-3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/15/2015-04-14-training-python-3/">python技术分享[3]－list dict在实际中的应用</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/15/2015-04-14-training-python-3/" class="archive-article-date">
+  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>在python中, list, tuple, dict, set有什么区别, 主要应用在什么样的场景?</li>
+<li>定义:</li>
+</ul>
+<ul>
+<li><ul>
+<li>list:链表,有序的项目, 通过索引进行查找,使用方括号”[]”;<br>tuple:元组,元组将多样的对象集合到一起,不能修改,通过索引进行查找, 使用括号”()”;<br>dict:字典,字典是一组键(key)和值(value)的组合,通过键(key)进行查找,没有顺序, 使用大括号”{}”;<br>set:集合,无序,元素只出现一次, 自动去重,使用”set([])”</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>应用场景:</li>
+</ul>
+<ul>
+<li><ul>
+<li>list, 简单的数据集合,可以使用索引;<br>tuple, 把一些数据当做一个整体去使用,不能修改;<br>dict,使用键值和值进行关联的数据;<br>set,数据只出现一次,只关心数据是否出现, 不关心其位置;</li>
+</ul>
+</li>
+</ul>
+<h4 id="实践样例"><a href="#实践样例" class="headerlink" title="实践样例"></a>实践样例</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：统计游戏中玩家及玩家登陆次数</div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">#统计游戏中玩家及玩家登陆次数</div><div class="line">games = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'a'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>,<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'b'</span>]  </div><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter  </div><div class="line">d = Counter(games) </div><div class="line">print d</div><div class="line"></div><div class="line"></div><div class="line">#排位赛规则，如果积分相同，则按胜利场次，再相同按失败场次</div><div class="line">games =[&#123;<span class="string">'f'</span>:<span class="number">3</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">3</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">20</span>,<span class="string">'b'</span>:<span class="number">16</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">12</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,]</div><div class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter  </div><div class="line">print sorted(games ,key = itemgetter(<span class="string">'f'</span>,<span class="string">'s'</span>,<span class="string">'b'</span>),reverse=<span class="literal">True</span>)</div><div class="line"></div><div class="line"></div><div class="line">#选择某一天，然后以这天为准，次日留存，<span class="number">3</span>日留存，<span class="number">7</span>日留存，<span class="number">14</span>日留存，<span class="number">30</span>日留存</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime,timedelta  </div><div class="line">def GetNextDay(baseday,n):  </div><div class="line">    return str((datetime.strptime(str(baseday),<span class="string">'%Y-%m-%d'</span>)+timedelta(days=n)).date())  </div><div class="line"></div><div class="line"><span class="keyword">import</span> functools  </div><div class="line">selected_day = <span class="string">'2015-02-01'</span></div><div class="line">nday = functools.partial(GetNextDay,selected_day)</div><div class="line">print nday(<span class="number">1</span>)</div><div class="line">print nday(<span class="number">2</span>)</div><div class="line">print nday(<span class="number">6</span>)</div><div class="line">print nday(<span class="number">13</span>)</div><div class="line">print nday(<span class="number">29</span>)</div><div class="line"></div><div class="line">#用来计算游戏包裹里面的变化情况</div><div class="line">def symmetric_difference(_oldobj,_newobj):  </div><div class="line">    _oldkeys = _oldobj.keys()  </div><div class="line">    _newkeys = _newobj.keys()  </div><div class="line">    _diff = &#123;&#125;  </div><div class="line">    for _key <span class="keyword">in</span> set(_oldkeys + _newkeys):  </div><div class="line">        _val = _newobj.get(_key,<span class="number">0</span>) - _oldobj.get(_key,<span class="number">0</span>)  </div><div class="line">        <span class="keyword">if</span> _val:  </div><div class="line">            _diff[_key] = _val   </div><div class="line">    return _diff   </div><div class="line">      </div><div class="line">oldobj = &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">2</span>,<span class="string">'c'</span>:<span class="number">3</span>&#125;  </div><div class="line">newobj = &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">3</span>,<span class="string">'d'</span>:<span class="number">4</span>&#125;  </div><div class="line">print symmetric_difference(oldobj,newobj)</div></pre></td></tr></table></figure>
+<ul>
+<li>输入：python 3.py</li>
+<li>输出：<ul>
+<li>Counter({‘a’: 3, ‘b’: 3, ‘c’: 2, ‘d’: 1})</li>
+<li>[{‘s’: 20, ‘b’: 16, ‘f’: 13}, {‘s’: 12, ‘b’: 12, ‘f’: 13}, {‘s’: 10, ‘b’: 12, ‘f’: 13},  </li>
+<li>{‘s’: - 10, ‘b’: 12, ‘f’: 3}, {‘s’: 10, ‘b’: 12, ‘f’: 3}]- </li>
+<li>2015-02-02- </li>
+<li>2015-02-03- </li>
+<li>2015-02-07- </li>
+<li>2015-02-14- </li>
+<li>2015-03-02- </li>
+<li>{‘c’: -3, ‘b’: 1, ‘d’: 4}- </li>
+</ul>
+</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/15/2015-04-14-training-python-3/">展开全文 >></a>
         </p>
       
 
@@ -470,161 +654,6 @@
 
 
   
-    <article id="post-2015-04-10-training-python-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-04-10-training-python-1/">python技术分享[1]－python初步感观</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/15/2015-04-10-training-python-1/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>###1、环境简介</p>
-<ul>
-<li>os系统：centos6.5</li>
-<li>python:2.7.7 或者 2.7.8</li>
-<li>扩展要求:<pre><code>setuptools ,pip     ,MySQL-python    
-</code></pre></li>
-<li>如果你的python版本过低，可以用下面的脚本升级为2.7.7</li>
-<li><p>脚本下载：<a href="http://pan.baidu.com/s/1jGDvFzo" target="_blank" rel="external">http://pan.baidu.com/s/1jGDvFzo</a>      </p>
-</li>
-<li><p>###1.1 python使用方式</p>
-<ul>
-<li>进入python shell环境</li>
-<li>执行脚本模式 python demo.py</li>
-</ul>
-</li>
-</ul>
-<p>###2、初步感观<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"><span class="comment">#!/usr/bin/python2.7</span></div><div class="line"></div><div class="line"><span class="comment">###################################################</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#      python 第一个显示程序，用于初步感观</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">###################################################</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">()</span>:</span></div><div class="line">  <span class="string">'''</span></div><div class="line"><span class="string">  a generator that produces the fibonacci series's elements</span></div><div class="line"><span class="string">  '''</span></div><div class="line"> </div><div class="line">  a = <span class="number">1</span></div><div class="line">  b = <span class="number">1</span></div><div class="line">  <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">    a, b = a + b, a</div><div class="line">    <span class="keyword">yield</span> a</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">nth</span><span class="params">(series, n)</span>:</span></div><div class="line">  <span class="string">'''</span></div><div class="line"><span class="string">  returns the nth element of a series,</span></div><div class="line"><span class="string">  consuming the series' earlier elements.</span></div><div class="line"><span class="string">  '''</span></div><div class="line"> </div><div class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> series:</div><div class="line">    n -= <span class="number">1</span></div><div class="line">    <span class="keyword">if</span> n &lt;= <span class="number">0</span>: <span class="keyword">return</span> x</div><div class="line"> </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	print(<span class="string">'Executed from the command line'</span>)</div><div class="line">	<span class="keyword">print</span> nth(fib(), <span class="number">10</span>)</div></pre></td></tr></table></figure></p>
-<ul>
-<li>执行 </li>
-<li>python demo.py </li>
-<li>输出</li>
-<li>Executed from the command line</li>
-<li>144</li>
-</ul>
-<p>###3、Python格言</p>
-<ul>
-<li>输入python 进入python shell环境</li>
-<li>import this </li>
-<li><p>显示python之禅</p>
-</li>
-<li><h5 id="3-1-Python之禅"><a href="#3-1-Python之禅" class="headerlink" title="3.1 Python之禅"></a>3.1 Python之禅</h5><ul>
-<li>Beautiful is better than ugly.  </li>
-<li>漂亮的代码要比丑陋的代码要好得多。  </li>
-<li>Explicit is better than implicit.  </li>
-<li>明确的定义比 隐式定义更好。  </li>
-<li>Simple is better than complex.  </li>
-<li>简单比负责要好。  </li>
-<li>Complex is better than complicated.  </li>
-<li>负责要比搞复杂要好。  </li>
-<li>Flat is better than nested.  </li>
-<li>扁平结构要比嵌套结构好。  </li>
-<li>Sparse is better than dense.  </li>
-<li>简洁明了的代码要比稠密的代码要好。  </li>
-<li>Readability counts.  </li>
-<li>可读写的计数。  </li>
-<li>Special cases aren’t special enough to break the rules.  </li>
-<li>专门的用例不是特殊到足以违反规则。  </li>
-<li>Although practicality beats purity.  </li>
-<li>是的，实用性练就纯度。  </li>
-<li>Errors should never pass silently.  </li>
-<li>错误永远都不会沉默。  </li>
-<li>Unless explicitly silenced.  </li>
-<li>除非明确啥也不干。  </li>
-<li>In the face of ambiguity, refuse the temptation to guess.  </li>
-<li>面对模糊定义、拒绝视图拍脑袋猜。  </li>
-<li>There should be one– and preferably only one –obvious way to do it.  </li>
-<li>Although that way may not be obvious at first unless you’re Dutch.  </li>
-<li>虽然一开始不那面明确,我们会选择更清晰一条到走。  </li>
-<li>Now is better than never.  </li>
-<li>现在开始总比不开始的要好。  </li>
-<li>Although never is often better than <em>right</em> now.  </li>
-<li>虽然从不尝试总比现在开始尝试好。  </li>
-<li>If the implementation is hard to explain, it’s a bad idea.  </li>
-<li>如果实现难以说明，那它是个坏主意。  </li>
-<li>If the implementation is easy to explain, it may be a good idea.  </li>
-<li>如果实现容易说明，那它是个好主意。  </li>
-<li>Namespaces are one honking great idea – let’s do more of those!  </li>
-<li>名称空间是一个好东西——让我们做更多那样的东西!  </li>
-</ul>
-</li>
-<li><h5 id="3-2-Python“八荣八耻”"><a href="#3-2-Python“八荣八耻”" class="headerlink" title="3.2 Python“八荣八耻”"></a>3.2 Python“八荣八耻”</h5><ul>
-<li>以动手实践为荣 , 以只看不练为耻;</li>
-<li>以打印日志为荣 , 以单步跟踪为耻;</li>
-<li>以空格缩进为荣 , 以制表缩进为耻;</li>
-<li>以单元测试为荣 , 以人工测试为耻;</li>
-<li>以模块复用为荣 , 以复制粘贴为耻;</li>
-<li>以多态应用为荣 , 以分支判断为耻;</li>
-<li>以Pythonic为荣 , 以冗余拖沓为耻;</li>
-<li>以总结分享为荣 , 以跪求其解为耻;</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-04-10-training-python-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2015-04-13-training-python-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -805,114 +834,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/09/15/2015-04-19-training-python-5/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2015-04-14-training-python-3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-04-14-training-python-3/">python技术分享[3]－list dict在实际中的应用</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/15/2015-04-14-training-python-3/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>在python中, list, tuple, dict, set有什么区别, 主要应用在什么样的场景?</li>
-<li>定义:</li>
-</ul>
-<ul>
-<li><ul>
-<li>list:链表,有序的项目, 通过索引进行查找,使用方括号”[]”;<br>tuple:元组,元组将多样的对象集合到一起,不能修改,通过索引进行查找, 使用括号”()”;<br>dict:字典,字典是一组键(key)和值(value)的组合,通过键(key)进行查找,没有顺序, 使用大括号”{}”;<br>set:集合,无序,元素只出现一次, 自动去重,使用”set([])”</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>应用场景:</li>
-</ul>
-<ul>
-<li><ul>
-<li>list, 简单的数据集合,可以使用索引;<br>tuple, 把一些数据当做一个整体去使用,不能修改;<br>dict,使用键值和值进行关联的数据;<br>set,数据只出现一次,只关心数据是否出现, 不关心其位置;</li>
-</ul>
-</li>
-</ul>
-<h4 id="实践样例"><a href="#实践样例" class="headerlink" title="实践样例"></a>实践样例</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：统计游戏中玩家及玩家登陆次数</div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">#统计游戏中玩家及玩家登陆次数</div><div class="line">games = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'a'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>,<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'b'</span>]  </div><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter  </div><div class="line">d = Counter(games) </div><div class="line">print d</div><div class="line"></div><div class="line"></div><div class="line">#排位赛规则，如果积分相同，则按胜利场次，再相同按失败场次</div><div class="line">games =[&#123;<span class="string">'f'</span>:<span class="number">3</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">3</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">20</span>,<span class="string">'b'</span>:<span class="number">16</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">12</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,]</div><div class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter  </div><div class="line">print sorted(games ,key = itemgetter(<span class="string">'f'</span>,<span class="string">'s'</span>,<span class="string">'b'</span>),reverse=<span class="literal">True</span>)</div><div class="line"></div><div class="line"></div><div class="line">#选择某一天，然后以这天为准，次日留存，<span class="number">3</span>日留存，<span class="number">7</span>日留存，<span class="number">14</span>日留存，<span class="number">30</span>日留存</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime,timedelta  </div><div class="line">def GetNextDay(baseday,n):  </div><div class="line">    return str((datetime.strptime(str(baseday),<span class="string">'%Y-%m-%d'</span>)+timedelta(days=n)).date())  </div><div class="line"></div><div class="line"><span class="keyword">import</span> functools  </div><div class="line">selected_day = <span class="string">'2015-02-01'</span></div><div class="line">nday = functools.partial(GetNextDay,selected_day)</div><div class="line">print nday(<span class="number">1</span>)</div><div class="line">print nday(<span class="number">2</span>)</div><div class="line">print nday(<span class="number">6</span>)</div><div class="line">print nday(<span class="number">13</span>)</div><div class="line">print nday(<span class="number">29</span>)</div><div class="line"></div><div class="line">#用来计算游戏包裹里面的变化情况</div><div class="line">def symmetric_difference(_oldobj,_newobj):  </div><div class="line">    _oldkeys = _oldobj.keys()  </div><div class="line">    _newkeys = _newobj.keys()  </div><div class="line">    _diff = &#123;&#125;  </div><div class="line">    for _key <span class="keyword">in</span> set(_oldkeys + _newkeys):  </div><div class="line">        _val = _newobj.get(_key,<span class="number">0</span>) - _oldobj.get(_key,<span class="number">0</span>)  </div><div class="line">        <span class="keyword">if</span> _val:  </div><div class="line">            _diff[_key] = _val   </div><div class="line">    return _diff   </div><div class="line">      </div><div class="line">oldobj = &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">2</span>,<span class="string">'c'</span>:<span class="number">3</span>&#125;  </div><div class="line">newobj = &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">3</span>,<span class="string">'d'</span>:<span class="number">4</span>&#125;  </div><div class="line">print symmetric_difference(oldobj,newobj)</div></pre></td></tr></table></figure>
-<ul>
-<li>输入：python 3.py</li>
-<li>输出：<ul>
-<li>Counter({‘a’: 3, ‘b’: 3, ‘c’: 2, ‘d’: 1})</li>
-<li>[{‘s’: 20, ‘b’: 16, ‘f’: 13}, {‘s’: 12, ‘b’: 12, ‘f’: 13}, {‘s’: 10, ‘b’: 12, ‘f’: 13},  </li>
-<li>{‘s’: - 10, ‘b’: 12, ‘f’: 3}, {‘s’: 10, ‘b’: 12, ‘f’: 3}]- </li>
-<li>2015-02-02- </li>
-<li>2015-02-03- </li>
-<li>2015-02-07- </li>
-<li>2015-02-14- </li>
-<li>2015-03-02- </li>
-<li>{‘c’: -3, ‘b’: 1, ‘d’: 4}- </li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-04-14-training-python-3/">展开全文 >></a>
         </p>
       
 
