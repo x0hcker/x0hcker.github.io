@@ -157,6 +157,102 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2016-02-02-php-ext-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/02/2016-02-02-php-ext-2/">php7扩展开发[2]-怎么样定义一个类</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/02/2016-02-02-php-ext-2/" class="archive-article-date">
+  	<time datetime="2017-08-02T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-需要实现的细节"><a href="#1-需要实现的细节" class="headerlink" title="1.需要实现的细节"></a>1.需要实现的细节</h3><ul>
+<li>实现一个person类</li>
+<li>实现一个doing方法和saying方法</li>
+</ul>
+<h3 id="2-第一个扩展"><a href="#2-第一个扩展" class="headerlink" title="2.第一个扩展"></a>2.第一个扩展</h3><h4 id="2-1创建类的扩展："><a href="#2-1创建类的扩展：" class="headerlink" title="2.1创建类的扩展："></a>2.1创建类的扩展：</h4><p>[root@bogon ext]# cd /usr/local/src/php-7.0.3/ext</p>
+<p>[root@bogon ext]# ./ext_skel –extname=person</p>
+<h4 id="2-2-修改配置"><a href="#2-2-修改配置" class="headerlink" title="2.2 修改配置"></a>2.2 修改配置</h4><p>[root@bogon ext]# vim person/config.m4</p>
+<ul>
+<li>dnl PHP_ARG_WITH(person, for person support,</li>
+<li>dnl Make sure that the comment is aligned:</li>
+<li>dnl [  –with-person             Include person support])</li>
+<li>更改为：</li>
+<li>PHP_ARG_WITH(person, for person support,</li>
+<li>dnl Make sure that the comment is aligned:</li>
+<li>[  –with-person             Include person support])</li>
+</ul>
+<h4 id="2-3-实现代码"><a href="#2-3-实现代码" class="headerlink" title="2.3 实现代码"></a>2.3 实现代码</h4><p>在php_person.h头中加上</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">extern</span> zend_class_entry *person_ce;</div><div class="line"></div><div class="line">PHP_METHOD(person_ce,__construct);</div><div class="line">PHP_METHOD(person_ce,saying);</div><div class="line">PHP_METHOD(person_ce,doing);</div></pre></td></tr></table></figure>
+<p>在person.c头中加上</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * 声明构造函数</span></div><div class="line"><span class="comment"> * @param</span></div><div class="line"><span class="comment"> * @return</span></div><div class="line"><span class="comment"> */</span></div><div class="line">ZEND_METHOD(person,__construct)&#123;</div><div class="line"></div><div class="line">        zval *pThis;</div><div class="line">        pThis = getThis();</div><div class="line"></div><div class="line"></div><div class="line">	zend_printf(<span class="string">"construct\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * 声明析造函数</span></div><div class="line"><span class="comment"> * @param</span></div><div class="line"><span class="comment"> * @return</span></div><div class="line"><span class="comment"> */</span></div><div class="line">ZEND_METHOD(person,__destruct)&#123;</div><div class="line"></div><div class="line"></div><div class="line">	zend_printf(<span class="string">"destruct\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">ZEND_METHOD(person,doing)&#123;</div><div class="line"></div><div class="line"></div><div class="line">	zend_printf(<span class="string">"doing\n"</span>);</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">ZEND_METHOD(person,saying)&#123;</div><div class="line"></div><div class="line">	zend_printf(<span class="string">"saying\n"</span>);</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//这个函数需要加上声明，去掉了没用的test函数</span></div><div class="line"><span class="keyword">const</span> zend_function_entry person_functions[] = &#123;</div><div class="line"></div><div class="line"></div><div class="line">	ZEND_ME(person, __construct, global_config_arg, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)</div><div class="line">	ZEND_ME(person,doing,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC) ZEND_ME(person,saying,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC)</div><div class="line">	ZEND_ME(person,__destruct,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC|ZEND_ACC_DTOR)</div><div class="line"></div><div class="line">	PHP_FE_END	<span class="comment">/* Must be the last line in person_functions[] */</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//将类和方法注册到zend</span></div><div class="line">PHP_MINIT_FUNCTION(person)</div><div class="line">&#123;</div><div class="line">       zend_class_entry ce;</div><div class="line">       INIT_CLASS_ENTRY(ce, <span class="string">"person"</span>, person_functions);</div><div class="line">       person_ce = zend_register_internal_class(&amp;ce TSRMLS_CC);</div><div class="line"></div><div class="line">       zend_declare_property_null(person_ce,<span class="string">"saying"</span>,<span class="built_in">strlen</span>(<span class="string">"saying"</span>),ZEND_ACC_PUBLIC);</div><div class="line">       zend_declare_property_null(person_ce,<span class="string">"doing"</span>,<span class="built_in">strlen</span>(<span class="string">"doing"</span>),ZEND_ACC_PUBLIC);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="2-4-编译"><a href="#2-4-编译" class="headerlink" title="2.4 编译"></a>2.4 编译</h4><pre><code>* [root@bogon hello]# [root@localhost person]# ./configure &amp;&amp; make &amp;&amp; make install
+</code></pre><h4 id="2-5-扩展安装"><a href="#2-5-扩展安装" class="headerlink" title="2.5 扩展安装"></a>2.5 扩展安装</h4><pre><code>1. 改更php.ini 加上[person] extenstion=person.so
+</code></pre><h5 id="2-6-扩展使用"><a href="#2-6-扩展使用" class="headerlink" title="2.6 扩展使用"></a>2.6 扩展使用</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@bogon tests]# cat test.php</div><div class="line">&lt;?php</div><div class="line">	</div><div class="line"><span class="meta">$</span><span class="bash">n = new person();</span></div><div class="line">echo $n-&gt;saying();</div><div class="line">echo $n-&gt;doing();</div><div class="line">	</div><div class="line">[root@localhost tests]# php test.php</div><div class="line">construct</div><div class="line">saying</div><div class="line">doing</div><div class="line">destruct</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/02/2016-02-02-php-ext-2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2016-02-01-php-ext-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -895,86 +991,6 @@ echo &quot;3&quot; &gt; /opt/zookeeper/data/myid 在172.16.61.104上
 
 
   
-    <article id="post-manage-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/24/manage-1/">一个创业管理者的内心读白</a>
-    </h1>
-  
-
-        
-        <a href="/2017/05/24/manage-1/" class="archive-article-date">
-  	<time datetime="2017-05-24T00:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h3 id="别太拿自己当回事儿"><a href="#别太拿自己当回事儿" class="headerlink" title="别太拿自己当回事儿"></a>别太拿自己当回事儿</h3><p>创业，如果放不下架子，放不下面子，你没有机会享受高风险的回报，即使有，你也不配<br>常常是自己的所谓“为了项目好”，最后一意孤行，闹得所有人都开心，已有的计划无法继续，所有人都失去信心，如果项目黄了，你要承担多少责任？<br>
-        
-          <a class="article-more-a" href="/2017/05/24/manage-1/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">新人入职</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">培训管理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/怎么样做团队建设/" class="article-tag-list-link color4">怎么样做团队建设</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/05/24/manage-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
@@ -1076,11 +1092,11 @@ echo &quot;3&quot; &gt; /opt/zookeeper/data/myid 在172.16.61.104上
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">phpmongodb</a>
+                <a href="javascript:void(0)" class="js-tag color5">集群搭建</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">集群搭建</a>
+                <a href="javascript:void(0)" class="js-tag color1">phpmongodb</a>
               </li>
              
               <li class="article-tag-list-item">
