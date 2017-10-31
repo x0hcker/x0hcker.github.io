@@ -157,6 +157,85 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2016-02-09-php-ext-9" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/09/2016-02-09-php-ext-9/">php7扩展开发[9] zend_call_method和zend_call_function</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/09/2016-02-09-php-ext-9/" class="archive-article-date">
+  	<time datetime="2017-08-09T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight smali"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">场景：我们想要在php7扩展中调用用户自定的类中的方法，而且方法有多个参数，找到以下方</div><div class="line">法，没有看到可以超过两个参数的方法。所以一直向下查找，发现zend_call_method调用的</div><div class="line">zend_call_function，但是并非只能传两个参数。一直追下去。这样我们用zend_call_function来调用多个参数，实现我们要的目的。</div></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div></pre></td><td class="code"><pre><div class="line">函数原型：在 Zend/zend_interfaces.下：</div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> zend_call_method_with_0_params(obj, obj_ce, fn_proxy, function_name, retval) \</span></div><div class="line">	zend_call_method(obj, obj_ce, fn_proxy, function_name, <span class="keyword">sizeof</span>(function_name)<span class="number">-1</span>, retval, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>)</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> zend_call_method_with_1_params(obj, obj_ce, fn_proxy, function_name, retval, arg1) \</span></div><div class="line">	zend_call_method(obj, obj_ce, fn_proxy, function_name, <span class="keyword">sizeof</span>(function_name)<span class="number">-1</span>, retval, <span class="number">1</span>, arg1, <span class="literal">NULL</span>)</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> zend_call_method_with_2_params(obj, obj_ce, fn_proxy, function_name, retval, arg1, arg2) \</span></div><div class="line">	zend_call_method(obj, obj_ce, fn_proxy, function_name, <span class="keyword">sizeof</span>(function_name)<span class="number">-1</span>, retval, <span class="number">2</span>, arg1, arg2)</div><div class="line"></div><div class="line"></div><div class="line">上面三个调用下面的zend_call_method：</div><div class="line"></div><div class="line"></div><div class="line"><span class="function">ZEND_API zval* <span class="title">zend_call_method</span><span class="params">(zval *object, zend_class_entry *obj_ce, zend_function **fn_proxy, <span class="keyword">const</span> <span class="keyword">char</span> *function_name, <span class="keyword">size_t</span> function_name_len, zval *retval_ptr, <span class="keyword">int</span> param_count, zval* arg1, zval* arg2)</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">    <span class="keyword">int</span> result;</div><div class="line">    zend_fcall_info fci;</div><div class="line">    zval retval;</div><div class="line">    HashTable *function_table;</div><div class="line"></div><div class="line">    zval params[<span class="number">2</span>];</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (param_count &gt; <span class="number">0</span>) &#123;</div><div class="line">        ZVAL_COPY_VALUE(&amp;params[<span class="number">0</span>], arg1);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (param_count &gt; <span class="number">1</span>) &#123;</div><div class="line">        ZVAL_COPY_VALUE(&amp;params[<span class="number">1</span>], arg2);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">//看这里.原来可以传多个参数，只是这里做了限制</span></div><div class="line">    <span class="comment">//看这里.原来可以传多个参数，只是这里做了限制</span></div><div class="line">    <span class="comment">//看这里.原来可以传多个参数，只是这里做了限制</span></div><div class="line">    </div><div class="line">    fci.size = <span class="keyword">sizeof</span>(fci);</div><div class="line"> </div><div class="line">    fci.object = (object &amp;&amp; Z_TYPE_P(object) == IS_OBJECT) ? Z_OBJ_P(object) : <span class="literal">NULL</span>;</div><div class="line">    ZVAL_STRINGL(&amp;fci.function_name, function_name, function_name_len);</div><div class="line">    fci.retval = retval_ptr ? retval_ptr : &amp;retval;</div><div class="line">    fci.param_count = param_count;</div><div class="line">    fci.params = params;</div><div class="line">    fci.no_separation = <span class="number">1</span>;</div><div class="line">    fci.symbol_table = <span class="literal">NULL</span>;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (!fn_proxy &amp;&amp; !obj_ce) &#123;</div><div class="line">        </div><div class="line">        fci.function_table = !object ? EG(function_table) : <span class="literal">NULL</span>;</div><div class="line">        </div><div class="line">        <span class="comment">//看这里.原来调用的是zend_call_function</span></div><div class="line">        <span class="comment">//看这里.原来调用的是zend_call_function</span></div><div class="line">        <span class="comment">//看这里.原来调用的是zend_call_function</span></div><div class="line">        </div><div class="line">        result = zend_call_function(&amp;fci, <span class="literal">NULL</span>);</div><div class="line">        zval_ptr_dtor(&amp;fci.function_name);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        zend_fcall_info_cache fcic;</div><div class="line"></div><div class="line">        fcic.initialized = <span class="number">1</span>;</div><div class="line">        <span class="keyword">if</span> (!obj_ce) &#123;</div><div class="line">            obj_ce = object ? Z_OBJCE_P(object) : <span class="literal">NULL</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (obj_ce) &#123;</div><div class="line">            function_table = &amp;obj_ce-&gt;function_table;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            function_table = EG(function_table);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (!fn_proxy || !*fn_proxy) &#123;</div><div class="line">            <span class="keyword">if</span> ((fcic.function_handler = zend_hash_find_ptr(function_table, Z_STR(fci.function_name))) == <span class="literal">NULL</span>) &#123;</div><div class="line">                <span class="comment">/* error at c-level */</span></div><div class="line">                zend_error_noreturn(E_CORE_ERROR, <span class="string">"Couldn't find implementation for method %s%s%s"</span>, obj_ce ? ZSTR_VAL(obj_ce-&gt;name) : <span class="string">""</span>, obj_ce ? <span class="string">"::"</span> : <span class="string">""</span>, function_name);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (fn_proxy) &#123;</div><div class="line">                *fn_proxy = fcic.function_handler;</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            fcic.function_handler = *fn_proxy;</div><div class="line">        &#125;</div><div class="line">        fcic.calling_scope = obj_ce;</div><div class="line">        <span class="keyword">if</span> (object) &#123;</div><div class="line">            fcic.called_scope = Z_OBJCE_P(object);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            zend_class_entry *called_scope = zend_get_called_scope(EG(current_execute_data));</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (obj_ce &amp;&amp;</div><div class="line">                (!called_scope ||</div><div class="line">                 !instanceof_function(called_scope, obj_ce))) &#123;</div><div class="line">                fcic.called_scope = obj_ce;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                fcic.called_scope = called_scope;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        fcic.object = object ? Z_OBJ_P(object) : <span class="literal">NULL</span>;</div><div class="line">        </div><div class="line">        <span class="comment">//看这里.原来调用的是zend_call_function</span></div><div class="line">        <span class="comment">//看这里.原来调用的是zend_call_function</span></div><div class="line">        <span class="comment">//看这里.原来调用的是zend_call_function</span></div><div class="line">        </div><div class="line">        result = zend_call_function(&amp;fci, &amp;fcic);</div><div class="line">        zval_ptr_dtor(&amp;fci.function_name);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (result == FAILURE) &#123;</div><div class="line">        <span class="comment">/* error at c-level */</span></div><div class="line">        <span class="keyword">if</span> (!obj_ce) &#123;</div><div class="line">            obj_ce = object ? Z_OBJCE_P(object) : <span class="literal">NULL</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (!EG(exception)) &#123;</div><div class="line">            zend_error_noreturn(E_CORE_ERROR, <span class="string">"Couldn't execute method %s%s%s"</span>, obj_ce ? ZSTR_VAL(obj_ce-&gt;name) : <span class="string">""</span>, obj_ce ? <span class="string">"::"</span> : <span class="string">""</span>, function_name);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">/* copy arguments back, they might be changed by references */</span></div><div class="line">    <span class="keyword">if</span> (param_count &gt; <span class="number">0</span> &amp;&amp; Z_ISREF(params[<span class="number">0</span>]) &amp;&amp; !Z_ISREF_P(arg1)) &#123;</div><div class="line">        ZVAL_COPY_VALUE(arg1, &amp;params[<span class="number">0</span>]);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (param_count &gt; <span class="number">1</span> &amp;&amp; Z_ISREF(params[<span class="number">1</span>]) &amp;&amp; !Z_ISREF_P(arg2)) &#123;</div><div class="line">        ZVAL_COPY_VALUE(arg2, &amp;params[<span class="number">1</span>]);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (!retval_ptr) &#123;</div><div class="line">        zval_ptr_dtor(&amp;retval);</div><div class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> retval_ptr;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">我们可以看到zend_call_method调用zend_call_function,函数体定义在Zend/zend_API.h下：</div><div class="line"><span class="function">ZEND_API <span class="keyword">int</span> <span class="title">zend_call_function</span><span class="params">(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache)</span></span>;</div><div class="line">我们可以看到要想使用zend_call_function 必须要了解zend_fcall_info结构体。</div><div class="line"></div><div class="line">PHP7 中</div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">zend_fcall_info</span> &#123;</span></div><div class="line">    <span class="keyword">size_t</span> size;</div><div class="line">    HashTable *function_table;</div><div class="line">    zval function_name;</div><div class="line">    zend_array *symbol_table;</div><div class="line">    zval *retval;</div><div class="line">    zval *params;</div><div class="line">    zend_object *object;</div><div class="line">    zend_bool no_separation;</div><div class="line">    <span class="keyword">uint32_t</span> param_count;</div><div class="line">&#125; zend_fcall_info;</div><div class="line"></div><div class="line">由于网上流传的代码都是PHP5的代码，我们也就再贴一下PHP5的代码，到改造代码时，可以有个借鉴。</div><div class="line">PHP5 中</div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">zend_fcall_info</span> &#123;</span></div><div class="line">   <span class="keyword">size_t</span> size;</div><div class="line">   HashTable *function_table;</div><div class="line">   zval *function_name;</div><div class="line">   HashTable *symbol_table;</div><div class="line">   zval **retval_ptr_ptr;</div><div class="line">   zend_uint param_count;</div><div class="line">   zval ***params;</div><div class="line">   zval *object_ptr;</div><div class="line">   zend_bool no_separation;</div><div class="line">&#125; zend_fcall_info;</div><div class="line"></div><div class="line">其中有变化的参数：</div><div class="line">zval *function_name;   -&gt;  zval function_name;</div><div class="line">zval **retval_ptr_ptr; -&gt;  zval *retval;</div><div class="line">zval *object_ptr;      -&gt;  zend_object *object;</div><div class="line">zval ***params;        -&gt;  zval *params;</div><div class="line"></div><div class="line"></div><div class="line">在PHP7的扩展使用PHP5的代码make时，会出现如下错误：</div><div class="line">error: incompatible types when assigning to type ‘<span class="class"><span class="keyword">struct</span> <span class="title">zval</span> *’ <span class="title">from</span> <span class="title">type</span> ‘<span class="title">zval</span>’</span></div><div class="line"><span class="class"><span class="title">error</span>:</span> ‘zend_fcall_info’ has no member named ‘object’</div><div class="line">error: ‘zend_fcall_info’ has no member named ‘retval’</div><div class="line"></div><div class="line"></div><div class="line">我们搜一下php源码中zend_call_function中的使用情况，我们会发现自动加载中的代码如下：</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">spl_instantiate_arg_n</span><span class="params">(zend_class_entry *pce, zval *retval, <span class="keyword">int</span> argc, zval *argv)</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">    zend_function *func = pce-&gt;constructor;</div><div class="line">    zend_fcall_info fci;</div><div class="line">    zend_fcall_info_cache fcc;</div><div class="line">    zval dummy;</div><div class="line"></div><div class="line">    spl_instantiate(pce, retval);</div><div class="line"></div><div class="line">    fci.size = <span class="keyword">sizeof</span>(zend_fcall_info);</div><div class="line">    fci.function_table = &amp;pce-&gt;function_table;</div><div class="line">    ZVAL_STR(&amp;fci.function_name, func-&gt;common.function_name);</div><div class="line">    fci.object = Z_OBJ_P(retval);</div><div class="line">    fci.symbol_table = <span class="literal">NULL</span>;</div><div class="line">    fci.retval = &amp;dummy;</div><div class="line">    fci.param_count = argc;</div><div class="line">    fci.params = argv;</div><div class="line">    fci.no_separation = <span class="number">1</span>;</div><div class="line"></div><div class="line">    fcc.initialized = <span class="number">1</span>;</div><div class="line">    fcc.function_handler = func;</div><div class="line">    fcc.calling_scope = EG(scope);</div><div class="line">    fcc.called_scope = pce;</div><div class="line">    fcc.object = Z_OBJ_P(retval);</div><div class="line"></div><div class="line">    zend_call_function(&amp;fci, &amp;fcc);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>OK,我们写一个可以调用用户定义类的方法的函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">class_call_user_method</span><span class="params">(zval *retval, zend_class_entry *obj_ce, </span></span></div><div class="line"><span class="function"><span class="params">    zval *obj, zval func,  <span class="keyword">uint32_t</span> params_count, zval params[])</span></span>&#123; </div><div class="line"></div><div class="line"></div><div class="line">    HashTable *function_table; </div><div class="line"></div><div class="line">    <span class="keyword">if</span>(obj) &#123; </div><div class="line">                function_table = &amp;Z_OBJCE_P(obj)-&gt;function_table;</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">                function_table = (CG(function_table));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 对象初始化内容，不能放在这里</span></div><div class="line">    <span class="comment">// if(!obj_ce)&#123;</span></div><div class="line">     </div><div class="line">    <span class="comment">//      object_init(&amp;obj);</span></div><div class="line">    <span class="comment">// &#125;</span></div><div class="line">    <span class="comment">// else&#123;</span></div><div class="line">    </div><div class="line">    <span class="comment">//      object_init_ex(&amp;obj, obj_ce);</span></div><div class="line">    <span class="comment">// &#125;</span></div><div class="line"></div><div class="line">    zend_fcall_info fci;  </div><div class="line">    fci.size = <span class="keyword">sizeof</span>(fci);  </div><div class="line">    fci.function_table = function_table;  </div><div class="line">    fci.object =  obj ? Z_OBJ_P(obj) : <span class="literal">NULL</span>;;</div><div class="line">    fci.function_name = func;   </div><div class="line">    fci.retval = retval;  </div><div class="line">    fci.param_count = params_count;  </div><div class="line">    fci.params = params;  </div><div class="line">    fci.no_separation = <span class="number">1</span>;  </div><div class="line">    fci.symbol_table = <span class="literal">NULL</span>;  </div><div class="line">      </div><div class="line">    </div><div class="line">    <span class="comment">/**/</span></div><div class="line">	<span class="keyword">int</span> result;</div><div class="line">	result = zend_call_function(&amp;fci, <span class="literal">NULL</span> TSRMLS_CC);         <span class="comment">//函数调用结束。  </span></div><div class="line"></div><div class="line">       </div><div class="line">	<span class="keyword">if</span> (result == FAILURE) &#123;</div><div class="line">            </div><div class="line">		zend_printf(<span class="string">"error"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">    <span class="comment">/**/</span></div><div class="line">    zend_printf(<span class="string">"Success.\n"</span>);</div><div class="line">   </div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用方法如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">ZEND_METHOD(udf,get)&#123;</div><div class="line"></div><div class="line">    <span class="comment">//call  __construct</span></div><div class="line">    zval retval;</div><div class="line"></div><div class="line">	zval obj;</div><div class="line">    object_init_ex(&amp;obj, adf_ce);</div><div class="line"></div><div class="line">	zval function_name;</div><div class="line">	ZVAL_STRING(&amp;function_name,<span class="string">"__construct"</span>);</div><div class="line"></div><div class="line">	<span class="comment">//int class_call_user_method(zval *retval, zend_class_entry *obj_ce, </span></div><div class="line">    <span class="comment">//zval *obj, zval func,  uint32_t params_count, zval params[])</span></div><div class="line">	class_call_user_method(&amp;retval, adf_ce, &amp;obj, function_name, <span class="number">0</span>,<span class="literal">NULL</span>);</div><div class="line"></div><div class="line"></div><div class="line">    <span class="comment">//call  set</span></div><div class="line">    zval retval2;</div><div class="line"></div><div class="line">	zval obj2;</div><div class="line">    object_init_ex(&amp;obj2, adf_ce);</div><div class="line"></div><div class="line"></div><div class="line">	zval function_name2;</div><div class="line">	ZVAL_STRING(&amp;function_name2,<span class="string">"set"</span>);</div><div class="line"></div><div class="line"></div><div class="line">    zval params[<span class="number">2</span>];</div><div class="line">    ZVAL_STRING(&amp;params[<span class="number">0</span>],<span class="string">"root"</span>);</div><div class="line">    ZVAL_STRING(&amp;params[<span class="number">1</span>],<span class="string">"tyyy"</span>);</div><div class="line"></div><div class="line">    </div><div class="line">	class_call_user_method(&amp;retval2, adf_ce, &amp;obj2, function_name2, <span class="number">2</span>, params);</div><div class="line">        	</div><div class="line"></div><div class="line">    <span class="comment">//call get</span></div><div class="line">    zval retval3;</div><div class="line"></div><div class="line">    zval obj3;</div><div class="line">    object_init_ex(&amp;obj3, adf_ce);</div><div class="line"></div><div class="line">    zval function_name3;</div><div class="line">    ZVAL_STRING(&amp;function_name3,<span class="string">"get"</span>);</div><div class="line"></div><div class="line"></div><div class="line">    class_call_user_method(&amp;retval3, adf_ce, &amp;obj3, function_name3, <span class="number">0</span>, <span class="literal">NULL</span>);</div><div class="line">        </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/09/2016-02-09-php-ext-9/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2016-02-08-php-ext-8" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -847,174 +926,9 @@ typedef struct _zend_internal_arg_info {
 
 
   
-    <article id="post-2016-02-01-php-ext-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/01/2016-02-01-php-ext-1/">php7扩展开发[1]-helloword</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/01/2016-02-01-php-ext-1/" class="archive-article-date">
-  	<time datetime="2017-08-01T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-环境安装"><a href="#1-环境安装" class="headerlink" title="1.环境安装"></a>1.环境安装</h3><ul>
-<li>centos 7.1</li>
-<li>php 7.0.3</li>
-</ul>
-<h5 id="1-1-RPM安装PHP"><a href="#1-1-RPM安装PHP" class="headerlink" title="1.1 RPM安装PHP"></a>1.1 RPM安装PHP</h5><ul>
-<li>rpm -Uvh <a href="https://mirror.webtatic.com/yum/el7/webtatic-release.rpm" target="_blank" rel="external">https://mirror.webtatic.com/yum/el7/webtatic-release.rpm</a> </li>
-<li>yum install php70w</li>
-<li>php -v 看一下 7.0.3</li>
-<li>php -m 看一下 php70w-devel, php70w-opcache模块安装没有，没有的话安装一下 </li>
-</ul>
-<h5 id="1-2-下载php的源码包"><a href="#1-2-下载php的源码包" class="headerlink" title="1.2 下载php的源码包"></a>1.2 下载php的源码包</h5><ul>
-<li><a href="http://hk1.php.net/distributions/php-7.0.3.tar.gz" target="_blank" rel="external">http://hk1.php.net/distributions/php-7.0.3.tar.gz</a></li>
-<li>把源码放在/usr/local/src/下解压</li>
-</ul>
-<h3 id="2-第一个扩展"><a href="#2-第一个扩展" class="headerlink" title="2.第一个扩展"></a>2.第一个扩展</h3><h4 id="2-1-输入："><a href="#2-1-输入：" class="headerlink" title="2.1 输入："></a>2.1 输入：</h4><p>[root@bogon ext]# cd /usr/local/src/php-7.0.3/ext</p>
-<p>[root@bogon ext]# ./ext_skel –extname=hello</p>
-<h4 id="2-1-输出："><a href="#2-1-输出：" class="headerlink" title="2.1 输出："></a>2.1 输出：</h4><p>Creating directory hello</p>
-<p>Creating basic files: config.m4 config.w32 .gitignore hello.c php_hello.h<br>CREDITS EXPERIMENTAL tests/001.phpt hello.php [done].</p>
-<p>To use your new extension, you will have to execute the following steps:</p>
-<ol>
-<li>$ cd ..</li>
-<li>$ vi ext/hello/config.m4</li>
-<li>$ ./buildconf</li>
-<li>$ ./configure –[with|enable]-hello</li>
-<li>$ make</li>
-<li>$ ./sapi/cli/php -f ext/hello/hello.php</li>
-<li>$ vi ext/hello/hello.c</li>
-<li>$ make</li>
-</ol>
-<p>Repeat steps 3-6 until you are satisfied with ext/hello/config.m4 and<br>step 6 confirms that your module is compiled into PHP. Then, start writing<br>code and repeat the last two steps as often as necessary.</p>
-<h4 id="2-2-输入："><a href="#2-2-输入：" class="headerlink" title="2.2 输入："></a>2.2 输入：</h4><p>[root@bogon ext]# tree hello/</p>
-<h4 id="2-2-输出："><a href="#2-2-输出：" class="headerlink" title="2.2 输出："></a>2.2 输出：</h4><ol>
-<li>hello/</li>
-<li>├── config.m4</li>
-<li>├── config.w32</li>
-<li>├── CREDITS</li>
-<li>├── EXPERIMENTAL</li>
-<li>├── hello.c</li>
-<li>├── hello.php</li>
-<li>├── php_hello.h</li>
-<li>└── tests</li>
-<li>占个位└── 001.phpt</li>
-</ol>
-<h4 id="2-3-修改配置"><a href="#2-3-修改配置" class="headerlink" title="2.3 修改配置"></a>2.3 修改配置</h4><p>[root@bogon ext]# vim hello/config.m4</p>
-<ul>
-<li>dnl PHP_ARG_WITH(hello, for hello support,</li>
-<li>dnl Make sure that the comment is aligned:</li>
-<li>dnl [  –with-hello             Include hello support])</li>
-<li>更改为：</li>
-<li>PHP_ARG_WITH(hello, for hello support,</li>
-<li>dnl Make sure that the comment is aligned:</li>
-<li>[  –with-hello             Include hello support])</li>
-</ul>
-<h4 id="2-4-实现代码"><a href="#2-4-实现代码" class="headerlink" title="2.4 实现代码"></a>2.4 实现代码</h4><pre><code>* 新增 声明函数 PHP_FE(hello,    NULL)；
-* 
-    -     const zend_function_entry hello_functions[] = {
-    -         PHP_FE(hello,    NULL)        /* For testing, remove later. */
-    -         PHP_FE(confirm_hello_compiled,    NULL)
-    -        /* For testing, remove later. */
-    -        PHP_FE_END    /* Must be the last line in hello_functions[] */
-    -    };
-*  新增 函数实现 PHP_FE(hello,    NULL)；放在PHP_FUNCTION(confirm_hello_compiled)上面
-*  
-    - PHP_FUNCTION(hello)
-    - {
-    -     zend_string *strg;
-    -    strg = strpprintf(0, &quot;hello word&quot;);
-    -    RETURN_STR(strg);
-    - }
-</code></pre><h4 id="2-4-编译"><a href="#2-4-编译" class="headerlink" title="2.4 编译"></a>2.4 编译</h4><pre><code>* [root@bogon hello]# pwd
-* /usr/local/src/php-7.0.3/ext/hello
-* [root@bogon hello]# ./configure
-* ............. 
-* [root@bogon hello]# make
-* .............
-* [root@bogon hello]# ll modules/
-* -rw-r--r--. 1 root root   915 Mar 16 21:58 hello.la
-* -rwxr-xr-x. 1 root root 31422 Mar 16 21:58 hello.so
-</code></pre><h4 id="2-5-扩展安装"><a href="#2-5-扩展安装" class="headerlink" title="2.5 扩展安装"></a>2.5 扩展安装</h4><pre><code>1. 改更php.ini 加上[hello] extenstion=hello.so
-2. 安放扩展so文件，如果你不知道PHP扩展在哪，可以用如下方法找
-3. [root@bogon hello]# find / -name opcache.so
-4. cp modules/hello.so /usr/lib64/php/modules
-5. php -m|grep hello 会出现hello字样
-</code></pre><h5 id="2-6-扩展使用"><a href="#2-6-扩展使用" class="headerlink" title="2.6 扩展使用"></a>2.6 扩展使用</h5><pre><code>[root@bogon tests]# cat test.php
-&lt;?php
-
-echo hello();
-echo &quot;\r\n&quot;;
-
-[root@bogon tests]# php test.php
-hello word  
-</code></pre><p>&gt;</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/01/2016-02-01-php-ext-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
     </nav>
   
 
@@ -1113,11 +1027,19 @@ hello word
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">phpmongodb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群搭建</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">phpmongodb</a>
+                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1142,14 +1064,6 @@ hello word
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">技术管理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
               </li>
             
             <div class="clearfix"></div>
