@@ -15,7 +15,7 @@
 <meta property="og:url" content="//www.zwting.com/2017/11/12/2017-11-13-erlang-01/index.html">
 <meta property="og:site_name" content="醉翁亭">
 <meta property="og:description" content="Erlang程序设计的读书笔记">
-<meta property="og:updated_time" content="2017-11-17T02:29:09.000Z">
+<meta property="og:updated_time" content="2017-11-17T03:04:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Erlang程序设计(第2版) 读书笔记【第一章】">
 <meta name="twitter:description" content="Erlang程序设计的读书笔记">
@@ -199,8 +199,11 @@
 <li><p>当Erlang运行时系统执行spawn时，它会创建一个新进程（不是操作系统的进程，而是一个由Erlang系统管理的轻量级进程）。当进程创建完毕后，它便开始执行参数所指定的代码。ModName 是包含想要执行代码的模块名。FuncName是模块里的函数名，而[Arg1, Arg2, …]是一个列表，包含了想要执行的函数参数。因此，下面这个调用的意思是启动一个执行函数person:init(“hello”)的进程</p>
 </li>
 </ul>
-<h5 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h5><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Susannah!&#123;self(),<span class="string">"send message"</span>&#125;```- Pid ! Msg语法的意思是发送消息Msg到进程Pid。大括号里的self()参数标明了发送消息的进程（在此处是Joe）。</div><div class="line"></div><div class="line">##### 接收消息</div></pre></td></tr></table></figure>
-<p>receive<br>    {From, Message} -&gt;<br>        ……<br>end<br>```</p>
+<h5 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h5><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Susannah!&#123;<span class="keyword">self</span>(),<span class="string">"send message"</span>&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>Pid ! Msg语法的意思是发送消息Msg到进程Pid。大括号里的self()参数标明了发送消息的进程（在此处是Joe）。</li>
+</ul>
+<h5 id="接收消息"><a href="#接收消息" class="headerlink" title="接收消息"></a>接收消息</h5><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">receive</div><div class="line">	&#123;From, Message&#125; -&gt;</div><div class="line">		......</div><div class="line">end</div></pre></td></tr></table></figure>
 <ul>
 <li>当Susannah的进程接收到一条消息时，变量From会绑定为Joe，这样Susannah就知道消息来自何处，变量Message则会包含此消息</li>
 </ul>
@@ -469,14 +472,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">运维</a>
               </li>
              
@@ -498,6 +493,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">技术管理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
               </li>
             
             <div class="clearfix"></div>
