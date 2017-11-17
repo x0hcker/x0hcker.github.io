@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//www.zwting.com">
-  <title>erlang参考文章集合 | 醉翁亭</title>
+  <title>Erlang程序设计(第2版) 读书笔记【第一章】 | 醉翁亭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="erlang参考文章集合">
-<meta name="keywords" content="erlang技术分享">
+  <meta name="description" content="Erlang程序设计的读书笔记">
+<meta name="keywords" content="Erlang程序设计的读书笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="erlang参考文章集合">
+<meta property="og:title" content="Erlang程序设计(第2版) 读书笔记【第一章】">
 <meta property="og:url" content="//www.zwting.com/2017/11/12/2017-11-13-erlang-01/index.html">
 <meta property="og:site_name" content="醉翁亭">
-<meta property="og:description" content="erlang参考文章集合">
-<meta property="og:updated_time" content="2017-11-15T10:17:43.000Z">
+<meta property="og:description" content="Erlang程序设计的读书笔记">
+<meta property="og:updated_time" content="2017-11-17T02:29:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="erlang参考文章集合">
-<meta name="twitter:description" content="erlang参考文章集合">
+<meta name="twitter:title" content="Erlang程序设计(第2版) 读书笔记【第一章】">
+<meta name="twitter:description" content="Erlang程序设计的读书笔记">
   
     <link rel="alternative" href="/atom.xml" title="醉翁亭" type="application/atom+xml">
   
@@ -58,7 +58,7 @@
 
 	<nav class="header-menu">
 	
-		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/erlang技术分享/">erlang技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
 	
 	</nav>
 		<nav class="header-smart-menu">
@@ -163,7 +163,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      erlang参考文章集合
+      Erlang程序设计(第2版) 读书笔记【第一章】
     </h1>
   
 
@@ -176,54 +176,38 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="1-建立-编译-发布-运行"><a href="#1-建立-编译-发布-运行" class="headerlink" title="1. 建立 编译 发布 运行"></a>1. 建立 编译 发布 运行</h3><pre><code>建立项目
-$ rebar3 new release myproject
+        <h3 id="第1章-什么是并发"><a href="#第1章-什么是并发" class="headerlink" title="第1章 什么是并发"></a>第1章 什么是并发</h3><h5 id="并发和并行含义"><a href="#并发和并行含义" class="headerlink" title="并发和并行含义"></a>并发和并行含义</h5><ul>
+<li><p>区分基于操作系统的并发和基于语言的并发很重要，因为如果使用基于操作系统的并发，那么程序在不同的操作系统上就会有不同的工作方式。Erlang的并发在所有操作系统上都有着相同的工作方式。要用Erlang编写并发程序，只需掌握Erlang，而不必掌握操作系统的并发机制</p>
+</li>
+<li><p>并发程序是一种用并发编程语言编写的程序。编写并发程序是为了提升性能、可扩展性和容错性。（nodejs erlang）</p>
+</li>
+<li><p>并发编程语言拥有专门用于编写并发程序的语言结构。这些结构是编程语言的主要部分， 在所有操作系统上都有着相同的表现。</p>
+</li>
+<li>并行计算机是一种有多个处理单元（CPU或核心）同时运行的计算机。</li>
+</ul>
+<h5 id="模块和函数"><a href="#模块和函数" class="headerlink" title="模块和函数"></a>模块和函数</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(test)</span>. <span class="comment">%%模块声明</span></div><div class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></div><div class="line">	io:format(<span class="string">"~w~n"</span>,[Name]).</div></pre></td></tr></table></figure>
+<ul>
+<li>模块名必须以一个小写字母开头。</li>
+<li>导出声明指明了模块里哪些函数可以从模块外部进行调用。</li>
+<li>-export([init/1]).语法的意思是带有一个参数。</li>
+<li>-export([funcname1/1，funcname2/1，funcname3/1，]). 导出多个函数列表的写法。</li>
+</ul>
+<h5 id="erlang起进程"><a href="#erlang起进程" class="headerlink" title="erlang起进程"></a>erlang起进程</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(test)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"><span class="keyword">-export</span><span class="params">([start/<span class="number">0</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">start</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  debugger:start(),</div><div class="line"></div><div class="line">  spawn(test,init,[<span class="string">"hello"</span>]).</div><div class="line"></div><div class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></div><div class="line"></div><div class="line">  io:format(<span class="string">"~w~n"</span>,[Name]).</div></pre></td></tr></table></figure>
+<ul>
+<li><p>spawn(ModName,FunName,[Arg1,Arg2,….])</p>
+</li>
+<li><p>当Erlang运行时系统执行spawn时，它会创建一个新进程（不是操作系统的进程，而是一个由Erlang系统管理的轻量级进程）。当进程创建完毕后，它便开始执行参数所指定的代码。ModName 是包含想要执行代码的模块名。FuncName是模块里的函数名，而[Arg1, Arg2, …]是一个列表，包含了想要执行的函数参数。因此，下面这个调用的意思是启动一个执行函数person:init(“hello”)的进程</p>
+</li>
+</ul>
+<h5 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h5><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Susannah!&#123;self(),<span class="string">"send message"</span>&#125;```- Pid ! Msg语法的意思是发送消息Msg到进程Pid。大括号里的self()参数标明了发送消息的进程（在此处是Joe）。</div><div class="line"></div><div class="line">##### 接收消息</div></pre></td></tr></table></figure>
+<p>receive<br>    {From, Message} -&gt;<br>        ……<br>end<br>```</p>
+<ul>
+<li>当Susannah的进程接收到一条消息时，变量From会绑定为Joe，这样Susannah就知道消息来自何处，变量Message则会包含此消息</li>
+</ul>
+<blockquote>
+<p>这样吧</p>
+</blockquote>
 
-编译项目
-$ rebar3 compile
-
-发行项目
-$ rebar3 release
-
-
-运行项目
-./_build/default/rel/myproject/bin/myproject console
-
-
-或者
-## 开始
-$./_build/default/rel/myproject/bin/myproject start
-##停止
-$./_build/default/rel/myproject/bin/myproject stop
-##确认
-$cat ./_build/default/rel/myproject/log/erlang.log.1 
-</code></pre><h3 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h3><pre><code>http://zewaren.net/site/?q=node/144 
-</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><pre><code>http://erldoc.com/doc/pdf/Erlang程序设计(第2版).pdf
-https://medium.com/@kansi/hot-code-loading-with-erlang-and-rebar3-8252af16605b
-http://davekuhlman.org/implement-app-with-rebar3.html
-http://szpzs.oschina.io/2016/12/09/hot-code-loading-with-erlang-and-rebar3/
-http://www.minostro.com/rebar-templates/
-http://www.cnblogs.com/scheme/category/483939.html
-https://zhuanlan.zhihu.com/p/28859183
-http://www.r-5.org/files/books/computers/languages/ruby/rb-way/Wolfgang_Loder-Erlang_and_Elixir_for_Imperative_Programmers-EN.pdf
-http://davekuhlman.org/implement-app-with-rebar3.html
-https://medium.com/@kansi/hot-code-loading-with-erlang-and-rebar3-8252af16605b
-http://wudaijun.com/2016/05/erlang-debug-online/
-http://wudaijun.com/2017/09/ngs-battle/
-http://vlambda.com/wz_5gPoOQrC72X.html
-http://www.kongqingquan.com/archives/419
-https://coolshell.cn/articles/1313.html
-http://www.mryk.info/?cat=2&amp;paged=3
-
-https://github.com/hbcrhythm/cluster
-https://github.com/SongCF/cluster/tree/master/src
-
-https://insight.io/github.com/3tgame/myblog/blob/gh-pages/_posts/2015-04-01-Erlang-log-Framework-lager.markdown
-
-集群
-https://github.com/SongCF/cluster/tree/master/src
-https://github.com/hbcrhythm/cluster/tree/master/src
-</code></pre>
       
 
       
@@ -262,7 +246,7 @@ https://github.com/hbcrhythm/cluster/tree/master/src
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">erlang技术分享</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
         		</li>
       		
 		</ul>
@@ -274,7 +258,7 @@ https://github.com/hbcrhythm/cluster/tree/master/src
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/erlang技术分享/" class="article-tag-list-link color1">erlang技术分享</a>
+        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
         		</li>
       		
 		</ul>
@@ -367,7 +351,7 @@ https://github.com/hbcrhythm/cluster/tree/master/src
 
   
   <div class="duoshuo">
-	<div class="ds-thread" data-thread-key="2017-11-13-erlang-01" data-title="erlang参考文章集合" data-url="//www.zwting.com/2017/11/12/2017-11-13-erlang-01/"></div>
+	<div class="ds-thread" data-thread-key="2017-11-13-erlang-01" data-title="Erlang程序设计(第2版) 读书笔记【第一章】" data-url="//www.zwting.com/2017/11/12/2017-11-13-erlang-01/"></div>
 
 	<div id="uyan_frame"></div>
 	<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2023055"></script>
@@ -481,7 +465,7 @@ https://github.com/hbcrhythm/cluster/tree/master/src
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">erlang技术分享</a>
+                <a href="javascript:void(0)" class="js-tag color1">Erlang程序设计的读书笔记</a>
               </li>
              
               <li class="article-tag-list-item">
