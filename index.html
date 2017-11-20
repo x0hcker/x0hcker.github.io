@@ -157,6 +157,112 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2017-11-13-erlang-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/12/2017-11-13-erlang-01/">Erlang程序设计(第2版) 读书笔记【第一章】</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/12/2017-11-13-erlang-01/" class="archive-article-date">
+  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="第1章-什么是并发"><a href="#第1章-什么是并发" class="headerlink" title="第1章 什么是并发"></a>第1章 什么是并发</h3><h5 id="并发和并行含义"><a href="#并发和并行含义" class="headerlink" title="并发和并行含义"></a>并发和并行含义</h5><ul>
+<li><p>区分基于操作系统的并发和基于语言的并发很重要，因为如果使用基于操作系统的并发，那么程序在不同的操作系统上就会有不同的工作方式。Erlang的并发在所有操作系统上都有着相同的工作方式。要用Erlang编写并发程序，只需掌握Erlang，而不必掌握操作系统的并发机制</p>
+</li>
+<li><p>并发程序是一种用并发编程语言编写的程序。编写并发程序是为了提升性能、可扩展性和容错性。（nodejs erlang）</p>
+</li>
+<li><p>并发编程语言拥有专门用于编写并发程序的语言结构。这些结构是编程语言的主要部分， 在所有操作系统上都有着相同的表现。</p>
+</li>
+<li>并行计算机是一种有多个处理单元（CPU或核心）同时运行的计算机。</li>
+</ul>
+<h5 id="模块和函数"><a href="#模块和函数" class="headerlink" title="模块和函数"></a>模块和函数</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(test)</span>. <span class="comment">%%模块声明</span></div><div class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></div><div class="line">	io:format(<span class="string">"~w~n"</span>,[Name]).</div></pre></td></tr></table></figure>
+<ul>
+<li>模块名必须以一个小写字母开头。</li>
+<li>导出声明指明了模块里哪些函数可以从模块外部进行调用。</li>
+<li>-export([init/1]).语法的意思是带有一个参数。</li>
+<li>-export([funcname1/1，funcname2/1，funcname3/1，]). 导出多个函数列表的写法。</li>
+</ul>
+<h5 id="erlang起进程"><a href="#erlang起进程" class="headerlink" title="erlang起进程"></a>erlang起进程</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(test)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"><span class="keyword">-export</span><span class="params">([start/<span class="number">0</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">start</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  debugger:start(),</div><div class="line"></div><div class="line">  spawn(test,init,[<span class="string">"hello"</span>]).</div><div class="line"></div><div class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></div><div class="line"></div><div class="line">  io:format(<span class="string">"~w~n"</span>,[Name]).</div></pre></td></tr></table></figure>
+<ul>
+<li><p>spawn(ModName,FunName,[Arg1,Arg2,….])</p>
+</li>
+<li><p>当Erlang运行时系统执行spawn时，它会创建一个新进程（不是操作系统的进程，而是一个由Erlang系统管理的轻量级进程）。当进程创建完毕后，它便开始执行参数所指定的代码。ModName 是包含想要执行代码的模块名。FuncName是模块里的函数名，而[Arg1, Arg2, …]是一个列表，包含了想要执行的函数参数。因此，下面这个调用的意思是启动一个执行函数person:init(“hello”)的进程</p>
+</li>
+</ul>
+<h5 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h5><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Susannah!&#123;<span class="keyword">self</span>(),<span class="string">"send message"</span>&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>Pid ! Msg语法的意思是发送消息Msg到进程Pid。大括号里的self()参数标明了发送消息的进程（在此处是Joe）。</li>
+</ul>
+<h5 id="接收消息"><a href="#接收消息" class="headerlink" title="接收消息"></a>接收消息</h5><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">receive</div><div class="line">	&#123;From, Message&#125; -&gt;</div><div class="line">		......</div><div class="line">end</div></pre></td></tr></table></figure>
+<ul>
+<li>当Susannah的进程接收到一条消息时，变量From会绑定为Joe，这样Susannah就知道消息来自何处，变量Message则会包含此消息</li>
+</ul>
+<blockquote>
+<p>这样吧</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/12/2017-11-13-erlang-01/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2017-11-13-git-hacker" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -363,112 +469,6 @@ git config  user.email &quot;TEST1@gmail.com&quot;
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/11/12/2017-11-14-erlang-02/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2017-11-13-erlang-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/12/2017-11-13-erlang-01/">Erlang程序设计(第2版) 读书笔记【第一章】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/11/12/2017-11-13-erlang-01/" class="archive-article-date">
-  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="第1章-什么是并发"><a href="#第1章-什么是并发" class="headerlink" title="第1章 什么是并发"></a>第1章 什么是并发</h3><h5 id="并发和并行含义"><a href="#并发和并行含义" class="headerlink" title="并发和并行含义"></a>并发和并行含义</h5><ul>
-<li><p>区分基于操作系统的并发和基于语言的并发很重要，因为如果使用基于操作系统的并发，那么程序在不同的操作系统上就会有不同的工作方式。Erlang的并发在所有操作系统上都有着相同的工作方式。要用Erlang编写并发程序，只需掌握Erlang，而不必掌握操作系统的并发机制</p>
-</li>
-<li><p>并发程序是一种用并发编程语言编写的程序。编写并发程序是为了提升性能、可扩展性和容错性。（nodejs erlang）</p>
-</li>
-<li><p>并发编程语言拥有专门用于编写并发程序的语言结构。这些结构是编程语言的主要部分， 在所有操作系统上都有着相同的表现。</p>
-</li>
-<li>并行计算机是一种有多个处理单元（CPU或核心）同时运行的计算机。</li>
-</ul>
-<h5 id="模块和函数"><a href="#模块和函数" class="headerlink" title="模块和函数"></a>模块和函数</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(test)</span>. <span class="comment">%%模块声明</span></div><div class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></div><div class="line">	io:format(<span class="string">"~w~n"</span>,[Name]).</div></pre></td></tr></table></figure>
-<ul>
-<li>模块名必须以一个小写字母开头。</li>
-<li>导出声明指明了模块里哪些函数可以从模块外部进行调用。</li>
-<li>-export([init/1]).语法的意思是带有一个参数。</li>
-<li>-export([funcname1/1，funcname2/1，funcname3/1，]). 导出多个函数列表的写法。</li>
-</ul>
-<h5 id="erlang起进程"><a href="#erlang起进程" class="headerlink" title="erlang起进程"></a>erlang起进程</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(test)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"><span class="keyword">-export</span><span class="params">([start/<span class="number">0</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">start</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  debugger:start(),</div><div class="line"></div><div class="line">  spawn(test,init,[<span class="string">"hello"</span>]).</div><div class="line"></div><div class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></div><div class="line"></div><div class="line">  io:format(<span class="string">"~w~n"</span>,[Name]).</div></pre></td></tr></table></figure>
-<ul>
-<li><p>spawn(ModName,FunName,[Arg1,Arg2,….])</p>
-</li>
-<li><p>当Erlang运行时系统执行spawn时，它会创建一个新进程（不是操作系统的进程，而是一个由Erlang系统管理的轻量级进程）。当进程创建完毕后，它便开始执行参数所指定的代码。ModName 是包含想要执行代码的模块名。FuncName是模块里的函数名，而[Arg1, Arg2, …]是一个列表，包含了想要执行的函数参数。因此，下面这个调用的意思是启动一个执行函数person:init(“hello”)的进程</p>
-</li>
-</ul>
-<h5 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h5><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Susannah!&#123;<span class="keyword">self</span>(),<span class="string">"send message"</span>&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>Pid ! Msg语法的意思是发送消息Msg到进程Pid。大括号里的self()参数标明了发送消息的进程（在此处是Joe）。</li>
-</ul>
-<h5 id="接收消息"><a href="#接收消息" class="headerlink" title="接收消息"></a>接收消息</h5><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">receive</div><div class="line">	&#123;From, Message&#125; -&gt;</div><div class="line">		......</div><div class="line">end</div></pre></td></tr></table></figure>
-<ul>
-<li>当Susannah的进程接收到一条消息时，变量From会绑定为Joe，这样Susannah就知道消息来自何处，变量Message则会包含此消息</li>
-</ul>
-<blockquote>
-<p>这样吧</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/12/2017-11-13-erlang-01/">展开全文 >></a>
         </p>
       
 
@@ -2212,19 +2212,19 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 
 
   
-    <article id="post-2015-05-14-training-python-10" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2015-05-15-training-python-11" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-05-14-training-python-10/">python技术分享[10]－ 日志－记文件log</a>
+      <a class="article-title" href="/2017/09/15/2015-05-15-training-python-11/">python技术分享[11]－ 日志－日志记录到mongodb中</a>
     </h1>
   
 
         
-        <a href="/2017/09/15/2015-05-14-training-python-10/" class="archive-article-date">
+        <a href="/2017/09/15/2015-05-15-training-python-11/" class="archive-article-date">
   	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
 </a>
         
@@ -2233,7 +2233,7 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
     <div class="article-entry" itemprop="articleBody">
       
         <h4 id="1-日志操作："><a href="#1-日志操作：" class="headerlink" title="1.日志操作："></a>1.日志操作：</h4><p>&gt;<br>    日志文件操作在工作中最常用的操作类库之一，今天贴出来我常用的文件操作类，一直在用，也一直在不断优化，暂时可以满足业务</p>
-<h4 id="2-日志操作代码："><a href="#2-日志操作代码：" class="headerlink" title="2.日志操作代码："></a>2.日志操作代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/python</span></div><div class="line"><span class="comment">#coding:utf-8</span></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="string">mail:wuqichao@gyyx.com</span></div><div class="line"><span class="string">createtime:2011-3-1下午12:24:29</span></div><div class="line"><span class="string">usege:</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">"""</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> sys, os, re</div><div class="line"><span class="keyword">import</span> logging</div><div class="line"><span class="keyword">import</span> logging.handlers</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LogFactory</span>:</span></div><div class="line">    </div><div class="line">    <span class="string">'''日志工厂'''</span></div><div class="line">    </div><div class="line">    ilog = <span class="keyword">None</span> <span class="comment">#信息日志</span></div><div class="line">    elog = <span class="keyword">None</span> <span class="comment">#错误日志</span></div><div class="line">    root = os.path.abspath(<span class="string">'.'</span>)</div><div class="line">    ilogfile = root+<span class="string">'/logs/mtask_info_%s.log'</span> <span class="comment">#信息日志文件</span></div><div class="line">    elogfile = root+<span class="string">'/logs/mtask_err_%s.log'</span> <span class="comment">#错误日志文件</span></div><div class="line">    ERROR = <span class="string">'err'</span></div><div class="line">    INFO = <span class="string">'info'</span></div><div class="line"></div><div class="line"><span class="meta">    @staticmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init_log</span><span class="params">(logtype, p = <span class="string">""</span>)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        初始化日志对像</span></div><div class="line"><span class="string">        @param logtype:info 和 err分别是信息日志和错误日志</span></div><div class="line"><span class="string">        @param p :日志文件名后缀</span></div><div class="line"><span class="string">        '''</span></div><div class="line"></div><div class="line">        logfile = LogFactory.ilogfile % p</div><div class="line">        <span class="keyword">if</span> logtype == LogFactory.ERROR: logfile = LogFactory.elogfile % p</div><div class="line">        logger = logging.getLogger(logtype)</div><div class="line">        logger.setLevel(logging.INFO)</div><div class="line">        handler = logging.handlers.RotatingFileHandler(logfile, maxBytes=<span class="number">1024</span>*<span class="number">1024</span>*<span class="number">1024</span>, backupCount=<span class="number">5</span>)</div><div class="line"></div><div class="line">        formatter = logging.Formatter(<span class="string">'%(asctime)s %(levelname)-8s %(filename)s %(lineno)d %(message)s'</span>)</div><div class="line"></div><div class="line">        handler.setFormatter(formatter)</div><div class="line">        logger.addHandler(handler)</div><div class="line"></div><div class="line">        <span class="keyword">return</span> logger</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">    @staticmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_err_logger</span><span class="params">(p=<span class="string">""</span>)</span>:</span></div><div class="line">        <span class="string">'''初使化错误日志'''</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> LogFactory.elog :</div><div class="line">            LogFactory.elog = LogFactory.init_log(LogFactory.ERROR, p)</div><div class="line">        <span class="keyword">return</span> LogFactory.elog</div><div class="line"></div><div class="line"><span class="meta">    @staticmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_info_logger</span><span class="params">(p=<span class="string">""</span>)</span>:</span></div><div class="line">        <span class="string">'''初使化错误日志'''</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> LogFactory.ilog :</div><div class="line">            LogFactory.ilog = LogFactory.init_log(LogFactory.INFO, p)</div><div class="line">        <span class="keyword">return</span> LogFactory.ilog</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">w_info</span><span class="params">(msg,p=<span class="string">''</span>)</span>:</span></div><div class="line">    <span class="string">'''</span></div><div class="line"><span class="string">    写信息日志</span></div><div class="line"><span class="string">    @param msg:信息</span></div><div class="line"><span class="string">    '''</span></div><div class="line">    ilogger = LogFactory.get_info_logger(p=p)</div><div class="line">    ilogger.info(msg)</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">w_err</span><span class="params">(msg,p=<span class="string">''</span>)</span>:</span></div><div class="line">    <span class="string">'''</span></div><div class="line"><span class="string">    写错误日志</span></div><div class="line"><span class="string">    @param msg : 错误信息</span></div><div class="line"><span class="string">    '''</span></div><div class="line">    elogger = LogFactory.get_err_logger(p=p)</div><div class="line">    elogger.error(msg)</div></pre></td></tr></table></figure>
+<h4 id="2-日志操作代码："><a href="#2-日志操作代码：" class="headerlink" title="2.日志操作代码："></a>2.日志操作代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> logging</div><div class="line"><span class="keyword">import</span> getpass</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</div><div class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> gethostname</div><div class="line"><span class="keyword">from</span> pymongo.connection <span class="keyword">import</span> Connection</div><div class="line"><span class="keyword">from</span> bson <span class="keyword">import</span> InvalidDocument</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MongoFormatter</span><span class="params">(logging.Formatter)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">format</span><span class="params">(self, record)</span>:</span></div><div class="line">        <span class="string">"""Format exception object as a string"""</span></div><div class="line">        data = record.__dict__.copy()</div><div class="line"></div><div class="line">        <span class="keyword">if</span> record.args:</div><div class="line">            record.msg = record.msg % record.args</div><div class="line"></div><div class="line">        data.update(</div><div class="line">            username=getpass.getuser(),</div><div class="line">            time=datetime.now(),</div><div class="line">            host=gethostname(),</div><div class="line">            message=record.msg,</div><div class="line">            args=tuple(unicode(arg) <span class="keyword">for</span> arg <span class="keyword">in</span> record.args)</div><div class="line">        )</div><div class="line">        <span class="keyword">if</span> <span class="string">'exc_info'</span> <span class="keyword">in</span> data <span class="keyword">and</span> data[<span class="string">'exc_info'</span>]:</div><div class="line">            data[<span class="string">'exc_info'</span>] = self.formatException(data[<span class="string">'exc_info'</span>])</div><div class="line">        <span class="keyword">return</span> data</div><div class="line">    </div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MongoHandler</span><span class="params">(logging.Handler)</span>:</span></div><div class="line">    <span class="string">""" Custom log handler</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Logs all messages to a mongo collection. This  handler is </span></div><div class="line"><span class="string">    designed to be used with the standard python logging mechanism.</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line"><span class="meta">    @classmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">to</span><span class="params">(cls, db, collection, host=<span class="string">'localhost'</span>, port=None, level=logging.NOTSET)</span>:</span></div><div class="line">        <span class="string">""" Create a handler for a given  """</span></div><div class="line">        <span class="keyword">return</span> cls(Connection(host, port)[db][collection], level)</div><div class="line">        </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, collection, db=<span class="string">'mongolog'</span>, host=<span class="string">'localhost'</span>, port=None, level=logging.NOTSET)</span>:</span></div><div class="line">        <span class="string">""" Init log handler and store the collection handle """</span></div><div class="line">        logging.Handler.__init__(self, level)</div><div class="line">        <span class="keyword">if</span> (type(collection) == str):</div><div class="line">            self.collection = Connection(host, port)[db][collection]</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            self.collection = collection</div><div class="line">        self.formatter = MongoFormatter()</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">emit</span><span class="params">(self,record)</span>:</span></div><div class="line">        <span class="string">""" Store the record to the collection. Async insert """</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self.collection.save(self.format(record))</div><div class="line">        <span class="keyword">except</span> InvalidDocument, e:</div><div class="line">            logging.error(<span class="string">"Unable to save log record: %s"</span>, e.message ,exc_info=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
       
 
@@ -2268,7 +2268,7 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-05-14-training-python-10/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/09/15/2015-05-15-training-python-11/">展开全文 >></a>
         </p>
       
 
