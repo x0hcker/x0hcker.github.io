@@ -157,6 +157,157 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2016-02-07-php-ext-7" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/07/2016-02-07-php-ext-7/">php7扩展开发[7]含有两个类的扩展模块</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/07/2016-02-07-php-ext-7/" class="archive-article-date">
+  	<time datetime="2017-08-07T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight mel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">在我们写扩展时，就像YAF不会是用一个类文件来完成一个扩展功能，所以我们要在一个扩展模块里</div><div class="line">调起几个类的实例，同类之间的方法，可以相互调用，不同类之间的实例，应该也可以调用，下面我</div><div class="line">们就用一个例子来说明。</div><div class="line">首先我们先创建<span class="keyword">play</span>扩展模块，再创建adf扩展模块，最后创建udf扩展模块，</div><div class="line">我们要做到的是php -m中显示加载了<span class="keyword">play</span>,我们可以调用adf类和udf类。</div></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">第一步：</div><div class="line">	在adf和udf类中各实现<span class="builtin-name">set</span> get方法，然后初始化minit中的内容</div><div class="line">	运行成功后，将adf.c php_adf.h和udf.c php_udf.h拷入play文件中</div><div class="line">	</div><div class="line">第二步</div><div class="line">修改play文件夹中的config.m4：</div><div class="line"><span class="keyword">if</span> test -z <span class="string">"<span class="variable">$PHP_DEBUG</span>"</span> ; then </div><div class="line">  PHP_NEW_EXTENSION(play, play.c udf.c adf.c, <span class="variable">$ext_shared</span>,, <span class="attribute">-DZEND_ENABLE_STATIC_TSRMLS_CACHE</span>=1)</div><div class="line">  </div><div class="line">在play.c的MINIT函数中加上</div><div class="line">	ZEND_MODULE_STARTUP_N(udf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">	ZEND_MODULE_STARTUP_N(adf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">  </div><div class="line">第三步执行</div><div class="line">phpize </div><div class="line">./configure <span class="attribute">--with-php-config</span>=/usr/bin/php-config --enable-debug</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div></pre></td><td class="code"><pre><div class="line">adf.c </div><div class="line"></div><div class="line"></div><div class="line">zend<span class="number">_</span><span class="keyword">class</span><span class="number">_</span>entry *adf<span class="number">_</span>ce;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//新增定义</span></div><div class="line">ZEND<span class="number">_</span>BEGIN<span class="number">_</span>ARG<span class="number">_</span>INFO<span class="number">_</span>EX(global<span class="number">_</span>setkey<span class="number">_</span>arg, <span class="number">0</span>, <span class="number">0</span>, <span class="number">2</span>)</div><div class="line">    ZEND<span class="number">_</span>ARG<span class="number">_</span>INFO(<span class="number">0</span>, key<span class="number">1</span>)</div><div class="line">    ZEND<span class="number">_</span>ARG<span class="number">_</span>INFO(<span class="number">0</span>, key<span class="number">2</span>)</div><div class="line">ZEND<span class="number">_</span>END<span class="number">_</span>ARG<span class="number">_</span>INFO()</div><div class="line"></div><div class="line">ZEND<span class="number">_M</span>ETHOD(adf,<span class="number">__</span>construct)&#123;</div><div class="line"></div><div class="line">	RETURN<span class="number">_</span>NULL();</div><div class="line">&#125;</div><div class="line"></div><div class="line">ZEND<span class="number">_M</span>ETHOD(adf,set)&#123;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">	zval *param<span class="number">1</span>;</div><div class="line">	zval *param<span class="number">2</span>;</div><div class="line"></div><div class="line">	array<span class="number">_</span>init(param<span class="number">2</span>);</div><div class="line"></div><div class="line">	<span class="comment">//int zend_parse_parameters ( int num_args TSRMLS_DC, char* type_spec, ... )</span></div><div class="line"></div><div class="line">	<span class="keyword">if</span> (zend<span class="number">_p</span>arse<span class="number">_p</span>arameters(ZEND<span class="number">_</span>NUM<span class="number">_</span>ARGS(), <span class="string">"z|z"</span>,&amp;param<span class="number">1</span>,&amp;param<span class="number">2</span>) == FAILURE) &#123;</div><div class="line">		RETURN<span class="number">_</span>FALSE;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	zend<span class="number">_u</span>pdate<span class="number">_p</span>roperty(adf<span class="number">_</span>ce, getThis(), <span class="string">"param1"</span>, sizeof(<span class="string">"param1"</span>)-<span class="number">1</span>, param<span class="number">1</span> TSRMLS<span class="number">_</span>CC);</div><div class="line">	zend<span class="number">_u</span>pdate<span class="number">_p</span>roperty(adf<span class="number">_</span>ce, getThis(), <span class="string">"param2"</span>, sizeof(<span class="string">"param2"</span>)-<span class="number">1</span>, param<span class="number">2</span> TSRMLS<span class="number">_</span>CC);</div><div class="line"></div><div class="line">	RETURN<span class="number">_</span>NULL();</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">ZEND<span class="number">_M</span>ETHOD(adf,get)&#123;</div><div class="line"></div><div class="line">	array<span class="number">_</span>init(<span class="keyword">return</span><span class="number">_</span><span class="keyword">value</span>);</div><div class="line"></div><div class="line">	zval  *get<span class="number">1</span>;</div><div class="line">	zval  *get<span class="number">2</span>;</div><div class="line"></div><div class="line">	zval  param<span class="number">1</span>; <span class="comment">//php &gt;=7.0</span></div><div class="line">	zval  param<span class="number">2</span>; <span class="comment">//php &gt;=7.0</span></div><div class="line"></div><div class="line">	get<span class="number">1</span> = zend<span class="number">_</span>read<span class="number">_p</span>roperty(adf<span class="number">_</span>ce, getThis(), <span class="string">"param1"</span>, sizeof(<span class="string">"param1"</span>)-<span class="number">1</span>, <span class="number">0</span>, &amp;param<span class="number">1</span> TSRMLS<span class="number">_</span>DC);</div><div class="line">	get<span class="number">2</span> = zend<span class="number">_</span>read<span class="number">_p</span>roperty(adf<span class="number">_</span>ce, getThis(), <span class="string">"param2"</span>, sizeof(<span class="string">"param2"</span>)-<span class="number">1</span>, <span class="number">0</span>, &amp;param<span class="number">2</span> TSRMLS<span class="number">_</span>DC);</div><div class="line"></div><div class="line"></div><div class="line">	add<span class="number">_n</span>ext<span class="number">_</span>index<span class="number">_</span>string(<span class="keyword">return</span><span class="number">_</span><span class="keyword">value</span>,Z<span class="number">_</span>STRVAL<span class="number">_P</span>(get<span class="number">1</span>));</div><div class="line">	add<span class="number">_n</span>ext<span class="number">_</span>index<span class="number">_</span>string(<span class="keyword">return</span><span class="number">_</span><span class="keyword">value</span>,Z<span class="number">_</span>STRVAL<span class="number">_P</span>(get<span class="number">2</span>));</div><div class="line">	<span class="comment">//add_assoc_string(return_value, "param1", ZEND_STRL("test1"));</span></div><div class="line">	<span class="comment">//add_assoc_string(return_value, "param2", ZEND_STRL("test2"));</span></div><div class="line"></div><div class="line">	RETURN<span class="number">_</span>ZVAL(<span class="keyword">return</span><span class="number">_</span><span class="keyword">value</span>, <span class="number">1</span>, <span class="number">0</span>);</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">const zend<span class="number">_f</span>unction<span class="number">_</span>entry adf<span class="number">_f</span>unctions[] = &#123;</div><div class="line"></div><div class="line">	PHP<span class="number">_M</span>E(adf, <span class="number">__</span>construct,NULL,ZEND<span class="number">_</span>ACC<span class="number">_P</span>UBLIC|ZEND<span class="number">_</span>ACC<span class="number">_</span>CTOR)</div><div class="line">	PHP<span class="number">_M</span>E(adf,set,global<span class="number">_</span>setkey<span class="number">_</span>arg,ZEND<span class="number">_</span>ACC<span class="number">_P</span>UBLIC)</div><div class="line">	PHP<span class="number">_M</span>E(adf,get,NULL,ZEND<span class="number">_</span>ACC<span class="number">_P</span>UBLIC)</div><div class="line">	PHP<span class="number">_M</span>E(adf,calladf,NULL,ZEND<span class="number">_</span>ACC<span class="number">_P</span>UBLIC|ZEND<span class="number">_</span>ACC<span class="number">_</span>STATIC)</div><div class="line"></div><div class="line">	PHP<span class="number">_</span>FE<span class="number">_</span>END	<span class="comment">/* Must be the last line in adf_functions[] */</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line">PHP<span class="number">_M</span>INIT<span class="number">_</span>FUNCTION(adf)</div><div class="line">&#123;</div><div class="line">	<span class="comment">/* If you have INI entries, uncomment these lines</span></div><div class="line"><span class="comment">	REGISTER_INI_ENTRIES();</span></div><div class="line"><span class="comment">	*/</span></div><div class="line"></div><div class="line">        zend<span class="number">_</span><span class="keyword">class</span><span class="number">_</span>entry ce;</div><div class="line">        INIT<span class="number">_</span>CLASS<span class="number">_</span>ENTRY(ce, <span class="string">"adf"</span>, adf<span class="number">_f</span>unctions);</div><div class="line">	adf<span class="number">_</span>ce = zend<span class="number">_</span>register<span class="number">_</span>internal<span class="number">_</span><span class="keyword">class</span>(&amp;ce TSRMLS<span class="number">_</span>CC);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">play</span><span class="selector-class">.c</span>中代码：</div><div class="line"></div><div class="line"><span class="selector-tag">PHP_MINIT_FUNCTION</span>(play)</div><div class="line">&#123;</div><div class="line">	<span class="comment">/* If you have INI entries, uncomment these lines</span></div><div class="line"><span class="comment">	REGISTER_INI_ENTRIES();</span></div><div class="line"><span class="comment">	*/</span></div><div class="line"></div><div class="line">	<span class="selector-tag">ZEND_MODULE_STARTUP_N</span>(udf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">	<span class="selector-tag">ZEND_MODULE_STARTUP_N</span>(adf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">	<span class="selector-tag">return</span> <span class="selector-tag">SUCCESS</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/07/2016-02-07-php-ext-7/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2016-02-06-php-ext-6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/06/2016-02-06-php-ext-6/">php7扩展开发[6] 调试Segmentation fault</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/06/2016-02-06-php-ext-6/" class="archive-article-date">
+  	<time datetime="2017-08-06T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="number">1.</span>编译安装php<span class="number">-7.0</span><span class="number">.5</span>，编译时，加上--<span class="keyword">enable</span>-<span class="keyword">debug</span> --<span class="keyword">enable</span>-phpdbg</div><div class="line"></div><div class="line">wget http:<span class="comment">//cn2.php.net/distributions/php-7.0.5.tar.gz</span></div><div class="line">tar zxvf php<span class="number">-7.0</span><span class="number">.5</span>.tar.gz</div><div class="line">cd php<span class="number">-7.0</span><span class="number">.5</span></div><div class="line">./configure --prefix=/usr/<span class="keyword">local</span>/php7<span class="number">.0</span><span class="number">.5</span> --<span class="keyword">enable</span>-<span class="keyword">debug</span> --<span class="keyword">enable</span>-cli --<span class="keyword">enable</span>-fpm   --<span class="keyword">enable</span>-pcntl --with-openssl --<span class="keyword">enable</span>-mysqlnd  --<span class="keyword">enable</span>-phpdbg --<span class="keyword">enable</span>-embed</div><div class="line"><span class="built_in">make</span> &amp;&amp; <span class="built_in">make</span> install</div><div class="line"></div><div class="line"></div><div class="line"><span class="number">2.</span>php7扩展调用时，出现Segmentation fault</div><div class="line"></div><div class="line"><span class="number">2.1</span></div><div class="line">ulimit -c unlimited</div><div class="line">再执行一次php脚本，出现 core.xxxx，OK就先到这里</div><div class="line">gdb php -c core.xxxx</div><div class="line"></div><div class="line"><span class="number">2.2</span></div><div class="line">修改扩展模块中的config.m4</div><div class="line">在其中加入：</div><div class="line"><span class="keyword">if</span> test -z <span class="string">"$PHP_DEBUG"</span> ; then</div><div class="line">    AC_ARG_ENABLE(<span class="keyword">debug</span>, [--<span class="keyword">enable</span>-<span class="keyword">debug</span> <span class="keyword">compile</span> with debugging <span class="keyword">system</span>], [PHP_DEBUG=$enableval],[PHP_DEBUG=no] )</div><div class="line">fi</div><div class="line"></div><div class="line"></div><div class="line"><span class="number">2.3</span> 重新编译扩展源码</div><div class="line">phpize</div><div class="line">./configure --with-php-config=/usr/bin/php-config --<span class="keyword">enable</span>-<span class="keyword">debug</span></div><div class="line"><span class="built_in">make</span> &amp;&amp; <span class="built_in">make</span> install</div><div class="line"></div><div class="line"><span class="number">2.4</span> 确认断点函数</div><div class="line">nm modules/xxx.so 会列出所有的函数</div><div class="line">如果自己写的一个Demo类中的get方法出现问题 一般这个函数名为zim_demo_get</div><div class="line">或者nm modules/xxx.so|grep xxx 找出你自己的写的方法名</div><div class="line"></div><div class="line"><span class="number">3.</span>调试xxxx.php文件</div><div class="line">gdb php 进入gdb界面</div><div class="line"><span class="keyword">break</span> zim_demo_get 会问y/n 选y</div><div class="line">gdb -q xxxx.php -c /etc/php.ini</div><div class="line"></div><div class="line">这时会停在zend_method(demo,get)&#123;&#125;方法内，这时只要输入n回车  输入n回车  输入n回车</div><div class="line">直到出现Segmentation基本上可以定位问题所在。当然你也可以在每一步<span class="keyword">print</span> 打印你想看的变量内容。</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/06/2016-02-06-php-ext-6/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2016-02-05-php-ext-5" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -858,197 +1009,6 @@ hello word
 
 
   
-    <article id="post-2017-07-28-training-python-16" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/28/2017-07-28-training-python-16/">python技术分享[16] python使用ssh隧道连接内网开放的mysql</a>
-    </h1>
-  
-
-        
-        <a href="/2017/07/28/2017-07-28-training-python-16/" class="archive-article-date">
-  	<time datetime="2017-07-28T10:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h3><ul>
-<li>数据库只允许内网访问</li>
-<li>服务器公网SSH访问</li>
-</ul>
-<h3 id="模块安装"><a href="#模块安装" class="headerlink" title="模块安装"></a>模块安装</h3><ul>
-<li>pip install sshtunnel -i <a href="https://pypi.doubanio.com/simple/" target="_blank" rel="external">https://pypi.doubanio.com/simple/</a>  </li>
-<li>pip install MySQL-python==1.2.5 -i <a href="https://pypi.doubanio.com/simple/" target="_blank" rel="external">https://pypi.doubanio.com/simple/</a></li>
-<li>[关键是sshtunnel]  </li>
-</ul>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">import</span> MySQLdb  </div><div class="line">from sshtunnel <span class="built_in">import</span> SSHTunnelForwarder  </div><div class="line"><span class="built_in">import</span> MySQLdb.cursors  </div><div class="line"></div><div class="line">def dbconnect_ssh(ssh_host,ssh_port,keyfile,ssh_user,db_host,db_name,sql,db_port,db_user,db_passwd):  </div><div class="line">    <span class="keyword">with</span> SSHTunnelForwarder(</div><div class="line">            (ssh_host, ssh_port),</div><div class="line">            <span class="comment">#ssh_password="sshpasswd",</span></div><div class="line">            <span class="attr">ssh_pkey=keyfile,</span></div><div class="line">            <span class="attr">ssh_username=ssh_user,</span></div><div class="line">            <span class="attr">remote_bind_address=(db_host,</span> db_port)</div><div class="line">    ) as server:</div><div class="line"></div><div class="line">        <span class="attr">db</span> = MySQLdb.connect(</div><div class="line">            <span class="attr">host='127.0.0.1',</span></div><div class="line">            <span class="attr">port=server.local_bind_port,</span></div><div class="line">            <span class="attr">user=db_user,</span></div><div class="line">            <span class="attr">passwd=db_passwd,</span></div><div class="line">            <span class="attr">db=db_name,</span></div><div class="line">            <span class="attr">charset="utf8",</span></div><div class="line">            <span class="attr">cursorclass=MySQLdb.cursors.DictCursor)</span></div><div class="line"></div><div class="line">        <span class="attr">cursor</span> = db.cursor()</div><div class="line"></div><div class="line">        try:</div><div class="line">            cursor.execute(sql)</div><div class="line">            <span class="attr">data</span> = cursor.fetchall()</div><div class="line">            db.commit()</div><div class="line">        except:</div><div class="line">            db.rollback()</div><div class="line"></div><div class="line">        <span class="attr">collect</span> = []</div><div class="line">        for result <span class="keyword">in</span> data:</div><div class="line">            collect.append(result)</div><div class="line"></div><div class="line">        db.close()</div><div class="line">        cursor.close()</div><div class="line"></div><div class="line">        return collect</div><div class="line"></div><div class="line"><span class="keyword">if</span> <span class="attr">__name__</span> == <span class="string">"__main__"</span>:  </div><div class="line">    <span class="attr">ssh_host</span> = <span class="string">"1.1.1.1"</span>           <span class="comment">#SSH服务器地址</span></div><div class="line">    <span class="attr">ssh_port</span> = <span class="number">22</span>                  <span class="comment">#SSH端口</span></div><div class="line">    <span class="attr">keyfile</span> = <span class="string">"/root/.ssh/id_rsa"</span>  <span class="comment">#SSH密钥</span></div><div class="line">    <span class="attr">ssh_user</span> = <span class="string">"leoiceo"</span>           <span class="comment">#SSH用户名</span></div><div class="line">    <span class="attr">db_host</span> = <span class="string">"192.168.1.1"</span>        <span class="comment">#数据库地址</span></div><div class="line">    <span class="attr">db_name</span> = 'mysql'              <span class="comment">#数据库名</span></div><div class="line">    <span class="attr">sql</span> = 'show databases;'        <span class="comment">#SQL</span></div><div class="line">    <span class="attr">db_port</span> = <span class="number">3306</span>                 <span class="comment">#数据库端口</span></div><div class="line">    <span class="attr">db_user</span> = 'root'               <span class="comment">#数据库用户名</span></div><div class="line">    <span class="attr">db_passwd</span> = '<span class="number">123456</span>'           <span class="comment">#数据库密码</span></div><div class="line">    <span class="attr">result</span> = dbconnect_ssh(ssh_host,ssh_port,keyfile,ssh_user,db_host,db_name,sql,db_port,db_user,db_passwd)</div><div class="line">    print result</div></pre></td></tr></table></figure>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">phpmongodb</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/07/28/2017-07-28-training-python-16/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2017-07-07-cluster-zookeeper-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/07/2017-07-07-cluster-zookeeper-1/">zookeeper的Cluster集群搭建及管理</a>
-    </h1>
-  
-
-        
-        <a href="/2017/07/07/2017-07-07-cluster-zookeeper-1/" class="archive-article-date">
-  	<time datetime="2017-07-07T02:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h3 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h3><ul>
-<li>三台服务器实现zookeeper集群<ul>
-<li>172.16.61.102  172.16.61.103  172.16.61.104</li>
-</ul>
-</li>
-<li>安装目录 /opt 一切动作默认的目录</li>
-</ul>
-<h3 id="安装zookeeper-每台服务器"><a href="#安装zookeeper-每台服务器" class="headerlink" title="安装zookeeper[每台服务器]"></a>安装zookeeper[每台服务器]</h3><pre><code>wget http://mirrors.cnnic.cn/apache/zookeeper/zookeeper-3.4.9/zookeeper-3.4.9.tar.gz
-
-tar zxvf zookeeper-3.4.9.tar.gz 
-
-ln -s zookeeper-3.4.9/ zookeeper
-</code></pre><h3 id="写zookeeper配置"><a href="#写zookeeper配置" class="headerlink" title="写zookeeper配置"></a>写zookeeper配置</h3><pre><code>cat conf/zoo.cfg 
-tickTime=2000
-initLimit=10
-syncLimit=5
-clientPort=2181
-maxClientCnxns=0
-dataDir=/opt/zookeeper/data
-dataLogDir=/opt/zookeeper/logs
-server.1=172.16.61.102:2888:3888
-server.2=172.16.61.103:2888:3888
-server.3=172.16.61.104:2888:3888
-</code></pre><h3 id="分发上面安装好的目录"><a href="#分发上面安装好的目录" class="headerlink" title="分发上面安装好的目录"></a>分发上面安装好的目录</h3><pre><code>scp -r /opt/zookeeper root@172.16.61.103:/opt
-scp -r /opt/zookeeper root@172.16.61.104:/opt
-</code></pre><h3 id="安装zookeeper-每台服务器-1"><a href="#安装zookeeper-每台服务器-1" class="headerlink" title="安装zookeeper[每台服务器]"></a>安装zookeeper[每台服务器]</h3><pre><code>根据上面的配置
-server.1=172.16.61.102:2888:3888
-server.2=172.16.61.103:2888:3888
-server.3=172.16.61.104:2888:3888
-
-如下操作：
-
-echo &quot;1&quot; &gt; /opt/zookeeper/data/myid 在172.16.61.102上
-echo &quot;2&quot; &gt; /opt/zookeeper/data/myid 在172.16.61.103上
-echo &quot;3&quot; &gt; /opt/zookeeper/data/myid 在172.16.61.104上
-</code></pre><h3 id="启动zookeeper-每台服务器"><a href="#启动zookeeper-每台服务器" class="headerlink" title="启动zookeeper[每台服务器]"></a>启动zookeeper[每台服务器]</h3><p>/opt/zookeeper/bin/zkServer.sh start</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/07/07/2017-07-07-cluster-zookeeper-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
@@ -1150,11 +1110,11 @@ echo &quot;3&quot; &gt; /opt/zookeeper/data/myid 在172.16.61.104上
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">集群搭建</a>
+                <a href="javascript:void(0)" class="js-tag color1">phpmongodb</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">phpmongodb</a>
+                <a href="javascript:void(0)" class="js-tag color5">集群搭建</a>
               </li>
              
               <li class="article-tag-list-item">

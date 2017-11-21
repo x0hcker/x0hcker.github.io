@@ -157,6 +157,362 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2017-09-11-cluster-kafka-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/11/2017-09-11-cluster-kafka-1/">kafka-flume集群环境搭建【1】</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/11/2017-09-11-cluster-kafka-1/" class="archive-article-date">
+  	<time datetime="2017-09-11T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h3 id="1-前期准备"><a href="#1-前期准备" class="headerlink" title="1. 前期准备"></a>1. 前期准备</h3><h4 id="1-1-操作系统"><a href="#1-1-操作系统" class="headerlink" title="1.1 操作系统"></a>1.1 操作系统</h4><pre><code>172.16.61.102,centos6.9
+172.16.61.103,centos6.9
+172.16.61.104,centos6.9
+</code></pre><h3 id="1-2-etc-hosts-（3主机均需要）"><a href="#1-2-etc-hosts-（3主机均需要）" class="headerlink" title="1.2 /etc/hosts  （3主机均需要）"></a>1.2 /etc/hosts  （3主机均需要）</h3><pre><code>172.16.61.102  kafka01
+172.16.61.103  kafka02
+172.16.61.104  kafka03
+</code></pre><h3 id="1-3-安装Java-（3主机均需要）"><a href="#1-3-安装Java-（3主机均需要）" class="headerlink" title="1.3 安装Java （3主机均需要）"></a>1.3 安装Java （3主机均需要）</h3><pre><code>yum install java-1.8.0-openjdk -y
+</code></pre><h3 id="1-4-下载安装kafka-（3主机均需要）"><a href="#1-4-下载安装kafka-（3主机均需要）" class="headerlink" title="1.4 下载安装kafka （3主机均需要）"></a>1.4 下载安装kafka （3主机均需要）</h3><pre><code>cd ~
+wget http://mirrors.hust.edu.cn/apache/kafka/0.11.0.0/kafka_2.11-0.11.0.0.tgz
+tar -xf kafka_2.11-0.11.0.0.tgz -C /usr/local/
+ln -sv /usr/local/kafka_2.11-0.11.0.0 /usr/local/kafka
+ll  /usr/local/kafka
+</code></pre><h3 id="2-配置zookeeper"><a href="#2-配置zookeeper" class="headerlink" title="2. 配置zookeeper"></a>2. 配置zookeeper</h3><h5 id="2-1-zookeeper-配置"><a href="#2-1-zookeeper-配置" class="headerlink" title="2.1 zookeeper 配置"></a>2.1 zookeeper 配置</h5><p>[root@kafka102 ] cat /usr/local/kafka/config/zookeeper.properties</p>
+<pre><code>dataDir=/data/zookeeper
+clientPort=2181
+tickTime=2000
+initLimit=20
+syncLimit=10
+server.102=172.16.61.102:2888:3888
+server.103=172.16.61.103:2888:3888
+server.104=172.16.61.104:2888:3888
+</code></pre><p>[root@kafka103 ] cat /usr/local/kafka/config/zookeeper.properties</p>
+<pre><code>dataDir=/data/zookeeper
+clientPort=2181
+tickTime=2000
+initLimit=20
+syncLimit=10
+server.102=172.16.61.102:2888:3888
+server.103=172.16.61.103:2888:3888
+server.104=172.16.61.104:2888:3888
+</code></pre><p>[root@kafka104 ] cat /usr/local/kafka/config/zookeeper.properties</p>
+<pre><code>dataDir=/data/zookeeper
+clientPort=2181
+tickTime=2000
+initLimit=20
+syncLimit=10
+server.102=172.16.61.102:2888:3888
+server.103=172.16.61.103:2888:3888
+server.104=172.16.61.104:2888:3888
+</code></pre><h5 id="2-2-创建数据目录-（3主机均需要）"><a href="#2-2-创建数据目录-（3主机均需要）" class="headerlink" title="2.2 创建数据目录 （3主机均需要）"></a>2.2 创建数据目录 （3主机均需要）</h5><pre><code>[root@kafka102 ] mkdir -p /data/zookeeper 
+[root@kafka103 ] mkdir -p /data/zookeeper 
+[root@kafka104] mkdir -p /data/zookeeper 
+</code></pre><h5 id="2-3-写zookeeper标识（3主机均需要）"><a href="#2-3-写zookeeper标识（3主机均需要）" class="headerlink" title="2.3 写zookeeper标识（3主机均需要）"></a>2.3 写zookeeper标识（3主机均需要）</h5><pre><code>[root@kafka102 ] echo 102 &gt; /data/zookeeper/myid
+[root@kafka103 ] echo 103 &gt; /data/zookeeper/myid
+[root@kafka104 ] echo 104 &gt; /data/zookeeper/myid
+</code></pre><font color="red"> 注意数字要zookeeper.properties中一致</font> 
+
+<h5 id="2-4-启动zookeeper"><a href="#2-4-启动zookeeper" class="headerlink" title="2.4 启动zookeeper"></a>2.4 启动zookeeper</h5><pre><code>[root@kafka102 ]# nohup /usr/local/kafka/bin/zookeeper-server-start.sh /usr/local/kafka/config/zookeeper.properties &amp;
+
+[root@kafka103 ]# nohup /usr/local/kafka/bin/zookeeper-server-start.sh /usr/local/kafka/config/zookeeper.properties &amp;
+
+[root@kafka104 ]# nohup /usr/local/kafka/bin/zookeeper-server-start.sh /usr/local/kafka/config/zookeeper.properties &amp;
+</code></pre><h5 id="2-5-停止zookeeper"><a href="#2-5-停止zookeeper" class="headerlink" title="2.5 停止zookeeper"></a>2.5 停止zookeeper</h5><pre><code>/usr/local/kafka/bin/zookeeper-server-stop.sh
+</code></pre><h3 id="3-配置kafka"><a href="#3-配置kafka" class="headerlink" title="3. 配置kafka"></a>3. 配置kafka</h3><h5 id="3-1-server-properties-修改-broker-id、zookeeper-connect"><a href="#3-1-server-properties-修改-broker-id、zookeeper-connect" class="headerlink" title="3.1 server.properties 修改 broker.id、zookeeper.connect"></a>3.1 server.properties 修改 broker.id、zookeeper.connect</h5><p>[root@kafka102 ~]# grep -v ^#  /usr/local/kafka/config/server.properties|sed ‘/^$/d’</p>
+<pre><code>broker.id=102
+num.network.threads=3
+num.io.threads=8
+socket.send.buffer.bytes=102400
+socket.receive.buffer.bytes=102400
+socket.request.max.bytes=104857600
+log.dirs=/tmp/kafka-logs
+num.partitions=1
+num.recovery.threads.per.data.dir=1
+offsets.topic.replication.factor=1
+transaction.state.log.replication.factor=1
+transaction.state.log.min.isr=1
+log.retention.hours=168
+log.segment.bytes=1073741824
+log.retention.check.interval.ms=300000
+zookeeper.connect=172.16.61.102:2181,172.16.61.103:2181,172.16.61.104:2181
+zookeeper.connection.timeout.ms=6000
+group.initial.rebalance.delay.ms=0
+</code></pre><p>[root@kafka103 ~]# grep -v ^#  /usr/local/kafka/config/server.properties|sed ‘/^$/d’</p>
+<pre><code>broker.id=103
+num.network.threads=3
+num.io.threads=8
+socket.send.buffer.bytes=102400
+socket.receive.buffer.bytes=102400
+socket.request.max.bytes=104857600
+log.dirs=/tmp/kafka-logs
+num.partitions=1
+num.recovery.threads.per.data.dir=1
+offsets.topic.replication.factor=1
+transaction.state.log.replication.factor=1
+transaction.state.log.min.isr=1
+log.retention.hours=168
+log.segment.bytes=1073741824
+log.retention.check.interval.ms=300000
+zookeeper.connect=172.16.61.102:2181,172.16.61.103:2181,172.16.61.104:2181
+zookeeper.connection.timeout.ms=6000
+group.initial.rebalance.delay.ms=0
+</code></pre><p>[root@kafka104 ~]# grep -v ^#  /usr/local/kafka/config/server.properties|sed ‘/^$/d’</p>
+<pre><code>broker.id=104
+num.network.threads=3
+num.io.threads=8
+socket.send.buffer.bytes=102400
+socket.receive.buffer.bytes=102400
+socket.request.max.bytes=104857600
+log.dirs=/tmp/kafka-logs
+num.partitions=1
+num.recovery.threads.per.data.dir=1
+offsets.topic.replication.factor=1
+transaction.state.log.replication.factor=1
+transaction.state.log.min.isr=1
+log.retention.hours=168
+log.segment.bytes=1073741824
+log.retention.check.interval.ms=300000
+zookeeper.connect=172.16.61.102:2181,172.16.61.103:2181,172.16.61.104:2181
+zookeeper.connection.timeout.ms=6000
+group.initial.rebalance.delay.ms=0
+</code></pre><h5 id="3-2-启动kafka"><a href="#3-2-启动kafka" class="headerlink" title="3.2 启动kafka"></a>3.2 启动kafka</h5><pre><code>[root@kafka102 zookeeper]# nohup /usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties &amp;
+[root@kafka103 zookeeper]# nohup /usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties &amp;
+[root@kafka104 zookeeper]# nohup /usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties &amp;
+</code></pre><h5 id="3-3-停止kafka"><a href="#3-3-停止kafka" class="headerlink" title="3.3 停止kafka"></a>3.3 停止kafka</h5><pre><code>/usr/local/kafka/bin/kafka-server-stop.sh
+</code></pre><h3 id="3-4-查看各机器端口"><a href="#3-4-查看各机器端口" class="headerlink" title="3.4 查看各机器端口"></a>3.4 查看各机器端口</h3><pre><code>netstat -nlpt | grep -E &quot;2181|2888|3888|9092&quot;
+</code></pre><h3 id="4-kafka日常操作"><a href="#4-kafka日常操作" class="headerlink" title="4. kafka日常操作"></a>4. kafka日常操作</h3><h5 id="4-1-创建主题"><a href="#4-1-创建主题" class="headerlink" title="4.1 创建主题"></a>4.1 创建主题</h5><pre><code>[root@kafka102 ~]# /usr/local/kafka/bin/kafka-topics.sh --create --zookeeper 172.16.61.102:2181 --replication-factor 3 --partitions 1 --topic test000
+</code></pre><h5 id="4-2-查看主题列表"><a href="#4-2-查看主题列表" class="headerlink" title="4.2 查看主题列表"></a>4.2 查看主题列表</h5><pre><code>[root@kafka102 ~]# /usr/local/kafka/bin/kafka-topics.sh --list --zookeeper 172.16.61.102:2181
+</code></pre><h5 id="4-3-查看主题详细内容"><a href="#4-3-查看主题详细内容" class="headerlink" title="4.3 查看主题详细内容"></a>4.3 查看主题详细内容</h5><pre><code>[root@kafka102 ~]# /usr/local/kafka/bin/kafka-topics.sh --describe --zookeeper 172.16.61.102:2181 --topic test000
+</code></pre><h5 id="4-4-生产者-和-消费者"><a href="#4-4-生产者-和-消费者" class="headerlink" title="4.4 生产者 和 消费者"></a>4.4 生产者 和 消费者</h5><pre><code>[root@kafka01 ~]# /usr/local/kafka/bin/kafka-console-producer.sh --broker-list 172.16.61.102:2181 --topic test000
+
+[root@kafka01 ~]# /usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic test000 --from-beginning
+
+会有如下提示，需要用最新的指令 0.9+
+Using the ConsoleConsumer with old consumer is deprecated and will be removed in a future major release. Consider using the new consumer by passing [bootstrap-server] instead of [zookeeper].
+
+
+ /usr/local/kafka/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test --producer.config /usr/local/kafka/config/producer.properties
+
+
+ /usr/local/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --new-consumer --from-beginning --consumer.config /usr/local/kafka/config/consumer.properties
+</code></pre><h3 id="5-kafka问题实录："><a href="#5-kafka问题实录：" class="headerlink" title="5. kafka问题实录："></a>5. kafka问题实录：</h3><h5 id="5-1-Q：因为没有启动kafka"><a href="#5-1-Q：因为没有启动kafka" class="headerlink" title="5.1 Q：因为没有启动kafka"></a>5.1 Q：因为没有启动kafka</h5><pre><code>[root@kafka102 ~]# /usr/local/kafka/bin/kafka-topics.sh --create --zookeeper 172.16.61.102:2181 --replication-factor 3 --partitions 1 --topic test000
+
+Error while executing topic command : replication factor: 3 larger than available brokers: 0
+[2017-09-12 16:42:56,533] ERROR org.apache.kafka.common.errors.InvalidReplicationFactorException: replication factor: 3 larger than available brokers: 0
+ (kafka.admin.TopicCommand$)
+</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>&gt;<br><a href="http://blog.csdn.net/ddcowboy/article/details/54617740" target="_blank" rel="external">http://blog.csdn.net/ddcowboy/article/details/54617740</a><br><a href="http://orchome.com/454" target="_blank" rel="external">http://orchome.com/454</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/11/2017-09-11-cluster-kafka-1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Internal-value-representation-in-PHP-7-part-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/29/Internal-value-representation-in-PHP-7-part-2/">PHP7扩展开发官方译文[2]</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/29/Internal-value-representation-in-PHP-7-part-2/" class="archive-article-date">
+  	<time datetime="2017-08-29T11:51:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><em>本文第一部分和第二均翻译自Nikita Popov(nikic，PHP 官方开发组成员，柏林科技大学的学生) 的<a href="http://nikic.github.io/" target="_blank" rel="external">博客</a>。为了更符合汉语的阅读习惯，文中并不会逐字逐句的翻译。</em></p>
+<p><em>要理解本文，你应该对 PHP5 中变量的实现有了一些了解，本文重点在于解释 PHP7 中 zval 的变化。</em></p>
+<p>第一部分讲了 PHP5 和 PHP7 中关于变量最基础的实现和变化。这里再重复一下，主要的变化就是 zval 不再单独分配内存，不自己存储引用计数。整型浮点型等简单类型直接存储在 zval 中。复杂类型则通过指针指向一个独立的结构体。</p>
+<p>复杂的 zval 数据值有一个共同的头，其结构由 <code>zend_refcounted</code> 定义：</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">_zend_refcounted</span> &#123;</span></div><div class="line">    uint32_t refcount;</div><div class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></div><div class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">            ZEND_ENDIAN_LOHI_3(</div><div class="line">                zend_uchar    <span class="keyword">type</span>,</div><div class="line">                zend_uchar    flags,</div><div class="line">                uint16_t      gc_info)</div><div class="line">        &#125; v;</div><div class="line">        uint32_t type_info;</div><div class="line">    &#125; u;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>这个头存储有 <code>refcount</code>（引用计数），值的类型 <code>type</code> 和循环回收的相关信息 <code>gc_info</code> 以及类型标志位 <code>flags</code>。</p>
+<p>接下来会对每种复杂类型的实现单独进行分析并和 PHP5 的实现进行比较。引用虽然也属于复杂类型，但是上一部分已经介绍过了，这里就不再赘述。另外这里也不会讲到资源类型（因为作者觉得资源类型没什么好讲的）。</p>
+<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><p>PHP7 中定义了一个新的结构体 <code>zend_string</code> 用于存储字符串变量：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">struct _zend_string &#123;</div><div class="line">    zend_refcounted   gc<span class="comment">;</span></div><div class="line">    zend_ulong        h<span class="comment">;        /* hash value */</span></div><div class="line">    size_t            len<span class="comment">;</span></div><div class="line">    char              val[<span class="number">1</span>]<span class="comment">;</span></div><div class="line">&#125;<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>除了引用计数的头以外，字符串还包含哈希缓存 <code>h</code>，字符串长度 <code>len</code> 以及字符串的值 <code>val</code>。哈希缓存的存在是为了防止使用字符串做为 hashtable 的 key 在查找时需要重复计算其哈希值，所以这个在使用之前就对其进行初始化。</p>
+<p>如果你对 C 语言了解的不是很深入的话，可能会觉得 <code>val</code> 的定义有些奇怪：这个声明只有一个元素，但是显然我们想存储的字符串偿付肯定大于一个字符的长度。这里其实使用的是结构体的一个『黑』方法：在声明数组时只定义一个元素，但是实际创建 <code>zend_string</code> 时再分配足够的内存来存储整个字符串。这样我们还是可以通过 <code>val</code> 访问完整的字符串。</p>
+<p>当然这属于非常规的实现手段，因为我们实际的读和写的内容都超过了单字符数组的边界。但是 C 语言编译器却不知道你是这么做的。虽然 C99 也曾明确规定过支持『柔性数组』，但是感谢我们的好朋友微软，没人能在不同的平台上保证 C99 的一致性（所以这种手段是为了解决 Windows 平台下柔性数组的支持问题）。</p>
+<p>新的字符串类型的结构比原生的 C 字符串更方便使用：第一是因为直接存储了字符串的长度，这样就不用每次使用时都去计算。第二是字符串也有引用计数的头，这样也就可以在不同的地方共享字符串本身而无需使用 zval。一个经常使用的地方就是共享 hashtable 的 key。</p>
+<p>但是新的字符串类型也有一个很不好的地方：虽然可以很方便的从 zend_string 中取出 C 字符串（使用 <code>str-&gt;val</code> 即可），但反过来，如果将 C 字符串变成 zend_string 就需要先分配 zend_string 需要的内存，再将字符串复制到 zend_string 中。这在实际使用的过程中并不是很方便。</p>
+<p>字符串也有一些特有的标志（存储在 GC 的标志位中的）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_STR_PERSISTENT           (1&lt;&lt;0) <span class="comment">/* allocated using malloc */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_STR_INTERNED             (1&lt;&lt;1) <span class="comment">/* interned string */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_STR_PERMANENT            (1&lt;&lt;2) <span class="comment">/* interned string surviving request boundary */</span></span></div></pre></td></tr></table></figure>
+<p>持久化的字符串需要的内存直接从系统本身分配而不是 zend 内存管理器（ZMM），这样它就可以一直存在而不是只在单次请求中有效。给这种特殊的分配打上标记便于 zval 使用持久化字符串。在 PHP5 中并不是这样处理的，是在使用前复制一份到 ZMM 中。</p>
+<p>保留字符（interned strings）有点特殊，它会一直存在直到请求结束时才销毁，所以也就无需进行引用计数。保留字符串也不可重复（duplicate），所以在创建新的保留字符时也会先检查是否有同样字符的已经存在。所有 PHP 源码中不可变的字符串都是保留字符（包括字符串常量、变量名函数名等）。持久化字符串也是请求开始之前已经创建好的保留字符。但普通的保留字符在请求结束后会销毁，持久化字符串却始终存在。</p>
+<p>如果使用了 opcache 的话保留字符会被存储在共享内存（SHM）中这样就可以在所有 PHP 进程质检共享。这种情况下持久化字符串也就没有存在的意义了，因为保留字符也是不会被销毁的。</p>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>因为<a href="http://nikic.github.io/2014/12/22/PHPs-new-hashtable-implementation.html" target="_blank" rel="external">之前的文章</a>有讲过新的数组实现，所以这里就不再详细描述了。虽然最近有些变化导致之前的描述不是十分准确了，但是基本的概念还是一致的。</p>
+<p>这里要说的是之前的文章中没有提到的数组相关的概念：不可变数组。其本质上和保留字符类似：没有引用计数且在请求结束之前一直存在（也可能在请求结束之后还存在）。</p>
+<p>因为某些内存管理方便的原因，不可变数组只会在开启 opcache 时会使用到。我们来看看实际使用的例子，先看以下的脚本：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?php</span></span></div><div class="line"><span class="php"><span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; <span class="number">1000000</span>; ++$i) &#123;</span></div><div class="line"><span class="php">    $array[] = [<span class="string">'foo'</span>];</span></div><div class="line"><span class="php">&#125;</span></div><div class="line"><span class="php">var_dump(memory_get_usage());</span></div></pre></td></tr></table></figure>
+<p>开启 opcache 时，以上代码会使用 32MB 的内存，不开启的情况下因为 <code>$array</code> 每个元素都会复制一份 <code>[&#39;foo&#39;]</code> ，所以需要 390MB。这里会进行完整的复制而不是增加引用计数值的原因是防止 zend 虚拟机操作符执行的时候出现共享内存出错的情况。我希望不使用 opcache 时内存暴增的问题以后能得到改善。</p>
+<h2 id="PHP5-中的对象"><a href="#PHP5-中的对象" class="headerlink" title="PHP5 中的对象"></a>PHP5 中的对象</h2><p>在了解 PHP7 中的对象实现直线我们先看一下 PHP5 的并且看一下有什么效率上的问题。PHP5 中的 zval 会存储一个 <code>zend_object_value</code> 结构，其定义如下：</p>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">typedef struct <span class="number">_</span>zend<span class="number">_</span><span class="keyword">object</span><span class="number">_</span><span class="keyword">value</span> &#123;</div><div class="line">    zend<span class="number">_</span><span class="keyword">object</span><span class="number">_</span>handle handle;</div><div class="line">    const zend<span class="number">_</span><span class="keyword">object</span><span class="number">_</span>handlers *handlers;</div><div class="line">&#125; zend<span class="number">_</span><span class="keyword">object</span><span class="number">_</span><span class="keyword">value</span>;</div></pre></td></tr></table></figure>
+<p><code>handle</code> 是对象的唯一 ID，可以用于查找对象数据。<code>handles</code> 是保存对象各种属性方法的虚函数表指针。通常情况下 PHP 对象都有着同样的 handler 表，但是 PHP 扩展创建的对象也可以通过操作符重载等方式对其行为自定义。</p>
+<p>对象句柄（handler）是作为索引用于『对象存储』，对象存储本身是一个存储容器（bucket）的数组，bucket 定义如下：</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">typedef <span class="class"><span class="keyword">struct</span> <span class="title">_zend_object_store_bucket</span> &#123;</span></div><div class="line">    zend_bool destructor_called;</div><div class="line">    zend_bool valid;</div><div class="line">    zend_uchar apply_count;</div><div class="line">    <span class="class"><span class="keyword">union</span> <span class="title">_store_bucket</span> &#123;</span></div><div class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">_store_object</span> &#123;</span></div><div class="line">            void *object;</div><div class="line">            zend_objects_store_dtor_t dtor;</div><div class="line">            zend_objects_free_object_storage_t free_storage;</div><div class="line">            zend_objects_store_clone_t clone;</div><div class="line">            const zend_object_handlers *handlers;</div><div class="line">            zend_uint refcount;</div><div class="line">            gc_root_buffer *buffered;</div><div class="line">        &#125; obj;</div><div class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">            int <span class="keyword">next</span>;</div><div class="line">        &#125; free_list;</div><div class="line">    &#125; bucket;</div><div class="line">&#125; zend_object_store_bucket;</div></pre></td></tr></table></figure>
+<p>这个结构体包含了很多东西。前三个成员只是些普通的元数据（对象的析构函数是否被调用过、bucke 是否被使用过以及对象被递归调用过多少次）。接下来的联合体用于区分 bucket 是处于使用中的状态还是空闲状态。上面的结构中最重要的是 <code>struct _store_object</code> 子结构体：</p>
+<p>第一个成员 <code>object</code> 是指向实际对象（也就是对象最终存储的位置）的指针。对象实际并不是直接嵌入到对象存储的 bucket 中的，因为对象不是定长的。对象指针下面是三个用于管理对象销毁、释放与克隆的操作句柄（handler）。这里要注意的是 PHP 销毁和释放对象是不同的步骤，前者在某些情况下有可能会被跳过（不完全释放）。克隆操作实际上几乎几乎不会被用到，因为这里包含的操作不是普通对象本身的一部分，所以（任何时候）他们在每个对象中他们都会被单独复制（duplicate）一份而不是共享。</p>
+<p>这些对象存储操作句柄后面是一个普通的对象 <code>handlers</code> 指针。存储这几个数据是因为有时候可能会在 zval 未知的情况下销毁对象（通常情况下这些操作都是针对 zval 进行的）。</p>
+<p>bucket 也包含了 <code>refcount</code> 的字段，不过这种行为在 PHP5 中显得有些奇怪，因为 zval 本身已经存储了引用计数。为什么还需要一个多余的计数呢？问题在于虽然通常情况下 zval 的『复制』行为都是简单的增加引用计数即可，但是偶尔也会有深度复制的情况出现，比如创建一个全新的 zval 但是保存同样的 <code>zend_object_value</code>。这种情况下两个不同的 zval 就用到了同一个对象存储的 bucket，所以 bucket 自身也需要进行引用计数。这种『双重计数』的方式是 PHP5 的实现内在的问题。GC 根缓冲区中的 <code>buffered</code> 指针也是由于同样的原因才需要进行完全复制（duplicate）。</p>
+<p>现在看看对象存储中指针指向的实际的 <code>object</code> 的结构，通常情况下用户层面的对象定义如下：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">typedef struct _zend_object &#123;</div><div class="line">    zend_class_entry *ce<span class="comment">;</span></div><div class="line">    HashTable *properties<span class="comment">;</span></div><div class="line">    zval **properties_table<span class="comment">;</span></div><div class="line">    HashTable *guards<span class="comment">;</span></div><div class="line">&#125; zend_object<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p><code>zend_class_entry</code> 指针指向的是对象实现的类原型。接下来的两个元素是使用不同的方式存储对象属性。动态属性（运行时添加的而不是在类中定义的）全部存在 <code>properties</code> 中，不过只是属性名和值的简单匹配。</p>
+<p>不过这里有针对已经声明的属性的一个优化：编译期间每个属性都会被指定一个索引并且属性本身是存储在 <code>properties_table</code> 的索引中。属性名称和索引的匹配存储在类原型的 hashtable 中。这样就可以防止每个对象使用的内存超过 hashtable 的上限，并且属性的索引会在运行时有多处缓存。</p>
+<p><code>guards</code> 的哈希表是用于实现魔术方法的递归行为的，比如 <code>__get</code>，这里我们不深入讨论。</p>
+<p>除了上文提到过的双重计数的问题，这种实现还有一个问题是一个最小的只有一个属性的对象也需要 136 个字节的内存（这还不算 zval 需要的内存）。而且中间存在很多间接访问动作：比如要从对象 zval 中取出一个元素，先需要取出对象存储 bucket，然后是 <code>zend object</code>，然后才能通过指针找到对象属性表和 zval。这样这里至少就有 4 层间接访问（并且实际使用中可能最少需要七层）。</p>
+<h2 id="PHP7-中的对象"><a href="#PHP7-中的对象" class="headerlink" title="PHP7 中的对象"></a>PHP7 中的对象</h2><p>PHP7 的实现中试图解决上面这些问题，包括去掉双重引用计数、减少内存使用以及间接访问。新的 <code>zend_object</code> 结构体如下：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">struct _zend_object &#123;</div><div class="line">    zend_refcounted   gc<span class="comment">;</span></div><div class="line">    uint32_t          handle<span class="comment">;</span></div><div class="line">    zend_class_entry *ce<span class="comment">;</span></div><div class="line">    const zend_object_handlers *handlers<span class="comment">;</span></div><div class="line">    HashTable        *properties<span class="comment">;</span></div><div class="line">    zval              properties_table[<span class="number">1</span>]<span class="comment">;</span></div><div class="line">&#125;<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>可以看到现在这个结构体几乎就是一个对象的全部内容了：<code>zend_object_value</code> 已经被替换成一个直接指向对象和对象存储的指针，虽然没有完全移除，但已经是很大的提升了。</p>
+<p>除了 PHP7 中惯用的 <code>zend_refcounted</code> 头以外，<code>handle</code> 和 对象的 <code>handlers</code> 现在也被放到了 <code>zend_object</code> 中。这里的 <code>properties_table</code> 同样用到了 C 结构体的小技巧，这样 <code>zend_object</code> 和属性表就会得到一整块内存。当然，现在属性表是直接嵌入到 zval 中的而不是指针。</p>
+<p>现在对象结构体中没有了 <code>guards</code> 表，现在如果需要的话这个字段的值会被存储在 <code>properties_table</code> 的第一位中，也就是使用 <code>__get</code> 等方法的时候。不过如果没有使用魔术方法的话，guards 表会被省略。</p>
+<p><code>dtor</code>、<code>free_storage</code>  和  <code>clone</code> 三个操作句柄之前是存储在对象操作 bucket 中，现在直接存在 <code>handlers</code> 表中，其结构体定义如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">zend_object_handlers</span> &#123;</span></div><div class="line">    <span class="comment">/* offset of real object header (usually zero) */</span></div><div class="line">    <span class="keyword">int</span>                                     offset;</div><div class="line">    <span class="comment">/* general object functions */</span></div><div class="line">    <span class="keyword">zend_object_free_obj_t</span>                  free_obj;</div><div class="line">    <span class="keyword">zend_object_dtor_obj_t</span>                  dtor_obj;</div><div class="line">    <span class="keyword">zend_object_clone_obj_t</span>                 clone_obj;</div><div class="line">    <span class="comment">/* individual object functions */</span></div><div class="line">    <span class="comment">// ... rest is about the same in PHP 5</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>handler 表的第一个成员是 <code>offset</code>，很显然这不是一个操作句柄。这个 offset 是现在的实现中必须存在的，因为虽然内部的对象总是嵌入到标准的 <code>zend_object</code> 中，但是也总会有添加一些成员进去的需求。在 PHP5 中解决这个问题的方法是添加一些内容到标准的对象后面：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">custom_object</span> &#123;</span></div><div class="line">    zend_object <span class="built_in">std</span>;</div><div class="line">    <span class="keyword">uint32_t</span> something;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>这样如果你可以轻易的将 <code>zend_object*</code> 添加到 <code>struct custom_object*</code> 中。这也是 C 语言中常用的结构体继承的做法。但是在 PHP7 中这种实现会有一个问题：因为 <code>zend_object</code> 在存储属性表时用了结构体 hack 的技巧，<code>zend_object</code> 尾部存储的 PHP 属性会覆盖掉后续添加进去的内部成员。所以 PHP7 的实现中会把自己添加的成员添加到标准对象结构的前面：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">custom_object</span> &#123;</span></div><div class="line">    <span class="keyword">uint32_t</span> something;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    zend_object <span class="built_in">std</span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>不过这样也就意味着现在无法直接在 <code>zend_object*</code> 和 <code>struct custom_object*</code> 进行简单的转换了，因为两者都一个偏移分割开了。所以这个偏移量就需要被存储在对象 handler 表中的第一个元素中，这样在编译时通过 <code>offsetof()</code> 宏就能确定具体的偏移值。</p>
+<p>也许你会好奇既然现在已经直接（在 <code>zend_value</code> 中）存储了 <code>zend_object</code> 的指针，那现在就不需要再到对象存储中去查找对象了，为什么 PHP7 的对象者还保留着 <code>handle</code> 字段呢？</p>
+<p>这是因为现在对象存储仍然存在，虽然得到了极大的简化，所以保留 handle 仍然是有必要的。现在它只是一个指向对象的指针数组。当对象被创建时，会有一个指针插入到对象存储中并且其索引会保存在 <code>handle</code> 中，当对象被释放时，索引也会被移除。</p>
+<p>那么为什么现在还需要对象存储呢？因为在请求结束的阶段会在存在某个节点，在这之后再去执行用户代码并且取指针数据时就不安全了。为了避免这种情况出现 PHP 会在更早的节点上执行所有对象的析构函数并且之后就不再有此类操作，所以就需要一个活跃对象的列表。</p>
+<p>并且 handle 对于调试也是很有用的，它让每个对象都有了一个唯一的 ID，这样就很容易区分两个对象是同一个还是只是有相同的内容。虽然 HHVM 没有对象存储的概念，但它也存了对象的 handle。</p>
+<p>和 PHP5 相比，现在的实现中只有一个引用计数（zval 自身不计数），并且内存的使用量有了很大的缩减：40 个字节用于基础对象，每个属性需要 16 个字节，并且这还是算了 zval 之后的。间接访问的情况也有了显著的改善，因为现在中间层的结构体要么被去掉了，要么就是直接嵌入的，所以现在读取一个属性只有一层访问而不再是四层。</p>
+<h2 id="间接-zval"><a href="#间接-zval" class="headerlink" title="间接 zval"></a>间接 zval</h2><p>到现在我们已经基本提到过了所有正常的 zval 类型，但是也有一对特殊类型用于某些特定的情况的，其中之一就是 PHP7 新添加的 <code>IS_INDIRECT</code>。</p>
+<p>间接 zval 指的就是其真正的值是存储在其他地方的。注意这个 <code>IS_REFERENCE</code> 类型是不同的，间接 zval 是直接指向另外一个 zval 而不是像 <code>zend_reference</code> 结构体一样嵌入 zval。</p>
+<p>为了理解在什么时候会出现这种情况，我们来看一下 PHP 中变量的实现（实际上对象属性的存储也是一样的情况）。</p>
+<p>所有在编译过程中已知的变量都会被指定一个索引并且其值会被存在编译变量（CV）表的相应位置中。但是 PHP 也允许你动态的引用变量，不管是局部变量还是全局变量（比如 <code>$GLOBALS</code>），只要出现这种情况，PHP 就会为脚本或者函数创建一个符号表，这其中包含了变量名和它们的值之间的映射关系。</p>
+<p>但是问题在于：怎么样才能实现两个表的同时访问呢？我们需要在 CV 表中能够访问普通变量，也需要能在符号表中访问编译变量。在 PHP5 中 CV 表用了双重指针 <code>zval**</code>，通常这些指针指向中间的 <code>zval*</code> 的表，<code>zval*</code> 最终指向的才是实际的 zval:</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">+------ CV_ptr_ptr[0]</div><div class="line">|<span class="string"> +---- CV_ptr_ptr[1]</span></div><div class="line">|<span class="string"> </span>|<span class="string"> +-- CV_ptr_ptr[2]</span></div><div class="line">|<span class="string"> </span>|<span class="string"> </span>|</div><div class="line">|<span class="string"> </span>|<span class="string"> +-&gt; CV_ptr[0] --&gt; some zval</span></div><div class="line">|<span class="string"> +---&gt; CV_ptr[1] --&gt; some zval</span></div><div class="line"><span class="string">+-----&gt; CV_ptr[2] --&gt; some zval</span></div></pre></td></tr></table></figure>
+<p>当需要使用符号表时存储 <code>zval*</code> 的中间表其实是没有用到的而 <code>zval**</code> 指针会被更新到 hashtable buckets 的响应位置中。我们假定有 <code>$a</code>、<code>$b</code> 和 <code>$c</code> 三个变量，下面是简单的示意图：</p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">CV_<span class="function"><span class="title">ptr_ptr</span>[0] --&gt;</span> S<span class="function"><span class="title">ymbolTable</span>["a"].pDataPtr --&gt;</span> some zval</div><div class="line">CV_<span class="function"><span class="title">ptr_ptr</span>[1] --&gt;</span> S<span class="function"><span class="title">ymbolTable</span>["b"].pDataPtr --&gt;</span> some zval</div><div class="line">CV_<span class="function"><span class="title">ptr_ptr</span>[2] --&gt;</span> S<span class="function"><span class="title">ymbolTable</span>["c"].pDataPtr --&gt;</span> some zval</div></pre></td></tr></table></figure>
+<p>但是 PHP7 的用法中已经没有这个问题了，因为 PHP7 中的 hashtable 大小发生变化时 hashtable bucket 就失效了。所以 PHP7 用了一个相反的策略：为了访问 CV 表中存储的变量，符号表中存储 <code>INDIRECT</code> 来指向 CV 表。CV 表在符号表的生命周期内不会重新分配，所以也就不会存在有无效指针的问题了。</p>
+<p>所以加入你有一个函数并且在 CV 表中有 <code>$a</code>、<code>$b</code> 和 <code>$c</code>，同时还有一个动态分配的变量 <code>$d</code>，符号表的结构看起来大概就是这个样子：</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="type">SymbolTable</span>[<span class="string">"a"</span>].<span class="keyword">value</span> = <span class="type">INDIRECT</span> --&gt; <span class="type">CV</span>[<span class="number">0</span>] = <span class="type">LONG</span> <span class="number">42</span></div><div class="line"><span class="type">SymbolTable</span>[<span class="string">"b"</span>].<span class="keyword">value</span> = <span class="type">INDIRECT</span> --&gt; <span class="type">CV</span>[<span class="number">1</span>] = <span class="type">DOUBLE</span> <span class="number">42.0</span></div><div class="line"><span class="type">SymbolTable</span>[<span class="string">"c"</span>].<span class="keyword">value</span> = <span class="type">INDIRECT</span> --&gt; <span class="type">CV</span>[<span class="number">2</span>] = <span class="type">STRING</span> --&gt; zend_string(<span class="string">"42"</span>)</div><div class="line"><span class="type">SymbolTable</span>[<span class="string">"d"</span>].<span class="keyword">value</span> = <span class="type">ARRAY</span> --&gt; zend_array([<span class="number">4</span>, <span class="number">2</span>])</div></pre></td></tr></table></figure>
+<p>间接 zval 也可以是一个指向 <code>IS_UNDEF</code> 类型 zval 的指针，当 hashtable 没有和它关联的 key 时就会出现这种情况。所以当使用 <code>unset($a)</code> 将 <code>CV[0]</code> 的类型标记为 <code>UNDEF</code> 时就会判定符号表不存在键值为 <code>a</code> 的数据。</p>
+<h2 id="常量和-AST"><a href="#常量和-AST" class="headerlink" title="常量和 AST"></a>常量和 AST</h2><p>还有两个需要说一下的在 PHP5 和 PHP7 中都存在的特殊类型 <code>IS_CONSTANT</code> 和 <code>IS_CONSTANT_AST</code>。要了解他们我们还是先看以下的例子：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">($a = ANSWER,</span></span></div><div class="line"><span class="function"><span class="params">              $b = ANSWER * ANSWER)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> $a + $b;</div><div class="line">&#125;</div><div class="line"></div><div class="line">define(<span class="string">'ANSWER'</span>, <span class="number">42</span>);</div><div class="line">var_dump(test()); <span class="comment">// int(42 + 42 * 42)·</span></div></pre></td></tr></table></figure>
+<p><code>test()</code> 函数的两个参数的默认值都是由常量 <code>ANSWER</code>构成，但是函数声明时常量的值尚未定义。常量的具体值只有通过 <code>define()</code> 定义时才知道。</p>
+<p>由于以上问题的存在，参数和属性的默认值、常量以及其他接受『静态表达式』的东西都支持『延时绑定』直到首次使用时。</p>
+<p>常量（或者类的静态属性）这些需要『延时绑定』的数据就是最常需要用到 <code>IS_CONSTANT</code> 类型 zval 的地方。如果这个值是表达式，就会使用 <code>IS_CONSTANT_AST</code> 类型的 zval 指向表达式的抽象语法树（AST）。</p>
+<p>到这里我们就结束了对 PHP7 中变量实现的分析。后面我可能还会写两篇文章来介绍一些虚拟机优化、新的命名约定以及一些编译器基础结构的优化的内容（这是作者原话）。</p>
+<p><em>译者注：两篇文章篇幅较长，翻译中可能有疏漏或不正确的地方，如果发现了请及时指正。</em></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/29/Internal-value-representation-in-PHP-7-part-2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Internal-value-representation-in-PHP-7-part-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -729,157 +1085,6 @@ typedef struct _zend_fcall_info {
 
 
   
-    <article id="post-2016-02-07-php-ext-7" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/07/2016-02-07-php-ext-7/">php7扩展开发[7]含有两个类的扩展模块</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/07/2016-02-07-php-ext-7/" class="archive-article-date">
-  	<time datetime="2017-08-07T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight mel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">在我们写扩展时，就像YAF不会是用一个类文件来完成一个扩展功能，所以我们要在一个扩展模块里</div><div class="line">调起几个类的实例，同类之间的方法，可以相互调用，不同类之间的实例，应该也可以调用，下面我</div><div class="line">们就用一个例子来说明。</div><div class="line">首先我们先创建<span class="keyword">play</span>扩展模块，再创建adf扩展模块，最后创建udf扩展模块，</div><div class="line">我们要做到的是php -m中显示加载了<span class="keyword">play</span>,我们可以调用adf类和udf类。</div></pre></td></tr></table></figure>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">第一步：</div><div class="line">	在adf和udf类中各实现<span class="builtin-name">set</span> get方法，然后初始化minit中的内容</div><div class="line">	运行成功后，将adf.c php_adf.h和udf.c php_udf.h拷入play文件中</div><div class="line">	</div><div class="line">第二步</div><div class="line">修改play文件夹中的config.m4：</div><div class="line"><span class="keyword">if</span> test -z <span class="string">"<span class="variable">$PHP_DEBUG</span>"</span> ; then </div><div class="line">  PHP_NEW_EXTENSION(play, play.c udf.c adf.c, <span class="variable">$ext_shared</span>,, <span class="attribute">-DZEND_ENABLE_STATIC_TSRMLS_CACHE</span>=1)</div><div class="line">  </div><div class="line">在play.c的MINIT函数中加上</div><div class="line">	ZEND_MODULE_STARTUP_N(udf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">	ZEND_MODULE_STARTUP_N(adf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">  </div><div class="line">第三步执行</div><div class="line">phpize </div><div class="line">./configure <span class="attribute">--with-php-config</span>=/usr/bin/php-config --enable-debug</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div></pre></td><td class="code"><pre><div class="line">adf.c </div><div class="line"></div><div class="line"></div><div class="line">zend<span class="number">_</span><span class="keyword">class</span><span class="number">_</span>entry *adf<span class="number">_</span>ce;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//新增定义</span></div><div class="line">ZEND<span class="number">_</span>BEGIN<span class="number">_</span>ARG<span class="number">_</span>INFO<span class="number">_</span>EX(global<span class="number">_</span>setkey<span class="number">_</span>arg, <span class="number">0</span>, <span class="number">0</span>, <span class="number">2</span>)</div><div class="line">    ZEND<span class="number">_</span>ARG<span class="number">_</span>INFO(<span class="number">0</span>, key<span class="number">1</span>)</div><div class="line">    ZEND<span class="number">_</span>ARG<span class="number">_</span>INFO(<span class="number">0</span>, key<span class="number">2</span>)</div><div class="line">ZEND<span class="number">_</span>END<span class="number">_</span>ARG<span class="number">_</span>INFO()</div><div class="line"></div><div class="line">ZEND<span class="number">_M</span>ETHOD(adf,<span class="number">__</span>construct)&#123;</div><div class="line"></div><div class="line">	RETURN<span class="number">_</span>NULL();</div><div class="line">&#125;</div><div class="line"></div><div class="line">ZEND<span class="number">_M</span>ETHOD(adf,set)&#123;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">	zval *param<span class="number">1</span>;</div><div class="line">	zval *param<span class="number">2</span>;</div><div class="line"></div><div class="line">	array<span class="number">_</span>init(param<span class="number">2</span>);</div><div class="line"></div><div class="line">	<span class="comment">//int zend_parse_parameters ( int num_args TSRMLS_DC, char* type_spec, ... )</span></div><div class="line"></div><div class="line">	<span class="keyword">if</span> (zend<span class="number">_p</span>arse<span class="number">_p</span>arameters(ZEND<span class="number">_</span>NUM<span class="number">_</span>ARGS(), <span class="string">"z|z"</span>,&amp;param<span class="number">1</span>,&amp;param<span class="number">2</span>) == FAILURE) &#123;</div><div class="line">		RETURN<span class="number">_</span>FALSE;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	zend<span class="number">_u</span>pdate<span class="number">_p</span>roperty(adf<span class="number">_</span>ce, getThis(), <span class="string">"param1"</span>, sizeof(<span class="string">"param1"</span>)-<span class="number">1</span>, param<span class="number">1</span> TSRMLS<span class="number">_</span>CC);</div><div class="line">	zend<span class="number">_u</span>pdate<span class="number">_p</span>roperty(adf<span class="number">_</span>ce, getThis(), <span class="string">"param2"</span>, sizeof(<span class="string">"param2"</span>)-<span class="number">1</span>, param<span class="number">2</span> TSRMLS<span class="number">_</span>CC);</div><div class="line"></div><div class="line">	RETURN<span class="number">_</span>NULL();</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">ZEND<span class="number">_M</span>ETHOD(adf,get)&#123;</div><div class="line"></div><div class="line">	array<span class="number">_</span>init(<span class="keyword">return</span><span class="number">_</span><span class="keyword">value</span>);</div><div class="line"></div><div class="line">	zval  *get<span class="number">1</span>;</div><div class="line">	zval  *get<span class="number">2</span>;</div><div class="line"></div><div class="line">	zval  param<span class="number">1</span>; <span class="comment">//php &gt;=7.0</span></div><div class="line">	zval  param<span class="number">2</span>; <span class="comment">//php &gt;=7.0</span></div><div class="line"></div><div class="line">	get<span class="number">1</span> = zend<span class="number">_</span>read<span class="number">_p</span>roperty(adf<span class="number">_</span>ce, getThis(), <span class="string">"param1"</span>, sizeof(<span class="string">"param1"</span>)-<span class="number">1</span>, <span class="number">0</span>, &amp;param<span class="number">1</span> TSRMLS<span class="number">_</span>DC);</div><div class="line">	get<span class="number">2</span> = zend<span class="number">_</span>read<span class="number">_p</span>roperty(adf<span class="number">_</span>ce, getThis(), <span class="string">"param2"</span>, sizeof(<span class="string">"param2"</span>)-<span class="number">1</span>, <span class="number">0</span>, &amp;param<span class="number">2</span> TSRMLS<span class="number">_</span>DC);</div><div class="line"></div><div class="line"></div><div class="line">	add<span class="number">_n</span>ext<span class="number">_</span>index<span class="number">_</span>string(<span class="keyword">return</span><span class="number">_</span><span class="keyword">value</span>,Z<span class="number">_</span>STRVAL<span class="number">_P</span>(get<span class="number">1</span>));</div><div class="line">	add<span class="number">_n</span>ext<span class="number">_</span>index<span class="number">_</span>string(<span class="keyword">return</span><span class="number">_</span><span class="keyword">value</span>,Z<span class="number">_</span>STRVAL<span class="number">_P</span>(get<span class="number">2</span>));</div><div class="line">	<span class="comment">//add_assoc_string(return_value, "param1", ZEND_STRL("test1"));</span></div><div class="line">	<span class="comment">//add_assoc_string(return_value, "param2", ZEND_STRL("test2"));</span></div><div class="line"></div><div class="line">	RETURN<span class="number">_</span>ZVAL(<span class="keyword">return</span><span class="number">_</span><span class="keyword">value</span>, <span class="number">1</span>, <span class="number">0</span>);</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">const zend<span class="number">_f</span>unction<span class="number">_</span>entry adf<span class="number">_f</span>unctions[] = &#123;</div><div class="line"></div><div class="line">	PHP<span class="number">_M</span>E(adf, <span class="number">__</span>construct,NULL,ZEND<span class="number">_</span>ACC<span class="number">_P</span>UBLIC|ZEND<span class="number">_</span>ACC<span class="number">_</span>CTOR)</div><div class="line">	PHP<span class="number">_M</span>E(adf,set,global<span class="number">_</span>setkey<span class="number">_</span>arg,ZEND<span class="number">_</span>ACC<span class="number">_P</span>UBLIC)</div><div class="line">	PHP<span class="number">_M</span>E(adf,get,NULL,ZEND<span class="number">_</span>ACC<span class="number">_P</span>UBLIC)</div><div class="line">	PHP<span class="number">_M</span>E(adf,calladf,NULL,ZEND<span class="number">_</span>ACC<span class="number">_P</span>UBLIC|ZEND<span class="number">_</span>ACC<span class="number">_</span>STATIC)</div><div class="line"></div><div class="line">	PHP<span class="number">_</span>FE<span class="number">_</span>END	<span class="comment">/* Must be the last line in adf_functions[] */</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line">PHP<span class="number">_M</span>INIT<span class="number">_</span>FUNCTION(adf)</div><div class="line">&#123;</div><div class="line">	<span class="comment">/* If you have INI entries, uncomment these lines</span></div><div class="line"><span class="comment">	REGISTER_INI_ENTRIES();</span></div><div class="line"><span class="comment">	*/</span></div><div class="line"></div><div class="line">        zend<span class="number">_</span><span class="keyword">class</span><span class="number">_</span>entry ce;</div><div class="line">        INIT<span class="number">_</span>CLASS<span class="number">_</span>ENTRY(ce, <span class="string">"adf"</span>, adf<span class="number">_f</span>unctions);</div><div class="line">	adf<span class="number">_</span>ce = zend<span class="number">_</span>register<span class="number">_</span>internal<span class="number">_</span><span class="keyword">class</span>(&amp;ce TSRMLS<span class="number">_</span>CC);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">play</span><span class="selector-class">.c</span>中代码：</div><div class="line"></div><div class="line"><span class="selector-tag">PHP_MINIT_FUNCTION</span>(play)</div><div class="line">&#123;</div><div class="line">	<span class="comment">/* If you have INI entries, uncomment these lines</span></div><div class="line"><span class="comment">	REGISTER_INI_ENTRIES();</span></div><div class="line"><span class="comment">	*/</span></div><div class="line"></div><div class="line">	<span class="selector-tag">ZEND_MODULE_STARTUP_N</span>(udf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">	<span class="selector-tag">ZEND_MODULE_STARTUP_N</span>(adf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">	<span class="selector-tag">return</span> <span class="selector-tag">SUCCESS</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/07/2016-02-07-php-ext-7/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2016-02-06-php-ext-6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/06/2016-02-06-php-ext-6/">php7扩展开发[6] 调试Segmentation fault</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/06/2016-02-06-php-ext-6/" class="archive-article-date">
-  	<time datetime="2017-08-06T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="number">1.</span>编译安装php<span class="number">-7.0</span><span class="number">.5</span>，编译时，加上--<span class="keyword">enable</span>-<span class="keyword">debug</span> --<span class="keyword">enable</span>-phpdbg</div><div class="line"></div><div class="line">wget http:<span class="comment">//cn2.php.net/distributions/php-7.0.5.tar.gz</span></div><div class="line">tar zxvf php<span class="number">-7.0</span><span class="number">.5</span>.tar.gz</div><div class="line">cd php<span class="number">-7.0</span><span class="number">.5</span></div><div class="line">./configure --prefix=/usr/<span class="keyword">local</span>/php7<span class="number">.0</span><span class="number">.5</span> --<span class="keyword">enable</span>-<span class="keyword">debug</span> --<span class="keyword">enable</span>-cli --<span class="keyword">enable</span>-fpm   --<span class="keyword">enable</span>-pcntl --with-openssl --<span class="keyword">enable</span>-mysqlnd  --<span class="keyword">enable</span>-phpdbg --<span class="keyword">enable</span>-embed</div><div class="line"><span class="built_in">make</span> &amp;&amp; <span class="built_in">make</span> install</div><div class="line"></div><div class="line"></div><div class="line"><span class="number">2.</span>php7扩展调用时，出现Segmentation fault</div><div class="line"></div><div class="line"><span class="number">2.1</span></div><div class="line">ulimit -c unlimited</div><div class="line">再执行一次php脚本，出现 core.xxxx，OK就先到这里</div><div class="line">gdb php -c core.xxxx</div><div class="line"></div><div class="line"><span class="number">2.2</span></div><div class="line">修改扩展模块中的config.m4</div><div class="line">在其中加入：</div><div class="line"><span class="keyword">if</span> test -z <span class="string">"$PHP_DEBUG"</span> ; then</div><div class="line">    AC_ARG_ENABLE(<span class="keyword">debug</span>, [--<span class="keyword">enable</span>-<span class="keyword">debug</span> <span class="keyword">compile</span> with debugging <span class="keyword">system</span>], [PHP_DEBUG=$enableval],[PHP_DEBUG=no] )</div><div class="line">fi</div><div class="line"></div><div class="line"></div><div class="line"><span class="number">2.3</span> 重新编译扩展源码</div><div class="line">phpize</div><div class="line">./configure --with-php-config=/usr/bin/php-config --<span class="keyword">enable</span>-<span class="keyword">debug</span></div><div class="line"><span class="built_in">make</span> &amp;&amp; <span class="built_in">make</span> install</div><div class="line"></div><div class="line"><span class="number">2.4</span> 确认断点函数</div><div class="line">nm modules/xxx.so 会列出所有的函数</div><div class="line">如果自己写的一个Demo类中的get方法出现问题 一般这个函数名为zim_demo_get</div><div class="line">或者nm modules/xxx.so|grep xxx 找出你自己的写的方法名</div><div class="line"></div><div class="line"><span class="number">3.</span>调试xxxx.php文件</div><div class="line">gdb php 进入gdb界面</div><div class="line"><span class="keyword">break</span> zim_demo_get 会问y/n 选y</div><div class="line">gdb -q xxxx.php -c /etc/php.ini</div><div class="line"></div><div class="line">这时会停在zend_method(demo,get)&#123;&#125;方法内，这时只要输入n回车  输入n回车  输入n回车</div><div class="line">直到出现Segmentation基本上可以定位问题所在。当然你也可以在每一步<span class="keyword">print</span> 打印你想看的变量内容。</div></pre></td></tr></table></figure>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/06/2016-02-06-php-ext-6/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -981,11 +1186,11 @@ typedef struct _zend_fcall_info {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">集群搭建</a>
+                <a href="javascript:void(0)" class="js-tag color1">phpmongodb</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">phpmongodb</a>
+                <a href="javascript:void(0)" class="js-tag color5">集群搭建</a>
               </li>
              
               <li class="article-tag-list-item">
