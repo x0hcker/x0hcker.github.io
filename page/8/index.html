@@ -6,19 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//www.zwting.com">
-  <title>python技术分享[3]－list dict在实际中的应用 | 醉翁亭</title>
+  <title>醉翁亭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="python技术分享[3]－list dict在实际中的应用">
-<meta name="keywords" content="python技术分享">
-<meta property="og:type" content="article">
-<meta property="og:title" content="python技术分享[3]－list dict在实际中的应用">
-<meta property="og:url" content="//www.zwting.com/2017/09/15/2015-04-14-training-python-3/index.html">
+  <meta name="description" content="活在当下，求的不过是顺心意。工作十年了，记录一些生活、工作的经历聊以慰藉。">
+<meta name="keywords" content="前端,js,jquery,javascript,html5,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验,运维,运维开发">
+<meta property="og:type" content="website">
+<meta property="og:title" content="醉翁亭">
+<meta property="og:url" content="//www.zwting.com/page/8/index.html">
 <meta property="og:site_name" content="醉翁亭">
-<meta property="og:description" content="python技术分享[3]－list dict在实际中的应用">
-<meta property="og:updated_time" content="2017-09-18T07:21:53.000Z">
+<meta property="og:description" content="活在当下，求的不过是顺心意。工作十年了，记录一些生活、工作的经历聊以慰藉。">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python技术分享[3]－list dict在实际中的应用">
-<meta name="twitter:description" content="python技术分享[3]－list dict在实际中的应用">
+<meta name="twitter:title" content="醉翁亭">
+<meta name="twitter:description" content="活在当下，求的不过是顺心意。工作十年了，记录一些生活、工作的经历聊以慰藉。">
   
     <link rel="alternative" href="/atom.xml" title="醉翁亭" type="application/atom+xml">
   
@@ -156,91 +155,33 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-2015-04-14-training-python-3" class="article article-type-post " itemscope itemprop="blogPost">
+            
+  
+    <article id="post-team-0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      python技术分享[3]－list dict在实际中的应用
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/04/team-0/">目录索引</a>
     </h1>
   
 
         
-        <a href="/2017/09/15/2015-04-14-training-python-3/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+        <a href="/2017/04/04/team-0/" class="archive-article-date">
+  	<time datetime="2017-04-04T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-04</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li>在python中, list, tuple, dict, set有什么区别, 主要应用在什么样的场景?</li>
-<li>定义:</li>
-</ul>
-<ul>
-<li><ul>
-<li>list:链表,有序的项目, 通过索引进行查找,使用方括号”[]”;<br>tuple:元组,元组将多样的对象集合到一起,不能修改,通过索引进行查找, 使用括号”()”;<br>dict:字典,字典是一组键(key)和值(value)的组合,通过键(key)进行查找,没有顺序, 使用大括号”{}”;<br>set:集合,无序,元素只出现一次, 自动去重,使用”set([])”</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>应用场景:</li>
-</ul>
-<ul>
-<li><ul>
-<li>list, 简单的数据集合,可以使用索引;<br>tuple, 把一些数据当做一个整体去使用,不能修改;<br>dict,使用键值和值进行关联的数据;<br>set,数据只出现一次,只关心数据是否出现, 不关心其位置;</li>
-</ul>
-</li>
-</ul>
-<h4 id="实践样例"><a href="#实践样例" class="headerlink" title="实践样例"></a>实践样例</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：统计游戏中玩家及玩家登陆次数</div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">#统计游戏中玩家及玩家登陆次数</div><div class="line">games = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'a'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>,<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'b'</span>]  </div><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter  </div><div class="line">d = Counter(games) </div><div class="line">print d</div><div class="line"></div><div class="line"></div><div class="line">#排位赛规则，如果积分相同，则按胜利场次，再相同按失败场次</div><div class="line">games =[&#123;<span class="string">'f'</span>:<span class="number">3</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">3</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">20</span>,<span class="string">'b'</span>:<span class="number">16</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">12</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,]</div><div class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter  </div><div class="line">print sorted(games ,key = itemgetter(<span class="string">'f'</span>,<span class="string">'s'</span>,<span class="string">'b'</span>),reverse=<span class="literal">True</span>)</div><div class="line"></div><div class="line"></div><div class="line">#选择某一天，然后以这天为准，次日留存，<span class="number">3</span>日留存，<span class="number">7</span>日留存，<span class="number">14</span>日留存，<span class="number">30</span>日留存</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime,timedelta  </div><div class="line">def GetNextDay(baseday,n):  </div><div class="line">    return str((datetime.strptime(str(baseday),<span class="string">'%Y-%m-%d'</span>)+timedelta(days=n)).date())  </div><div class="line"></div><div class="line"><span class="keyword">import</span> functools  </div><div class="line">selected_day = <span class="string">'2015-02-01'</span></div><div class="line">nday = functools.partial(GetNextDay,selected_day)</div><div class="line">print nday(<span class="number">1</span>)</div><div class="line">print nday(<span class="number">2</span>)</div><div class="line">print nday(<span class="number">6</span>)</div><div class="line">print nday(<span class="number">13</span>)</div><div class="line">print nday(<span class="number">29</span>)</div><div class="line"></div><div class="line">#用来计算游戏包裹里面的变化情况</div><div class="line">def symmetric_difference(_oldobj,_newobj):  </div><div class="line">    _oldkeys = _oldobj.keys()  </div><div class="line">    _newkeys = _newobj.keys()  </div><div class="line">    _diff = &#123;&#125;  </div><div class="line">    for _key <span class="keyword">in</span> set(_oldkeys + _newkeys):  </div><div class="line">        _val = _newobj.get(_key,<span class="number">0</span>) - _oldobj.get(_key,<span class="number">0</span>)  </div><div class="line">        <span class="keyword">if</span> _val:  </div><div class="line">            _diff[_key] = _val   </div><div class="line">    return _diff   </div><div class="line">      </div><div class="line">oldobj = &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">2</span>,<span class="string">'c'</span>:<span class="number">3</span>&#125;  </div><div class="line">newobj = &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">3</span>,<span class="string">'d'</span>:<span class="number">4</span>&#125;  </div><div class="line">print symmetric_difference(oldobj,newobj)</div></pre></td></tr></table></figure>
-<ul>
-<li>输入：python 3.py</li>
-<li>输出：<ul>
-<li>Counter({‘a’: 3, ‘b’: 3, ‘c’: 2, ‘d’: 1})</li>
-<li>[{‘s’: 20, ‘b’: 16, ‘f’: 13}, {‘s’: 12, ‘b’: 12, ‘f’: 13}, {‘s’: 10, ‘b’: 12, ‘f’: 13},  </li>
-<li>{‘s’: - 10, ‘b’: 12, ‘f’: 3}, {‘s’: 10, ‘b’: 12, ‘f’: 3}]- </li>
-<li>2015-02-02- </li>
-<li>2015-02-03- </li>
-<li>2015-02-07- </li>
-<li>2015-02-14- </li>
-<li>2015-03-02- </li>
-<li>{‘c’: -3, ‘b’: 1, ‘d’: 4}- </li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+        <hr>
+<h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><h2 id="1-支撑部门介绍"><a href="#1-支撑部门介绍" class="headerlink" title="1. 支撑部门介绍"></a>1. <a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-1" target="_blank" rel="external">支撑部门介绍</a></h2><h4 id="1-１-部门定义及组织架构"><a href="#1-１-部门定义及组织架构" class="headerlink" title="1.１ 部门定义及组织架构"></a>1.１ 部门定义及组织架构</h4><h4 id="1-2-部门业务定位"><a href="#1-2-部门业务定位" class="headerlink" title="1.2 部门业务定位"></a>1.2 部门业务定位</h4><h4 id="1-３-部门管理理念"><a href="#1-３-部门管理理念" class="headerlink" title="1.３ 部门管理理念"></a>1.３ 部门管理理念</h4><h2 id="2-业务环境概述"><a href="#2-业务环境概述" class="headerlink" title="2.业务环境概述"></a>2.<a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-2" target="_blank" rel="external">业务环境概述</a></h2><h4 id="2-1-游戏服务器架构"><a href="#2-1-游戏服务器架构" class="headerlink" title="2.1 游戏服务器架构"></a>2.1 游戏服务器架构</h4><h4 id="2-1-支撑体系架构"><a href="#2-1-支撑体系架构" class="headerlink" title="2.1 支撑体系架构"></a>2.1 支撑体系架构</h4><h2 id="3-怎样搭建CMDB管理平台"><a href="#3-怎样搭建CMDB管理平台" class="headerlink" title="3.怎样搭建CMDB管理平台"></a>3.<a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-3" target="_blank" rel="external">怎样搭建CMDB管理平台</a></h2><h4 id="3-1-业务背景"><a href="#3-1-业务背景" class="headerlink" title="3.1 业务背景"></a>3.1 业务背景</h4><h4 id="3-2-业务架构"><a href="#3-2-业务架构" class="headerlink" title="3.2 业务架构"></a>3.2 业务架构</h4><h4 id="3-3-数据组织结构"><a href="#3-3-数据组织结构" class="headerlink" title="3.3 数据组织结构"></a>3.3 数据组织结构</h4><h2 id="４-怎样搭建自助式运维平台"><a href="#４-怎样搭建自助式运维平台" class="headerlink" title="４.怎样搭建自助式运维平台"></a>４.<a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-4" target="_blank" rel="external">怎样搭建自助式运维平台</a></h2><h4 id="4-1-业务背景"><a href="#4-1-业务背景" class="headerlink" title="4.1 业务背景"></a>4.1 业务背景</h4><h4 id="4-2-业务架构"><a href="#4-2-业务架构" class="headerlink" title="4.2 业务架构"></a>4.2 业务架构</h4><h4 id="4-3-服务器结构"><a href="#4-3-服务器结构" class="headerlink" title="4.3 服务器结构"></a>4.3 服务器结构</h4><h2 id="5-怎样搭建手游自助式出包平台"><a href="#5-怎样搭建手游自助式出包平台" class="headerlink" title="5.怎样搭建手游自助式出包平台"></a>5.<a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-5" target="_blank" rel="external">怎样搭建手游自助式出包平台</a></h2><h2 id="6-怎样搭建自助式游戏业务系统"><a href="#6-怎样搭建自助式游戏业务系统" class="headerlink" title="6.怎样搭建自助式游戏业务系统"></a>6.<a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-6" target="_blank" rel="external">怎样搭建自助式游戏业务系统</a></h2><h2 id="7-怎样搭建自助式WEB业务系统"><a href="#7-怎样搭建自助式WEB业务系统" class="headerlink" title="7.怎样搭建自助式WEB业务系统"></a>7.<a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-6" target="_blank" rel="external">怎样搭建自助式WEB业务系统</a></h2><h2 id="8-怎样搭建自助式GM管理平台"><a href="#8-怎样搭建自助式GM管理平台" class="headerlink" title="8.怎样搭建自助式GM管理平台"></a>8.<a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-6" target="_blank" rel="external">怎样搭建自助式GM管理平台</a></h2><h2 id="9-怎样搭建登录充账平台"><a href="#9-怎样搭建登录充账平台" class="headerlink" title="9.怎样搭建登录充账平台"></a>9.怎样搭建登录充账平台</h2><h2 id="10-怎样搭建广告平台"><a href="#10-怎样搭建广告平台" class="headerlink" title="10.怎样搭建广告平台"></a>10.怎样搭建广告平台</h2><h2 id="11-怎样搭建数据管理平台"><a href="#11-怎样搭建数据管理平台" class="headerlink" title="11.怎样搭建数据管理平台"></a>11.怎样搭建数据管理平台</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
 
       
 
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/weixindashang.png">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
       
     </div>
     <div class="article-info article-info-index">
@@ -251,7 +192,27 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">开发</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">QA</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SDK开发</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术管理</a>
         		</li>
       		
 		</ul>
@@ -263,7 +224,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        			<a href="/categories/游戏支撑团队如何建立/" class="article-tag-list-link color1">游戏支撑团队如何建立</a>
         		</li>
       		
 		</ul>
@@ -271,83 +232,18 @@
 
 
       
-
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/04/04/team-0/">展开全文 >></a>
+        </p>
       
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
 
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://www.zwting.com/2017/09/15/2015-04-14-training-python-3/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
 
-  
-<nav id="article-nav">
-  
-    <a href="/2017/09/15/2015-05-20-training-python-13/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          python技术分享[13]－ Flask实现restful接口
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2017/09/15/2015-04-13-training-python-2/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">python技术分享[2]－list dict 基本使用</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
+
 
 
 
@@ -355,17 +251,11 @@
 
 
   
-  <div class="duoshuo">
-	<div class="ds-thread" data-thread-key="2015-04-14-training-python-3" data-title="python技术分享[3]－list dict在实际中的应用" data-url="//www.zwting.com/2017/09/15/2015-04-14-training-python-3/"></div>
-
-	<div id="uyan_frame"></div>
-	<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2023055"></script>
-</div>
-
-
   
-
-
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span>
+    </nav>
+  
 
 
           </div>
@@ -387,8 +277,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: false,
-		isPost: true,
+		isHome: true,
+		isPost: false,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

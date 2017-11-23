@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//www.zwting.com">
-  <title>python技术分享[3]－list dict在实际中的应用 | 醉翁亭</title>
+  <title>Erlang程序设计(第2版) 读书笔记【第八章】 | 醉翁亭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="python技术分享[3]－list dict在实际中的应用">
-<meta name="keywords" content="python技术分享">
+  <meta name="description" content="Erlang程序设计的读书笔记">
+<meta name="keywords" content="Erlang程序设计的读书笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python技术分享[3]－list dict在实际中的应用">
-<meta property="og:url" content="//www.zwting.com/2017/09/15/2015-04-14-training-python-3/index.html">
+<meta property="og:title" content="Erlang程序设计(第2版) 读书笔记【第八章】">
+<meta property="og:url" content="//www.zwting.com/2017/11/21/2017-11-21-erlang-07/index.html">
 <meta property="og:site_name" content="醉翁亭">
-<meta property="og:description" content="python技术分享[3]－list dict在实际中的应用">
-<meta property="og:updated_time" content="2017-09-18T07:21:53.000Z">
+<meta property="og:description" content="Erlang程序设计的读书笔记">
+<meta property="og:updated_time" content="2017-11-22T10:15:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python技术分享[3]－list dict在实际中的应用">
-<meta name="twitter:description" content="python技术分享[3]－list dict在实际中的应用">
+<meta name="twitter:title" content="Erlang程序设计(第2版) 读书笔记【第八章】">
+<meta name="twitter:description" content="Erlang程序设计的读书笔记">
   
     <link rel="alternative" href="/atom.xml" title="醉翁亭" type="application/atom+xml">
   
@@ -156,62 +156,40 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-2015-04-14-training-python-3" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-2017-11-21-erlang-07" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      python技术分享[3]－list dict在实际中的应用
+      Erlang程序设计(第2版) 读书笔记【第八章】
     </h1>
   
 
         
-        <a href="/2017/09/15/2015-04-14-training-python-3/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+        <a href="/2017/11/21/2017-11-21-erlang-07/" class="archive-article-date">
+  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li>在python中, list, tuple, dict, set有什么区别, 主要应用在什么样的场景?</li>
-<li>定义:</li>
+        <h5 id="8-10-动态代码载入"><a href="#8-10-动态代码载入" class="headerlink" title="8.10    动态代码载入"></a>8.10    动态代码载入</h5><ul>
+<li>b.erl</li>
 </ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(b)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([x/<span class="number">0</span>])</span>.</div><div class="line"></div><div class="line"><span class="function"><span class="title">x</span><span class="params">()</span> -&gt;</span> <span class="number">2</span>.</div></pre></td></tr></table></figure>
 <ul>
-<li><ul>
-<li>list:链表,有序的项目, 通过索引进行查找,使用方括号”[]”;<br>tuple:元组,元组将多样的对象集合到一起,不能修改,通过索引进行查找, 使用括号”()”;<br>dict:字典,字典是一组键(key)和值(value)的组合,通过键(key)进行查找,没有顺序, 使用大括号”{}”;<br>set:集合,无序,元素只出现一次, 自动去重,使用”set([])”</li>
+<li>a.erl</li>
 </ul>
-</li>
-</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(a)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-compile</span><span class="params">(export_all)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([])</span>.</div><div class="line"></div><div class="line"><span class="function"><span class="title">start</span><span class="params">(Tag)</span> -&gt;</span></div><div class="line"></div><div class="line">  spawn(<span class="keyword">fun</span>() -&gt; loop(Tag) <span class="keyword">end</span>).</div><div class="line"></div><div class="line"><span class="function"><span class="title">loop</span><span class="params">(Tag)</span> -&gt;</span></div><div class="line"></div><div class="line">  sleep(),</div><div class="line">  Val = b:x(),</div><div class="line">  io:format(<span class="string">"Vsn2 (~p) b:x() = ~p~n"</span>,[Tag, Val]),</div><div class="line">  loop(Tag).</div><div class="line"></div><div class="line"><span class="function"><span class="title">sleep</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  <span class="keyword">receive</span></div><div class="line"></div><div class="line">    <span class="keyword">after</span> <span class="number">3000</span> -&gt; <span class="literal">true</span></div><div class="line">  <span class="keyword">end</span>.</div></pre></td></tr></table></figure>
 <ul>
-<li>应用场景:</li>
+<li>在任一时刻，Erlang允许一个模块的两个版本同时运行：当前版和旧版。重新编译某个模块时，任何运行旧版代码的进程都会被终止，当前版成为旧版，新编译的版本则成为当前版。可以把这想象成一个带有两个版本代码的移位寄存器。当添加新代码时，最老的版本就被清除了。一些进程可以运行旧版代码，与此同时，另一些则可以运行新版代码</li>
 </ul>
-<ul>
-<li><ul>
-<li>list, 简单的数据集合,可以使用索引;<br>tuple, 把一些数据当做一个整体去使用,不能修改;<br>dict,使用键值和值进行关联的数据;<br>set,数据只出现一次,只关心数据是否出现, 不关心其位置;</li>
-</ul>
-</li>
-</ul>
-<h4 id="实践样例"><a href="#实践样例" class="headerlink" title="实践样例"></a>实践样例</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：统计游戏中玩家及玩家登陆次数</div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">#统计游戏中玩家及玩家登陆次数</div><div class="line">games = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'a'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>,<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'b'</span>]  </div><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter  </div><div class="line">d = Counter(games) </div><div class="line">print d</div><div class="line"></div><div class="line"></div><div class="line">#排位赛规则，如果积分相同，则按胜利场次，再相同按失败场次</div><div class="line">games =[&#123;<span class="string">'f'</span>:<span class="number">3</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">3</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">20</span>,<span class="string">'b'</span>:<span class="number">16</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">12</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,]</div><div class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter  </div><div class="line">print sorted(games ,key = itemgetter(<span class="string">'f'</span>,<span class="string">'s'</span>,<span class="string">'b'</span>),reverse=<span class="literal">True</span>)</div><div class="line"></div><div class="line"></div><div class="line">#选择某一天，然后以这天为准，次日留存，<span class="number">3</span>日留存，<span class="number">7</span>日留存，<span class="number">14</span>日留存，<span class="number">30</span>日留存</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime,timedelta  </div><div class="line">def GetNextDay(baseday,n):  </div><div class="line">    return str((datetime.strptime(str(baseday),<span class="string">'%Y-%m-%d'</span>)+timedelta(days=n)).date())  </div><div class="line"></div><div class="line"><span class="keyword">import</span> functools  </div><div class="line">selected_day = <span class="string">'2015-02-01'</span></div><div class="line">nday = functools.partial(GetNextDay,selected_day)</div><div class="line">print nday(<span class="number">1</span>)</div><div class="line">print nday(<span class="number">2</span>)</div><div class="line">print nday(<span class="number">6</span>)</div><div class="line">print nday(<span class="number">13</span>)</div><div class="line">print nday(<span class="number">29</span>)</div><div class="line"></div><div class="line">#用来计算游戏包裹里面的变化情况</div><div class="line">def symmetric_difference(_oldobj,_newobj):  </div><div class="line">    _oldkeys = _oldobj.keys()  </div><div class="line">    _newkeys = _newobj.keys()  </div><div class="line">    _diff = &#123;&#125;  </div><div class="line">    for _key <span class="keyword">in</span> set(_oldkeys + _newkeys):  </div><div class="line">        _val = _newobj.get(_key,<span class="number">0</span>) - _oldobj.get(_key,<span class="number">0</span>)  </div><div class="line">        <span class="keyword">if</span> _val:  </div><div class="line">            _diff[_key] = _val   </div><div class="line">    return _diff   </div><div class="line">      </div><div class="line">oldobj = &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">2</span>,<span class="string">'c'</span>:<span class="number">3</span>&#125;  </div><div class="line">newobj = &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">3</span>,<span class="string">'d'</span>:<span class="number">4</span>&#125;  </div><div class="line">print symmetric_difference(oldobj,newobj)</div></pre></td></tr></table></figure>
-<ul>
-<li>输入：python 3.py</li>
-<li>输出：<ul>
-<li>Counter({‘a’: 3, ‘b’: 3, ‘c’: 2, ‘d’: 1})</li>
-<li>[{‘s’: 20, ‘b’: 16, ‘f’: 13}, {‘s’: 12, ‘b’: 12, ‘f’: 13}, {‘s’: 10, ‘b’: 12, ‘f’: 13},  </li>
-<li>{‘s’: - 10, ‘b’: 12, ‘f’: 3}, {‘s’: 10, ‘b’: 12, ‘f’: 3}]- </li>
-<li>2015-02-02- </li>
-<li>2015-02-03- </li>
-<li>2015-02-07- </li>
-<li>2015-02-14- </li>
-<li>2015-03-02- </li>
-<li>{‘c’: -3, ‘b’: 1, ‘d’: 4}- </li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>这样吧</p>
+</blockquote>
 
       
 
@@ -251,7 +229,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
         		</li>
       		
 		</ul>
@@ -263,7 +241,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
         		</li>
       		
 		</ul>
@@ -318,7 +296,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://www.zwting.com/2017/09/15/2015-04-14-training-python-3/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.zwting.com/2017/11/21/2017-11-21-erlang-07/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -332,18 +310,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/09/15/2015-05-20-training-python-13/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/11/21/2017-11-21-erlang-05/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          python技术分享[13]－ Flask实现restful接口
+          Erlang程序设计(第2版) 读书笔记【第五章】
         
       </div>
     </a>
   
   
-    <a href="/2017/09/15/2015-04-13-training-python-2/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">python技术分享[2]－list dict 基本使用</div>
+    <a href="/2017/11/20/2017-11-20-erlang-04/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Erlang程序设计(第2版) 读书笔记【第四章】</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -356,7 +334,7 @@
 
   
   <div class="duoshuo">
-	<div class="ds-thread" data-thread-key="2015-04-14-training-python-3" data-title="python技术分享[3]－list dict在实际中的应用" data-url="//www.zwting.com/2017/09/15/2015-04-14-training-python-3/"></div>
+	<div class="ds-thread" data-thread-key="2017-11-21-erlang-07" data-title="Erlang程序设计(第2版) 读书笔记【第八章】" data-url="//www.zwting.com/2017/11/21/2017-11-21-erlang-07/"></div>
 
 	<div id="uyan_frame"></div>
 	<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2023055"></script>

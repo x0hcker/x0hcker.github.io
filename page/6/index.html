@@ -157,6 +157,260 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2016-02-01-php-ext-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/01/2016-02-01-php-ext-1/">php7扩展开发[1]-helloword</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/01/2016-02-01-php-ext-1/" class="archive-article-date">
+  	<time datetime="2017-08-01T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-环境安装"><a href="#1-环境安装" class="headerlink" title="1.环境安装"></a>1.环境安装</h3><ul>
+<li>centos 7.1</li>
+<li>php 7.0.3</li>
+</ul>
+<h5 id="1-1-RPM安装PHP"><a href="#1-1-RPM安装PHP" class="headerlink" title="1.1 RPM安装PHP"></a>1.1 RPM安装PHP</h5><ul>
+<li>rpm -Uvh <a href="https://mirror.webtatic.com/yum/el7/webtatic-release.rpm" target="_blank" rel="external">https://mirror.webtatic.com/yum/el7/webtatic-release.rpm</a> </li>
+<li>yum install php70w</li>
+<li>php -v 看一下 7.0.3</li>
+<li>php -m 看一下 php70w-devel, php70w-opcache模块安装没有，没有的话安装一下 </li>
+</ul>
+<h5 id="1-2-下载php的源码包"><a href="#1-2-下载php的源码包" class="headerlink" title="1.2 下载php的源码包"></a>1.2 下载php的源码包</h5><ul>
+<li><a href="http://hk1.php.net/distributions/php-7.0.3.tar.gz" target="_blank" rel="external">http://hk1.php.net/distributions/php-7.0.3.tar.gz</a></li>
+<li>把源码放在/usr/local/src/下解压</li>
+</ul>
+<h3 id="2-第一个扩展"><a href="#2-第一个扩展" class="headerlink" title="2.第一个扩展"></a>2.第一个扩展</h3><h4 id="2-1-输入："><a href="#2-1-输入：" class="headerlink" title="2.1 输入："></a>2.1 输入：</h4><p>[root@bogon ext]# cd /usr/local/src/php-7.0.3/ext</p>
+<p>[root@bogon ext]# ./ext_skel –extname=hello</p>
+<h4 id="2-1-输出："><a href="#2-1-输出：" class="headerlink" title="2.1 输出："></a>2.1 输出：</h4><p>Creating directory hello</p>
+<p>Creating basic files: config.m4 config.w32 .gitignore hello.c php_hello.h<br>CREDITS EXPERIMENTAL tests/001.phpt hello.php [done].</p>
+<p>To use your new extension, you will have to execute the following steps:</p>
+<ol>
+<li>$ cd ..</li>
+<li>$ vi ext/hello/config.m4</li>
+<li>$ ./buildconf</li>
+<li>$ ./configure –[with|enable]-hello</li>
+<li>$ make</li>
+<li>$ ./sapi/cli/php -f ext/hello/hello.php</li>
+<li>$ vi ext/hello/hello.c</li>
+<li>$ make</li>
+</ol>
+<p>Repeat steps 3-6 until you are satisfied with ext/hello/config.m4 and<br>step 6 confirms that your module is compiled into PHP. Then, start writing<br>code and repeat the last two steps as often as necessary.</p>
+<h4 id="2-2-输入："><a href="#2-2-输入：" class="headerlink" title="2.2 输入："></a>2.2 输入：</h4><p>[root@bogon ext]# tree hello/</p>
+<h4 id="2-2-输出："><a href="#2-2-输出：" class="headerlink" title="2.2 输出："></a>2.2 输出：</h4><ol>
+<li>hello/</li>
+<li>├── config.m4</li>
+<li>├── config.w32</li>
+<li>├── CREDITS</li>
+<li>├── EXPERIMENTAL</li>
+<li>├── hello.c</li>
+<li>├── hello.php</li>
+<li>├── php_hello.h</li>
+<li>└── tests</li>
+<li>占个位└── 001.phpt</li>
+</ol>
+<h4 id="2-3-修改配置"><a href="#2-3-修改配置" class="headerlink" title="2.3 修改配置"></a>2.3 修改配置</h4><p>[root@bogon ext]# vim hello/config.m4</p>
+<ul>
+<li>dnl PHP_ARG_WITH(hello, for hello support,</li>
+<li>dnl Make sure that the comment is aligned:</li>
+<li>dnl [  –with-hello             Include hello support])</li>
+<li>更改为：</li>
+<li>PHP_ARG_WITH(hello, for hello support,</li>
+<li>dnl Make sure that the comment is aligned:</li>
+<li>[  –with-hello             Include hello support])</li>
+</ul>
+<h4 id="2-4-实现代码"><a href="#2-4-实现代码" class="headerlink" title="2.4 实现代码"></a>2.4 实现代码</h4><pre><code>* 新增 声明函数 PHP_FE(hello,    NULL)；
+* 
+    -     const zend_function_entry hello_functions[] = {
+    -         PHP_FE(hello,    NULL)        /* For testing, remove later. */
+    -         PHP_FE(confirm_hello_compiled,    NULL)
+    -        /* For testing, remove later. */
+    -        PHP_FE_END    /* Must be the last line in hello_functions[] */
+    -    };
+*  新增 函数实现 PHP_FE(hello,    NULL)；放在PHP_FUNCTION(confirm_hello_compiled)上面
+*  
+    - PHP_FUNCTION(hello)
+    - {
+    -     zend_string *strg;
+    -    strg = strpprintf(0, &quot;hello word&quot;);
+    -    RETURN_STR(strg);
+    - }
+</code></pre><h4 id="2-4-编译"><a href="#2-4-编译" class="headerlink" title="2.4 编译"></a>2.4 编译</h4><pre><code>* [root@bogon hello]# pwd
+* /usr/local/src/php-7.0.3/ext/hello
+* [root@bogon hello]# ./configure
+* ............. 
+* [root@bogon hello]# make
+* .............
+* [root@bogon hello]# ll modules/
+* -rw-r--r--. 1 root root   915 Mar 16 21:58 hello.la
+* -rwxr-xr-x. 1 root root 31422 Mar 16 21:58 hello.so
+</code></pre><h4 id="2-5-扩展安装"><a href="#2-5-扩展安装" class="headerlink" title="2.5 扩展安装"></a>2.5 扩展安装</h4><pre><code>1. 改更php.ini 加上[hello] extenstion=hello.so
+2. 安放扩展so文件，如果你不知道PHP扩展在哪，可以用如下方法找
+3. [root@bogon hello]# find / -name opcache.so
+4. cp modules/hello.so /usr/lib64/php/modules
+5. php -m|grep hello 会出现hello字样
+</code></pre><h5 id="2-6-扩展使用"><a href="#2-6-扩展使用" class="headerlink" title="2.6 扩展使用"></a>2.6 扩展使用</h5><pre><code>[root@bogon tests]# cat test.php
+&lt;?php
+
+echo hello();
+echo &quot;\r\n&quot;;
+
+[root@bogon tests]# php test.php
+hello word  
+</code></pre><p>&gt;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/01/2016-02-01-php-ext-1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2017-07-29-training-python-17" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/29/2017-07-29-training-python-17/">python技术分享[18] tornado之TCPServer</a>
+    </h1>
+  
+
+        
+        <a href="/2017/07/29/2017-07-29-training-python-17/" class="archive-article-date">
+  	<time datetime="2017-07-29T10:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h3 id="C10K问题"><a href="#C10K问题" class="headerlink" title="C10K问题"></a>C10K问题</h3><p>C10K问题的一个文章：<a href="http://www.kegel.com/c10k.html" target="_blank" rel="external">http://www.kegel.com/c10k.html</a></p>
+<h3 id="环境准备："><a href="#环境准备：" class="headerlink" title="环境准备："></a>环境准备：</h3><ul>
+<li><p>修改系统打开文件限制</p>
+  <figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">limit -<span class="keyword">n</span> 查看到当前设置 </div><div class="line">grep '<span class="keyword">open</span> files' /proc/$(<span class="keyword">cat</span> /<span class="keyword">var</span>/<span class="keyword">run</span>/xxxx.pid)/limits</div><div class="line">   </div><div class="line">打开 /etc/security/limits.<span class="keyword">conf</span> 并添加（如果已经存在，则修改数值）</div><div class="line"><span class="comment">* soft nofile 1000000</span></div><div class="line"><span class="comment">* hard nofile 1000000</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>网络端口限制修改</p>
+  <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">vi /etc/sysctl.conf</div><div class="line">net.nf_conntrack_max= <span class="number">6553500</span></div><div class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.ip_local_port_range</span>=<span class="string">"1024 65535"</span></div><div class="line"></div><div class="line">使之生效</div><div class="line">sysctl -p</div><div class="line">vi /proc/sys/net/nf_conntrack_max</div><div class="line">查看修改是否成功</div></pre></td></tr></table></figure>
+</li>
+<li><p>解决大量TCP的TIME_WAIT问题</p>
+</li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">查看服务器中TCP连接的状态。</div><div class="line">netstat -<span class="keyword">n</span> | awk '/^tcp/ &#123;++S[<span class="variable">$NF</span>]&#125; END &#123;<span class="keyword">for</span>(a <span class="keyword">in</span> S) <span class="keyword">print</span> a, S[a]&#125;'</div><div class="line">	</div><div class="line">修改系统参数，缓解TIME_WAIT问题</div><div class="line">vi /etc/sysctl.<span class="keyword">conf</span></div><div class="line"><span class="keyword">net</span>.ipv4.tcp_tw_reuse=1</div><div class="line"><span class="keyword">net</span>.ipv4.tcp_tw_recycle=1</div><div class="line"><span class="keyword">net</span>.ipv4.tcp_max_tw_buckets=5000</div><div class="line"><span class="keyword">net</span>.ipv4.tcp_syncookies=1</div><div class="line"></div><div class="line">使之生效</div><div class="line">sysctl -p</div></pre></td></tr></table></figure>
+<h3 id="TcpServer代码"><a href="#TcpServer代码" class="headerlink" title="TcpServer代码"></a>TcpServer代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># encoding: utf-8</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">from</span> tornado <span class="keyword">import</span> process</div><div class="line"><span class="keyword">from</span> tornado <span class="keyword">import</span> web, netutil</div><div class="line"><span class="keyword">from</span> tornado.tcpserver <span class="keyword">import</span> TCPServer</div><div class="line"><span class="keyword">from</span> tornado <span class="keyword">import</span> ioloop</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">import</span> sys, os ,syslog</div><div class="line"><span class="keyword">import</span> json, base64</div><div class="line"><span class="keyword">import</span> multiprocessing</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sub_mod</span><span class="params">(ip, data)</span>:</span></div><div class="line">    <span class="comment">#解密内容</span></div><div class="line">    data = json.loads(base64.b64decode(data))</div><div class="line">    print(data)</div><div class="line"></div><div class="line">    <span class="comment">#db = custom_mongodb(using='logs')</span></div><div class="line">    <span class="comment">#db.insert('test', **data)</span></div><div class="line">    <span class="comment">#db.conn.disconnect()</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MtaskConnection</span><span class="params">(object)</span>:</span></div><div class="line">    stream_set = set([])</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, pool, stream, address)</span>:</span></div><div class="line">        self.pool = pool</div><div class="line">        self.stream = stream</div><div class="line">        self.address = address</div><div class="line">        self.stream_set.add(self.stream)</div><div class="line"></div><div class="line">        self.stream.set_close_callback(self._on_close)</div><div class="line">        self.stream.read_until(<span class="string">'\n'</span>, self._on_read_line)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_on_read_line</span><span class="params">(self, data)</span>:</span></div><div class="line">        self.pool.apply_async(sub_mod, (self.address[<span class="number">0</span>], data))</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_on_close</span><span class="params">(self)</span>:</span></div><div class="line">        MtaskConnection.stream_set.remove(self.stream)</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MonitorTCPServer</span><span class="params">(TCPServer)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        TCPServer.__init__(self)</div><div class="line">        self.pool = multiprocessing.Pool(processes=<span class="number">8</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_stream</span><span class="params">(self, stream, address)</span>:</span></div><div class="line"></div><div class="line">        MtaskConnection(self.pool, stream, address)</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    sockets = netutil.bind_sockets(<span class="number">8080</span>)</div><div class="line">    process.fork_processes(<span class="number">0</span>)</div><div class="line"></div><div class="line">    server = MonitorTCPServer()</div><div class="line">    server.add_sockets(sockets)</div><div class="line">    ioloop.IOLoop.instance().start()</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    syslog.openlog(<span class="string">"monitor_svr"</span>, <span class="number">0</span>, syslog.LOG_LOCAL6)</div><div class="line">    main()</div><div class="line">    syslog.closelog()</div></pre></td></tr></table></figure>
+<h3 id="TcpClient代码"><a href="#TcpClient代码" class="headerlink" title="TcpClient代码"></a>TcpClient代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span>  socket</div><div class="line"><span class="keyword">import</span>  base64</div><div class="line"><span class="keyword">import</span>  json</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">clint</span><span class="params">()</span>:</span></div><div class="line">    host = <span class="string">'127.0.0.1'</span></div><div class="line">    port = <span class="number">8080</span></div><div class="line">    bufsize = <span class="number">1024</span></div><div class="line">    addr = (host, port)</div><div class="line">    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</div><div class="line">    client.connect(addr)</div><div class="line"></div><div class="line">    data =&#123;<span class="string">"value"</span>:<span class="string">"testtestest"</span>&#125;</div><div class="line"></div><div class="line">    <span class="comment"># json化返回数据</span></div><div class="line">    client.send(base64.b64encode(json.dumps(data)) + <span class="string">'\n'</span>)</div><div class="line">    client.close()</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    clint()</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">phpmongodb</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/07/29/2017-07-29-training-python-17/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2017-07-28-training-python-16" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -721,187 +975,9 @@ echo &quot;3&quot; &gt; /opt/zookeeper/data/myid 在172.16.61.104上
 
 
   
-    <article id="post-manage-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/17/manage-2/">如何有效地帮助新人融入项目中</a>
-    </h1>
-  
-
-        
-        <a href="/2017/05/17/manage-2/" class="archive-article-date">
-  	<time datetime="2017-05-17T03:13:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>　　新同事的学习和领悟能力自然是非常重要，然而一个好的“师傅”能够带他进门，也会极大降低学习的门槛。在这里，分享一点自己的心得，我一般按照下面几步进行介绍，而我自己在进入到一个新项目中一般也是按照这几步进行学习的。</p>
-<h4 id="一、项目背景"><a href="#一、项目背景" class="headerlink" title="一、项目背景"></a>一、项目背景</h4><p>　　在这个环节，我会介绍为什么会有这个项目，项目的目标是什么，当前的状态以及项目组的组织结构等。这里，一定不要忘记把当前的产品展示新同事，使其有一个直观的印象。</p>
-<p>　　虽然我们都是搞技术的，但是对于一个新同事，一上来就直接深入细节而抛开项目背景，显然是不合适的。因为，一个人是否可以把事情做好，除了取决于他的技术能力；还和他是否对项目或者业务方向有认可度，是否愿意投入精力去用心让项目成果。如果一个人对项目本身的目标都不认可，怎么可能会做好呢。<br>
-        
-          <a class="article-more-a" href="/2017/05/17/manage-2/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">新人入职</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">培训管理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/怎么样做团队建设/" class="article-tag-list-link color4">怎么样做团队建设</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/05/17/manage-2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-team-6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/16/team-6/">怎样搭建自动式发包平台</a>
-    </h1>
-  
-
-        
-        <a href="/2017/05/16/team-6/" class="archive-article-date">
-  	<time datetime="2017-05-16T07:51:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h2 id="业务背景"><a href="#业务背景" class="headerlink" title="业务背景"></a>业务背景</h2><p>在客户端和服务端都准备完备的前提下，需要实现游戏自助切换版本上线，以往都是运维手工切版本上线，且流程冗长，内容繁多，一不小心就会出问题，而且具体发版的内容需要和后端研发和运营反复核对，所以做此系统用来解决在运营期间每次发版本的问题。<br>
-        
-          <a class="article-more-a" href="/2017/05/16/team-6/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">开发</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">QA</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SDK开发</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术管理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/游戏支撑团队如何建立/" class="article-tag-list-link color1">游戏支撑团队如何建立</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/05/16/team-6/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
     </nav>
   
 
