@@ -15,7 +15,7 @@
 <meta property="og:url" content="//www.zwting.com/2017/11/21/2017-11-21-erlang-07/index.html">
 <meta property="og:site_name" content="醉翁亭">
 <meta property="og:description" content="Erlang程序设计的读书笔记">
-<meta property="og:updated_time" content="2017-11-22T10:15:03.000Z">
+<meta property="og:updated_time" content="2017-11-23T11:06:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Erlang程序设计(第2版) 读书笔记【第八章】">
 <meta name="twitter:description" content="Erlang程序设计的读书笔记">
@@ -187,6 +187,21 @@
 <ul>
 <li>在任一时刻，Erlang允许一个模块的两个版本同时运行：当前版和旧版。重新编译某个模块时，任何运行旧版代码的进程都会被终止，当前版成为旧版，新编译的版本则成为当前版。可以把这想象成一个带有两个版本代码的移位寄存器。当添加新代码时，最老的版本就被清除了。一些进程可以运行旧版代码，与此同时，另一些则可以运行新版代码</li>
 </ul>
+<h5 id="8-1-进程字典"><a href="#8-1-进程字典" class="headerlink" title="8.1    进程字典"></a>8.1    进程字典</h5><p>每个Erlang进程都有一个被称为进程字典（process dictionary）的私有数据存储区域。进程字典是一个关联数组（在其他语言里可能被称作map、hashmap或者散列表），它由若干个键和值组成。每个键只有一个值。</p>
+<ul>
+<li><p>put(Key,Val).<br>给进程字典添加一个Key, Value组合。put的值是OldValue，也就是Key之前关联的值。如果没有之前的值，就返回原子undefined。</p>
+</li>
+<li><p>get(Key).<br>查找Key的值。如果字典里存在Key, Value组合就返回Value，否则返回原子undefined。</p>
+</li>
+<li><p>get().<br>返回整个字典，形式是一个由{Key,Value}元组所构成的列表。</p>
+</li>
+<li><p>get_keys().<br>返回一个列表，内含字典里所有值为Value的键。</p>
+</li>
+<li><p>erase(x).<br>返回Key的关联值，如果不存在则返回原子undefined。最后，删除Key的关联值。</p>
+</li>
+<li><p>erase().<br>删除整个进程字典。返回值是一个由{Key,Value}元组所构成的列表，代表了字典删除之前的状态。</p>
+</li>
+</ul>
 <blockquote>
 <p>这样吧</p>
 </blockquote>
@@ -310,18 +325,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/11/21/2017-11-21-erlang-05/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/11/21/2017-11-24-erlang-11/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Erlang程序设计(第2版) 读书笔记【第五章】
+          Erlang程序设计(第2版) 读书笔记【第十一章】
         
       </div>
     </a>
   
   
-    <a href="/2017/11/20/2017-11-20-erlang-04/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Erlang程序设计(第2版) 读书笔记【第四章】</div>
+    <a href="/2017/11/21/2017-11-21-erlang-05/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Erlang程序设计(第2版) 读书笔记【第五章】</div>
       <i class="icon-circle-right"></i>
     </a>
   
