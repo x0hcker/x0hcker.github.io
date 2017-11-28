@@ -157,6 +157,135 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2016-02-03-php-ext-3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/03/2016-02-03-php-ext-3/">php7扩展开发[3]类构造函数传参</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/03/2016-02-03-php-ext-3/" class="archive-article-date">
+  	<time datetime="2017-08-03T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-需要实现的细节"><a href="#1-需要实现的细节" class="headerlink" title="1.需要实现的细节"></a>1.需要实现的细节</h3><ul>
+<li>实现一个person类 ，实现一个doing方法和saying方法</li>
+<li>在构造方法中传递一个数组，在doing中打印此数组</li>
+<li>saying方法中，构建一个空数组，返回，不需要传参。</li>
+</ul>
+<h3 id="2-class扩展"><a href="#2-class扩展" class="headerlink" title="2.class扩展"></a>2.class扩展</h3><h4 id="2-1创建类的扩展："><a href="#2-1创建类的扩展：" class="headerlink" title="2.1创建类的扩展："></a>2.1创建类的扩展：</h4><p>[root@bogon ext]# cd /usr/local/src/php-7.0.3/ext</p>
+<p>[root@bogon ext]# ./ext_skel –extname=person</p>
+<h4 id="2-2-修改配置"><a href="#2-2-修改配置" class="headerlink" title="2.2 修改配置"></a>2.2 修改配置</h4><p>[root@bogon ext]# vim person/config.m4</p>
+<ul>
+<li>dnl PHP_ARG_WITH(person, for person support,</li>
+<li>dnl Make sure that the comment is aligned:</li>
+<li>dnl [  –with-person             Include person support])</li>
+<li>更改为：</li>
+<li>PHP_ARG_WITH(person, for person support,</li>
+<li>dnl Make sure that the comment is aligned:</li>
+<li>[  –with-person             Include person support])</li>
+</ul>
+<h4 id="2-3-实现代码"><a href="#2-3-实现代码" class="headerlink" title="2.3 实现代码"></a>2.3 实现代码</h4><p>在php_person.h头中加上</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">extern</span> zend_class_entry *person_ce;</div><div class="line"></div><div class="line">PHP_METHOD(person_ce,__construct);</div><div class="line">PHP_METHOD(person_ce,saying);</div><div class="line">PHP_METHOD(person_ce,doing);</div></pre></td></tr></table></figure>
+<p>在person.c头中加上</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">ZEND_BEGIN_ARG_INFO_EX(global_config_arg, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)</div><div class="line">	ZEND_ARG_INFO(<span class="number">0</span>, global_config)</div><div class="line">ZEND_END_ARG_INFO()</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * 声明构造函数</span></div><div class="line"><span class="comment"> * @param</span></div><div class="line"><span class="comment"> * @return</span></div><div class="line"><span class="comment"> */</span></div><div class="line">ZEND_METHOD(person,__construct)&#123;</div><div class="line"></div><div class="line">	zval *array_config;</div><div class="line">	</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, <span class="string">"a"</span>, &amp;array_config) == FAILURE) &#123;</div><div class="line"></div><div class="line">		RETURN_NULL();</div><div class="line">    	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//php_var_dump( &amp;array_config,1 TSRMLS_CC);</span></div><div class="line">	zend_update_property(person_ce, getThis(), <span class="string">"config"</span>, <span class="keyword">sizeof</span>(<span class="string">"config"</span>)<span class="number">-1</span>, array_config TSRMLS_CC);</div><div class="line">	</div><div class="line">	</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * 声明析造函数</span></div><div class="line"><span class="comment"> * @param</span></div><div class="line"><span class="comment"> * @return</span></div><div class="line"><span class="comment"> */</span></div><div class="line">ZEND_METHOD(person,__destruct)&#123;</div><div class="line"></div><div class="line"></div><div class="line">	zend_printf(<span class="string">"destruct\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">ZEND_METHOD(person,doing)&#123;</div><div class="line"></div><div class="line"></div><div class="line">	<span class="comment">//array_init(return_value);</span></div><div class="line">	zval  *array_config;</div><div class="line">	zval  rv; <span class="comment">//php &gt;=7.0</span></div><div class="line"></div><div class="line">	array_config = zend_read_property(person_ce, getThis(), <span class="string">"config"</span>, <span class="keyword">sizeof</span>(<span class="string">"config"</span>)<span class="number">-1</span>, <span class="number">0</span>, &amp;rv TSRMLS_DC);</div><div class="line"></div><div class="line">	<span class="keyword">if</span>( Z_TYPE_P(array_config) == IS_NULL || Z_TYPE_P(array_config) != IS_ARRAY )&#123;</div><div class="line">		<span class="comment">//zend_error(E_ERROR, "framework config error!");</span></div><div class="line">		RETURN_FALSE;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">   <span class="comment">//php_var_dump(&amp;array_config, 1 TSRMLS_CC);</span></div><div class="line"></div><div class="line">	</div><div class="line">	RETURN_ZVAL(array_config, <span class="number">1</span>, <span class="number">0</span>);</div><div class="line">   <span class="comment">//zend_printf("doing\n");</span></div><div class="line">        </div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">ZEND_METHOD(person,saying)&#123;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (zend_parse_parameters_none() == FAILURE) &#123;</div><div class="line"></div><div class="line">		RETURN_FALSE;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">    array_init(return_value);</div><div class="line">	<span class="comment">//zend_printf("saying\n");</span></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//这个函数需要加上声明，去掉了没用的test函数</span></div><div class="line"><span class="keyword">const</span> zend_function_entry person_functions[] = &#123;</div><div class="line"></div><div class="line"></div><div class="line">	ZEND_ME(person, __construct, global_config_arg, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)</div><div class="line">	ZEND_ME(person,doing,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC)</div><div class="line">	ZEND_ME(person,saying,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC)</div><div class="line">	ZEND_ME(person,__destruct,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC|ZEND_ACC_DTOR)</div><div class="line"></div><div class="line">	PHP_FE_END	<span class="comment">/* Must be the last line in person_functions[] */</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//将类和方法注册到zend</span></div><div class="line">PHP_MINIT_FUNCTION(person)</div><div class="line">&#123;</div><div class="line">       zend_class_entry ce;</div><div class="line">       INIT_CLASS_ENTRY(ce, <span class="string">"person"</span>, person_functions);</div><div class="line">       person_ce = zend_register_internal_class(&amp;ce TSRMLS_CC);</div><div class="line"></div><div class="line">       zend_declare_property_null(person_ce,<span class="string">"saying"</span>,<span class="built_in">strlen</span>(<span class="string">"saying"</span>),ZEND_ACC_PUBLIC);</div><div class="line">       zend_declare_property_null(person_ce,<span class="string">"doing"</span>,<span class="built_in">strlen</span>(<span class="string">"doing"</span>),ZEND_ACC_PUBLIC);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="2-4-编译"><a href="#2-4-编译" class="headerlink" title="2.4 编译"></a>2.4 编译</h4><pre><code>* [root@bogon hello]# [root@localhost person]# ./configure &amp;&amp; make &amp;&amp; make install
+</code></pre><h4 id="2-5-扩展安装"><a href="#2-5-扩展安装" class="headerlink" title="2.5 扩展安装"></a>2.5 扩展安装</h4><pre><code>1. 改更php.ini 加上[person] extenstion=person.so
+</code></pre><h5 id="2-6-扩展使用"><a href="#2-6-扩展使用" class="headerlink" title="2.6 扩展使用"></a>2.6 扩展使用</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">[root@bogon tests]# cat test.php</div><div class="line">&lt;?php</div><div class="line">	</div><div class="line"><span class="meta">$</span><span class="bash">n = new person(array(<span class="string">'key'</span>=&gt;<span class="string">'value'</span>));</span></div><div class="line"><span class="meta">var_dump($</span><span class="bash">n-&gt;saying(<span class="string">'error'</span>));</span></div><div class="line"><span class="meta">var_dump($</span><span class="bash">n-&gt;saying());</span></div><div class="line"><span class="meta">var_dump($</span><span class="bash">n-&gt;doing());</span></div><div class="line"></div><div class="line">	</div><div class="line">[root@localhost tests]# php test.php</div><div class="line">PHP Warning:  person::saying() expects exactly 0 parameters, 1 given in /usr/local/src/php-7.0.3/ext/person/tests/test.php on line 5</div><div class="line">bool(false)</div><div class="line">array(0) &#123;</div><div class="line">&#125;</div><div class="line">array(1) &#123;</div><div class="line">  ["key"]=&gt;</div><div class="line">  string(5) "value"</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="3-引用宏说明"><a href="#3-引用宏说明" class="headerlink" title="3.引用宏说明"></a>3.引用宏说明</h3><h5 id="3-1-定义参数宏-Zend-zend-API-h"><a href="#3-1-定义参数宏-Zend-zend-API-h" class="headerlink" title="3.1 定义参数宏 Zend/zend_API.h"></a>3.1 定义参数宏 Zend/zend_API.h</h5><pre><code>[root@bogon php-7.0.3]# grep -A 10  &apos;ZEND_BEGIN_ARG_INFO_EX&apos; ./Zend/*.h
+#define ZEND_BEGIN_ARG_INFO_EX(name, _unused, return_reference, required_num_args)    \
+static const zend_internal_arg_info name[] = { \
+    { (const char*)(zend_uintptr_t)(required_num_args), NULL, 0, return_reference, 0, 0 },
+#define ZEND_BEGIN_ARG_INFO(name, _unused)\
+ZEND_BEGIN_ARG_INFO_EX(name, 0, ZEND_RETURN_VALUE, -1)
+#define ZEND_END_ARG_INFO()        };
+
+
+//宏说明
+ZEND_BEGIN_ARG_INFO(name, pass_rest_by_reference) //开始参数块定义，pass_rest_by_reference为1时，强制所有参数为引用类型
+ZEND_END_ARG_INFO() //结束参数块定义
+
+
+ZEND_ARG_INFO //声明普通参数，可以用来表示PHP中的int, float, double, string等基本数据类型
+
+ZEND_ARG_OBJ_INFO //声明对象类型的参数
+ZEND_ARG_ARRAY_INFO //声明数组类型的参数
+ZEND_ARG_PASS_INFO(pass_by_ref)  //pass_by_ref为1时，强制设置后续的参数为引用类型 
+
+
+zend_internal_arg_info结构定义在./Zend/zend_compile.h:
+typedef struct _zend_internal_arg_info {
+        const char *name; //参数的名称
+        const char *class_name; //当参数类型为类时，指定类的名称
+        zend_uchar type_hint;
+        zend_uchar pass_by_reference;//是否设置为引用，即使用&amp;操作符
+        zend_bool allow_null; //是否允许设置为null
+        zend_bool is_variadic;
+} zend_internal_arg_info;
+</code></pre><h5 id="3-2-定义返回值的宏-Zend-zend-API-h"><a href="#3-2-定义返回值的宏-Zend-zend-API-h" class="headerlink" title="3.2 定义返回值的宏 Zend/zend_API.h"></a>3.2 定义返回值的宏 Zend/zend_API.h</h5><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_BOOL</span>(b)                                  <span class="selector-tag">ZVAL_BOOL</span>(return_value, b)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_NULL</span>()                                   <span class="selector-tag">ZVAL_NULL</span>(return_value)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_LONG</span>(l)                                  <span class="selector-tag">ZVAL_LONG</span>(return_value, l)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_DOUBLE</span>(d)                                <span class="selector-tag">ZVAL_DOUBLE</span>(return_value, d)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_STR</span>(s)                                   <span class="selector-tag">ZVAL_STR</span>(return_value, s)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_INTERNED_STR</span>(s)                  <span class="selector-tag">ZVAL_INTERNED_STR</span>(return_value, s)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_NEW_STR</span>(s)                               <span class="selector-tag">ZVAL_NEW_STR</span>(return_value, s)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_STR_COPY</span>(s)                              <span class="selector-tag">ZVAL_STR_COPY</span>(return_value, s)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_STRING</span>(s)                                <span class="selector-tag">ZVAL_STRING</span>(return_value, s)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_STRINGL</span>(s, l)                    <span class="selector-tag">ZVAL_STRINGL</span>(return_value, s, l)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_EMPTY_STRING</span>()                   <span class="selector-tag">ZVAL_EMPTY_STRING</span>(return_value)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_RES</span>(r)                                   <span class="selector-tag">ZVAL_RES</span>(return_value, r)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_ARR</span>(r)                                   <span class="selector-tag">ZVAL_ARR</span>(return_value, r)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_OBJ</span>(r)                                   <span class="selector-tag">ZVAL_OBJ</span>(return_value, r)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_ZVAL</span>(zv, copy, dtor)             <span class="selector-tag">ZVAL_ZVAL</span>(return_value, zv, copy, dtor)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_FALSE</span>                                    <span class="selector-tag">ZVAL_FALSE</span>(return_value)</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETVAL_TRUE</span>                                     <span class="selector-tag">ZVAL_TRUE</span>(return_value)</div><div class="line"></div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_BOOL</span>(b)                                  &#123; <span class="selector-tag">RETVAL_BOOL</span>(b); <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_NULL</span>()                                   &#123; <span class="selector-tag">RETVAL_NULL</span>(); <span class="selector-tag">return</span>;&#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_LONG</span>(l)                                  &#123; <span class="selector-tag">RETVAL_LONG</span>(l); <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_DOUBLE</span>(d)                                &#123; <span class="selector-tag">RETVAL_DOUBLE</span>(d); <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_STR</span>(s)                                   &#123; <span class="selector-tag">RETVAL_STR</span>(s); <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_INTERNED_STR</span>(s)                  &#123; <span class="selector-tag">RETVAL_INTERNED_STR</span>(s); <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_NEW_STR</span>(s)                               &#123; <span class="selector-tag">RETVAL_NEW_STR</span>(s); <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_STR_COPY</span>(s)                              &#123; <span class="selector-tag">RETVAL_STR_COPY</span>(s); <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_STRING</span>(s)                                &#123; <span class="selector-tag">RETVAL_STRING</span>(s); <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_STRINGL</span>(s, l)                    &#123; <span class="selector-tag">RETVAL_STRINGL</span>(s, l); <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_EMPTY_STRING</span>()                   &#123; <span class="selector-tag">RETVAL_EMPTY_STRING</span>(); <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_RES</span>(r)                                   &#123; <span class="selector-tag">RETVAL_RES</span>(r); <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_ARR</span>(r)                                   &#123; <span class="selector-tag">RETVAL_ARR</span>(r); <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_OBJ</span>(r)                                   &#123; <span class="selector-tag">RETVAL_OBJ</span>(r); <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_ZVAL</span>(zv, copy, dtor)             &#123; <span class="selector-tag">RETVAL_ZVAL</span>(zv, copy, dtor); <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_FALSE</span>                                    &#123; <span class="selector-tag">RETVAL_FALSE</span>; <span class="selector-tag">return</span>; &#125;</div><div class="line"><span class="selector-id">#define</span> <span class="selector-tag">RETURN_TRUE</span>                                     &#123; <span class="selector-tag">RETVAL_TRUE</span>; <span class="selector-tag">return</span>; &#125;</div><div class="line"></div><div class="line"><span class="selector-tag">a</span>)返回数组</div><div class="line"><span class="selector-tag">array_init</span>(return_value);<span class="comment">//初始化return_value成数组，此操作完后就可以返回一个空的数组</span></div><div class="line"></div><div class="line"><span class="selector-tag">b</span>)返回<span class="selector-tag">object</span></div><div class="line"><span class="selector-tag">object_init</span>(return_value);<span class="comment">//初始化return_value成Object，此操作完成后返回一个空的对像</span></div></pre></td></tr></table></figure>
+<h5 id="3-3-类访问控制掩码-Zend-zend-compile-h"><a href="#3-3-类访问控制掩码-Zend-zend-compile-h" class="headerlink" title="3.3 类访问控制掩码 ./Zend/zend_compile.h"></a>3.3 类访问控制掩码 ./Zend/zend_compile.h</h5><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* method flags (types) */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_STATIC                 0x01</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_ABSTRACT               0x02</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_FINAL                  0x04</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_IMPLEMENTED_ABSTRACT           0x08</span></div><div class="line"></div><div class="line"><span class="comment">/* class flags (types) */</span></div><div class="line"><span class="comment">/* ZEND_ACC_IMPLICIT_ABSTRACT_CLASS is used for abstract classes (since it is set by any abstract method even interfaces MAY have it s</span></div><div class="line"><span class="comment">/* ZEND_ACC_EXPLICIT_ABSTRACT_CLASS denotes that a class was explicitly defined as abstract by using the keyword. */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_IMPLICIT_ABSTRACT_CLASS        0x10</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_EXPLICIT_ABSTRACT_CLASS        0x20</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_INTERFACE                          0x40</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_TRAIT                                          0x80</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_ANON_CLASS                 0x100</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_ANON_BOUND                 0x200</span></div><div class="line"></div><div class="line"><span class="comment">/* method flags (visibility) */</span></div><div class="line"><span class="comment">/* The order of those must be kept - public &lt; protected &lt; private */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_PUBLIC         0x100</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_PROTECTED      0x200</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_PRIVATE        0x400</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_PPP_MASK  (ZEND_ACC_PUBLIC | ZEND_ACC_PROTECTED | ZEND_ACC_PRIVATE)</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_CHANGED        0x800</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_IMPLICIT_PUBLIC        0x1000</span></div><div class="line"></div><div class="line"><span class="comment">/* method flags (special method detection) */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_CTOR           0x2000</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_DTOR           0x4000</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ZEND_ACC_CLONE          0x8000</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/03/2016-02-03-php-ext-3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2016-02-02-php-ext-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -898,82 +1027,6 @@ echo &quot;3&quot; &gt; /opt/zookeeper/data/myid 在172.16.61.104上
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/06/30/team-2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-tech-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/27/tech-2/">php的mongodb报错socket-timeout-calling-ismaster.md</a>
-    </h1>
-  
-
-        
-        <a href="/2017/05/27/tech-2/" class="archive-article-date">
-  	<time datetime="2017-05-27T10:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>使用php的mongodb的扩展时报如下错误 No suitable servers found (<code>serverSelectionTryOnce</code> set): [socket timeout calling ismaster on ‘xxx.xxx.xxx.xxx:xx’<br>
-        
-          <a class="article-more-a" href="/2017/05/27/tech-2/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/05/27/tech-2/">展开全文 >></a>
         </p>
       
 
