@@ -157,101 +157,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-2015-04-13-training-python-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-04-13-training-python-2/">python技术分享[2]－list dict 基本使用</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/15/2015-04-13-training-python-2/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>定义:<ul>
-<li>list:链表,有序的项目, 通过索引进行查找,使用方括号”[]”;</li>
-<li>tuple:元组,元组将多样的对象集合到一起,不能修改,通过索引进行查找, 使用括号”()”;</li>
-<li>dict:字典,字典是一组键(key)和值(value)的组合,通过键(key)进行查找,没有顺序, 使用大括号”{}”;</li>
-<li>set:集合,无序,元素只出现一次, 自动去重,使用”set([])”</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">#样例</div><div class="line">mylist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="string">'Oh'</span>]  </div><div class="line">mytuple = (<span class="number">1</span>, <span class="number">2</span>, <span class="string">'Hello'</span>, (<span class="number">4</span>, <span class="number">5</span>))  </div><div class="line">mydict = &#123;<span class="string">'Wang'</span> : <span class="number">1</span>, <span class="string">'Hu'</span> : <span class="number">2</span>, <span class="string">'Liu'</span> : <span class="number">4</span>&#125;  </div><div class="line">myset = set([<span class="string">'Wang'</span>, <span class="string">'Hu'</span>, <span class="string">'Liu'</span>, <span class="number">4</span>, <span class="string">'Wang'</span>])  </div><div class="line">  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mylist)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mytuple)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mydict)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(myset)</span></span></div></pre></td></tr></table></figure>
-<ul>
-<li><p>输出</p>
-<ul>
-<li>[1, 2, 3, 4, ‘Oh’]  </li>
-<li>(1, 2, ‘Hello’, (4, 5))  </li>
-<li>{‘Liu’: 4, ‘Wang’: 1, ‘Hu’: 2}  </li>
-<li>set([‘Liu’, 4, ‘Wang’, ‘Hu’]) </li>
-</ul>
-</li>
-</ul>
-<p>我们重点讲字典和列表</p>
-<p>####一、List操作<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：python入门引导 </div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">#定义函数</div><div class="line">def list_test():</div><div class="line">    #初始化列表</div><div class="line">    sample_list = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">3</span>]</div><div class="line">    print sample_list</div><div class="line">      </div><div class="line">    #得到列表中的某一个值</div><div class="line">    value_start = sample_list[<span class="number">1</span>:<span class="number">3</span>]</div><div class="line">    print value_start</div><div class="line">      </div><div class="line">    end_value = sample_list[<span class="number">-1</span>]</div><div class="line">    print end_value</div><div class="line">      </div><div class="line">    #删除列表的第一个值</div><div class="line">    del sample_list[<span class="number">0</span>]</div><div class="line">      </div><div class="line">    #在列表中插入一个值</div><div class="line">    sample_list[<span class="number">0</span>] = [<span class="string">'sample value'</span>]</div><div class="line">    sample_list[<span class="number">2</span>] = <span class="string">'second'</span></div><div class="line">    sample_list.append(<span class="string">'three'</span>)</div><div class="line">      </div><div class="line">    #得到列表的长度</div><div class="line">    list_length = len(sample_list)</div><div class="line">    print list_length</div><div class="line">      </div><div class="line">    #列表遍历</div><div class="line">    for element <span class="keyword">in</span> sample_list:</div><div class="line">        print(element)</div><div class="line">      </div><div class="line">    #用同一个值初始化，形成一个含有六个元素的列表</div><div class="line">    sample_list = [<span class="string">'test'</span>]*<span class="number">6</span></div><div class="line">    for element <span class="keyword">in</span> sample_list:</div><div class="line">        print(element)</div><div class="line">        </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    #调用函数</div><div class="line">    list_test()</div></pre></td></tr></table></figure></p>
-<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line">#coding=utf<span class="number">-8</span></div><div class="line"></div><div class="line"></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：python入门引导 </div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">def dict_test():</div><div class="line">    #初始化字典    </div><div class="line">    sample_dict = &#123;<span class="string">'a'</span>:<span class="string">'a'</span>,<span class="string">'2'</span>:<span class="string">'b'</span>,<span class="number">3</span>:<span class="string">'c'</span>&#125;</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #获取指定的key的值</div><div class="line">    pop = sample_dict.pop(<span class="string">'2'</span>)</div><div class="line">    print pop</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    get = sample_dict.get(<span class="string">'a'</span>)</div><div class="line">    print get</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    print sample_dict[<span class="number">3</span>]</div><div class="line"></div><div class="line">    #删除指定key的值</div><div class="line">    pop = sample_dict.pop(<span class="number">3</span>)</div><div class="line">    print pop</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #在字典中插入一个值</div><div class="line">    sample_dict.update(&#123;<span class="number">3</span>:<span class="string">'c'</span>,<span class="string">'2'</span>:<span class="string">'b'</span>&#125;)</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #获取字典长度</div><div class="line">    print len(sample_dict)</div><div class="line"></div><div class="line">    #字典遍历</div><div class="line">    for element <span class="keyword">in</span> sample_dict:</div><div class="line">        print element,sample_dict[element]</div><div class="line"></div><div class="line">    for (k, v) <span class="keyword">in</span> sample_dict.items():</div><div class="line">        print <span class="string">"sample_dict[%s] ="</span> % k, v</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    dict_test()</div></pre></td></tr></table></figure>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-04-13-training-python-2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2016-12-06-training-python-14" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -315,6 +220,85 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/09/15/2016-12-06-training-python-14/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2017-04-20-training-python-15" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/15/2017-04-20-training-python-15/">python技术分享[15]－ 视频教程</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/15/2017-04-20-training-python-15/" class="archive-article-date">
+  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>###为了培训python录的视频，每周更新，欢迎拍砖！</p>
+<h3 id="请用无线观看，每个约200M大小"><a href="#请用无线观看，每个约200M大小" class="headerlink" title="请用无线观看，每个约200M大小"></a>请用无线观看，每个约200M大小</h3><embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=z0395naxllw&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
+
+<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=n0395xrwzdg&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
+
+<p>&gt;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/15/2017-04-20-training-python-15/">展开全文 >></a>
         </p>
       
 
@@ -487,19 +471,19 @@
 
 
   
-    <article id="post-2017-04-20-training-python-15" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2015-04-13-training-python-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2017-04-20-training-python-15/">python技术分享[15]－ 视频教程</a>
+      <a class="article-title" href="/2017/09/15/2015-04-13-training-python-2/">python技术分享[2]－list dict 基本使用</a>
     </h1>
   
 
         
-        <a href="/2017/09/15/2017-04-20-training-python-15/" class="archive-article-date">
+        <a href="/2017/09/15/2015-04-13-training-python-2/" class="archive-article-date">
   	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
 </a>
         
@@ -507,14 +491,30 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>###为了培训python录的视频，每周更新，欢迎拍砖！</p>
-<h3 id="请用无线观看，每个约200M大小"><a href="#请用无线观看，每个约200M大小" class="headerlink" title="请用无线观看，每个约200M大小"></a>请用无线观看，每个约200M大小</h3><embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=z0395naxllw&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
-
-<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=n0395xrwzdg&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
-
-<p>&gt;</p>
+        <ul>
+<li>定义:<ul>
+<li>list:链表,有序的项目, 通过索引进行查找,使用方括号”[]”;</li>
+<li>tuple:元组,元组将多样的对象集合到一起,不能修改,通过索引进行查找, 使用括号”()”;</li>
+<li>dict:字典,字典是一组键(key)和值(value)的组合,通过键(key)进行查找,没有顺序, 使用大括号”{}”;</li>
+<li>set:集合,无序,元素只出现一次, 自动去重,使用”set([])”</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">#样例</div><div class="line">mylist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="string">'Oh'</span>]  </div><div class="line">mytuple = (<span class="number">1</span>, <span class="number">2</span>, <span class="string">'Hello'</span>, (<span class="number">4</span>, <span class="number">5</span>))  </div><div class="line">mydict = &#123;<span class="string">'Wang'</span> : <span class="number">1</span>, <span class="string">'Hu'</span> : <span class="number">2</span>, <span class="string">'Liu'</span> : <span class="number">4</span>&#125;  </div><div class="line">myset = set([<span class="string">'Wang'</span>, <span class="string">'Hu'</span>, <span class="string">'Liu'</span>, <span class="number">4</span>, <span class="string">'Wang'</span>])  </div><div class="line">  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mylist)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mytuple)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mydict)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(myset)</span></span></div></pre></td></tr></table></figure>
+<ul>
+<li><p>输出</p>
+<ul>
+<li>[1, 2, 3, 4, ‘Oh’]  </li>
+<li>(1, 2, ‘Hello’, (4, 5))  </li>
+<li>{‘Liu’: 4, ‘Wang’: 1, ‘Hu’: 2}  </li>
+<li>set([‘Liu’, 4, ‘Wang’, ‘Hu’]) </li>
+</ul>
+</li>
+</ul>
+<p>我们重点讲字典和列表</p>
+<p>####一、List操作<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：python入门引导 </div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">#定义函数</div><div class="line">def list_test():</div><div class="line">    #初始化列表</div><div class="line">    sample_list = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">3</span>]</div><div class="line">    print sample_list</div><div class="line">      </div><div class="line">    #得到列表中的某一个值</div><div class="line">    value_start = sample_list[<span class="number">1</span>:<span class="number">3</span>]</div><div class="line">    print value_start</div><div class="line">      </div><div class="line">    end_value = sample_list[<span class="number">-1</span>]</div><div class="line">    print end_value</div><div class="line">      </div><div class="line">    #删除列表的第一个值</div><div class="line">    del sample_list[<span class="number">0</span>]</div><div class="line">      </div><div class="line">    #在列表中插入一个值</div><div class="line">    sample_list[<span class="number">0</span>] = [<span class="string">'sample value'</span>]</div><div class="line">    sample_list[<span class="number">2</span>] = <span class="string">'second'</span></div><div class="line">    sample_list.append(<span class="string">'three'</span>)</div><div class="line">      </div><div class="line">    #得到列表的长度</div><div class="line">    list_length = len(sample_list)</div><div class="line">    print list_length</div><div class="line">      </div><div class="line">    #列表遍历</div><div class="line">    for element <span class="keyword">in</span> sample_list:</div><div class="line">        print(element)</div><div class="line">      </div><div class="line">    #用同一个值初始化，形成一个含有六个元素的列表</div><div class="line">    sample_list = [<span class="string">'test'</span>]*<span class="number">6</span></div><div class="line">    for element <span class="keyword">in</span> sample_list:</div><div class="line">        print(element)</div><div class="line">        </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    #调用函数</div><div class="line">    list_test()</div></pre></td></tr></table></figure></p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line">#coding=utf<span class="number">-8</span></div><div class="line"></div><div class="line"></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：python入门引导 </div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">def dict_test():</div><div class="line">    #初始化字典    </div><div class="line">    sample_dict = &#123;<span class="string">'a'</span>:<span class="string">'a'</span>,<span class="string">'2'</span>:<span class="string">'b'</span>,<span class="number">3</span>:<span class="string">'c'</span>&#125;</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #获取指定的key的值</div><div class="line">    pop = sample_dict.pop(<span class="string">'2'</span>)</div><div class="line">    print pop</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    get = sample_dict.get(<span class="string">'a'</span>)</div><div class="line">    print get</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    print sample_dict[<span class="number">3</span>]</div><div class="line"></div><div class="line">    #删除指定key的值</div><div class="line">    pop = sample_dict.pop(<span class="number">3</span>)</div><div class="line">    print pop</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #在字典中插入一个值</div><div class="line">    sample_dict.update(&#123;<span class="number">3</span>:<span class="string">'c'</span>,<span class="string">'2'</span>:<span class="string">'b'</span>&#125;)</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #获取字典长度</div><div class="line">    print len(sample_dict)</div><div class="line"></div><div class="line">    #字典遍历</div><div class="line">    for element <span class="keyword">in</span> sample_dict:</div><div class="line">        print element,sample_dict[element]</div><div class="line"></div><div class="line">    for (k, v) <span class="keyword">in</span> sample_dict.items():</div><div class="line">        print <span class="string">"sample_dict[%s] ="</span> % k, v</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    dict_test()</div></pre></td></tr></table></figure>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
       
 
       
@@ -548,7 +548,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2017-04-20-training-python-15/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/09/15/2015-04-13-training-python-2/">展开全文 >></a>
         </p>
       
 
@@ -1278,14 +1278,6 @@ Error while executing topic command : replication factor: 3 larger than availabl
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">运维</a>
               </li>
              
@@ -1307,6 +1299,14 @@ Error while executing topic command : replication factor: 3 larger than availabl
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">技术管理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
               </li>
             
             <div class="clearfix"></div>
