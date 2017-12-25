@@ -157,6 +157,90 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2015-05-20-training-python-13" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/15/2015-05-20-training-python-13/">python技术分享[13]－ Flask实现restful接口</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/15/2015-05-20-training-python-13/" class="archive-article-date">
+  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-安装扩展"><a href="#1-安装扩展" class="headerlink" title="1.安装扩展"></a>1.安装扩展</h4><ul>
+<li>pip install flask</li>
+<li>pip install flask-restful</li>
+<li>pip install sqlalchemy</li>
+<li>网方文档地址：<br><a href="http://flask-restful.readthedocs.org/en/0.3.3/" target="_blank" rel="external">http://flask-restful.readthedocs.org/en/0.3.3/</a></li>
+</ul>
+<h4 id="2-models代码："><a href="#2-models代码：" class="headerlink" title="2.models代码："></a>2.models代码：</h4><figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/python</span></div><div class="line"><span class="meta">#coding=utf-8</span></div><div class="line"></div><div class="line">‘’‘</div><div class="line">功能：定义数据表结构，生成需要生成数据表时，直接python models.py</div><div class="line">’‘’</div><div class="line"><span class="title">from</span> sqlalchemy <span class="keyword">import</span> Column</div><div class="line"><span class="title">from</span> sqlalchemy <span class="keyword">import</span> Integer</div><div class="line"><span class="title">from</span> sqlalchemy <span class="keyword">import</span> String</div><div class="line"><span class="title">from</span> sqlalchemy.ext.declarative <span class="keyword">import</span> declarative_base</div><div class="line"></div><div class="line"><span class="type">Base</span> = declarative_base()</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="type">Todo</span>(<span class="type">Base</span>):</span></div><div class="line"><span class="class">    __tablename__ = 'todos'</span></div><div class="line"><span class="class"></span></div><div class="line"><span class="class">    id = <span class="type">Column</span>(<span class="type">Integer</span>, <span class="title">primary_key</span>=<span class="type">True</span>)</span></div><div class="line"><span class="class">    task = <span class="type">Column</span>(<span class="type">String(255)</span>)</span></div><div class="line"><span class="class">‘’‘</span></div><div class="line"><span class="class">if __name__ == "__main__":</span></div><div class="line"><span class="class">    from sqlalchemy import create_engine</span></div><div class="line"><span class="class">    from settings import <span class="type">DB_URI</span></span></div><div class="line"><span class="class">    engine = create_engine(<span class="type">DB_URI</span>)</span></div><div class="line"><span class="class">    <span class="type">Base</span>.metadata.drop_all(<span class="title">engine</span>)</span></div><div class="line"><span class="class">    <span class="type">Base</span>.metadata.create_all(<span class="title">engine</span>)</span></div><div class="line"><span class="class"></span></div><div class="line"><span class="class">’‘’</span></div></pre></td></tr></table></figure>
+<h4 id="3-db代码："><a href="#3-db代码：" class="headerlink" title="3.db代码："></a>3.db代码：</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> create_engine</div><div class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> scoped_session</div><div class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> sessionmaker</div><div class="line">#<span class="keyword">from</span> settings <span class="keyword">import</span> DB_URI</div><div class="line"></div><div class="line">DB_URI = <span class="string">'mysql://root:@localhost:3306/test?charset=utf8'</span></div><div class="line"></div><div class="line">Session = sessionmaker(autocommit=<span class="literal">False</span>,</div><div class="line">                       autoflush=<span class="literal">False</span>,</div><div class="line">                       bind=create_engine(DB_URI))</div><div class="line">session = scoped_session(Session)</div></pre></td></tr></table></figure>
+<h4 id="4-resources代码："><a href="#4-resources代码：" class="headerlink" title="4.resources代码："></a>4.resources代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="string">功能：引入上面的models文件，将数据表数据进行对象化，定义restful资源，返回前数据利用marshal_with装饰器做序列化</span></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="keyword">from</span> models <span class="keyword">import</span> Todo</div><div class="line"><span class="keyword">from</span> db <span class="keyword">import</span> session</div><div class="line"></div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> reqparse</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> abort</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> Resource</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> fields</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> marshal_with</div><div class="line"></div><div class="line">todo_fields = &#123;</div><div class="line">    <span class="string">'id'</span>: fields.Integer,</div><div class="line">    <span class="string">'task'</span>: fields.String,</div><div class="line">    <span class="string">'uri'</span>: fields.Url(<span class="string">'todo'</span>, absolute=<span class="keyword">True</span>),</div><div class="line">&#125;</div><div class="line"></div><div class="line">parser = reqparse.RequestParser()</div><div class="line">parser.add_argument(<span class="string">'task'</span>, type=str)</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TodoResource</span><span class="params">(Resource)</span>:</span></div><div class="line"><span class="meta">    @marshal_with(todo_fields)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, id)</span>:</span></div><div class="line">        todo = session.query(Todo).filter(Todo.id == id).first()</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> todo:</div><div class="line">            abort(<span class="number">404</span>, message=<span class="string">"Todo &#123;&#125; doesn't exist"</span>.format(id))</div><div class="line">        <span class="keyword">return</span> todo</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self, id)</span>:</span></div><div class="line">        todo = session.query(Todo).filter(Todo.id == id).first()</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> todo:</div><div class="line">            abort(<span class="number">404</span>, message=<span class="string">"Todo &#123;&#125; doesn't exist"</span>.format(id))</div><div class="line">        session.delete(todo)</div><div class="line">        session.commit()</div><div class="line">        <span class="keyword">return</span> &#123;&#125;, <span class="number">204</span></div><div class="line"></div><div class="line"><span class="meta">    @marshal_with(todo_fields)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, id)</span>:</span></div><div class="line">        parsed_args = parser.parse_args()</div><div class="line">        <span class="keyword">print</span> parsed_args</div><div class="line">        todo = session.query(Todo).filter(Todo.id == id).first()</div><div class="line">        todo.task = parsed_args[<span class="string">'task'</span>]</div><div class="line">        session.add(todo)</div><div class="line">        session.commit()</div><div class="line">        <span class="keyword">return</span> todo, <span class="number">201</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TodoListResource</span><span class="params">(Resource)</span>:</span></div><div class="line"><span class="meta">    @marshal_with(todo_fields)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></div><div class="line">        todos = session.query(Todo).all()</div><div class="line">        <span class="keyword">return</span> todos</div><div class="line"></div><div class="line"><span class="meta">    @marshal_with(todo_fields)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self)</span>:</span></div><div class="line">        parsed_args = parser.parse_args()</div><div class="line">        todo = Todo(task=parsed_args[<span class="string">'task'</span>])</div><div class="line">        session.add(todo)</div><div class="line">        session.commit()</div><div class="line">        <span class="keyword">return</span> todo, <span class="number">201</span></div></pre></td></tr></table></figure>
+<h4 id="5-app代码："><a href="#5-app代码：" class="headerlink" title="5.app代码："></a>5.app代码：</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> Api</div><div class="line"></div><div class="line">app = Flask(__name__)</div><div class="line">api = Api(app)</div><div class="line"></div><div class="line"><span class="keyword">from</span> resources <span class="keyword">import</span> TodoListResource</div><div class="line"><span class="keyword">from</span> resources <span class="keyword">import</span> TodoResource</div><div class="line"></div><div class="line">api.add_resource(TodoListResource, <span class="string">'/todos'</span>, endpoint=<span class="string">'todos'</span>)</div><div class="line">api.add_resource(TodoResource, <span class="string">'/todos/&lt;string:id&gt;'</span>, endpoint=<span class="string">'todo'</span>)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    app.run(debug=<span class="literal">True</span>)</div></pre></td></tr></table></figure>
+<h4 id="5-test代码："><a href="#5-test代码：" class="headerlink" title="5.test代码："></a>5.test代码：</h4><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> requests, json</div><div class="line"><span class="built_in">print</span> requests.<span class="built_in">get</span>(<span class="string">'http://localhost:5000/todos'</span>).json()</div><div class="line"><span class="built_in">print</span> requests.post(<span class="string">'http://localhost:5000/todos'</span>,</div><div class="line">                 headers=&#123;<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>&#125;,</div><div class="line">                 data=json.dumps(&#123;<span class="string">'task'</span>: <span class="string">'go outside!'</span>&#125;)).json()</div><div class="line"><span class="built_in">print</span> requests.<span class="built_in">get</span>(<span class="string">'http://localhost:5000/todos/1'</span>).json()</div><div class="line"><span class="built_in">print</span> requests.<span class="built_in">put</span>(<span class="string">'http://localhost:5000/todos/1'</span>,</div><div class="line">                headers=&#123;<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>&#125;,</div><div class="line">                data=json.dumps(&#123;<span class="string">'task'</span>: <span class="string">'go to the gym'</span>&#125;)).json()</div><div class="line"><span class="built_in">print</span> requests.<span class="keyword">delete</span>(<span class="string">'http://localhost:5000/todos/1'</span>)</div><div class="line"><span class="built_in">print</span> requests.<span class="built_in">get</span>(<span class="string">'http://localhost:5000/todos'</span>).json()</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/15/2015-05-20-training-python-13/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2016-12-06-training-python-14" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -220,240 +304,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/09/15/2016-12-06-training-python-14/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2017-04-20-training-python-15" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2017-04-20-training-python-15/">python技术分享[15]－ 视频教程</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/15/2017-04-20-training-python-15/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>###为了培训python录的视频，每周更新，欢迎拍砖！</p>
-<h3 id="请用无线观看，每个约200M大小"><a href="#请用无线观看，每个约200M大小" class="headerlink" title="请用无线观看，每个约200M大小"></a>请用无线观看，每个约200M大小</h3><embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=z0395naxllw&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
-
-<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=n0395xrwzdg&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
-
-<p>&gt;</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2017-04-20-training-python-15/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2015-04-10-training-python-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-04-10-training-python-1/">python技术分享[1]－python初步感观</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/15/2015-04-10-training-python-1/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>###1、环境简介</p>
-<ul>
-<li>os系统：centos6.5</li>
-<li>python:2.7.7 或者 2.7.8</li>
-<li>扩展要求:<pre><code>setuptools ,pip     ,MySQL-python    
-</code></pre></li>
-<li>如果你的python版本过低，可以用下面的脚本升级为2.7.7</li>
-<li><p>脚本下载：<a href="http://pan.baidu.com/s/1jGDvFzo" target="_blank" rel="external">http://pan.baidu.com/s/1jGDvFzo</a>      </p>
-</li>
-<li><p>###1.1 python使用方式</p>
-<ul>
-<li>进入python shell环境</li>
-<li>执行脚本模式 python demo.py</li>
-</ul>
-</li>
-</ul>
-<p>###2、初步感观<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"><span class="comment">#!/usr/bin/python2.7</span></div><div class="line"></div><div class="line"><span class="comment">###################################################</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#      python 第一个显示程序，用于初步感观</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">###################################################</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">()</span>:</span></div><div class="line">  <span class="string">'''</span></div><div class="line"><span class="string">  a generator that produces the fibonacci series's elements</span></div><div class="line"><span class="string">  '''</span></div><div class="line"> </div><div class="line">  a = <span class="number">1</span></div><div class="line">  b = <span class="number">1</span></div><div class="line">  <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">    a, b = a + b, a</div><div class="line">    <span class="keyword">yield</span> a</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">nth</span><span class="params">(series, n)</span>:</span></div><div class="line">  <span class="string">'''</span></div><div class="line"><span class="string">  returns the nth element of a series,</span></div><div class="line"><span class="string">  consuming the series' earlier elements.</span></div><div class="line"><span class="string">  '''</span></div><div class="line"> </div><div class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> series:</div><div class="line">    n -= <span class="number">1</span></div><div class="line">    <span class="keyword">if</span> n &lt;= <span class="number">0</span>: <span class="keyword">return</span> x</div><div class="line"> </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	print(<span class="string">'Executed from the command line'</span>)</div><div class="line">	<span class="keyword">print</span> nth(fib(), <span class="number">10</span>)</div></pre></td></tr></table></figure></p>
-<ul>
-<li>执行 </li>
-<li>python demo.py </li>
-<li>输出</li>
-<li>Executed from the command line</li>
-<li>144</li>
-</ul>
-<p>###3、Python格言</p>
-<ul>
-<li>输入python 进入python shell环境</li>
-<li>import this </li>
-<li><p>显示python之禅</p>
-</li>
-<li><h5 id="3-1-Python之禅"><a href="#3-1-Python之禅" class="headerlink" title="3.1 Python之禅"></a>3.1 Python之禅</h5><ul>
-<li>Beautiful is better than ugly.  </li>
-<li>漂亮的代码要比丑陋的代码要好得多。  </li>
-<li>Explicit is better than implicit.  </li>
-<li>明确的定义比 隐式定义更好。  </li>
-<li>Simple is better than complex.  </li>
-<li>简单比负责要好。  </li>
-<li>Complex is better than complicated.  </li>
-<li>负责要比搞复杂要好。  </li>
-<li>Flat is better than nested.  </li>
-<li>扁平结构要比嵌套结构好。  </li>
-<li>Sparse is better than dense.  </li>
-<li>简洁明了的代码要比稠密的代码要好。  </li>
-<li>Readability counts.  </li>
-<li>可读写的计数。  </li>
-<li>Special cases aren’t special enough to break the rules.  </li>
-<li>专门的用例不是特殊到足以违反规则。  </li>
-<li>Although practicality beats purity.  </li>
-<li>是的，实用性练就纯度。  </li>
-<li>Errors should never pass silently.  </li>
-<li>错误永远都不会沉默。  </li>
-<li>Unless explicitly silenced.  </li>
-<li>除非明确啥也不干。  </li>
-<li>In the face of ambiguity, refuse the temptation to guess.  </li>
-<li>面对模糊定义、拒绝视图拍脑袋猜。  </li>
-<li>There should be one– and preferably only one –obvious way to do it.  </li>
-<li>Although that way may not be obvious at first unless you’re Dutch.  </li>
-<li>虽然一开始不那面明确,我们会选择更清晰一条到走。  </li>
-<li>Now is better than never.  </li>
-<li>现在开始总比不开始的要好。  </li>
-<li>Although never is often better than <em>right</em> now.  </li>
-<li>虽然从不尝试总比现在开始尝试好。  </li>
-<li>If the implementation is hard to explain, it’s a bad idea.  </li>
-<li>如果实现难以说明，那它是个坏主意。  </li>
-<li>If the implementation is easy to explain, it may be a good idea.  </li>
-<li>如果实现容易说明，那它是个好主意。  </li>
-<li>Namespaces are one honking great idea – let’s do more of those!  </li>
-<li>名称空间是一个好东西——让我们做更多那样的东西!  </li>
-</ul>
-</li>
-<li><h5 id="3-2-Python“八荣八耻”"><a href="#3-2-Python“八荣八耻”" class="headerlink" title="3.2 Python“八荣八耻”"></a>3.2 Python“八荣八耻”</h5><ul>
-<li>以动手实践为荣 , 以只看不练为耻;</li>
-<li>以打印日志为荣 , 以单步跟踪为耻;</li>
-<li>以空格缩进为荣 , 以制表缩进为耻;</li>
-<li>以单元测试为荣 , 以人工测试为耻;</li>
-<li>以模块复用为荣 , 以复制粘贴为耻;</li>
-<li>以多态应用为荣 , 以分支判断为耻;</li>
-<li>以Pythonic为荣 , 以冗余拖沓为耻;</li>
-<li>以总结分享为荣 , 以跪求其解为耻;</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-04-10-training-python-1/">展开全文 >></a>
         </p>
       
 
@@ -549,6 +399,85 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/09/15/2015-04-13-training-python-2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2017-04-20-training-python-15" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/15/2017-04-20-training-python-15/">python技术分享[15]－ 视频教程</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/15/2017-04-20-training-python-15/" class="archive-article-date">
+  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>###为了培训python录的视频，每周更新，欢迎拍砖！</p>
+<h3 id="请用无线观看，每个约200M大小"><a href="#请用无线观看，每个约200M大小" class="headerlink" title="请用无线观看，每个约200M大小"></a>请用无线观看，每个约200M大小</h3><embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=z0395naxllw&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
+
+<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=n0395xrwzdg&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
+
+<p>&gt;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/15/2017-04-20-training-python-15/">展开全文 >></a>
         </p>
       
 
@@ -1278,6 +1207,14 @@ Error while executing topic command : replication factor: 3 larger than availabl
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">运维</a>
               </li>
              
@@ -1299,14 +1236,6 @@ Error while executing topic command : replication factor: 3 larger than availabl
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">技术管理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
               </li>
             
             <div class="clearfix"></div>
