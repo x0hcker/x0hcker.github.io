@@ -1469,191 +1469,6 @@
 
 
   
-    <article id="post-2017-09-21-flume-kafka-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/20/2017-09-21-flume-kafka-1/">kafka-flume集群环境搭建【3】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/20/2017-09-21-flume-kafka-1/" class="archive-article-date">
-  	<time datetime="2017-09-20T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h3 id="1-Flume与Kafka整合-把flume中的数据sink到Kafka"><a href="#1-Flume与Kafka整合-把flume中的数据sink到Kafka" class="headerlink" title="1.  Flume与Kafka整合 把flume中的数据sink到Kafka"></a>1.  Flume与Kafka整合 把flume中的数据sink到Kafka</h3><ol>
-<li>kafka 集群已经完成</li>
-<li>flume 集群已经完成</li>
-<li>flume 的数据存入kafka</li>
-</ol>
-<p>flume client -&gt; flume server -&gt; kafka 这样也是说只要改flume server中sink配置即可</p>
-<h3 id="2-配置flume"><a href="#2-配置flume" class="headerlink" title="2. 配置flume"></a>2. 配置flume</h3><h5 id="flume-client-conf"><a href="#flume-client-conf" class="headerlink" title="flume-client.conf"></a>flume-client.conf</h5><pre><code>[root@yaliceshi-1-2 ~]# cat /usr/local/flume/conf/flume-client.conf 
-#Agent
-flumeAgent.channels = c1
-flumeAgent.sources  = s1
-flumeAgent.sinks    = k1 
-#flumeAgent Spooling Directory Source
-#注(1)
-flumeAgent.sources.s1.type = spooldir
-flumeAgent.sources.s1.spoolDir  =/data/logs/
-flumeAgent.sources.s1.fileHeader = true
-flumeAgent.sources.s1.deletePolicy =immediate
-flumeAgent.sources.s1.batchSize =1000
-flumeAgent.sources.s1.channels =c1
-flumeAgent.sources.s1.deserializer.maxLineLength =1048576
-#flumeAgent FileChannel
-#注(2)
-flumeAgent.channels.c1.type = file
-flumeAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
-flumeAgent.channels.c1.dataDirs = /data/flume/spool/data
-flumeAgent.channels.c1.capacity = 200000000
-flumeAgent.channels.c1.keep-alive = 30
-flumeAgent.channels.c1.write-timeout = 30
-flumeAgent.channels.c1.checkpoint-timeout=600
-# flumeAgent Sinks
-#注(3)
-flumeAgent.sinks.k1.channel = c1
-flumeAgent.sinks.k1.type = avro
-# connect to CollectorMainAgent
-flumeAgent.sinks.k1.hostname = kafka103
-flumeAgent.sinks.k1.port = 44444
-</code></pre><font style="color:red">  sources 采用 spooldir 类型，监控/data/logs/目录中文件的变化 </font>
-
-<h5 id="flume-server-conf"><a href="#flume-server-conf" class="headerlink" title="flume-server.conf"></a>flume-server.conf</h5><pre><code>[root@yaliceshi-1-3 ~]# cat  /usr/local/flume/conf/flume-server.conf
-#flumeConsolidationAgent
-flumeConsolidationAgent.channels = c1
-flumeConsolidationAgent.sources  = s1
-flumeConsolidationAgent.sinks    = k1 
-
-#flumeConsolidationAgent Avro Source
-#注(4)
-flumeConsolidationAgent.sources.s1.type = avro
-flumeConsolidationAgent.sources.s1.channels = c1
-flumeConsolidationAgent.sources.s1.bind = kafka103
-flumeConsolidationAgent.sources.s1.port = 44444
-
-#flumeConsolidationAgent FileChannel
-flumeConsolidationAgent.channels.c1.type = file
-flumeConsolidationAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
-flumeConsolidationAgent.channels.c1.dataDirs = /data/flume/spool/data
-flumeConsolidationAgent.channels.c1.capacity = 200000000
-flumeConsolidationAgent.channels.c1.keep-alive = 30
-flumeConsolidationAgent.channels.c1.write-timeout = 30
-flumeConsolidationAgent.channels.c1.checkpoint-timeout=600
-
-##flumeConsolidationAgent Memory Channel
-#flumeConsolidationAgent.channels.c1.type = memory
-#flumeConsolidationAgent.channels.c1.capacity = 10000
-#flumeConsolidationAgent.channels.c1.transactionCapacity = 10000
-#flumeConsolidationAgent.channels.c1.byteCapacityBufferPercentage = 20
-#flumeConsolidationAgent.channels.c1.byteCapacity = 800000
-
-#flumeConsolidationAgent Sinks
-#注(5)
-flumeConsolidationAgent.sinks.k1.channel= c1
-flumeConsolidationAgent.sinks.k1.type = file_roll
-flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
-flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
-flumeConsolidationAgent.sinks.k1.batchSize = 10000
-</code></pre><font style="color:red">  sinks 采用 file_roll 类型，数据保存到 /data/tmp目录中 </font>
-
-
-
-<h5 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h5><pre><code>#flumeConsolidationAgent Sinks
-#注(5)
-#flumeConsolidationAgent.sinks.k1.channel= c1
-#flumeConsolidationAgent.sinks.k1.type = file_roll
-#flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
-#flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
-#flumeConsolidationAgent.sinks.k1.batchSize = 10000
-</code></pre><p>上面的注释掉加上下面的内容</p>
-<pre><code>#set sink to hdfs
-flumeConsolidationAgent.sinks.k1.type=org.apache.flume.sink.kafka.KafkaSink
-flumeConsolidationAgent.sinks.k1.topic = ScalaTopic
-flumeConsolidationAgent.sinks.k1.brokerList = kafka102:9092, kafka103:9092, kafka104:9092
-flumeConsolidationAgent.sinks.k1.requiredAcks = 1
-flumeConsolidationAgent.sinks.k1.batchSize = 20
-flumeConsolidationAgent.sinks.k1.channel=c1
-</code></pre><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>启动flume server</p>
-<pre><code>[root@yaliceshi-1-3 ~]#/usr/local/flume/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-server.conf --name flumeConsolidationAgent -Dflume.root.logger=INFO,console
-</code></pre><p>启动flume client</p>
-<pre><code>[root@yaliceshi-1-2 ~]#/usr/local/apache-flume-1.7.0-bin/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-client.conf --name flumeAgent -Dflume.root.logger=INFO,console
-</code></pre><p>启动 kafka 的消费者</p>
-<pre><code>[root@yaliceshi-1-1 ~]/usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
-</code></pre><p>拷个文件到flume客户端监听目录</p>
-<pre><code>[root@yaliceshi-1-2 ~]# echo &quot;test wqc&quot; &gt; test.log;cp test.log  /data/logs
-</code></pre><p>拷个文件到flume客户端监听目录</p>
-<pre><code>[root@yaliceshi-1-1 ~]#  /usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
-
-test wqc
-</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>&gt;</p>
-<ul>
-<li><a href="http://blog.csdn.net/strongyoung88/article/details/52937835" target="_blank" rel="external">http://blog.csdn.net/strongyoung88/article/details/52937835</a></li>
-<li><a href="http://blog.csdn.net/minicto/article/details/53643496" target="_blank" rel="external">http://blog.csdn.net/minicto/article/details/53643496</a></li>
-<li><a href="http://blog.csdn.net/shouhuzhezhishen/article/details/64904848" target="_blank" rel="external">http://blog.csdn.net/shouhuzhezhishen/article/details/64904848</a></li>
-<li><a href="http://blog.csdn.net/candysleep/article/details/53241268" target="_blank" rel="external">http://blog.csdn.net/candysleep/article/details/53241268</a></li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/20/2017-09-21-flume-kafka-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2017-09-18-cluster-flume-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1989,109 +1804,139 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 
 
   
-    <article id="post-2015-04-10-training-python-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2017-09-21-flume-kafka-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-04-10-training-python-1/">python技术分享[1]－python初步感观</a>
+      <a class="article-title" href="/2017/09/20/2017-09-21-flume-kafka-1/">kafka-flume集群环境搭建【3】</a>
     </h1>
   
 
         
-        <a href="/2017/09/15/2015-04-10-training-python-1/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+        <a href="/2017/09/20/2017-09-21-flume-kafka-1/" class="archive-article-date">
+  	<time datetime="2017-09-20T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-20</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>###1、环境简介</p>
+        <hr>
+<h3 id="1-Flume与Kafka整合-把flume中的数据sink到Kafka"><a href="#1-Flume与Kafka整合-把flume中的数据sink到Kafka" class="headerlink" title="1.  Flume与Kafka整合 把flume中的数据sink到Kafka"></a>1.  Flume与Kafka整合 把flume中的数据sink到Kafka</h3><ol>
+<li>kafka 集群已经完成</li>
+<li>flume 集群已经完成</li>
+<li>flume 的数据存入kafka</li>
+</ol>
+<p>flume client -&gt; flume server -&gt; kafka 这样也是说只要改flume server中sink配置即可</p>
+<h3 id="2-配置flume"><a href="#2-配置flume" class="headerlink" title="2. 配置flume"></a>2. 配置flume</h3><h5 id="flume-client-conf"><a href="#flume-client-conf" class="headerlink" title="flume-client.conf"></a>flume-client.conf</h5><pre><code>[root@yaliceshi-1-2 ~]# cat /usr/local/flume/conf/flume-client.conf 
+#Agent
+flumeAgent.channels = c1
+flumeAgent.sources  = s1
+flumeAgent.sinks    = k1 
+#flumeAgent Spooling Directory Source
+#注(1)
+flumeAgent.sources.s1.type = spooldir
+flumeAgent.sources.s1.spoolDir  =/data/logs/
+flumeAgent.sources.s1.fileHeader = true
+flumeAgent.sources.s1.deletePolicy =immediate
+flumeAgent.sources.s1.batchSize =1000
+flumeAgent.sources.s1.channels =c1
+flumeAgent.sources.s1.deserializer.maxLineLength =1048576
+#flumeAgent FileChannel
+#注(2)
+flumeAgent.channels.c1.type = file
+flumeAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
+flumeAgent.channels.c1.dataDirs = /data/flume/spool/data
+flumeAgent.channels.c1.capacity = 200000000
+flumeAgent.channels.c1.keep-alive = 30
+flumeAgent.channels.c1.write-timeout = 30
+flumeAgent.channels.c1.checkpoint-timeout=600
+# flumeAgent Sinks
+#注(3)
+flumeAgent.sinks.k1.channel = c1
+flumeAgent.sinks.k1.type = avro
+# connect to CollectorMainAgent
+flumeAgent.sinks.k1.hostname = kafka103
+flumeAgent.sinks.k1.port = 44444
+</code></pre><font style="color:red">  sources 采用 spooldir 类型，监控/data/logs/目录中文件的变化 </font>
+
+<h5 id="flume-server-conf"><a href="#flume-server-conf" class="headerlink" title="flume-server.conf"></a>flume-server.conf</h5><pre><code>[root@yaliceshi-1-3 ~]# cat  /usr/local/flume/conf/flume-server.conf
+#flumeConsolidationAgent
+flumeConsolidationAgent.channels = c1
+flumeConsolidationAgent.sources  = s1
+flumeConsolidationAgent.sinks    = k1 
+
+#flumeConsolidationAgent Avro Source
+#注(4)
+flumeConsolidationAgent.sources.s1.type = avro
+flumeConsolidationAgent.sources.s1.channels = c1
+flumeConsolidationAgent.sources.s1.bind = kafka103
+flumeConsolidationAgent.sources.s1.port = 44444
+
+#flumeConsolidationAgent FileChannel
+flumeConsolidationAgent.channels.c1.type = file
+flumeConsolidationAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
+flumeConsolidationAgent.channels.c1.dataDirs = /data/flume/spool/data
+flumeConsolidationAgent.channels.c1.capacity = 200000000
+flumeConsolidationAgent.channels.c1.keep-alive = 30
+flumeConsolidationAgent.channels.c1.write-timeout = 30
+flumeConsolidationAgent.channels.c1.checkpoint-timeout=600
+
+##flumeConsolidationAgent Memory Channel
+#flumeConsolidationAgent.channels.c1.type = memory
+#flumeConsolidationAgent.channels.c1.capacity = 10000
+#flumeConsolidationAgent.channels.c1.transactionCapacity = 10000
+#flumeConsolidationAgent.channels.c1.byteCapacityBufferPercentage = 20
+#flumeConsolidationAgent.channels.c1.byteCapacity = 800000
+
+#flumeConsolidationAgent Sinks
+#注(5)
+flumeConsolidationAgent.sinks.k1.channel= c1
+flumeConsolidationAgent.sinks.k1.type = file_roll
+flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
+flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
+flumeConsolidationAgent.sinks.k1.batchSize = 10000
+</code></pre><font style="color:red">  sinks 采用 file_roll 类型，数据保存到 /data/tmp目录中 </font>
+
+
+
+<h5 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h5><pre><code>#flumeConsolidationAgent Sinks
+#注(5)
+#flumeConsolidationAgent.sinks.k1.channel= c1
+#flumeConsolidationAgent.sinks.k1.type = file_roll
+#flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
+#flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
+#flumeConsolidationAgent.sinks.k1.batchSize = 10000
+</code></pre><p>上面的注释掉加上下面的内容</p>
+<pre><code>#set sink to hdfs
+flumeConsolidationAgent.sinks.k1.type=org.apache.flume.sink.kafka.KafkaSink
+flumeConsolidationAgent.sinks.k1.topic = ScalaTopic
+flumeConsolidationAgent.sinks.k1.brokerList = kafka102:9092, kafka103:9092, kafka104:9092
+flumeConsolidationAgent.sinks.k1.requiredAcks = 1
+flumeConsolidationAgent.sinks.k1.batchSize = 20
+flumeConsolidationAgent.sinks.k1.channel=c1
+</code></pre><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>启动flume server</p>
+<pre><code>[root@yaliceshi-1-3 ~]#/usr/local/flume/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-server.conf --name flumeConsolidationAgent -Dflume.root.logger=INFO,console
+</code></pre><p>启动flume client</p>
+<pre><code>[root@yaliceshi-1-2 ~]#/usr/local/apache-flume-1.7.0-bin/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-client.conf --name flumeAgent -Dflume.root.logger=INFO,console
+</code></pre><p>启动 kafka 的消费者</p>
+<pre><code>[root@yaliceshi-1-1 ~]/usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
+</code></pre><p>拷个文件到flume客户端监听目录</p>
+<pre><code>[root@yaliceshi-1-2 ~]# echo &quot;test wqc&quot; &gt; test.log;cp test.log  /data/logs
+</code></pre><p>拷个文件到flume客户端监听目录</p>
+<pre><code>[root@yaliceshi-1-1 ~]#  /usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
+
+test wqc
+</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>&gt;</p>
 <ul>
-<li>os系统：centos6.5</li>
-<li>python:2.7.7 或者 2.7.8</li>
-<li>扩展要求:<pre><code>setuptools ,pip     ,MySQL-python    
-</code></pre></li>
-<li>如果你的python版本过低，可以用下面的脚本升级为2.7.7</li>
-<li><p>脚本下载：<a href="http://pan.baidu.com/s/1jGDvFzo" target="_blank" rel="external">http://pan.baidu.com/s/1jGDvFzo</a>      </p>
-</li>
-<li><p>###1.1 python使用方式</p>
-<ul>
-<li>进入python shell环境</li>
-<li>执行脚本模式 python demo.py</li>
+<li><a href="http://blog.csdn.net/strongyoung88/article/details/52937835" target="_blank" rel="external">http://blog.csdn.net/strongyoung88/article/details/52937835</a></li>
+<li><a href="http://blog.csdn.net/minicto/article/details/53643496" target="_blank" rel="external">http://blog.csdn.net/minicto/article/details/53643496</a></li>
+<li><a href="http://blog.csdn.net/shouhuzhezhishen/article/details/64904848" target="_blank" rel="external">http://blog.csdn.net/shouhuzhezhishen/article/details/64904848</a></li>
+<li><a href="http://blog.csdn.net/candysleep/article/details/53241268" target="_blank" rel="external">http://blog.csdn.net/candysleep/article/details/53241268</a></li>
 </ul>
-</li>
-</ul>
-<p>###2、初步感观<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"><span class="comment">#!/usr/bin/python2.7</span></div><div class="line"></div><div class="line"><span class="comment">###################################################</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#      python 第一个显示程序，用于初步感观</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">###################################################</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">()</span>:</span></div><div class="line">  <span class="string">'''</span></div><div class="line"><span class="string">  a generator that produces the fibonacci series's elements</span></div><div class="line"><span class="string">  '''</span></div><div class="line"> </div><div class="line">  a = <span class="number">1</span></div><div class="line">  b = <span class="number">1</span></div><div class="line">  <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">    a, b = a + b, a</div><div class="line">    <span class="keyword">yield</span> a</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">nth</span><span class="params">(series, n)</span>:</span></div><div class="line">  <span class="string">'''</span></div><div class="line"><span class="string">  returns the nth element of a series,</span></div><div class="line"><span class="string">  consuming the series' earlier elements.</span></div><div class="line"><span class="string">  '''</span></div><div class="line"> </div><div class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> series:</div><div class="line">    n -= <span class="number">1</span></div><div class="line">    <span class="keyword">if</span> n &lt;= <span class="number">0</span>: <span class="keyword">return</span> x</div><div class="line"> </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	print(<span class="string">'Executed from the command line'</span>)</div><div class="line">	<span class="keyword">print</span> nth(fib(), <span class="number">10</span>)</div></pre></td></tr></table></figure></p>
-<ul>
-<li>执行 </li>
-<li>python demo.py </li>
-<li>输出</li>
-<li>Executed from the command line</li>
-<li>144</li>
-</ul>
-<p>###3、Python格言</p>
-<ul>
-<li>输入python 进入python shell环境</li>
-<li>import this </li>
-<li><p>显示python之禅</p>
-</li>
-<li><h5 id="3-1-Python之禅"><a href="#3-1-Python之禅" class="headerlink" title="3.1 Python之禅"></a>3.1 Python之禅</h5><ul>
-<li>Beautiful is better than ugly.  </li>
-<li>漂亮的代码要比丑陋的代码要好得多。  </li>
-<li>Explicit is better than implicit.  </li>
-<li>明确的定义比 隐式定义更好。  </li>
-<li>Simple is better than complex.  </li>
-<li>简单比负责要好。  </li>
-<li>Complex is better than complicated.  </li>
-<li>负责要比搞复杂要好。  </li>
-<li>Flat is better than nested.  </li>
-<li>扁平结构要比嵌套结构好。  </li>
-<li>Sparse is better than dense.  </li>
-<li>简洁明了的代码要比稠密的代码要好。  </li>
-<li>Readability counts.  </li>
-<li>可读写的计数。  </li>
-<li>Special cases aren’t special enough to break the rules.  </li>
-<li>专门的用例不是特殊到足以违反规则。  </li>
-<li>Although practicality beats purity.  </li>
-<li>是的，实用性练就纯度。  </li>
-<li>Errors should never pass silently.  </li>
-<li>错误永远都不会沉默。  </li>
-<li>Unless explicitly silenced.  </li>
-<li>除非明确啥也不干。  </li>
-<li>In the face of ambiguity, refuse the temptation to guess.  </li>
-<li>面对模糊定义、拒绝视图拍脑袋猜。  </li>
-<li>There should be one– and preferably only one –obvious way to do it.  </li>
-<li>Although that way may not be obvious at first unless you’re Dutch.  </li>
-<li>虽然一开始不那面明确,我们会选择更清晰一条到走。  </li>
-<li>Now is better than never.  </li>
-<li>现在开始总比不开始的要好。  </li>
-<li>Although never is often better than <em>right</em> now.  </li>
-<li>虽然从不尝试总比现在开始尝试好。  </li>
-<li>If the implementation is hard to explain, it’s a bad idea.  </li>
-<li>如果实现难以说明，那它是个坏主意。  </li>
-<li>If the implementation is easy to explain, it may be a good idea.  </li>
-<li>如果实现容易说明，那它是个好主意。  </li>
-<li>Namespaces are one honking great idea – let’s do more of those!  </li>
-<li>名称空间是一个好东西——让我们做更多那样的东西!  </li>
-</ul>
-</li>
-<li><h5 id="3-2-Python“八荣八耻”"><a href="#3-2-Python“八荣八耻”" class="headerlink" title="3.2 Python“八荣八耻”"></a>3.2 Python“八荣八耻”</h5><ul>
-<li>以动手实践为荣 , 以只看不练为耻;</li>
-<li>以打印日志为荣 , 以单步跟踪为耻;</li>
-<li>以空格缩进为荣 , 以制表缩进为耻;</li>
-<li>以单元测试为荣 , 以人工测试为耻;</li>
-<li>以模块复用为荣 , 以复制粘贴为耻;</li>
-<li>以多态应用为荣 , 以分支判断为耻;</li>
-<li>以Pythonic为荣 , 以冗余拖沓为耻;</li>
-<li>以总结分享为荣 , 以跪求其解为耻;</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
 
       
 
@@ -2105,7 +1950,7 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
         		</li>
       		
 		</ul>
@@ -2117,7 +1962,7 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
         		</li>
       		
 		</ul>
@@ -2126,7 +1971,7 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-04-10-training-python-1/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/09/20/2017-09-21-flume-kafka-1/">展开全文 >></a>
         </p>
       
 
@@ -2144,19 +1989,19 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 
 
   
-    <article id="post-2015-04-17-training-python-4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2015-04-13-training-python-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-04-17-training-python-4/">python技术分享[4]－使用pylint约束代码规范</a>
+      <a class="article-title" href="/2017/09/15/2015-04-13-training-python-2/">python技术分享[2]－list dict 基本使用</a>
     </h1>
   
 
         
-        <a href="/2017/09/15/2015-04-17-training-python-4/" class="archive-article-date">
+        <a href="/2017/09/15/2015-04-13-training-python-2/" class="archive-article-date">
   	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
 </a>
         
@@ -2165,82 +2010,29 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
     <div class="article-entry" itemprop="articleBody">
       
         <ul>
-<li>pylint是一个Python代码风格的检查工具, 它依据的标准是Guido van Rossum的PEP8<br>* Pylint:  <a href="http://www.logilab.org/project/pylint" target="_blank" rel="external">http://www.logilab.org/project/pylint</a></li>
-<li>Pep8:    <a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="external">https://www.python.org/dev/peps/pep-0008/</a></li>
-<li>Pep8中文: <a href="http://code.google.com/p/zhong-wiki/wiki/PEP8" target="_blank" rel="external">http://code.google.com/p/zhong-wiki/wiki/PEP8</a> </li>
-<li>原谅我用2007年译的版本，我只是觉得当年这篇比较靠近原意。</li>
-</ul>
-<h4 id="1-扩展安装："><a href="#1-扩展安装：" class="headerlink" title="1.扩展安装："></a>1.扩展安装：</h4><ul>
-<li>pip install pylint</li>
-<li>可以这样用 pylint demo.py </li>
-<li></li>
-<li>pip install pep8</li>
-<li>pep8 –show-source –show-pep8  demo.py </li>
-</ul>
-<h4 id="2-Pylint-的输出"><a href="#2-Pylint-的输出" class="headerlink" title="2.Pylint 的输出"></a>2.Pylint 的输出</h4><ul>
-<li>对于每一个 Python 模块，Pylint 的结果中首先显示一些”*”字符 , 后面紧跟模块的名字，然后是一系列的 message, </li>
-<li>message 的格式如下：</li>
-<li>MESSAGE_TYPE: LINE_NUM:[OBJECT:] MESSAGE <ul>
-<li>MESSAGE_TYPE 有如下几种：</li>
-<li>(C) 惯例。违反了编码风格标准</li>
-<li>(R) 重构。写得非常糟糕的代码。</li>
-<li>(W) 警告。某些 Python 特定的问题。</li>
-<li>(E) 错误。很可能是代码中的错误。</li>
-<li>(F) 致命错误。阻止 Pylint 进一步运行的错误。</li>
+<li>定义:<ul>
+<li>list:链表,有序的项目, 通过索引进行查找,使用方括号”[]”;</li>
+<li>tuple:元组,元组将多样的对象集合到一起,不能修改,通过索引进行查找, 使用括号”()”;</li>
+<li>dict:字典,字典是一组键(key)和值(value)的组合,通过键(key)进行查找,没有顺序, 使用大括号”{}”;</li>
+<li>set:集合,无序,元素只出现一次, 自动去重,使用”set([])”</li>
 </ul>
 </li>
 </ul>
-<p>####3.样本实例<br>demo.py在 <a href="http://djshell.github.io/python/training-python-1.html" target="_blank" rel="external">http://djshell.github.io/python/training-python-1.html</a></p>
-<p>######3.1检查python格式</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">#样例</div><div class="line">mylist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="string">'Oh'</span>]  </div><div class="line">mytuple = (<span class="number">1</span>, <span class="number">2</span>, <span class="string">'Hello'</span>, (<span class="number">4</span>, <span class="number">5</span>))  </div><div class="line">mydict = &#123;<span class="string">'Wang'</span> : <span class="number">1</span>, <span class="string">'Hu'</span> : <span class="number">2</span>, <span class="string">'Liu'</span> : <span class="number">4</span>&#125;  </div><div class="line">myset = set([<span class="string">'Wang'</span>, <span class="string">'Hu'</span>, <span class="string">'Liu'</span>, <span class="number">4</span>, <span class="string">'Wang'</span>])  </div><div class="line">  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mylist)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mytuple)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mydict)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(myset)</span></span></div></pre></td></tr></table></figure>
 <ul>
-<li>pylint demo.py <ul>
-<li>No config file found, using default configuration</li>
-<li><strong><strong><strong>*</strong></strong></strong> Module demo</li>
-<li>W: 11, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
-<li>W: 15, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
-<li>W: 16, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
-<li>W: 17, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
-<li>W: 18, 0: Bad indentation. Found 4 spaces, expected 8 (bad-indentation)</li>
-<li>W: 19, 0: Bad indentation. Found 4 spaces, expected 8 (bad-indentation)</li>
-<li>W: 22, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
-<li>W: 27, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
-<li>W: 28, 0: Bad indentation. Found 4 spaces, expected 8 (bad-indentation)</li>
-<li>W: 29, 0: Bad indentation. Found 4 spaces, expected 8 (bad-indentation)</li>
-<li>C: 32, 0: Unnecessary parens after u’print’ keyword (superfluous-parens)</li>
-<li>C:  1, 0: Missing module docstring (missing-docstring)</li>
-<li>C: 15, 2: Invalid variable name “a” (invalid-name)</li>
-<li>C: 16, 2: Invalid variable name “b” (invalid-name)</li>
-<li>C: 18, 4: Invalid variable name “a” (invalid-name)</li>
-<li>C: 18, 7: Invalid variable name “b” (invalid-name)</li>
-<li>C: 21, 0: Invalid argument name “n” (invalid-name)</li>
-<li>C: 27, 6: Invalid variable name “x” (invalid-name)</li>
-<li>C: 29,15: More than one statement on a single line (multiple-statements)</li>
-<li>…………</li>
-<li>…………省略多行，下面是得分</li>
-<li>Your code has been rated at -2.67/10<br><br><br><br></li>
-</ul>
-</li>
-<li>可能是在页面复制贴粘时空格数据发生改变了，我们只得了负分现在我们来按照提示整理格式<ul>
-<li>Bad indentation. Found 2 spaces, expected 4 (bad-indentation) 空格期望四个，错误缩进</li>
-<li>Unnecessary parens after u’print’ keyword (superfluous-parens) print 之后多余的小括号</li>
-<li>Missing module docstring (missing-docstring) 没有模块文档说明</li>
-<li>Invalid variable name “a” (invalid-name) 非法的变量</li>
-<li>No space allowed around keyword argument assignment 不要在用于指定<br>关键字参数 (keyword argument) 或默认参数值的 ‘=’ 号周围使用空格</li>
-<li>Trailing whitespace (trailing-whitespace) 尾随空白，行尾有空白字符，需要删除</li>
-</ul>
-</li>
-</ul>
-<p><br><br></p>
+<li><p>输出</p>
 <ul>
-<li>按照提示更改代码直到得到10分<ul>
-<li>Your code has been rated at 10.00/10 (previous run: 10.00/10, +0.00)</li>
+<li>[1, 2, 3, 4, ‘Oh’]  </li>
+<li>(1, 2, ‘Hello’, (4, 5))  </li>
+<li>{‘Liu’: 4, ‘Wang’: 1, ‘Hu’: 2}  </li>
+<li>set([‘Liu’, 4, ‘Wang’, ‘Hu’]) </li>
 </ul>
 </li>
 </ul>
-<p>####更改完的代码如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"><span class="comment">#!/usr/bin/python2.7</span></div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="string">python pylint demo</span></div><div class="line"><span class="string">'''</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">()</span>:</span></div><div class="line">    <span class="string">'''</span></div><div class="line"><span class="string">    a generator that produces the fibonacci series's elements</span></div><div class="line"><span class="string">    '''</span></div><div class="line"></div><div class="line">    int_a = <span class="number">1</span></div><div class="line">    int_b = <span class="number">1</span></div><div class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">        int_a, int_b = int_a + int_b, int_a</div><div class="line">        <span class="keyword">yield</span> int_a</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">nth</span><span class="params">(series, num)</span>:</span></div><div class="line">    <span class="string">'''</span></div><div class="line"><span class="string">   returns the nth element of a series, consuming the series' earlier elements.    '''</span></div><div class="line"></div><div class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> series:</div><div class="line">        num -= <span class="number">1</span></div><div class="line">        <span class="keyword">if</span> num &lt;= <span class="number">0</span>:</div><div class="line">            <span class="keyword">return</span> key</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    <span class="keyword">print</span> <span class="string">'Executed from the command line'</span></div><div class="line">    <span class="keyword">print</span> nth(fib(), <span class="number">10</span>)</div></pre></td></tr></table></figure>
+<p>我们重点讲字典和列表</p>
+<p>####一、List操作<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：python入门引导 </div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">#定义函数</div><div class="line">def list_test():</div><div class="line">    #初始化列表</div><div class="line">    sample_list = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">3</span>]</div><div class="line">    print sample_list</div><div class="line">      </div><div class="line">    #得到列表中的某一个值</div><div class="line">    value_start = sample_list[<span class="number">1</span>:<span class="number">3</span>]</div><div class="line">    print value_start</div><div class="line">      </div><div class="line">    end_value = sample_list[<span class="number">-1</span>]</div><div class="line">    print end_value</div><div class="line">      </div><div class="line">    #删除列表的第一个值</div><div class="line">    del sample_list[<span class="number">0</span>]</div><div class="line">      </div><div class="line">    #在列表中插入一个值</div><div class="line">    sample_list[<span class="number">0</span>] = [<span class="string">'sample value'</span>]</div><div class="line">    sample_list[<span class="number">2</span>] = <span class="string">'second'</span></div><div class="line">    sample_list.append(<span class="string">'three'</span>)</div><div class="line">      </div><div class="line">    #得到列表的长度</div><div class="line">    list_length = len(sample_list)</div><div class="line">    print list_length</div><div class="line">      </div><div class="line">    #列表遍历</div><div class="line">    for element <span class="keyword">in</span> sample_list:</div><div class="line">        print(element)</div><div class="line">      </div><div class="line">    #用同一个值初始化，形成一个含有六个元素的列表</div><div class="line">    sample_list = [<span class="string">'test'</span>]*<span class="number">6</span></div><div class="line">    for element <span class="keyword">in</span> sample_list:</div><div class="line">        print(element)</div><div class="line">        </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    #调用函数</div><div class="line">    list_test()</div></pre></td></tr></table></figure></p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line">#coding=utf<span class="number">-8</span></div><div class="line"></div><div class="line"></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：python入门引导 </div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">def dict_test():</div><div class="line">    #初始化字典    </div><div class="line">    sample_dict = &#123;<span class="string">'a'</span>:<span class="string">'a'</span>,<span class="string">'2'</span>:<span class="string">'b'</span>,<span class="number">3</span>:<span class="string">'c'</span>&#125;</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #获取指定的key的值</div><div class="line">    pop = sample_dict.pop(<span class="string">'2'</span>)</div><div class="line">    print pop</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    get = sample_dict.get(<span class="string">'a'</span>)</div><div class="line">    print get</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    print sample_dict[<span class="number">3</span>]</div><div class="line"></div><div class="line">    #删除指定key的值</div><div class="line">    pop = sample_dict.pop(<span class="number">3</span>)</div><div class="line">    print pop</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #在字典中插入一个值</div><div class="line">    sample_dict.update(&#123;<span class="number">3</span>:<span class="string">'c'</span>,<span class="string">'2'</span>:<span class="string">'b'</span>&#125;)</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #获取字典长度</div><div class="line">    print len(sample_dict)</div><div class="line"></div><div class="line">    #字典遍历</div><div class="line">    for element <span class="keyword">in</span> sample_dict:</div><div class="line">        print element,sample_dict[element]</div><div class="line"></div><div class="line">    for (k, v) <span class="keyword">in</span> sample_dict.items():</div><div class="line">        print <span class="string">"sample_dict[%s] ="</span> % k, v</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    dict_test()</div></pre></td></tr></table></figure>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
       
 
       
@@ -2274,7 +2066,7 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-04-17-training-python-4/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/09/15/2015-04-13-training-python-2/">展开全文 >></a>
         </p>
       
 
@@ -2400,6 +2192,81 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 
 
   
+    <article id="post-2015-04-23-training-python-6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/15/2015-04-23-training-python-6/">python技术分享[6]－ 自定义数据库连接池</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/15/2015-04-23-training-python-6/" class="archive-article-date">
+  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-数据库连接池原理："><a href="#1-数据库连接池原理：" class="headerlink" title="1.数据库连接池原理："></a>1.数据库连接池原理：</h4><p>&gt;<br>连接池基本的思想是在系统初始化的时候，将数据库连接作为对象存储在内存中，当用户需要访问数据库时，并非建立一个新的连接，而是从连接池中取出一个已建立的空闲连接对象。使用完毕后，用户也并非将连接关闭，而是将连接放回连接池中，以供下一个请求访问使用。而连接的建立、断开都由连接池自身来管理。同时，还可以通过设置连接池的参数来控制连接池中的初始连接数、连接的上下限数以及每个连接的最大使用次数、最大空闲时间等等。也可以通过其自身的管理机制来监视数据库连接的数量、使用情况等。</p>
+<h4 id="2-代码："><a href="#2-代码：" class="headerlink" title="2.代码："></a>2.代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/python</span></div><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> MySQLdb</div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">import</span> string</div><div class="line"> </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PooledConnection</span>:</span></div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, maxconnections, connstr,dbtype)</span>:</span></div><div class="line">        <span class="keyword">from</span> Queue <span class="keyword">import</span> Queue</div><div class="line">        self._pool = Queue(maxconnections) <span class="comment"># create the queue</span></div><div class="line">        self.connstr = connstr</div><div class="line">        self.dbtype=dbtype</div><div class="line">        self.maxconnections=maxconnections</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(maxconnections):</div><div class="line">                self.fillConnection(self.CreateConnection(connstr,dbtype))</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> e</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fillConnection</span><span class="params">(self,conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.put(conn)</div><div class="line"> </div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"fillConnection error:"</span>+str(e)</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">returnConnection</span><span class="params">(self, conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.put(conn)</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"returnConnection error:"</span>+str(e)</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getConnection</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">return</span> self._pool.get()</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"getConnection error:"</span>+str(e)</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ColseConnection</span><span class="params">(self,conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.get().close()</div><div class="line">            self.fillConnection(self.CreateConnection(connstr,dbtype))</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"CloseConnection error:"</span>+str(e)</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">CreateConnection</span><span class="params">(self,connstr,dbtype)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            conndb=MySQLdb.connect(db=<span class="string">'test'</span>,host=<span class="string">'127.0.0.1'</span>,user=<span class="string">'root'</span>,passwd=<span class="string">''</span>);</div><div class="line">            conndb.clientinfo = <span class="string">'datasync connection pool from datasync.py'</span>;</div><div class="line">            conndb.ping();</div><div class="line">            <span class="keyword">return</span> conndb</div><div class="line">        <span class="keyword">except</span> Exception, e:</div><div class="line">            <span class="keyword">print</span> <span class="string">'ssssssssss'</span></div><div class="line">            <span class="keyword">raise</span> <span class="string">'conn targetdb datasource Excepts,%s!!!(%s).'</span>%(<span class="string">'127.0.0.1'</span>,str(e))</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"> </div><div class="line"><span class="comment">#创建连接池：</span></div><div class="line">connstring=<span class="string">"rooot#' '#127.0.0.1:3306/test"</span></div><div class="line">pool=PooledConnection(<span class="number">10</span>,connstring,<span class="string">"mysql"</span>);</div><div class="line"><span class="comment">#获取连接：</span></div><div class="line">conn = pool.getConnection()</div><div class="line">time.sleep(<span class="number">15</span>)</div><div class="line">cursor = conn.cursor()</div><div class="line">cursor.execute(<span class="string">"""select * from emp"""</span>)</div><div class="line">result = cursor.fetchall();</div><div class="line"><span class="keyword">print</span>  cursor.description</div><div class="line">conn.close();</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/15/2015-04-23-training-python-6/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -2414,7 +2281,7 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2017 醉翁亭
+    		&copy; 2018 醉翁亭
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -2503,11 +2370,11 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">集群搭建</a>
+                <a href="javascript:void(0)" class="js-tag color1">phpmongodb</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">phpmongodb</a>
+                <a href="javascript:void(0)" class="js-tag color5">集群搭建</a>
               </li>
              
               <li class="article-tag-list-item">
