@@ -242,105 +242,6 @@
 
 
   
-    <article id="post-2017-11-21-erlang-05" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/21/2017-11-21-erlang-05/">Erlang程序设计(第2版) 读书笔记【第五章】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/11/21/2017-11-21-erlang-05/" class="archive-article-date">
-  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="第5章-记录与映射组"><a href="#第5章-记录与映射组" class="headerlink" title="第5章 记录与映射组"></a>第5章 记录与映射组</h5><ul>
-<li>元组用于保存固定数量的元素，而列表用于保存可变数量的元素。</li>
-<li>记录（record）和映射组（map）。记录其实就是元组的另一种形式。通过使用记录，可以给元组里的各个元素关联一个名称。</li>
-</ul>
-<h6 id="记录适合以下的情形：："><a href="#记录适合以下的情形：：" class="headerlink" title="记录适合以下的情形：："></a>记录适合以下的情形：：</h6><ul>
-<li>当你可以用一些预先确定且数量固定的原子来表示数据时；</li>
-<li>当记录里的元素数量和元素名称不会随时间而改变时；</li>
-<li>当存储空间是个问题时，典型的案例是你有一大堆元组，并且每个元组都有相同的结构。</li>
-</ul>
-<figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby"><span class="class"><span class="keyword">module</span>(<span class="title">myconf</span>).</span></span></div><div class="line"><span class="ruby">-record(server_opts, &#123;port, ip = <span class="string">"127.0.0.1"</span>, max_connections = <span class="number">10</span>&#125;).</span></div><div class="line"><span class="ruby"></span></div><div class="line"><span class="ruby"><span class="string">%%#server_opts&#123;port = 8000,ip = "192.168.56.101",</span></span></div><div class="line"><span class="ruby"><span class="string">%%max_connections = 10&#125;</span></span></div><div class="line"><span class="ruby"><span class="string">%%</span></span></div><div class="line"><span class="ruby"><span class="string">%%Opts#server_opts.port.</span></span></div></pre></td></tr></table></figure>
-<h6 id="映射组适合以下的情形："><a href="#映射组适合以下的情形：" class="headerlink" title="映射组适合以下的情形："></a>映射组适合以下的情形：</h6><ul>
-<li>当键不能预先知道时用来表示键值数据结构；</li>
-<li>当存在大量不同的键时用来表示数据；</li>
-<li>当方便使用很重要而效率无关紧要时作为万能的数据结构使用；</li>
-<li>用作“自解释型”的数据结构，也就是说，用户容易从键名猜出值的含义；</li>
-<li>用来表示键值解析树，例如XML或配置文件；</li>
-<li>用JSON来和其他编程语言通信。</li>
-<li>映射组在系统内部是作为有序集合存储的，打印时总是使用各键排序后的顺序，与映射组的创建方式无关。</li>
-<li>使用映射组的最佳方式是在首次定义某个键时总是使用Key =&gt; Val，而在修改具体某个键的值时都使用Key := Val</li>
-</ul>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Facts = <span class="comment">#&#123;a =&gt;1, b=&gt;2&#125;.</span></div></pre></td></tr></table></figure>
-<h5 id="json"><a href="#json" class="headerlink" title="json"></a>json</h5><pre><code>maps:to_json(Map) -&gt;Bin
-maps:from_json(Bin) -&gt;Map
-maps:safe_from_json(Bin) -&gt;Map
-</code></pre><blockquote>
-<p>这样吧</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/21/2017-11-21-erlang-05/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2017-11-24-erlang-11" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -546,82 +447,51 @@ maps:safe_from_json(Bin) -&gt;Map
 
 
   
-    <article id="post-2017-11-20-erlang-04" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2017-11-21-erlang-05" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/20/2017-11-20-erlang-04/">Erlang程序设计(第2版) 读书笔记【第四章】</a>
+      <a class="article-title" href="/2017/11/21/2017-11-21-erlang-05/">Erlang程序设计(第2版) 读书笔记【第五章】</a>
     </h1>
   
 
         
-        <a href="/2017/11/20/2017-11-20-erlang-04/" class="archive-article-date">
-  	<time datetime="2017-11-20T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-20</time>
+        <a href="/2017/11/21/2017-11-21-erlang-05/" class="archive-article-date">
+  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="第4章-模块与内置函数"><a href="#第4章-模块与内置函数" class="headerlink" title="第4章 模块与内置函数"></a>第4章 模块与<a href="http://erlang.org/doc/man/erlang.html" target="_blank" rel="external">内置函数</a></h3><h5 id="查看和修改当前的工作目录。"><a href="#查看和修改当前的工作目录。" class="headerlink" title="查看和修改当前的工作目录。"></a>查看和修改当前的工作目录。</h5><ul>
-<li>pwd()打印当前工作目录。</li>
-<li>ls()列出当前工作目录里所有的文件名。</li>
-<li>cd(Dir)修改当前工作目录至Dir。<h5 id="模块例子"><a href="#模块例子" class="headerlink" title="模块例子"></a>模块例子</h5></li>
-<li>模块是Erlang的基本代码单元。模块保存在扩展名为.erl的文件里，而且必须先编译才能运行模块里的代码。编译后的模块以.beam作为扩展名。</li>
+        <h5 id="第5章-记录与映射组"><a href="#第5章-记录与映射组" class="headerlink" title="第5章 记录与映射组"></a>第5章 记录与映射组</h5><ul>
+<li>元组用于保存固定数量的元素，而列表用于保存可变数量的元素。</li>
+<li>记录（record）和映射组（map）。记录其实就是元组的另一种形式。通过使用记录，可以给元组里的各个元素关联一个名称。</li>
 </ul>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(geometry)</span>.</div><div class="line"><span class="keyword">-export</span><span class="params">([area/<span class="number">1</span>])</span>.</div><div class="line"></div><div class="line"><span class="function"><span class="title">area</span><span class="params">(&#123;rectangle, Width, Height&#125;)</span> -&gt;</span></div><div class="line">  Width * Height;</div><div class="line"></div><div class="line"><span class="function"><span class="title">area</span><span class="params">(&#123;square, Side&#125;)</span> -&gt;</span></div><div class="line">  Side * Side.</div></pre></td></tr></table></figure>
-<ul>
-<li>运行演示：</li>
+<h6 id="记录适合以下的情形：："><a href="#记录适合以下的情形：：" class="headerlink" title="记录适合以下的情形：："></a>记录适合以下的情形：：</h6><ul>
+<li>当你可以用一些预先确定且数量固定的原子来表示数据时；</li>
+<li>当记录里的元素数量和元素名称不会随时间而改变时；</li>
+<li>当存储空间是个问题时，典型的案例是你有一大堆元组，并且每个元组都有相同的结构。</li>
 </ul>
-<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">8&gt; </span>c(geometry).</div><div class="line">&#123;ok,geometry&#125;</div><div class="line"><span class="meta">9&gt; </span>geometry:area(&#123;rectangle,<span class="number">2</span>,<span class="number">3</span>&#125;).</div><div class="line"><span class="number">6</span></div><div class="line"><span class="meta">10&gt; </span>geometry:area(&#123;square,<span class="number">3</span>&#125;).</div></pre></td></tr></table></figure>
-<h5 id="分隔符说明"><a href="#分隔符说明" class="headerlink" title="分隔符说明"></a>分隔符说明</h5><ul>
-<li>逗号（,）分隔函数调用、数据构造和模式中的参数。</li>
-<li>分号（;）分隔子句。我们能在很多地方看到子句，例如函数定义，以及case、if、<br>try..catch和receive表达式。</li>
-<li>句号（.）（后接空白）分隔函数整体，以及shell里的表达式。<br>有一种简单的方法可以记住这些：想想英语。句号分隔句子，分号分隔子句，逗号则分隔下级子句。逗号象征短程，分号象征中程，句号则象征长程。</li>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby"><span class="class"><span class="keyword">module</span>(<span class="title">myconf</span>).</span></span></div><div class="line"><span class="ruby">-record(server_opts, &#123;port, ip = <span class="string">"127.0.0.1"</span>, max_connections = <span class="number">10</span>&#125;).</span></div><div class="line"><span class="ruby"></span></div><div class="line"><span class="ruby"><span class="string">%%#server_opts&#123;port = 8000,ip = "192.168.56.101",</span></span></div><div class="line"><span class="ruby"><span class="string">%%max_connections = 10&#125;</span></span></div><div class="line"><span class="ruby"><span class="string">%%</span></span></div><div class="line"><span class="ruby"><span class="string">%%Opts#server_opts.port.</span></span></div></pre></td></tr></table></figure>
+<h6 id="映射组适合以下的情形："><a href="#映射组适合以下的情形：" class="headerlink" title="映射组适合以下的情形："></a>映射组适合以下的情形：</h6><ul>
+<li>当键不能预先知道时用来表示键值数据结构；</li>
+<li>当存在大量不同的键时用来表示数据；</li>
+<li>当方便使用很重要而效率无关紧要时作为万能的数据结构使用；</li>
+<li>用作“自解释型”的数据结构，也就是说，用户容易从键名猜出值的含义；</li>
+<li>用来表示键值解析树，例如XML或配置文件；</li>
+<li>用JSON来和其他编程语言通信。</li>
+<li>映射组在系统内部是作为有序集合存储的，打印时总是使用各键排序后的顺序，与映射组的创建方式无关。</li>
+<li>使用映射组的最佳方式是在首次定义某个键时总是使用Key =&gt; Val，而在修改具体某个键的值时都使用Key := Val</li>
 </ul>
-<h5 id="4-2-购物车"><a href="#4-2-购物车" class="headerlink" title="4.2 购物车."></a>4.2 购物车.</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(shop)</span>.</div><div class="line"><span class="keyword">-export</span><span class="params">([cost/<span class="number">1</span>, total/<span class="number">1</span>, test/<span class="number">0</span>])</span>.</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="title">cost</span><span class="params">(oranges)</span> -&gt;</span> <span class="number">2</span>;</div><div class="line"><span class="function"><span class="title">cost</span><span class="params">(milk)</span> -&gt;</span> <span class="number">8</span>;</div><div class="line"><span class="function"><span class="title">cost</span><span class="params">(pears)</span> -&gt;</span> <span class="number">1</span>.</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="title">total</span><span class="params">([&#123;What, N&#125; | T])</span> -&gt;</span></div><div class="line"></div><div class="line">  shop:cost(What) * N + total(T);</div><div class="line"></div><div class="line"><span class="function"><span class="title">total</span><span class="params">([])</span> -&gt;</span> <span class="number">0</span>.</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="title">test</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  <span class="comment">%%  shop:total([]).</span></div><div class="line">  shop:total([&#123;milk, <span class="number">8</span>&#125;,&#123;pears,<span class="number">8</span>&#125;]).</div></pre></td></tr></table></figure>
-<ul>
-<li>总结运算模型</li>
-</ul>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">total</span><span class="params">([Head|Tail])</span>-&gt;</span></div><div class="line">	to_do_funtion(Head) + total(Tail);</div><div class="line"><span class="function"><span class="title">total</span><span class="params">([])</span>-&gt;</span></div><div class="line">	<span class="number">0</span>.</div></pre></td></tr></table></figure>
-<h3 id="4-3-fun：基本的抽象单元"><a href="#4-3-fun：基本的抽象单元" class="headerlink" title="4.3    fun：基本的抽象单元"></a>4.3    fun：基本的抽象单元</h3><h5 id="4-3-0-匿名函数"><a href="#4-3-0-匿名函数" class="headerlink" title="4.3.0  匿名函数"></a>4.3.0  匿名函数</h5><ul>
-<li>fun可以有任意数量的参数。</li>
-</ul>
-<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">43&gt; </span>Double = fun(X) -&gt; <span class="number">2</span>*X end.</div><div class="line">#Fun&lt;erl_eval.<span class="number">6.52032458</span>&gt;</div><div class="line"><span class="meta">44&gt; </span>Double(<span class="number">4</span>).</div><div class="line"><span class="number">8</span></div><div class="line"></div><div class="line"><span class="meta">49&gt; </span>Hypot = fun(X,Y) -&gt; math:sqrt(X*X + Y*Y) end.</div><div class="line">#Fun&lt;erl_eval.<span class="number">12.52032458</span>&gt;</div><div class="line"><span class="meta">50&gt; </span>Hypot(<span class="number">3</span>,<span class="number">4</span>).</div><div class="line"><span class="number">5.0</span></div></pre></td></tr></table></figure>
-<h5 id="4-3-1-以fun作为参数的函数"><a href="#4-3-1-以fun作为参数的函数" class="headerlink" title="4.3.1 以fun作为参数的函数"></a>4.3.1 以fun作为参数的函数</h5><figure class="highlight elm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-<span class="keyword">module</span>(btest).</div><div class="line">-export([test/0]).</div><div class="line"></div><div class="line">test() -&gt;</div><div class="line">  </div><div class="line">  Even =   fun(<span class="type">X</span>) -&gt; (<span class="type">X</span> rem 2) =:= 0 end,</div><div class="line">  </div><div class="line">  %% lists:map(<span class="type">Even</span>,[1,2,3,4,5,6]).</div><div class="line">  lists:filter(<span class="type">Even</span>,[1,2,3,4,5,6]).</div></pre></td></tr></table></figure>
-<ul>
-<li>map和filter等函数能在一次调用里对整个列表执行某种操作，我们把它们称为一次一列表<br>（list-at-a-time）式操作。使用一次一列表式操作让程序变得更小，而且易于理解。</li>
-</ul>
-<h5 id="4-3-1-返回fun的函数"><a href="#4-3-1-返回fun的函数" class="headerlink" title="4.3.1    返回fun的函数"></a>4.3.1    返回fun的函数</h5><figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-<span class="class"><span class="keyword">module</span>(<span class="title">btest</span>).</span></div><div class="line">-export([test2/<span class="number">0</span>]).</div><div class="line"></div><div class="line">test2() -&gt;</div><div class="line"></div><div class="line">  Mult =  <span class="function"><span class="keyword">fun</span>(<span class="title">Times</span></span>) -&gt; (<span class="function"><span class="keyword">fun</span>(<span class="title">X</span></span>) -&gt; X * Times <span class="keyword">end</span> ) <span class="keyword">end</span>,</div><div class="line"></div><div class="line">  T = Mult(<span class="number">3</span>),</div><div class="line">  T(<span class="number">5</span>).</div></pre></td></tr></table></figure>
-<p>运行：</p>
-<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">73&gt; </span>c(btest).</div><div class="line">&#123;ok,btest&#125;</div><div class="line"><span class="meta">74&gt; </span>btest:test2().</div><div class="line"><span class="number">15</span></div></pre></td></tr></table></figure>
-<ul>
-<li>括号里的fun是fun(X) -&gt; X * Times end，它只是一个关于X的函数。Times是“外部”fun<br>的参数。</li>
-<li>Mult(3)执行后返回fun(X) -&gt; X * 3 end，即内部fun的主体（Times被替换为3）。现在我们可以测试它了。</li>
-</ul>
-<h6 id="列表推导"><a href="#列表推导" class="headerlink" title="列表推导"></a>列表推导</h6><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="number">75</span>&gt; L = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>].</div><div class="line">[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</div><div class="line"><span class="number">76</span>&gt; [<span class="number">2</span>*X || X &lt;- L].</div><div class="line">[<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>,<span class="number">12</span>]</div></pre></td></tr></table></figure>
-<p>-[ F(X) || X &lt;- L]标记的意思是“由F(X)组成的列表（X从列表L中提取）”。因此，[2 *X|| X &lt;- L ]的意思就是“由2*X组成的列表（X从列表L中提取）”。</p>
-<h6 id="毕达哥拉斯三元数组"><a href="#毕达哥拉斯三元数组" class="headerlink" title="毕达哥拉斯三元数组"></a>毕达哥拉斯三元数组</h6><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">-module(btest).</div><div class="line">-export([test/<span class="number">1</span>]).</div><div class="line"></div><div class="line">test(<span class="keyword">N</span>) -&gt;</div><div class="line"></div><div class="line">  [ &#123;A,B,C&#125;|| A &lt;-lists:seq(<span class="number">1</span>,<span class="keyword">N</span>),</div><div class="line">              B &lt;-lists:seq(<span class="number">1</span>,<span class="keyword">N</span>),</div><div class="line">              <span class="keyword">C</span> &lt;-lists:seq(<span class="number">1</span>,<span class="keyword">N</span>),</div><div class="line">              A+B+<span class="keyword">C</span> =&lt; <span class="keyword">N</span>,</div><div class="line">              A*A + B*B =:= <span class="keyword">C</span>*<span class="keyword">C</span></div><div class="line">  ].</div><div class="line"> </div><div class="line"><span class="number">77</span>&gt; c(btest).</div><div class="line">&#123;ok,btest&#125;</div><div class="line"><span class="number">78</span>&gt; btest:test3(<span class="number">15</span>).</div><div class="line">[&#123;3,4,5&#125;,&#123;4,3,5&#125;]</div><div class="line">    </div><div class="line">```	</div><div class="line">- lists:seq(<span class="number">1</span>, <span class="keyword">N</span>)返回一个包含从<span class="number">1</span>到<span class="keyword">N</span>所有整数的列表。因此，A &lt;- lists:seq(<span class="number">1</span>, <span class="keyword">N</span>)的意思是A提取从<span class="number">1</span>到<span class="keyword">N</span>的所有可能值。所以这个程序可以这样念：“提取<span class="number">1</span>到<span class="keyword">N</span>的所有A值，<span class="number">1</span>到<span class="keyword">N</span>的所有B值，<span class="number">1</span>到<span class="keyword">N</span>的所有<span class="keyword">C</span>值，条件是A + B + <span class="keyword">C</span>小于等于<span class="keyword">N</span>并且A*A + B*B = <span class="keyword">C</span>*<span class="keyword">C</span>。</div><div class="line"></div><div class="line"></div><div class="line">##### 关卡</div></pre></td></tr></table></figure>
-<pre><code>is_tuple(T), tuple_size(T) =:=6, abs(element(3,T)) &gt;5
-</code></pre><figure class="highlight excel"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- 第一行的意思是<span class="built_in">T</span>是一个包含六个元素的元组，并且<span class="built_in">T</span>中第三个元素的绝对值大于<span class="number">5</span>。关卡里分隔各个测试的逗号的意思是“并且”。</div></pre></td></tr></table></figure>
-<p>X =:=dog; X=:= cat<br>is_integer(X), X&gt;Y; abs(Y) &lt; 23<br><figure class="highlight tp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- 第一个关卡的意思是<span class="keyword">X</span>是一个cat或者dog，关卡里分号（;）的意思是“或者”。第二个关卡的意思是<span class="keyword">X</span>是一个整数，并且<span class="keyword">X</span>大于<span class="keyword">Y</span>或者<span class="keyword">Y</span>的绝对值小于<span class="number">23</span>。##### 所有的关卡判断函数（即返回布尔值的关卡）和所有的关卡内置函数|关卡判断函数	|意	思||---------|-----|is_atom(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个原子is_binary(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个二进制型is_constant(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个常量is_float(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个浮点数is_function(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个funis_function(<span class="keyword">X</span>, N)	|<span class="keyword">X</span>是一个带有N个参数的funis_integer(<span class="keyword">X</span>)|	<span class="keyword">X</span>是一个整数is_list(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个列表is_map(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个映射组is_number(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个整数或浮点数is_pid(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个进程标识符is_pmod(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个参数化模块的实例is_port(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个端is_reference(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个引用is_tuple(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个元组is_record(<span class="keyword">X</span>,Tag)	|<span class="keyword">X</span>是一个类型为Tag的记录is_record(<span class="keyword">X</span>,Tag,N)	|<span class="keyword">X</span>是一个类型为Tag、大小为N的记录</div><div class="line"></div><div class="line">##### 归集器</div><div class="line"></div><div class="line">- 把某个整数列表一分为二，分别包含原始列表里的奇数和偶数。</div></pre></td></tr></table></figure></p>
-<p>-module(mmisc).</p>
-<p>-export([odds_wqc_evens/1, adds_add_evens_acc/3]).</p>
-<p>odds_wqc_evens(L) -&gt;</p>
-<p>  adds_add_evens_acc(L, [], []).</p>
-<p>adds_add_evens_acc([H|T], Odds, Evens) -&gt;</p>
-<p>  case (H rem 2) of</p>
-<pre><code>1 -&gt; adds_add_evens_acc(T,[H|Odds], Evens);
-0 -&gt; adds_add_evens_acc(T,Odds, [H|Evens])
-</code></pre><p>  end;</p>
-<p>adds_add_evens_acc([], Odds, Evens) -&gt;</p>
-<p>  {Odds, Evens}.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">运行：</div></pre></td></tr></table></figure>
-<p>18&gt; c(mmisc).<br>{ok,mmisc}<br>19&gt; mmisc:odds_wqc_evens([1,2,3,4,5,6,7,8]).<br>{[7,5,3,1],[8,6,4,2]}<br>```</p>
-<blockquote>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Facts = <span class="comment">#&#123;a =&gt;1, b=&gt;2&#125;.</span></div></pre></td></tr></table></figure>
+<h5 id="json"><a href="#json" class="headerlink" title="json"></a>json</h5><pre><code>maps:to_json(Map) -&gt;Bin
+maps:from_json(Bin) -&gt;Map
+maps:safe_from_json(Bin) -&gt;Map
+</code></pre><blockquote>
 <p>这样吧</p>
 </blockquote>
 
@@ -658,7 +528,7 @@ maps:safe_from_json(Bin) -&gt;Map
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/20/2017-11-20-erlang-04/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/11/21/2017-11-21-erlang-05/">展开全文 >></a>
         </p>
       
 
@@ -772,6 +642,136 @@ X = true    | 成功：X = true
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/11/20/2017-11-20-erlang-03/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2017-11-20-erlang-04" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/20/2017-11-20-erlang-04/">Erlang程序设计(第2版) 读书笔记【第四章】</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/20/2017-11-20-erlang-04/" class="archive-article-date">
+  	<time datetime="2017-11-20T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="第4章-模块与内置函数"><a href="#第4章-模块与内置函数" class="headerlink" title="第4章 模块与内置函数"></a>第4章 模块与<a href="http://erlang.org/doc/man/erlang.html" target="_blank" rel="external">内置函数</a></h3><h5 id="查看和修改当前的工作目录。"><a href="#查看和修改当前的工作目录。" class="headerlink" title="查看和修改当前的工作目录。"></a>查看和修改当前的工作目录。</h5><ul>
+<li>pwd()打印当前工作目录。</li>
+<li>ls()列出当前工作目录里所有的文件名。</li>
+<li>cd(Dir)修改当前工作目录至Dir。<h5 id="模块例子"><a href="#模块例子" class="headerlink" title="模块例子"></a>模块例子</h5></li>
+<li>模块是Erlang的基本代码单元。模块保存在扩展名为.erl的文件里，而且必须先编译才能运行模块里的代码。编译后的模块以.beam作为扩展名。</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(geometry)</span>.</div><div class="line"><span class="keyword">-export</span><span class="params">([area/<span class="number">1</span>])</span>.</div><div class="line"></div><div class="line"><span class="function"><span class="title">area</span><span class="params">(&#123;rectangle, Width, Height&#125;)</span> -&gt;</span></div><div class="line">  Width * Height;</div><div class="line"></div><div class="line"><span class="function"><span class="title">area</span><span class="params">(&#123;square, Side&#125;)</span> -&gt;</span></div><div class="line">  Side * Side.</div></pre></td></tr></table></figure>
+<ul>
+<li>运行演示：</li>
+</ul>
+<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">8&gt; </span>c(geometry).</div><div class="line">&#123;ok,geometry&#125;</div><div class="line"><span class="meta">9&gt; </span>geometry:area(&#123;rectangle,<span class="number">2</span>,<span class="number">3</span>&#125;).</div><div class="line"><span class="number">6</span></div><div class="line"><span class="meta">10&gt; </span>geometry:area(&#123;square,<span class="number">3</span>&#125;).</div></pre></td></tr></table></figure>
+<h5 id="分隔符说明"><a href="#分隔符说明" class="headerlink" title="分隔符说明"></a>分隔符说明</h5><ul>
+<li>逗号（,）分隔函数调用、数据构造和模式中的参数。</li>
+<li>分号（;）分隔子句。我们能在很多地方看到子句，例如函数定义，以及case、if、<br>try..catch和receive表达式。</li>
+<li>句号（.）（后接空白）分隔函数整体，以及shell里的表达式。<br>有一种简单的方法可以记住这些：想想英语。句号分隔句子，分号分隔子句，逗号则分隔下级子句。逗号象征短程，分号象征中程，句号则象征长程。</li>
+</ul>
+<h5 id="4-2-购物车"><a href="#4-2-购物车" class="headerlink" title="4.2 购物车."></a>4.2 购物车.</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(shop)</span>.</div><div class="line"><span class="keyword">-export</span><span class="params">([cost/<span class="number">1</span>, total/<span class="number">1</span>, test/<span class="number">0</span>])</span>.</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="title">cost</span><span class="params">(oranges)</span> -&gt;</span> <span class="number">2</span>;</div><div class="line"><span class="function"><span class="title">cost</span><span class="params">(milk)</span> -&gt;</span> <span class="number">8</span>;</div><div class="line"><span class="function"><span class="title">cost</span><span class="params">(pears)</span> -&gt;</span> <span class="number">1</span>.</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="title">total</span><span class="params">([&#123;What, N&#125; | T])</span> -&gt;</span></div><div class="line"></div><div class="line">  shop:cost(What) * N + total(T);</div><div class="line"></div><div class="line"><span class="function"><span class="title">total</span><span class="params">([])</span> -&gt;</span> <span class="number">0</span>.</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="title">test</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  <span class="comment">%%  shop:total([]).</span></div><div class="line">  shop:total([&#123;milk, <span class="number">8</span>&#125;,&#123;pears,<span class="number">8</span>&#125;]).</div></pre></td></tr></table></figure>
+<ul>
+<li>总结运算模型</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">total</span><span class="params">([Head|Tail])</span>-&gt;</span></div><div class="line">	to_do_funtion(Head) + total(Tail);</div><div class="line"><span class="function"><span class="title">total</span><span class="params">([])</span>-&gt;</span></div><div class="line">	<span class="number">0</span>.</div></pre></td></tr></table></figure>
+<h3 id="4-3-fun：基本的抽象单元"><a href="#4-3-fun：基本的抽象单元" class="headerlink" title="4.3    fun：基本的抽象单元"></a>4.3    fun：基本的抽象单元</h3><h5 id="4-3-0-匿名函数"><a href="#4-3-0-匿名函数" class="headerlink" title="4.3.0  匿名函数"></a>4.3.0  匿名函数</h5><ul>
+<li>fun可以有任意数量的参数。</li>
+</ul>
+<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">43&gt; </span>Double = fun(X) -&gt; <span class="number">2</span>*X end.</div><div class="line">#Fun&lt;erl_eval.<span class="number">6.52032458</span>&gt;</div><div class="line"><span class="meta">44&gt; </span>Double(<span class="number">4</span>).</div><div class="line"><span class="number">8</span></div><div class="line"></div><div class="line"><span class="meta">49&gt; </span>Hypot = fun(X,Y) -&gt; math:sqrt(X*X + Y*Y) end.</div><div class="line">#Fun&lt;erl_eval.<span class="number">12.52032458</span>&gt;</div><div class="line"><span class="meta">50&gt; </span>Hypot(<span class="number">3</span>,<span class="number">4</span>).</div><div class="line"><span class="number">5.0</span></div></pre></td></tr></table></figure>
+<h5 id="4-3-1-以fun作为参数的函数"><a href="#4-3-1-以fun作为参数的函数" class="headerlink" title="4.3.1 以fun作为参数的函数"></a>4.3.1 以fun作为参数的函数</h5><figure class="highlight elm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-<span class="keyword">module</span>(btest).</div><div class="line">-export([test/0]).</div><div class="line"></div><div class="line">test() -&gt;</div><div class="line">  </div><div class="line">  Even =   fun(<span class="type">X</span>) -&gt; (<span class="type">X</span> rem 2) =:= 0 end,</div><div class="line">  </div><div class="line">  %% lists:map(<span class="type">Even</span>,[1,2,3,4,5,6]).</div><div class="line">  lists:filter(<span class="type">Even</span>,[1,2,3,4,5,6]).</div></pre></td></tr></table></figure>
+<ul>
+<li>map和filter等函数能在一次调用里对整个列表执行某种操作，我们把它们称为一次一列表<br>（list-at-a-time）式操作。使用一次一列表式操作让程序变得更小，而且易于理解。</li>
+</ul>
+<h5 id="4-3-1-返回fun的函数"><a href="#4-3-1-返回fun的函数" class="headerlink" title="4.3.1    返回fun的函数"></a>4.3.1    返回fun的函数</h5><figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-<span class="class"><span class="keyword">module</span>(<span class="title">btest</span>).</span></div><div class="line">-export([test2/<span class="number">0</span>]).</div><div class="line"></div><div class="line">test2() -&gt;</div><div class="line"></div><div class="line">  Mult =  <span class="function"><span class="keyword">fun</span>(<span class="title">Times</span></span>) -&gt; (<span class="function"><span class="keyword">fun</span>(<span class="title">X</span></span>) -&gt; X * Times <span class="keyword">end</span> ) <span class="keyword">end</span>,</div><div class="line"></div><div class="line">  T = Mult(<span class="number">3</span>),</div><div class="line">  T(<span class="number">5</span>).</div></pre></td></tr></table></figure>
+<p>运行：</p>
+<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">73&gt; </span>c(btest).</div><div class="line">&#123;ok,btest&#125;</div><div class="line"><span class="meta">74&gt; </span>btest:test2().</div><div class="line"><span class="number">15</span></div></pre></td></tr></table></figure>
+<ul>
+<li>括号里的fun是fun(X) -&gt; X * Times end，它只是一个关于X的函数。Times是“外部”fun<br>的参数。</li>
+<li>Mult(3)执行后返回fun(X) -&gt; X * 3 end，即内部fun的主体（Times被替换为3）。现在我们可以测试它了。</li>
+</ul>
+<h6 id="列表推导"><a href="#列表推导" class="headerlink" title="列表推导"></a>列表推导</h6><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="number">75</span>&gt; L = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>].</div><div class="line">[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</div><div class="line"><span class="number">76</span>&gt; [<span class="number">2</span>*X || X &lt;- L].</div><div class="line">[<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>,<span class="number">12</span>]</div></pre></td></tr></table></figure>
+<p>-[ F(X) || X &lt;- L]标记的意思是“由F(X)组成的列表（X从列表L中提取）”。因此，[2 *X|| X &lt;- L ]的意思就是“由2*X组成的列表（X从列表L中提取）”。</p>
+<h6 id="毕达哥拉斯三元数组"><a href="#毕达哥拉斯三元数组" class="headerlink" title="毕达哥拉斯三元数组"></a>毕达哥拉斯三元数组</h6><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">-module(btest).</div><div class="line">-export([test/<span class="number">1</span>]).</div><div class="line"></div><div class="line">test(<span class="keyword">N</span>) -&gt;</div><div class="line"></div><div class="line">  [ &#123;A,B,C&#125;|| A &lt;-lists:seq(<span class="number">1</span>,<span class="keyword">N</span>),</div><div class="line">              B &lt;-lists:seq(<span class="number">1</span>,<span class="keyword">N</span>),</div><div class="line">              <span class="keyword">C</span> &lt;-lists:seq(<span class="number">1</span>,<span class="keyword">N</span>),</div><div class="line">              A+B+<span class="keyword">C</span> =&lt; <span class="keyword">N</span>,</div><div class="line">              A*A + B*B =:= <span class="keyword">C</span>*<span class="keyword">C</span></div><div class="line">  ].</div><div class="line"> </div><div class="line"><span class="number">77</span>&gt; c(btest).</div><div class="line">&#123;ok,btest&#125;</div><div class="line"><span class="number">78</span>&gt; btest:test3(<span class="number">15</span>).</div><div class="line">[&#123;3,4,5&#125;,&#123;4,3,5&#125;]</div><div class="line">    </div><div class="line">```	</div><div class="line">- lists:seq(<span class="number">1</span>, <span class="keyword">N</span>)返回一个包含从<span class="number">1</span>到<span class="keyword">N</span>所有整数的列表。因此，A &lt;- lists:seq(<span class="number">1</span>, <span class="keyword">N</span>)的意思是A提取从<span class="number">1</span>到<span class="keyword">N</span>的所有可能值。所以这个程序可以这样念：“提取<span class="number">1</span>到<span class="keyword">N</span>的所有A值，<span class="number">1</span>到<span class="keyword">N</span>的所有B值，<span class="number">1</span>到<span class="keyword">N</span>的所有<span class="keyword">C</span>值，条件是A + B + <span class="keyword">C</span>小于等于<span class="keyword">N</span>并且A*A + B*B = <span class="keyword">C</span>*<span class="keyword">C</span>。</div><div class="line"></div><div class="line"></div><div class="line">##### 关卡</div></pre></td></tr></table></figure>
+<pre><code>is_tuple(T), tuple_size(T) =:=6, abs(element(3,T)) &gt;5
+</code></pre><figure class="highlight excel"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- 第一行的意思是<span class="built_in">T</span>是一个包含六个元素的元组，并且<span class="built_in">T</span>中第三个元素的绝对值大于<span class="number">5</span>。关卡里分隔各个测试的逗号的意思是“并且”。</div></pre></td></tr></table></figure>
+<p>X =:=dog; X=:= cat<br>is_integer(X), X&gt;Y; abs(Y) &lt; 23<br><figure class="highlight tp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- 第一个关卡的意思是<span class="keyword">X</span>是一个cat或者dog，关卡里分号（;）的意思是“或者”。第二个关卡的意思是<span class="keyword">X</span>是一个整数，并且<span class="keyword">X</span>大于<span class="keyword">Y</span>或者<span class="keyword">Y</span>的绝对值小于<span class="number">23</span>。##### 所有的关卡判断函数（即返回布尔值的关卡）和所有的关卡内置函数|关卡判断函数	|意	思||---------|-----|is_atom(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个原子is_binary(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个二进制型is_constant(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个常量is_float(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个浮点数is_function(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个funis_function(<span class="keyword">X</span>, N)	|<span class="keyword">X</span>是一个带有N个参数的funis_integer(<span class="keyword">X</span>)|	<span class="keyword">X</span>是一个整数is_list(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个列表is_map(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个映射组is_number(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个整数或浮点数is_pid(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个进程标识符is_pmod(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个参数化模块的实例is_port(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个端is_reference(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个引用is_tuple(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个元组is_record(<span class="keyword">X</span>,Tag)	|<span class="keyword">X</span>是一个类型为Tag的记录is_record(<span class="keyword">X</span>,Tag,N)	|<span class="keyword">X</span>是一个类型为Tag、大小为N的记录</div><div class="line"></div><div class="line">##### 归集器</div><div class="line"></div><div class="line">- 把某个整数列表一分为二，分别包含原始列表里的奇数和偶数。</div></pre></td></tr></table></figure></p>
+<p>-module(mmisc).</p>
+<p>-export([odds_wqc_evens/1, adds_add_evens_acc/3]).</p>
+<p>odds_wqc_evens(L) -&gt;</p>
+<p>  adds_add_evens_acc(L, [], []).</p>
+<p>adds_add_evens_acc([H|T], Odds, Evens) -&gt;</p>
+<p>  case (H rem 2) of</p>
+<pre><code>1 -&gt; adds_add_evens_acc(T,[H|Odds], Evens);
+0 -&gt; adds_add_evens_acc(T,Odds, [H|Evens])
+</code></pre><p>  end;</p>
+<p>adds_add_evens_acc([], Odds, Evens) -&gt;</p>
+<p>  {Odds, Evens}.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">运行：</div></pre></td></tr></table></figure>
+<p>18&gt; c(mmisc).<br>{ok,mmisc}<br>19&gt; mmisc:odds_wqc_evens([1,2,3,4,5,6,7,8]).<br>{[7,5,3,1],[8,6,4,2]}<br>```</p>
+<blockquote>
+<p>这样吧</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/20/2017-11-20-erlang-04/">展开全文 >></a>
         </p>
       
 
@@ -1115,11 +1115,11 @@ git config  user.email &quot;TEST1@gmail.com&quot;
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">phpmongodb</a>
+                <a href="javascript:void(0)" class="js-tag color5">集群搭建</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">集群搭建</a>
+                <a href="javascript:void(0)" class="js-tag color1">phpmongodb</a>
               </li>
              
               <li class="article-tag-list-item">
