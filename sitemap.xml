@@ -4,7 +4,7 @@
   <url>
     <loc>//www.zwting.com/2018/02/08/2018-02-08-android-01/</loc>
     
-    <lastmod>2018-02-12T03:53:14.000Z</lastmod>
+    <lastmod>2018-02-12T07:25:07.000Z</lastmod>
     
   </url>
   
@@ -107,7 +107,7 @@
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/08/11/2016-02-11-php-ext-11/</loc>
+    <loc>//www.zwting.com/2017/08/10/2016-02-10-php-ext-10/</loc>
     
     <lastmod>2017-09-18T07:26:21.000Z</lastmod>
     
@@ -121,14 +121,14 @@
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/08/10/2016-02-10-php-ext-10/</loc>
+    <loc>//www.zwting.com/2017/08/12/2016-02-12-php-ext-12/</loc>
     
     <lastmod>2017-09-18T07:26:21.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/08/12/2016-02-12-php-ext-12/</loc>
+    <loc>//www.zwting.com/2017/08/11/2016-02-11-php-ext-11/</loc>
     
     <lastmod>2017-09-18T07:26:21.000Z</lastmod>
     
@@ -149,7 +149,7 @@
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/08/07/2016-02-07-php-ext-7/</loc>
+    <loc>//www.zwting.com/2017/08/08/2016-02-08-php-ext-8/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     
@@ -163,6 +163,13 @@
   </url>
   
   <url>
+    <loc>//www.zwting.com/2017/08/03/2016-02-03-php-ext-3/</loc>
+    
+    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>//www.zwting.com/2017/08/04/2016-02-04-php-ext-4/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
@@ -170,14 +177,7 @@
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/08/06/2016-02-06-php-ext-6/</loc>
-    
-    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>//www.zwting.com/2017/08/02/2016-02-02-php-ext-2/</loc>
+    <loc>//www.zwting.com/2017/08/01/2016-02-01-php-ext-1/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     
@@ -191,7 +191,14 @@
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/08/03/2016-02-03-php-ext-3/</loc>
+    <loc>//www.zwting.com/2017/08/06/2016-02-06-php-ext-6/</loc>
+    
+    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>//www.zwting.com/2017/08/07/2016-02-07-php-ext-7/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     
@@ -199,13 +206,6 @@
   
   <url>
     <loc>//www.zwting.com/2017/09/15/2015-05-20-training-python-13/</loc>
-    
-    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>//www.zwting.com/2017/08/08/2016-02-08-php-ext-8/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     
@@ -240,13 +240,6 @@
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-05-10-training-python-8/</loc>
-    
-    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>//www.zwting.com/2017/09/15/2015-04-27-training-python-7/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
@@ -254,14 +247,21 @@
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/08/01/2016-02-01-php-ext-1/</loc>
+    <loc>//www.zwting.com/2017/09/15/2015-05-10-training-python-8/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-04-17-training-python-4/</loc>
+    <loc>//www.zwting.com/2017/08/02/2016-02-02-php-ext-2/</loc>
+    
+    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>//www.zwting.com/2017/09/15/2015-04-14-training-python-3/</loc>
     
     <lastmod>2017-09-18T07:21:53.000Z</lastmod>
     
@@ -289,7 +289,7 @@
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-04-14-training-python-3/</loc>
+    <loc>//www.zwting.com/2017/09/15/2015-04-17-training-python-4/</loc>
     
     <lastmod>2017-09-18T07:21:53.000Z</lastmod>
     
