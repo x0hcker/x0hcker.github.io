@@ -57,7 +57,7 @@
 
 	<nav class="header-menu">
 	
-		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
 	
 	</nav>
 		<nav class="header-smart-menu">
@@ -156,6 +156,121 @@
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-team-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/30/team-2/">业务环境概述</a>
+    </h1>
+  
+
+        
+        <a href="/2017/06/30/team-2/" class="archive-article-date">
+  	<time datetime="2017-06-30T02:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h2 id="业务架构思路"><a href="#业务架构思路" class="headerlink" title="业务架构思路"></a>业务架构思路</h2><p>以公司级通用信息、通用服务、游戏可规范数据为依托，构建企业级运营分析平台。将账号充值支付系统和广告接入系统和游戏数据打通，扩展游戏与用户之间的关系，提高用户行为分析精确度。以为运营平台为入口，管控多个游戏，屏蔽多游戏间的不同点，方便快速接入管理工具，减少游戏后端每个游戏都做一遍管理工具的 。以统一账号支付系统为入口，管控多个游戏，屏蔽多游戏间的不同点，方便快速接入第三渠道，减少游戏后端工作量，保持游戏包的纯净。</p>
+<h2 id="管理流程"><a href="#管理流程" class="headerlink" title="管理流程"></a>管理流程</h2><ul>
+<li>1、事件管理</li>
+<li>2、问题管理 </li>
+<li>3、配置管理</li>
+<li>4、变更管理</li>
+<li>5、发布管理</li>
+</ul>
+<p>事件管理的目标是在不影响业务的情况下，尽可能快速的恢复服务，从而保证最佳的效率和服务的可持续性。事件管理流程的建立包括事件分类，确定事件的优先级和建立事件的升级机制。</p>
+<p>问题管理是调查基础设施和所有可用信息，包括事件数据库，来确定引起事件发生的真正潜在原因，以及提供的服务中可能存在的故障。</p>
+<p>配置管理的目标是：定义和控制服务与基础设施的部件，并保持准确的配置信息。<br>变更管理的目标是：以受控的方式，确保所有变更得到评估、批准、实施和评审。<br>发布管理的目标是：在实际运行环境的发布中，交付、分发并跟踪一个或多个变更。</p>
+<h2 id="核心模块"><a href="#核心模块" class="headerlink" title="核心模块"></a>核心模块</h2><p>服务台：服务台是IT部门和IT服务用户之间的单一联系点。它通过提供一个集中和专职的服务联系点促进了组织业务流程与服务管理基础架构集成。服务台的主要目标是协调客户（用户）和IT部门之间的联系，为IT服务运作提供支持，从而提高客户的满意度。</p>
+<p>事故管理：事故管理负责记录、归类和安排专家处理事故并监督整个处理过程直至事故得到解决和终止。事故管理的目的是在尽可能最小地影响客户和用户业务的情况下使IT系统恢复到服务级别协议所定义的服务级别。</p>
+<p>问题管理：问题管理是指通过调查和分析IT基础架构的薄弱环节、查明事故产生的潜在原因，并制定解决事故的方案和防止事故再次发生的措施，将由于问题和事故对业务产生的负面影响减小到最低的服务管理流程。与事故管理强调事故恢复的速度不同，问题管理强调的是找出事故产生的根源，从而制定恰当的解决方案或防止其再次发生的预防措施。</p>
+<p>配置管理：配置管理是识别和确认系统的配置项，记录和报告配置项状态和变更请求，检验配置项的正确性和完整性等活动构成的过程，其目的是提供IT基础架构的逻辑模型，支持其它服务管理流程特别是变更管理和发布管理的运作。</p>
+<p>变更管理：变更管理是指为在最短的中断时间内完成基础架构或服务的任一方面的变更而对其进行控制的服务管理流程。变更管理的目标是确保在变更实施过程中使用标准的方法和步骤，尽快地实施变更，以将由变更所导致的业务中断对业务的影响减小到最低。</p>
+<p>发布管理：发布管理是指对经过测试后导入实际应用的新增或修改后的配置项进行分发和宣传的管理流程。发布管理以前又称为软件控制与分发，它由变更管理流程控制。</p>
+<p>服务级别管理：服务级别管理是为签订服务级别协议（SLAs）而进行的计划、草拟、协商、监控和报告以及签订服务级别协议后对服务绩效的评价等一系列活动所组成的一个服务管理流程。服务级别管理旨在确保组织所需的IT服务质量在成本合理的范围内得以维持并逐渐提高。</p>
+<p>IT服务财务管理：IT服务财务管理是负责预算和核算IT服务提供方提供IT服务所需的成本，并向客户收取相应服务费用的管理流程，它包括IT投资预算、IT服务成本核算和服务计费三个子流程，其目标是通过量化服务成本减少成本超支的风险、减少不必要的浪费、合理引导客户的行为，从而最终保证所提供的IT服务符合成本效益的原则。IT服务财务管理流程产生的预算和核算信息可以为服务级别管理、能力管理、IT服务持续性管理和变更管理等管理流程提供决策依据。</p>
+<p>IT服务持续性管理：IT服务持续性管理是指确保发生灾难后有足够的技术、财务和管理资源来确保IT服务持续性的管理流程。IT服务持续性管理关注的焦点是在发生服务故障后仍然能够提供预定级别的IT服务，从而支持组织的业务持续运作的能力。</p>
+<p>能力管理：能力管理是指在成本和业务需求的双重约束下，通过配置合理的服务能力使组织的IT资源发挥最大效能的服务管理流程。能力管理流程包括业务能力管理、服务能力管理和资源能力管理三个子流程。</p>
+<p>可用性管理：可用性管理是通过分析用户和业务方的可用性需求并据以优化和设计IT基础架构的可用性，从而确保以合理的成本满足不断增长的可用性需求的管理流程。可用性管理是一个前瞻性的管理流程，它通过对业务和用户可用性需求的定位，使得IT服务的设计建立在真实需求的基础上，从而避免IT服务运作中采用了过度的可用性级别，节约了IT服务的运作成本。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">开发</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">QA</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SDK开发</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术管理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/游戏支撑团队如何建立/" class="article-tag-list-link color1">游戏支撑团队如何建立</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/06/30/team-2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
   
     <article id="post-tech-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -771,101 +886,6 @@
 
 
   
-    <article id="post-team-4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/27/team-4/">怎样搭建自助式运维平台</a>
-    </h1>
-  
-
-        
-        <a href="/2017/04/27/team-4/" class="archive-article-date">
-  	<time datetime="2017-04-27T07:51:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>   由于运维的琐碎、故障出现的不确定性以及解决问题的不可控性的存在，所以让运维人痛并快乐着。好的架构不是设计出来的，而是一步步的演进出来的。命运就是这么难以捉摸,当你拼尽一切前进时才发现前无大道,想放弃一切后退之时却后路尽绝,最后生无可恋的纵身一跃时,希望却不知何时悄然而至。<br>
-        
-          <a class="article-more-a" href="/2017/04/27/team-4/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">开发</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">QA</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SDK开发</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术管理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/游戏支撑团队如何建立/" class="article-tag-list-link color1">游戏支撑团队如何建立</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/04/27/team-4/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
@@ -978,6 +998,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Erlang程序设计的读书笔记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
               </li>
              
               <li class="article-tag-list-item">

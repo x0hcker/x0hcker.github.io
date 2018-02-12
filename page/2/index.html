@@ -57,7 +57,7 @@
 
 	<nav class="header-menu">
 	
-		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
 	
 	</nav>
 		<nav class="header-smart-menu">
@@ -156,6 +156,109 @@
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-2017-11-13-git-hacker" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/12/2017-11-13-git-hacker/">在台机器上登录两个GITHUB账号</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/12/2017-11-13-git-hacker/" class="archive-article-date">
+  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>###<br>    git config –global –unset user.name<br>    git config –global –unset user.email</p>
+<pre><code>ssh-keygen -t rsa -C &quot;TEST2@gmail.com&quot; -f ~/.ssh/TEST2
+ssh-keygen -t rsa -C &quot;TEST1@gmail.com&quot; -f ~/.ssh/TEST1
+</code></pre><h3 id="TEST1-and-TEST2两个账号在GITHUB上"><a href="#TEST1-and-TEST2两个账号在GITHUB上" class="headerlink" title="TEST1 and TEST2两个账号在GITHUB上"></a>TEST1 and TEST2两个账号在GITHUB上</h3><pre><code>cat ~/.ssh/config
+
+Host gitlab.test.com
+  HostName gitlab.test.com
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/innergit
+
+Host TEST1.github.com
+  HostName github.com
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/TEST1
+
+
+Host TEST2.github.com
+  HostName github.com
+  User TEST2
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/TEST2
+</code></pre><h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><pre><code>git clone git@TEST2.github.com:TEST2/Alcman.git
+cd project_name1
+git config  user.name &quot;TEST2&quot;
+git config  user.email &quot;TEST2@gmail.com&quot;
+
+
+cd project_name2
+git clone git@TEST1.github.com:TEST1/rake-flow.git
+git config  user.name &quot;TEST1&quot;
+git config  user.email &quot;TEST1@gmail.com&quot;
+</code></pre>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/12/2017-11-13-git-hacker/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
   
     <article id="post-2017-11-13-erlang-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1989,174 +2092,19 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 
 
   
-    <article id="post-2015-04-10-training-python-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2015-04-14-training-python-3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-04-10-training-python-1/">python技术分享[1]－python初步感观</a>
+      <a class="article-title" href="/2017/09/15/2015-04-14-training-python-3/">python技术分享[3]－list dict在实际中的应用</a>
     </h1>
   
 
         
-        <a href="/2017/09/15/2015-04-10-training-python-1/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>###1、环境简介</p>
-<ul>
-<li>os系统：centos6.5</li>
-<li>python:2.7.7 或者 2.7.8</li>
-<li>扩展要求:<pre><code>setuptools ,pip     ,MySQL-python    
-</code></pre></li>
-<li>如果你的python版本过低，可以用下面的脚本升级为2.7.7</li>
-<li><p>脚本下载：<a href="http://pan.baidu.com/s/1jGDvFzo" target="_blank" rel="external">http://pan.baidu.com/s/1jGDvFzo</a>      </p>
-</li>
-<li><p>###1.1 python使用方式</p>
-<ul>
-<li>进入python shell环境</li>
-<li>执行脚本模式 python demo.py</li>
-</ul>
-</li>
-</ul>
-<p>###2、初步感观<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"><span class="comment">#!/usr/bin/python2.7</span></div><div class="line"></div><div class="line"><span class="comment">###################################################</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#      python 第一个显示程序，用于初步感观</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">###################################################</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">()</span>:</span></div><div class="line">  <span class="string">'''</span></div><div class="line"><span class="string">  a generator that produces the fibonacci series's elements</span></div><div class="line"><span class="string">  '''</span></div><div class="line"> </div><div class="line">  a = <span class="number">1</span></div><div class="line">  b = <span class="number">1</span></div><div class="line">  <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">    a, b = a + b, a</div><div class="line">    <span class="keyword">yield</span> a</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">nth</span><span class="params">(series, n)</span>:</span></div><div class="line">  <span class="string">'''</span></div><div class="line"><span class="string">  returns the nth element of a series,</span></div><div class="line"><span class="string">  consuming the series' earlier elements.</span></div><div class="line"><span class="string">  '''</span></div><div class="line"> </div><div class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> series:</div><div class="line">    n -= <span class="number">1</span></div><div class="line">    <span class="keyword">if</span> n &lt;= <span class="number">0</span>: <span class="keyword">return</span> x</div><div class="line"> </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	print(<span class="string">'Executed from the command line'</span>)</div><div class="line">	<span class="keyword">print</span> nth(fib(), <span class="number">10</span>)</div></pre></td></tr></table></figure></p>
-<ul>
-<li>执行 </li>
-<li>python demo.py </li>
-<li>输出</li>
-<li>Executed from the command line</li>
-<li>144</li>
-</ul>
-<p>###3、Python格言</p>
-<ul>
-<li>输入python 进入python shell环境</li>
-<li>import this </li>
-<li><p>显示python之禅</p>
-</li>
-<li><h5 id="3-1-Python之禅"><a href="#3-1-Python之禅" class="headerlink" title="3.1 Python之禅"></a>3.1 Python之禅</h5><ul>
-<li>Beautiful is better than ugly.  </li>
-<li>漂亮的代码要比丑陋的代码要好得多。  </li>
-<li>Explicit is better than implicit.  </li>
-<li>明确的定义比 隐式定义更好。  </li>
-<li>Simple is better than complex.  </li>
-<li>简单比负责要好。  </li>
-<li>Complex is better than complicated.  </li>
-<li>负责要比搞复杂要好。  </li>
-<li>Flat is better than nested.  </li>
-<li>扁平结构要比嵌套结构好。  </li>
-<li>Sparse is better than dense.  </li>
-<li>简洁明了的代码要比稠密的代码要好。  </li>
-<li>Readability counts.  </li>
-<li>可读写的计数。  </li>
-<li>Special cases aren’t special enough to break the rules.  </li>
-<li>专门的用例不是特殊到足以违反规则。  </li>
-<li>Although practicality beats purity.  </li>
-<li>是的，实用性练就纯度。  </li>
-<li>Errors should never pass silently.  </li>
-<li>错误永远都不会沉默。  </li>
-<li>Unless explicitly silenced.  </li>
-<li>除非明确啥也不干。  </li>
-<li>In the face of ambiguity, refuse the temptation to guess.  </li>
-<li>面对模糊定义、拒绝视图拍脑袋猜。  </li>
-<li>There should be one– and preferably only one –obvious way to do it.  </li>
-<li>Although that way may not be obvious at first unless you’re Dutch.  </li>
-<li>虽然一开始不那面明确,我们会选择更清晰一条到走。  </li>
-<li>Now is better than never.  </li>
-<li>现在开始总比不开始的要好。  </li>
-<li>Although never is often better than <em>right</em> now.  </li>
-<li>虽然从不尝试总比现在开始尝试好。  </li>
-<li>If the implementation is hard to explain, it’s a bad idea.  </li>
-<li>如果实现难以说明，那它是个坏主意。  </li>
-<li>If the implementation is easy to explain, it may be a good idea.  </li>
-<li>如果实现容易说明，那它是个好主意。  </li>
-<li>Namespaces are one honking great idea – let’s do more of those!  </li>
-<li>名称空间是一个好东西——让我们做更多那样的东西!  </li>
-</ul>
-</li>
-<li><h5 id="3-2-Python“八荣八耻”"><a href="#3-2-Python“八荣八耻”" class="headerlink" title="3.2 Python“八荣八耻”"></a>3.2 Python“八荣八耻”</h5><ul>
-<li>以动手实践为荣 , 以只看不练为耻;</li>
-<li>以打印日志为荣 , 以单步跟踪为耻;</li>
-<li>以空格缩进为荣 , 以制表缩进为耻;</li>
-<li>以单元测试为荣 , 以人工测试为耻;</li>
-<li>以模块复用为荣 , 以复制粘贴为耻;</li>
-<li>以多态应用为荣 , 以分支判断为耻;</li>
-<li>以Pythonic为荣 , 以冗余拖沓为耻;</li>
-<li>以总结分享为荣 , 以跪求其解为耻;</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-04-10-training-python-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2015-04-13-training-python-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-04-13-training-python-2/">python技术分享[2]－list dict 基本使用</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/15/2015-04-13-training-python-2/" class="archive-article-date">
+        <a href="/2017/09/15/2015-04-14-training-python-3/" class="archive-article-date">
   	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
 </a>
         
@@ -2165,29 +2113,42 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
     <div class="article-entry" itemprop="articleBody">
       
         <ul>
-<li>定义:<ul>
-<li>list:链表,有序的项目, 通过索引进行查找,使用方括号”[]”;</li>
-<li>tuple:元组,元组将多样的对象集合到一起,不能修改,通过索引进行查找, 使用括号”()”;</li>
-<li>dict:字典,字典是一组键(key)和值(value)的组合,通过键(key)进行查找,没有顺序, 使用大括号”{}”;</li>
-<li>set:集合,无序,元素只出现一次, 自动去重,使用”set([])”</li>
+<li>在python中, list, tuple, dict, set有什么区别, 主要应用在什么样的场景?</li>
+<li>定义:</li>
+</ul>
+<ul>
+<li><ul>
+<li>list:链表,有序的项目, 通过索引进行查找,使用方括号”[]”;<br>tuple:元组,元组将多样的对象集合到一起,不能修改,通过索引进行查找, 使用括号”()”;<br>dict:字典,字典是一组键(key)和值(value)的组合,通过键(key)进行查找,没有顺序, 使用大括号”{}”;<br>set:集合,无序,元素只出现一次, 自动去重,使用”set([])”</li>
 </ul>
 </li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">#样例</div><div class="line">mylist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="string">'Oh'</span>]  </div><div class="line">mytuple = (<span class="number">1</span>, <span class="number">2</span>, <span class="string">'Hello'</span>, (<span class="number">4</span>, <span class="number">5</span>))  </div><div class="line">mydict = &#123;<span class="string">'Wang'</span> : <span class="number">1</span>, <span class="string">'Hu'</span> : <span class="number">2</span>, <span class="string">'Liu'</span> : <span class="number">4</span>&#125;  </div><div class="line">myset = set([<span class="string">'Wang'</span>, <span class="string">'Hu'</span>, <span class="string">'Liu'</span>, <span class="number">4</span>, <span class="string">'Wang'</span>])  </div><div class="line">  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mylist)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mytuple)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mydict)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(myset)</span></span></div></pre></td></tr></table></figure>
 <ul>
-<li><p>输出</p>
+<li>应用场景:</li>
+</ul>
 <ul>
-<li>[1, 2, 3, 4, ‘Oh’]  </li>
-<li>(1, 2, ‘Hello’, (4, 5))  </li>
-<li>{‘Liu’: 4, ‘Wang’: 1, ‘Hu’: 2}  </li>
-<li>set([‘Liu’, 4, ‘Wang’, ‘Hu’]) </li>
+<li><ul>
+<li>list, 简单的数据集合,可以使用索引;<br>tuple, 把一些数据当做一个整体去使用,不能修改;<br>dict,使用键值和值进行关联的数据;<br>set,数据只出现一次,只关心数据是否出现, 不关心其位置;</li>
 </ul>
 </li>
 </ul>
-<p>我们重点讲字典和列表</p>
-<p>####一、List操作<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：python入门引导 </div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">#定义函数</div><div class="line">def list_test():</div><div class="line">    #初始化列表</div><div class="line">    sample_list = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">3</span>]</div><div class="line">    print sample_list</div><div class="line">      </div><div class="line">    #得到列表中的某一个值</div><div class="line">    value_start = sample_list[<span class="number">1</span>:<span class="number">3</span>]</div><div class="line">    print value_start</div><div class="line">      </div><div class="line">    end_value = sample_list[<span class="number">-1</span>]</div><div class="line">    print end_value</div><div class="line">      </div><div class="line">    #删除列表的第一个值</div><div class="line">    del sample_list[<span class="number">0</span>]</div><div class="line">      </div><div class="line">    #在列表中插入一个值</div><div class="line">    sample_list[<span class="number">0</span>] = [<span class="string">'sample value'</span>]</div><div class="line">    sample_list[<span class="number">2</span>] = <span class="string">'second'</span></div><div class="line">    sample_list.append(<span class="string">'three'</span>)</div><div class="line">      </div><div class="line">    #得到列表的长度</div><div class="line">    list_length = len(sample_list)</div><div class="line">    print list_length</div><div class="line">      </div><div class="line">    #列表遍历</div><div class="line">    for element <span class="keyword">in</span> sample_list:</div><div class="line">        print(element)</div><div class="line">      </div><div class="line">    #用同一个值初始化，形成一个含有六个元素的列表</div><div class="line">    sample_list = [<span class="string">'test'</span>]*<span class="number">6</span></div><div class="line">    for element <span class="keyword">in</span> sample_list:</div><div class="line">        print(element)</div><div class="line">        </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    #调用函数</div><div class="line">    list_test()</div></pre></td></tr></table></figure></p>
-<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line">#coding=utf<span class="number">-8</span></div><div class="line"></div><div class="line"></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：python入门引导 </div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">def dict_test():</div><div class="line">    #初始化字典    </div><div class="line">    sample_dict = &#123;<span class="string">'a'</span>:<span class="string">'a'</span>,<span class="string">'2'</span>:<span class="string">'b'</span>,<span class="number">3</span>:<span class="string">'c'</span>&#125;</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #获取指定的key的值</div><div class="line">    pop = sample_dict.pop(<span class="string">'2'</span>)</div><div class="line">    print pop</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    get = sample_dict.get(<span class="string">'a'</span>)</div><div class="line">    print get</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    print sample_dict[<span class="number">3</span>]</div><div class="line"></div><div class="line">    #删除指定key的值</div><div class="line">    pop = sample_dict.pop(<span class="number">3</span>)</div><div class="line">    print pop</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #在字典中插入一个值</div><div class="line">    sample_dict.update(&#123;<span class="number">3</span>:<span class="string">'c'</span>,<span class="string">'2'</span>:<span class="string">'b'</span>&#125;)</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #获取字典长度</div><div class="line">    print len(sample_dict)</div><div class="line"></div><div class="line">    #字典遍历</div><div class="line">    for element <span class="keyword">in</span> sample_dict:</div><div class="line">        print element,sample_dict[element]</div><div class="line"></div><div class="line">    for (k, v) <span class="keyword">in</span> sample_dict.items():</div><div class="line">        print <span class="string">"sample_dict[%s] ="</span> % k, v</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    dict_test()</div></pre></td></tr></table></figure>
+<h4 id="实践样例"><a href="#实践样例" class="headerlink" title="实践样例"></a>实践样例</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：统计游戏中玩家及玩家登陆次数</div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">#统计游戏中玩家及玩家登陆次数</div><div class="line">games = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'a'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>,<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'b'</span>]  </div><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter  </div><div class="line">d = Counter(games) </div><div class="line">print d</div><div class="line"></div><div class="line"></div><div class="line">#排位赛规则，如果积分相同，则按胜利场次，再相同按失败场次</div><div class="line">games =[&#123;<span class="string">'f'</span>:<span class="number">3</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">3</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">20</span>,<span class="string">'b'</span>:<span class="number">16</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">12</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,]</div><div class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter  </div><div class="line">print sorted(games ,key = itemgetter(<span class="string">'f'</span>,<span class="string">'s'</span>,<span class="string">'b'</span>),reverse=<span class="literal">True</span>)</div><div class="line"></div><div class="line"></div><div class="line">#选择某一天，然后以这天为准，次日留存，<span class="number">3</span>日留存，<span class="number">7</span>日留存，<span class="number">14</span>日留存，<span class="number">30</span>日留存</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime,timedelta  </div><div class="line">def GetNextDay(baseday,n):  </div><div class="line">    return str((datetime.strptime(str(baseday),<span class="string">'%Y-%m-%d'</span>)+timedelta(days=n)).date())  </div><div class="line"></div><div class="line"><span class="keyword">import</span> functools  </div><div class="line">selected_day = <span class="string">'2015-02-01'</span></div><div class="line">nday = functools.partial(GetNextDay,selected_day)</div><div class="line">print nday(<span class="number">1</span>)</div><div class="line">print nday(<span class="number">2</span>)</div><div class="line">print nday(<span class="number">6</span>)</div><div class="line">print nday(<span class="number">13</span>)</div><div class="line">print nday(<span class="number">29</span>)</div><div class="line"></div><div class="line">#用来计算游戏包裹里面的变化情况</div><div class="line">def symmetric_difference(_oldobj,_newobj):  </div><div class="line">    _oldkeys = _oldobj.keys()  </div><div class="line">    _newkeys = _newobj.keys()  </div><div class="line">    _diff = &#123;&#125;  </div><div class="line">    for _key <span class="keyword">in</span> set(_oldkeys + _newkeys):  </div><div class="line">        _val = _newobj.get(_key,<span class="number">0</span>) - _oldobj.get(_key,<span class="number">0</span>)  </div><div class="line">        <span class="keyword">if</span> _val:  </div><div class="line">            _diff[_key] = _val   </div><div class="line">    return _diff   </div><div class="line">      </div><div class="line">oldobj = &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">2</span>,<span class="string">'c'</span>:<span class="number">3</span>&#125;  </div><div class="line">newobj = &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">3</span>,<span class="string">'d'</span>:<span class="number">4</span>&#125;  </div><div class="line">print symmetric_difference(oldobj,newobj)</div></pre></td></tr></table></figure>
+<ul>
+<li>输入：python 3.py</li>
+<li>输出：<ul>
+<li>Counter({‘a’: 3, ‘b’: 3, ‘c’: 2, ‘d’: 1})</li>
+<li>[{‘s’: 20, ‘b’: 16, ‘f’: 13}, {‘s’: 12, ‘b’: 12, ‘f’: 13}, {‘s’: 10, ‘b’: 12, ‘f’: 13},  </li>
+<li>{‘s’: - 10, ‘b’: 12, ‘f’: 3}, {‘s’: 10, ‘b’: 12, ‘f’: 3}]- </li>
+<li>2015-02-02- </li>
+<li>2015-02-03- </li>
+<li>2015-02-07- </li>
+<li>2015-02-14- </li>
+<li>2015-03-02- </li>
+<li>{‘c’: -3, ‘b’: 1, ‘d’: 4}- </li>
+</ul>
+</li>
+</ul>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
       
 
       
@@ -2221,7 +2182,7 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-04-13-training-python-2/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/09/15/2015-04-14-training-python-3/">展开全文 >></a>
         </p>
       
 
@@ -2499,6 +2460,10 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Erlang程序设计的读书笔记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
               </li>
              
               <li class="article-tag-list-item">
