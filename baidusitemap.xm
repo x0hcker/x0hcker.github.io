@@ -4,12 +4,12 @@
 
     
   <url>
-    <loc>//www.zwting.com/2018/02/08/2018-03-08-android-02/</loc>
-    <lastmod>2018-04-08T02:48:26.900Z</lastmod>
+    <loc>//www.zwting.com/2018/03/08/2018-03-08-android-02/</loc>
+    <lastmod>2018-04-08T03:06:35.540Z</lastmod>
     <data>
         <display>
         <title>Appium测试【第二章】</title>
-        <pubTime>2018-02-08T11:03:59.000Z</pubTime>
+        <pubTime>2018-03-08T11:03:59.000Z</pubTime>
         
         <tag>Appium测试</tag>
          
