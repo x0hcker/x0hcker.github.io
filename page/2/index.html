@@ -157,6 +157,126 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2017-11-14-erlang-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/12/2017-11-14-erlang-02/">Erlang程序设计(第2版) 读书笔记【第二章】</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/12/2017-11-14-erlang-02/" class="archive-article-date">
+  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="第2章-Erlang速览"><a href="#第2章-Erlang速览" class="headerlink" title="第2章 Erlang速览"></a>第2章 Erlang速览</h3><h5 id="变量和原子的语法"><a href="#变量和原子的语法" class="headerlink" title="变量和原子的语法"></a>变量和原子的语法</h5><ul>
+<li>Erlang的变量只能绑定一次。</li>
+<li>Erlang的变量以大写字母开头。</li>
+</ul>
+<h5 id="在-shell-里编译并运行-Hello-World"><a href="#在-shell-里编译并运行-Hello-World" class="headerlink" title="在 shell 里编译并运行 Hello World"></a>在 shell 里编译并运行 Hello World</h5><p>erl文件命令成 hello.erl 输入以下内容</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- <span class="keyword">module</span>(hello).</div><div class="line">- <span class="keyword">export</span>([start/<span class="number">0</span>]).</div><div class="line"></div><div class="line">start()-&gt;</div><div class="line">	io:format(<span class="string">"hello world ~n"</span>).</div><div class="line">```	</div><div class="line">编译并运行它，我们从保存hello.erl的目录里启动Erlang shell</div></pre></td></tr></table></figure>
+<p>erl<br>Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]</p>
+<p>Eshell V8.2  (abort with ^G)</p>
+<p>1&gt; c(hello,debug_info).<br>{ok,hello}<br>9&gt; hello:start().<br>hello world<br>ok<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##### 并发</div><div class="line">- Erlang的基本并发单元是进程（process）。</div><div class="line">- 只能通过发送和接收消息来与其他进程通信。</div><div class="line">- loop函数永远不会返回，利用尾部的优化，意思是此函数的运行空间是固定的，不会耗尽栈空间</div><div class="line">- Erlang编译器和运行时系统会正确推断出如何在收到消息时运行适当的代码。不需要编写任何的<span class="keyword">if</span>-then-else或switch语句来设定该做什么。这是模式匹配带来的乐趣之一，会为你节省大量工作</div><div class="line"></div><div class="line"></div><div class="line">##### server</div></pre></td></tr></table></figure></p>
+<p>cat afile_server.erl</p>
+<p>-module(afile_server).<br>-export([start/1,loop/1]).</p>
+<p>start(Dir) -&gt;</p>
+<p>  spawn(afile_server,loop, [Dir]).</p>
+<p>loop(Dir) -&gt;</p>
+<p>  receive</p>
+<pre><code>{Client, list_dir} -&gt;
+
+  Client ! { self(), file:list_dir(Dir)};
+
+{Client, {get_file, File}} -&gt;
+
+  Full = filename:join(Dir, File),
+  Client ! {self(), file:read(Full)}
+</code></pre><p>  end,<br>  loop(Dir).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
+<p>➜  src erl<br>Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]</p>
+<p>Eshell V8.2  (abort with ^G)<br>1&gt; c(afile_server).<br>{ok,afile_server}<br>2&gt; FS =  afile_server:start(“.”).</p>
+<p><0.64.0><br>3&gt; FS ! {self(),list_dir}<br>3&gt; .<br>{<0.57.0>,list_dir}<br>4&gt; receive X-&gt;X end.<br>{<0.64.0>,<br> {ok,[“afile_server.beam”,”afile_server.erl”,<br>      “file_server.beam”,”hello.beam”,”hello.erl”,”test.beam”,<br>      “test.erl”]}}<br>5&gt;<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##### client</div></pre></td></tr></table></figure></0.64.0></0.57.0></0.64.0></p>
+<p>-module(afile_client).<br>-export([ls/1, get_file/2]).</p>
+<p>ls(Server) -&gt;</p>
+<p>  Server ! {self(), list_dir},</p>
+<p>  receive</p>
+<pre><code>{Server, FileList} -&gt;
+
+  FileList
+</code></pre><p>  end.</p>
+<p>get_file(Server, File) -&gt;</p>
+<p>  Server ! {self(), {get_file, File}},</p>
+<p>  receive</p>
+<pre><code>{Server, Content} -&gt;
+
+  Content
+</code></pre><p>  end.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+<p>1&gt; c(afile_server).<br>{ok,afile_server}<br>2&gt; c(afile_client).<br>{ok,afile_client}<br>3&gt; FS =  afile_server:start(“.”).</p>
+<p><0.69.0><br>4&gt; afile_client:ls(“./“).<br>** exception error: bad argument<br>     in function  afile_client:ls/1 (afile_client.erl, line 15)<br>5&gt; afile_client:ls(FS).<br>{ok,[“afile_client.beam”,”afile_client.erl”,<br>     “afile_server.beam”,”afile_server.erl”,”file_server.beam”,<br>     “hello.beam”,”hello.erl”,”test.beam”,”test.erl”]}<br>```</0.69.0></p>
+<blockquote>
+<p>这样吧</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/12/2017-11-14-erlang-02/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2017-11-13-git-hacker" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2223,114 +2343,6 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/09/15/2015-04-17-training-python-4/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2015-04-14-training-python-3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-04-14-training-python-3/">python技术分享[3]－list dict在实际中的应用</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/15/2015-04-14-training-python-3/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>在python中, list, tuple, dict, set有什么区别, 主要应用在什么样的场景?</li>
-<li>定义:</li>
-</ul>
-<ul>
-<li><ul>
-<li>list:链表,有序的项目, 通过索引进行查找,使用方括号”[]”;<br>tuple:元组,元组将多样的对象集合到一起,不能修改,通过索引进行查找, 使用括号”()”;<br>dict:字典,字典是一组键(key)和值(value)的组合,通过键(key)进行查找,没有顺序, 使用大括号”{}”;<br>set:集合,无序,元素只出现一次, 自动去重,使用”set([])”</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>应用场景:</li>
-</ul>
-<ul>
-<li><ul>
-<li>list, 简单的数据集合,可以使用索引;<br>tuple, 把一些数据当做一个整体去使用,不能修改;<br>dict,使用键值和值进行关联的数据;<br>set,数据只出现一次,只关心数据是否出现, 不关心其位置;</li>
-</ul>
-</li>
-</ul>
-<h4 id="实践样例"><a href="#实践样例" class="headerlink" title="实践样例"></a>实践样例</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：统计游戏中玩家及玩家登陆次数</div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">#统计游戏中玩家及玩家登陆次数</div><div class="line">games = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'a'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>,<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'b'</span>]  </div><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter  </div><div class="line">d = Counter(games) </div><div class="line">print d</div><div class="line"></div><div class="line"></div><div class="line">#排位赛规则，如果积分相同，则按胜利场次，再相同按失败场次</div><div class="line">games =[&#123;<span class="string">'f'</span>:<span class="number">3</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">3</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">20</span>,<span class="string">'b'</span>:<span class="number">16</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">12</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,]</div><div class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter  </div><div class="line">print sorted(games ,key = itemgetter(<span class="string">'f'</span>,<span class="string">'s'</span>,<span class="string">'b'</span>),reverse=<span class="literal">True</span>)</div><div class="line"></div><div class="line"></div><div class="line">#选择某一天，然后以这天为准，次日留存，<span class="number">3</span>日留存，<span class="number">7</span>日留存，<span class="number">14</span>日留存，<span class="number">30</span>日留存</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime,timedelta  </div><div class="line">def GetNextDay(baseday,n):  </div><div class="line">    return str((datetime.strptime(str(baseday),<span class="string">'%Y-%m-%d'</span>)+timedelta(days=n)).date())  </div><div class="line"></div><div class="line"><span class="keyword">import</span> functools  </div><div class="line">selected_day = <span class="string">'2015-02-01'</span></div><div class="line">nday = functools.partial(GetNextDay,selected_day)</div><div class="line">print nday(<span class="number">1</span>)</div><div class="line">print nday(<span class="number">2</span>)</div><div class="line">print nday(<span class="number">6</span>)</div><div class="line">print nday(<span class="number">13</span>)</div><div class="line">print nday(<span class="number">29</span>)</div><div class="line"></div><div class="line">#用来计算游戏包裹里面的变化情况</div><div class="line">def symmetric_difference(_oldobj,_newobj):  </div><div class="line">    _oldkeys = _oldobj.keys()  </div><div class="line">    _newkeys = _newobj.keys()  </div><div class="line">    _diff = &#123;&#125;  </div><div class="line">    for _key <span class="keyword">in</span> set(_oldkeys + _newkeys):  </div><div class="line">        _val = _newobj.get(_key,<span class="number">0</span>) - _oldobj.get(_key,<span class="number">0</span>)  </div><div class="line">        <span class="keyword">if</span> _val:  </div><div class="line">            _diff[_key] = _val   </div><div class="line">    return _diff   </div><div class="line">      </div><div class="line">oldobj = &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">2</span>,<span class="string">'c'</span>:<span class="number">3</span>&#125;  </div><div class="line">newobj = &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">3</span>,<span class="string">'d'</span>:<span class="number">4</span>&#125;  </div><div class="line">print symmetric_difference(oldobj,newobj)</div></pre></td></tr></table></figure>
-<ul>
-<li>输入：python 3.py</li>
-<li>输出：<ul>
-<li>Counter({‘a’: 3, ‘b’: 3, ‘c’: 2, ‘d’: 1})</li>
-<li>[{‘s’: 20, ‘b’: 16, ‘f’: 13}, {‘s’: 12, ‘b’: 12, ‘f’: 13}, {‘s’: 10, ‘b’: 12, ‘f’: 13},  </li>
-<li>{‘s’: - 10, ‘b’: 12, ‘f’: 3}, {‘s’: 10, ‘b’: 12, ‘f’: 3}]- </li>
-<li>2015-02-02- </li>
-<li>2015-02-03- </li>
-<li>2015-02-07- </li>
-<li>2015-02-14- </li>
-<li>2015-03-02- </li>
-<li>{‘c’: -3, ‘b’: 1, ‘d’: 4}- </li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-04-14-training-python-3/">展开全文 >></a>
         </p>
       
 

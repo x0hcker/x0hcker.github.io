@@ -157,6 +157,200 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2018-03-08-android-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/08/2018-03-08-android-02/">Appium测试【第二章】</a>
+    </h1>
+  
+
+        
+        <a href="/2018/02/08/2018-03-08-android-02/" class="archive-article-date">
+  	<time datetime="2018-02-08T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="懒人手记"><a href="#懒人手记" class="headerlink" title="懒人手记"></a>懒人手记</h3><p>手机做测试时需要监听数据，要么开热点转发，要么ADB，每次都是很麻烦，突然发奇想，在HACK工具中有ARP欺骗导入数据的 ettercap， 所以我们可以利用这个工具，不再用热点、数据线、ADB一堆的东西，直接欺骗手机的网关位置，来骗取数据到本地。</p>
+<h5 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h5><pre><code>brew install ettercap
+</code></pre><h5 id="启动转发"><a href="#启动转发" class="headerlink" title="启动转发"></a>启动转发</h5><pre><code>sudo sysctl -w net.inet.ip.forwarding=1
+sudo sysctl -w net.inet6.ip6.forwarding=1
+</code></pre><h5 id="macosx开启转发"><a href="#macosx开启转发" class="headerlink" title="macosx开启转发"></a>macosx开启转发</h5><p>新加一个文件：/etc/pf.anchors/http</p>
+<pre><code>rdr pass on lo0 inet proto tcp from any to any port 80 -&gt; 127.0.0.1 port 8080
+rdr pass on lo0 inet proto tcp from any to any port 443 -&gt; 127.0.0.1 port 4443
+rdr pass on en0 inet proto tcp from any to any port 80 -&gt; 127.0.0.1 port 8080
+rdr pass on en0 inet proto tcp from any to any port 443 -&gt; 127.0.0.1 port 4443
+</code></pre><p>检查其正确性：</p>
+<pre><code>pfctl -vnf /etc/pf.anchors/http
+</code></pre><p>在 rdr-anchor “com.apple/*” 下添加</p>
+<pre><code>rdr-anchor &quot;http-forwarding&quot;
+</code></pre><p>在 load anchor “com.apple” from “/etc/pf.anchors/com.apple” 下添加</p>
+<pre><code>load anchor &quot;http-forwarding&quot; from &quot;/etc/pf.anchors/http&quot;
+</code></pre><p>最后导入并允许运行：</p>
+<pre><code>pfctl -ef /etc/pf.conf
+</code></pre><p>使用 -e 命令启用</p>
+<pre><code>sudo pfctl -E
+</code></pre><p>使用 -d 命令关闭 pf：</p>
+<pre><code>sudo pfctl -d
+</code></pre><h5 id="启动arp"><a href="#启动arp" class="headerlink" title="启动arp"></a>启动arp</h5><pre><code>sudo ettercap -i en0 -Tq -M arp:remote /192.168.3.23///
+192.168.3.23 这个IP是手机IP
+</code></pre><h5 id="用nginx测试"><a href="#用nginx测试" class="headerlink" title="用nginx测试"></a>用nginx测试</h5><p>监听8080 在web上访问80看看 可不可以正常</p>
+<pre><code>brew services start nginx
+brew services stop nginx
+</code></pre><h5 id="开启wireshark-开始监听吧。。。。"><a href="#开启wireshark-开始监听吧。。。。" class="headerlink" title="开启wireshark 开始监听吧。。。。"></a>开启wireshark 开始监听吧。。。。</h5><hr>
+<h3 id="ettercap参数说明"><a href="#ettercap参数说明" class="headerlink" title="ettercap参数说明"></a>ettercap参数说明</h3><pre><code>参数介绍：
+攻击和嗅探类
+
+    -M, --mitm
+
+        ARP欺骗，参数 -M arp
+
+            remote  #双向模式，同时arp欺骗通信的双方，参数 -M arp:remote
+            oneway       #单向模式，只arp欺骗第一个目标到第二个目标的通信，参数 -M arp:oneway
+
+        icmp欺骗，参数 -M icmp:(MAC/IP)
+        DHCP欺骗，参数 -M dhcp:(ip_pool/netmask/dns)，如 -M dhcp:192.168.0.30,35,50-60/255.255.255.0/192.168.0.1是给新接入的主机提供ip地址，子网掩码和网关，-M dhcp:/255.255.255.0/192.168.0.1则不提供ip地址，只欺骗子网掩码和网关
+        Port Stealing，这个没搞懂～
+
+    -o, --only-mitm   #只进行中间人攻击，不进行嗅探
+    -f , --pcapfilter     #加载过滤器
+    -B, --bridge    #Bridged sniffing
+
+离线类参数
+
+    -r, --read       #读取本地文件
+    -w, --write      #将嗅探数据保存到本地
+
+界面显示类
+
+    -T, --text       #文本模式显示  
+    -q, --quiet        #安静模式，不显示嗅探数据
+    -s, --script        #加载脚本
+    -C, --curses       #curses-UI模式
+    -G, --gtk       #GTK-UI模式
+    -D, --daemonize       #daemonize后台模式
+
+普通选项：
+
+    -b, --broadcast        #嗅探广播地址
+    -i, --iface         #选择网卡
+    -I, --iflist            #列出可用网卡
+    -Y, --secondary         #后备网卡
+    -A, --address          #ip地址，针对一网卡多ip的情况
+    -n, --netmask             
+    -R, --reversed
+    -z, --silent              #不进行arp毒化和主机扫描
+    -p, --nopromisc
+    -S, --nosslmitm                 #不使用ssl中间人攻击
+    -t, --proto         #协议，tcp/udp/all，默认为all
+    -u, --unoffensive
+    -j, --load-hosts                #加载保存的主机地址
+    -k, --save-hosts                #保存扫描到的主机地址
+    -P, --plugin                 #载入插件
+    -F, --filter                     #载入过滤器文件
+    -W, --wifi-key            #载入wifi密码：
+
+              --wifi-key wep:128:p:secret
+              --wifi-key wep:128:s:ettercapwep0
+              --wifi-key &apos;wep:64:s:\x01\x02\x03\x04\x05&apos;
+              --wifi-key wpa:pwd:ettercapwpa:ssid
+              --wifi-key wpa:psk:663eb260e87cf389c6bd7331b28d82f5203b0cae4e315f9cbb7602f3236708a6
+
+    -a, --config                #载入并使用一个非默认配置文件
+    --certificate              #ssl攻击使用指定的 证书文件
+    --private-key            #ssl攻击使用指定的私钥文件
+
+可视化参数
+
+    -e, --regex         #使用一个正则表达式
+    -V, --visual           #显示方式
+        hex            #16进制
+        ascii           #ASCII码
+        text            
+        ebcdic
+        html
+        utf8
+    -d, --dns           #把ip地址转化为主机名
+    -E, --ext-headers
+    -Q, --superquiet          #超级安静模式，啥信息都不显示，只保存
+
+日志记录选项
+
+    -L, --log             #把所有数据包保存log文件
+    -l, --log-info           #读取离线log文件信息
+    -m, --log-msg              #显示存储在log文件里所有用户用ettercap抓取的信息
+    -c, --compress            #通过gzip算法压缩log文件
+    -o, --only-local           #只存储本地局域网主机配置信息
+    -O, --only-remote           #只存储远程主机配置信息
+
+
+常见的参数组合：
+
+ettercap -Tqi eth0 -M ARP // //           #arp毒化eth0所在的网段，安静模式文本显示
+
+ettercap -Tzq /10.0.0.1/21,22,23  -w hack.pcap          #监听10.0.0.1的ftp，ssh，telnet信息,并保存到本地
+
+ettercap -Tq -P dns_spoof -M arp /192.168.1.120/ //        #对192.168.1.120进行dns欺骗，使用默认网卡eth0,文本模式安静显示
+
+ettercap -Tqi eth0 -L sniffed_data -F filter.ef -M arp:remote /10.0.0.2/80 //     #使用过滤并监听10.0.0.2在80端口的所有通信，安静模式文本显示，保存数据到本地
+</code></pre>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Appium测试</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Appium测试/" class="article-tag-list-link color4">Appium测试</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/02/08/2018-03-08-android-02/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2018-02-08-android-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -860,126 +1054,6 @@ X = true    | 成功：X = true
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/11/20/2017-11-20-erlang-03/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2017-11-14-erlang-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/12/2017-11-14-erlang-02/">Erlang程序设计(第2版) 读书笔记【第二章】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/11/12/2017-11-14-erlang-02/" class="archive-article-date">
-  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="第2章-Erlang速览"><a href="#第2章-Erlang速览" class="headerlink" title="第2章 Erlang速览"></a>第2章 Erlang速览</h3><h5 id="变量和原子的语法"><a href="#变量和原子的语法" class="headerlink" title="变量和原子的语法"></a>变量和原子的语法</h5><ul>
-<li>Erlang的变量只能绑定一次。</li>
-<li>Erlang的变量以大写字母开头。</li>
-</ul>
-<h5 id="在-shell-里编译并运行-Hello-World"><a href="#在-shell-里编译并运行-Hello-World" class="headerlink" title="在 shell 里编译并运行 Hello World"></a>在 shell 里编译并运行 Hello World</h5><p>erl文件命令成 hello.erl 输入以下内容</p>
-<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- <span class="keyword">module</span>(hello).</div><div class="line">- <span class="keyword">export</span>([start/<span class="number">0</span>]).</div><div class="line"></div><div class="line">start()-&gt;</div><div class="line">	io:format(<span class="string">"hello world ~n"</span>).</div><div class="line">```	</div><div class="line">编译并运行它，我们从保存hello.erl的目录里启动Erlang shell</div></pre></td></tr></table></figure>
-<p>erl<br>Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]</p>
-<p>Eshell V8.2  (abort with ^G)</p>
-<p>1&gt; c(hello,debug_info).<br>{ok,hello}<br>9&gt; hello:start().<br>hello world<br>ok<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##### 并发</div><div class="line">- Erlang的基本并发单元是进程（process）。</div><div class="line">- 只能通过发送和接收消息来与其他进程通信。</div><div class="line">- loop函数永远不会返回，利用尾部的优化，意思是此函数的运行空间是固定的，不会耗尽栈空间</div><div class="line">- Erlang编译器和运行时系统会正确推断出如何在收到消息时运行适当的代码。不需要编写任何的<span class="keyword">if</span>-then-else或switch语句来设定该做什么。这是模式匹配带来的乐趣之一，会为你节省大量工作</div><div class="line"></div><div class="line"></div><div class="line">##### server</div></pre></td></tr></table></figure></p>
-<p>cat afile_server.erl</p>
-<p>-module(afile_server).<br>-export([start/1,loop/1]).</p>
-<p>start(Dir) -&gt;</p>
-<p>  spawn(afile_server,loop, [Dir]).</p>
-<p>loop(Dir) -&gt;</p>
-<p>  receive</p>
-<pre><code>{Client, list_dir} -&gt;
-
-  Client ! { self(), file:list_dir(Dir)};
-
-{Client, {get_file, File}} -&gt;
-
-  Full = filename:join(Dir, File),
-  Client ! {self(), file:read(Full)}
-</code></pre><p>  end,<br>  loop(Dir).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
-<p>➜  src erl<br>Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]</p>
-<p>Eshell V8.2  (abort with ^G)<br>1&gt; c(afile_server).<br>{ok,afile_server}<br>2&gt; FS =  afile_server:start(“.”).</p>
-<p><0.64.0><br>3&gt; FS ! {self(),list_dir}<br>3&gt; .<br>{<0.57.0>,list_dir}<br>4&gt; receive X-&gt;X end.<br>{<0.64.0>,<br> {ok,[“afile_server.beam”,”afile_server.erl”,<br>      “file_server.beam”,”hello.beam”,”hello.erl”,”test.beam”,<br>      “test.erl”]}}<br>5&gt;<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##### client</div></pre></td></tr></table></figure></0.64.0></0.57.0></0.64.0></p>
-<p>-module(afile_client).<br>-export([ls/1, get_file/2]).</p>
-<p>ls(Server) -&gt;</p>
-<p>  Server ! {self(), list_dir},</p>
-<p>  receive</p>
-<pre><code>{Server, FileList} -&gt;
-
-  FileList
-</code></pre><p>  end.</p>
-<p>get_file(Server, File) -&gt;</p>
-<p>  Server ! {self(), {get_file, File}},</p>
-<p>  receive</p>
-<pre><code>{Server, Content} -&gt;
-
-  Content
-</code></pre><p>  end.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
-<p>1&gt; c(afile_server).<br>{ok,afile_server}<br>2&gt; c(afile_client).<br>{ok,afile_client}<br>3&gt; FS =  afile_server:start(“.”).</p>
-<p><0.69.0><br>4&gt; afile_client:ls(“./“).<br>** exception error: bad argument<br>     in function  afile_client:ls/1 (afile_client.erl, line 15)<br>5&gt; afile_client:ls(FS).<br>{ok,[“afile_client.beam”,”afile_client.erl”,<br>     “afile_server.beam”,”afile_server.erl”,”file_server.beam”,<br>     “hello.beam”,”hello.erl”,”test.beam”,”test.erl”]}<br>```</0.69.0></p>
-<blockquote>
-<p>这样吧</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/12/2017-11-14-erlang-02/">展开全文 >></a>
         </p>
       
 

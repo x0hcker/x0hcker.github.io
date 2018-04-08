@@ -157,6 +157,122 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2016-02-05-php-ext-5" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/05/2016-02-05-php-ext-5/">php7扩展开发[5]本类内函数调用</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/05/2016-02-05-php-ext-5/" class="archive-article-date">
+  	<time datetime="2017-08-05T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-需要实现的细节"><a href="#1-需要实现的细节" class="headerlink" title="1.需要实现的细节"></a>1.需要实现的细节</h3><ul>
+<li>在第三节，有个调用函数的例子，我们来稍微细说下</li>
+<li>然后就是平时大家定义了类里面的方法，有时候有相互调用，我们写一个例子</li>
+</ul>
+<h3 id="2-person扩展"><a href="#2-person扩展" class="headerlink" title="2.person扩展"></a>2.person扩展</h3><h4 id="2-1在php-person-h中增加："><a href="#2-1在php-person-h中增加：" class="headerlink" title="2.1在php_person.h中增加："></a>2.1在php_person.h中增加：</h4><pre><code>PHP_METHOD(person_ce,callback);
+PHP_METHOD(person_ce,setkey);
+</code></pre><h4 id="2-2-实现代码"><a href="#2-2-实现代码" class="headerlink" title="2.2 实现代码"></a>2.2 实现代码</h4><p>在php_initest.h中打开全局变量设置块的注释，改成自己相要的变量如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//新增定义</span></div><div class="line">ZEND_BEGIN_ARG_INFO_EX(global_setkey_arg, <span class="number">0</span>, <span class="number">0</span>, <span class="number">2</span>)</div><div class="line">	ZEND_ARG_INFO(<span class="number">0</span>, setkey1)</div><div class="line">	ZEND_ARG_INFO(<span class="number">0</span>, setkey2)</div><div class="line">ZEND_END_ARG_INFO()</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">const</span> zend_function_entry person_functions[] = &#123;</div><div class="line"></div><div class="line">	</div><div class="line">	ZEND_ME(person, __construct, global_config_arg, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)</div><div class="line">	</div><div class="line">	ZEND_ME(person,doing,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC)</div><div class="line">	ZEND_ME(person,saying,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC)</div><div class="line">	<span class="comment">//增加两个类里面的方法</span></div><div class="line">	ZEND_ME(person,callback,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC)</div><div class="line">	ZEND_ME(person,setkey,global_setkey_arg,ZEND_ACC_PUBLIC)</div><div class="line">	</div><div class="line">	ZEND_ME(person,__destruct,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC|ZEND_ACC_DTOR)</div><div class="line">	</div><div class="line">	PHP_FE_END	<span class="comment">/* Must be the last line in person_functions[] */</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line">ZEND_METHOD(person,setkey)&#123;</div><div class="line"></div><div class="line">    zval *param1;</div><div class="line">    zval *param2;</div><div class="line"></div><div class="line">	<span class="comment">//#include &lt;zend_API.h&gt;</span></div><div class="line">	<span class="comment">//int zend_parse_parameters ( int num_args TSRMLS_DC, char* type_spec, ... )</span></div><div class="line"></div><div class="line">    <span class="keyword">if</span> (zend_parse_parameters(ZEND_NUM_ARGS(), <span class="string">"z|z"</span>,&amp;param1,&amp;param2) == FAILURE) &#123;</div><div class="line">        RETURN_FALSE;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    zend_update_property(person_ce, getThis(), <span class="string">"param1"</span>, <span class="keyword">sizeof</span>(<span class="string">"param1"</span>)<span class="number">-1</span>, param1 TSRMLS_CC);</div><div class="line">    zend_update_property(person_ce, getThis(), <span class="string">"param2"</span>, <span class="keyword">sizeof</span>(<span class="string">"param2"</span>)<span class="number">-1</span>, param2 TSRMLS_CC);</div><div class="line"></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">ZEND_METHOD(person,callback)&#123;</div><div class="line"></div><div class="line">	<span class="comment">//#include &lt;zend_interfaces.h&gt;</span></div><div class="line">	<span class="comment">//zval* zend_call_method_with_0_params ( ... obj, zend_class_entry* obj_ce, zend_function** fn_proxy, char* function_name, ... retval ) </span></div><div class="line">	<span class="comment">//zval* zend_call_method_with_1_params ( ... obj, zend_class_entry* obj_ce, zend_function** fn_proxy, char* function_name, ... retval, zval* arg1 )   </span></div><div class="line">	<span class="comment">//zval* zend_call_method_with_2_params ( ... obj, zend_class_entry* obj_ce, zend_function** fn_proxy, char* function_name, ... retval, zval* arg1, zval* arg2 )</span></div><div class="line">	<span class="comment">//zval* zend_call_method ( zval** object_pp, zend_class_entry* obj_ce, zend_function** fn_proxy, char* function_name, int function_name_len, zval** retval_ptr_ptr, int param_count, zval* arg1, zval* arg2, magic TSRMLS_DC )</span></div><div class="line">	zend_call_method_with_0_params(getThis(),person_ce,<span class="literal">NULL</span>,<span class="string">"doing"</span>,return_value);</div><div class="line"></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">ZEND_METHOD(person,callback_function)&#123;</div><div class="line">    <span class="comment">//声明一个对象变量</span></div><div class="line">	zval *object_name;</div><div class="line">    object_init_ex(object_name,person_ce);</div><div class="line"></div><div class="line">	<span class="comment">//声明函数名变量</span></div><div class="line">	zval function_name;</div><div class="line">	ZVAL_STRING(&amp;function_name,<span class="string">"doing"</span>);</div><div class="line"></div><div class="line">	<span class="comment">//声明承接返回值的变量</span></div><div class="line">	zval retval;</div><div class="line"></div><div class="line">	<span class="comment">// 调用类的 doing 方法</span></div><div class="line">   <span class="keyword">if</span>(call_user_function(EG(function_table), object_name, &amp;function_name, &amp;retval, <span class="number">0</span>, <span class="literal">NULL</span>)==FAILURE)&#123;</div><div class="line"></div><div class="line">		RETURN_NULL();</div><div class="line">		<span class="comment">//	zend_error(E_ERROR,"call person doing error");</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">	<span class="comment">//释放资源空间</span></div><div class="line">   *return_value=*retval;</div><div class="line">	zval_copy_ctor(return_value);</div><div class="line">	zval_ptr_dtor(&amp;retval);</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="2-3-相关内容"><a href="#2-3-相关内容" class="headerlink" title="2.3 相关内容"></a>2.3 相关内容</h4><pre><code>type_spec是格式化字符串，其常见的含义如下：
+参数   代表着的类型
+b   Boolean
+l   Integer 整型
+d   Floating point 浮点型
+s   String 字符串
+r   Resource 资源
+a   Array 数组
+o   Object instance 对象
+O   Object instance of a specified type 特定类型的对象
+z   Non-specific zval 任意类型～
+Z   zval**类型
+f   表示函数、方法名称
+
+对应的接收变量类型
+
+参数  对应C里的数据类型
+b   zend_bool
+l   long
+d   double
+s   char*, int 前者接收指针，后者接收长度
+r   zval*
+a   zval*
+o   zval*
+O   zval*, zend_class_entry*
+z   zval*
+Z   zval**
+
+
+zend_parse_parameters中的  | ，这个表示 在它之前的参数是必须的，之后的是非必须的
+</code></pre><h5 id="2-4-扩展使用"><a href="#2-4-扩展使用" class="headerlink" title="2.4 扩展使用"></a>2.4 扩展使用</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">[root@bogon tests]# cat test.php</div><div class="line">&lt;?php</div><div class="line"></div><div class="line"><span class="meta">$</span><span class="bash">n = new person(array(<span class="string">'key'</span>=&gt;<span class="string">'value'</span>));</span></div><div class="line"></div><div class="line"><span class="meta">$</span><span class="bash">n-&gt;setkey(<span class="string">'testparam1'</span>,<span class="string">'testparam2'</span>);</span></div><div class="line"><span class="meta">var_dump($</span><span class="bash">n-&gt;param1);</span></div><div class="line"><span class="meta">var_dump($</span><span class="bash">n-&gt;param2);</span></div><div class="line"></div><div class="line"></div><div class="line">[root@bogon tests]# php test.php</div><div class="line">string(10) "testparam1"</div><div class="line">string(10) "testparam2"</div><div class="line">array(1) &#123;</div><div class="line">  ["key"]=&gt;</div><div class="line">  string(5) "value"</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+<pre><code>仅属个人观点, 可以随意转载但保留以下信息
+作者：极品黑公子
+邮箱：x0hcker@gmail.com
+</code></pre><p>```</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/05/2016-02-05-php-ext-5/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2016-02-04-php-ext-4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -916,108 +1032,6 @@ echo &quot;3&quot; &gt; /opt/zookeeper/data/myid 在172.16.61.104上
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/07/07/2017-07-07-cluster-zookeeper-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2017-07-05-cluster-redis-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/05/2017-07-05-cluster-redis-1/">Redis的Cluster集群搭建及管理</a>
-    </h1>
-  
-
-        
-        <a href="/2017/07/05/2017-07-05-cluster-redis-1/" class="archive-article-date">
-  	<time datetime="2017-07-05T12:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h3 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h3><ul>
-<li><p>三台服务器 </p>
-<ul>
-<li>172.16.61.102  172.16.61.103  172.16.61.104</li>
-</ul>
-</li>
-<li><p>redis端口占有用情况</p>
-<ul>
-<li>172.16.61.102:6000  172.16.61.102:7000  </li>
-<li>172.16.61.103:6000  172.16.61.103:7000  </li>
-<li>172.16.61.104:6000  172.16.61.104:7000</li>
-</ul>
-</li>
-</ul>
-<h3 id="安装redis-每台服务器"><a href="#安装redis-每台服务器" class="headerlink" title="安装redis[每台服务器]"></a>安装redis[每台服务器]</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">wget http:<span class="comment">//download.redis.io/releases/redis-3.2.9.tar.gz</span></div><div class="line">tar zxf redis-<span class="number">3.2</span>.<span class="number">9</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span> </div><div class="line">cd redis-<span class="number">3.2</span>.<span class="number">9</span></div><div class="line">make &amp;&amp; make install</div><div class="line">cp src/redis-trib<span class="selector-class">.rb</span> /usr/bin/</div><div class="line">cp src/redis-trib<span class="selector-class">.rb</span> /usr/local/bin/</div></pre></td></tr></table></figure>
-<h3 id="安装redis-cluster-每台服务器"><a href="#安装redis-cluster-每台服务器" class="headerlink" title="安装redis cluster [每台服务器]"></a>安装redis cluster [每台服务器]</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">mkdir</span> -<span class="keyword">p</span> /<span class="keyword">opt</span>/<span class="number">6000</span>/logs </div><div class="line"><span class="built_in">mkdir</span> -<span class="keyword">p</span> /<span class="keyword">opt</span>/<span class="number">6000</span>/data </div><div class="line"><span class="built_in">mkdir</span> -<span class="keyword">p</span> /<span class="keyword">opt</span>/<span class="number">6000</span>/<span class="keyword">conf</span> </div><div class="line">	</div><div class="line"><span class="built_in">mkdir</span> -<span class="keyword">p</span> /<span class="keyword">opt</span>/<span class="number">7000</span>/logs </div><div class="line"><span class="built_in">mkdir</span> -<span class="keyword">p</span> /<span class="keyword">opt</span>/<span class="number">7000</span>/data </div><div class="line"><span class="built_in">mkdir</span> -<span class="keyword">p</span> /<span class="keyword">opt</span>/<span class="number">7000</span>/<span class="keyword">conf</span> </div><div class="line">```		</div><div class="line"></div><div class="line">[root@yaliceshi-<span class="number">1</span>-<span class="number">2</span> <span class="keyword">opt</span>]# <span class="keyword">cat</span> /<span class="keyword">opt</span>/<span class="number">6000</span>/<span class="keyword">conf</span>/redis_6000.<span class="keyword">conf</span></div><div class="line"></div><div class="line">```	</div><div class="line">port <span class="number">6000</span>  </div><div class="line">bind <span class="number">172.16</span>.<span class="number">61.102</span></div><div class="line">cluster-enabled yes  </div><div class="line">cluster-config-<span class="keyword">file</span> nodes.<span class="keyword">conf</span>  </div><div class="line">cluster-node-timeout <span class="number">5000</span></div><div class="line">cluster-slave-validity-factor <span class="number">10</span></div><div class="line">cluster-migration-barrier <span class="number">1</span></div><div class="line">cluster-require-full-coverage yes</div><div class="line">appendonly yes </div><div class="line">daemonize yes </div><div class="line">pidfile /<span class="keyword">opt</span>/<span class="number">6000</span>/redis.pid</div><div class="line">dir /<span class="keyword">opt</span>/<span class="number">6000</span>/data</div><div class="line">logfile /<span class="keyword">opt</span>/<span class="number">6000</span>/logs/error.<span class="built_in">log</span></div></pre></td></tr></table></figure>
-<p>[root@yaliceshi-1-2 opt]# cat /opt/7000/conf/redis_7000.conf</p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">port 7000  </div><div class="line">bind 172.16.61.102</div><div class="line"><span class="keyword">cluster</span>-enabled yes  </div><div class="line"><span class="keyword">cluster</span>-config-<span class="keyword">file</span> nodes.<span class="keyword">conf</span>  </div><div class="line"><span class="keyword">cluster</span>-node-timeout 5000</div><div class="line"><span class="keyword">cluster</span>-slave-validity-<span class="keyword">factor</span> 10</div><div class="line"><span class="keyword">cluster</span>-migration-barrier 1</div><div class="line"><span class="keyword">cluster</span>-require-full-coverage yes</div><div class="line">appendonly yes </div><div class="line">daemonize yes </div><div class="line">pidfile /opt/7000/redis.pid</div><div class="line"><span class="keyword">dir</span> /opt/7000/data</div><div class="line">logfile /opt/7000/logs/<span class="keyword">error</span>.<span class="built_in">log</span></div></pre></td></tr></table></figure>
-<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line">redis-server /opt/<span class="number">6000</span>/conf/redis_6000.conf </div><div class="line">redis-server /opt/<span class="number">7000</span>/conf/redis_7000.conf </div><div class="line"></div><div class="line"><span class="string">```</span>	</div><div class="line"></div><div class="line">* 安装ruby</div><div class="line">	* yum -y install ruby rubygems</div><div class="line">	* wget https://rubygems.org/downloads/redis-<span class="number">3.3</span><span class="meta">.3</span>.gem</div><div class="line">	* gem install -l redis-<span class="number">3.3</span><span class="meta">.3</span>.gem </div><div class="line">  </div><div class="line">* 创建集群</div><div class="line">	* redis-trib.rb create --replicas <span class="number">1</span> <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.102</span>:<span class="number">6000</span>  <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.102</span>:<span class="number">7000</span>  <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.103</span>:<span class="number">6000</span>  <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.103</span>:<span class="number">7000</span>  <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.104</span>:<span class="number">6000</span>  <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.104</span>:<span class="number">7000</span></div><div class="line"></div><div class="line"><span class="string">```</span>  </div><div class="line">&gt;&gt;&gt; Creating cluster</div><div class="line">&gt;&gt;&gt; Performing hash slots allocation on <span class="number">6</span> nodes...</div><div class="line">Using <span class="number">3</span> masters:</div><div class="line"><span class="number">172.16</span><span class="meta">.61</span><span class="meta">.104</span>:<span class="number">6000</span></div><div class="line"><span class="number">172.16</span><span class="meta">.61</span><span class="meta">.103</span>:<span class="number">6000</span></div><div class="line"><span class="number">172.16</span><span class="meta">.61</span><span class="meta">.102</span>:<span class="number">6000</span></div><div class="line">Adding replica <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.103</span>:<span class="number">7000</span> to <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.104</span>:<span class="number">6000</span></div><div class="line">Adding replica <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.104</span>:<span class="number">7000</span> to <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.103</span>:<span class="number">6000</span></div><div class="line">Adding replica <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.102</span>:<span class="number">7000</span> to <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.102</span>:<span class="number">6000</span></div><div class="line"><span class="symbol">M:</span> 0fce21a91ba5be57f75e65953383fb968515c03a <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.102</span>:<span class="number">6000</span></div><div class="line"><span class="symbol">   slots:</span><span class="number">10923</span>-<span class="number">16383</span> (<span class="number">5461</span> slots) master</div><div class="line"><span class="symbol">S:</span> 57601f37944296b3144261b304f2d18c044e610d <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.102</span>:<span class="number">7000</span></div><div class="line">   replicates 0fce21a91ba5be57f75e65953383fb968515c03a</div><div class="line"><span class="symbol">M:</span> f551d92f7504cca5109b2ea9bee1e9a56b711ddc <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.103</span>:<span class="number">6000</span></div><div class="line"><span class="symbol">   slots:</span><span class="number">5461</span>-<span class="number">10922</span> (<span class="number">5462</span> slots) master</div><div class="line"><span class="symbol">S:</span> b993661e480ff1005117a4b4418818798b0602ee <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.103</span>:<span class="number">7000</span></div><div class="line">   replicates 39eb4b60328941c93569448fd8730dfa36a35515</div><div class="line"><span class="symbol">M:</span> 39eb4b60328941c93569448fd8730dfa36a35515 <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.104</span>:<span class="number">6000</span></div><div class="line"><span class="symbol">   slots:</span><span class="number">0</span>-<span class="number">5460</span> (<span class="number">5461</span> slots) master</div><div class="line"><span class="symbol">S:</span> 2a0e2fbcbea48b43f2f953fd84517c5a9cada9ce <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.104</span>:<span class="number">7000</span></div><div class="line">   replicates f551d92f7504cca5109b2ea9bee1e9a56b711ddc</div><div class="line">Can I set the above configuration? (type <span class="string">'yes'</span> to accept): yes</div><div class="line">&gt;&gt;&gt; Nodes configuration updated</div><div class="line">&gt;&gt;&gt; Assign a different config epoch to <span class="number">each</span> node</div><div class="line">&gt;&gt;&gt; Sending CLUSTER MEET messages to join the cluster</div><div class="line">Waiting for the cluster to join...</div><div class="line">&gt;&gt;&gt; Performing Cluster Check (using node <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.102</span>:<span class="number">6000</span>)</div><div class="line"><span class="symbol">M:</span> 0fce21a91ba5be57f75e65953383fb968515c03a <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.102</span>:<span class="number">6000</span></div><div class="line"><span class="symbol">   slots:</span><span class="number">10923</span>-<span class="number">16383</span> (<span class="number">5461</span> slots) master</div><div class="line">   <span class="number">1</span> additional replica(s)</div><div class="line"><span class="symbol">S:</span> 2a0e2fbcbea48b43f2f953fd84517c5a9cada9ce <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.104</span>:<span class="number">7000</span></div><div class="line"><span class="symbol">   slots:</span> (<span class="number">0</span> slots) slave</div><div class="line">   replicates f551d92f7504cca5109b2ea9bee1e9a56b711ddc</div><div class="line"><span class="symbol">S:</span> 57601f37944296b3144261b304f2d18c044e610d <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.102</span>:<span class="number">7000</span></div><div class="line"><span class="symbol">   slots:</span> (<span class="number">0</span> slots) slave</div><div class="line">   replicates 0fce21a91ba5be57f75e65953383fb968515c03a</div><div class="line"><span class="symbol">M:</span> 39eb4b60328941c93569448fd8730dfa36a35515 <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.104</span>:<span class="number">6000</span></div><div class="line"><span class="symbol">   slots:</span><span class="number">0</span>-<span class="number">5460</span> (<span class="number">5461</span> slots) master</div><div class="line">   <span class="number">1</span> additional replica(s)</div><div class="line"><span class="symbol">S:</span> b993661e480ff1005117a4b4418818798b0602ee <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.103</span>:<span class="number">7000</span></div><div class="line"><span class="symbol">   slots:</span> (<span class="number">0</span> slots) slave</div><div class="line">   replicates 39eb4b60328941c93569448fd8730dfa36a35515</div><div class="line"><span class="symbol">M:</span> f551d92f7504cca5109b2ea9bee1e9a56b711ddc <span class="number">172.16</span><span class="meta">.61</span><span class="meta">.103</span>:<span class="number">6000</span></div><div class="line"><span class="symbol">   slots:</span><span class="number">5461</span>-<span class="number">10922</span> (<span class="number">5462</span> slots) master</div><div class="line">   <span class="number">1</span> additional replica(s)</div><div class="line">[OK] All nodes agree about slots configuration.</div><div class="line">&gt;&gt;&gt; Check for open slots...</div><div class="line">&gt;&gt;&gt; Check slots coverage...</div><div class="line">[OK] All <span class="number">16384</span> slots covered</div></pre></td></tr></table></figure>
-<ul>
-<li>检查集群</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="selector-attr">[root@yaliceshi-1-2 7000]</span># <span class="selector-tag">redis-cli</span> <span class="selector-tag">-h</span> 172<span class="selector-class">.16</span><span class="selector-class">.61</span><span class="selector-class">.102</span>  <span class="selector-tag">-p</span> 6000 <span class="selector-tag">cluster</span> <span class="selector-tag">nodes</span></div><div class="line">	0<span class="selector-tag">fce21a91ba5be57f75e65953383fb968515c03a</span> 172<span class="selector-class">.16</span><span class="selector-class">.61</span><span class="selector-class">.102</span><span class="selector-pseudo">:6000</span> <span class="selector-tag">myself</span>,<span class="selector-tag">master</span> <span class="selector-tag">-</span> 0 0 1 <span class="selector-tag">connected</span> 10923<span class="selector-tag">-16383</span></div><div class="line">	2<span class="selector-tag">a0e2fbcbea48b43f2f953fd84517c5a9cada9ce</span> 172<span class="selector-class">.16</span><span class="selector-class">.61</span><span class="selector-class">.104</span><span class="selector-pseudo">:7000</span> <span class="selector-tag">slave</span> <span class="selector-tag">f551d92f7504cca5109b2ea9bee1e9a56b711ddc</span> 0 1499409685274 6 <span class="selector-tag">connected</span></div><div class="line">	57601<span class="selector-tag">f37944296b3144261b304f2d18c044e610d</span> 172<span class="selector-class">.16</span><span class="selector-class">.61</span><span class="selector-class">.102</span><span class="selector-pseudo">:7000</span> <span class="selector-tag">slave</span> 0<span class="selector-tag">fce21a91ba5be57f75e65953383fb968515c03a</span> 0 1499409685274 2 <span class="selector-tag">connected</span></div><div class="line">	39<span class="selector-tag">eb4b60328941c93569448fd8730dfa36a35515</span> 172<span class="selector-class">.16</span><span class="selector-class">.61</span><span class="selector-class">.104</span><span class="selector-pseudo">:6000</span> <span class="selector-tag">master</span> <span class="selector-tag">-</span> 0 1499409684775 5 <span class="selector-tag">connected</span> 0<span class="selector-tag">-5460</span></div><div class="line">	<span class="selector-tag">b993661e480ff1005117a4b4418818798b0602ee</span> 172<span class="selector-class">.16</span><span class="selector-class">.61</span><span class="selector-class">.103</span><span class="selector-pseudo">:7000</span> <span class="selector-tag">slave</span> 39<span class="selector-tag">eb4b60328941c93569448fd8730dfa36a35515</span> 0 1499409683773 5 <span class="selector-tag">connected</span></div><div class="line">	<span class="selector-tag">f551d92f7504cca5109b2ea9bee1e9a56b711ddc</span> 172<span class="selector-class">.16</span><span class="selector-class">.61</span><span class="selector-class">.103</span><span class="selector-pseudo">:6000</span> <span class="selector-tag">master</span> <span class="selector-tag">-</span> 0 1499409684274 3 <span class="selector-tag">connected</span> 5461<span class="selector-tag">-10922</span></div></pre></td></tr></table></figure>
-<ul>
-<li>参考:    <ul>
-<li><a href="http://blog.csdn.net/reyleon/article/details/51454334" target="_blank" rel="external">http://blog.csdn.net/reyleon/article/details/51454334</a></li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/07/05/2017-07-05-cluster-redis-1/">展开全文 >></a>
         </p>
       
 
