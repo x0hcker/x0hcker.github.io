@@ -1822,6 +1822,191 @@ git config  user.email &quot;TEST1@gmail.com&quot;
 
 
   
+    <article id="post-2017-09-21-flume-kafka-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/20/2017-09-21-flume-kafka-1/">kafka-flume集群环境搭建【3】</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/20/2017-09-21-flume-kafka-1/" class="archive-article-date">
+  	<time datetime="2017-09-20T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h3 id="1-Flume与Kafka整合-把flume中的数据sink到Kafka"><a href="#1-Flume与Kafka整合-把flume中的数据sink到Kafka" class="headerlink" title="1.  Flume与Kafka整合 把flume中的数据sink到Kafka"></a>1.  Flume与Kafka整合 把flume中的数据sink到Kafka</h3><ol>
+<li>kafka 集群已经完成</li>
+<li>flume 集群已经完成</li>
+<li>flume 的数据存入kafka</li>
+</ol>
+<p>flume client -&gt; flume server -&gt; kafka 这样也是说只要改flume server中sink配置即可</p>
+<h3 id="2-配置flume"><a href="#2-配置flume" class="headerlink" title="2. 配置flume"></a>2. 配置flume</h3><h5 id="flume-client-conf"><a href="#flume-client-conf" class="headerlink" title="flume-client.conf"></a>flume-client.conf</h5><pre><code>[root@yaliceshi-1-2 ~]# cat /usr/local/flume/conf/flume-client.conf 
+#Agent
+flumeAgent.channels = c1
+flumeAgent.sources  = s1
+flumeAgent.sinks    = k1 
+#flumeAgent Spooling Directory Source
+#注(1)
+flumeAgent.sources.s1.type = spooldir
+flumeAgent.sources.s1.spoolDir  =/data/logs/
+flumeAgent.sources.s1.fileHeader = true
+flumeAgent.sources.s1.deletePolicy =immediate
+flumeAgent.sources.s1.batchSize =1000
+flumeAgent.sources.s1.channels =c1
+flumeAgent.sources.s1.deserializer.maxLineLength =1048576
+#flumeAgent FileChannel
+#注(2)
+flumeAgent.channels.c1.type = file
+flumeAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
+flumeAgent.channels.c1.dataDirs = /data/flume/spool/data
+flumeAgent.channels.c1.capacity = 200000000
+flumeAgent.channels.c1.keep-alive = 30
+flumeAgent.channels.c1.write-timeout = 30
+flumeAgent.channels.c1.checkpoint-timeout=600
+# flumeAgent Sinks
+#注(3)
+flumeAgent.sinks.k1.channel = c1
+flumeAgent.sinks.k1.type = avro
+# connect to CollectorMainAgent
+flumeAgent.sinks.k1.hostname = kafka103
+flumeAgent.sinks.k1.port = 44444
+</code></pre><font style="color:red">  sources 采用 spooldir 类型，监控/data/logs/目录中文件的变化 </font>
+
+<h5 id="flume-server-conf"><a href="#flume-server-conf" class="headerlink" title="flume-server.conf"></a>flume-server.conf</h5><pre><code>[root@yaliceshi-1-3 ~]# cat  /usr/local/flume/conf/flume-server.conf
+#flumeConsolidationAgent
+flumeConsolidationAgent.channels = c1
+flumeConsolidationAgent.sources  = s1
+flumeConsolidationAgent.sinks    = k1 
+
+#flumeConsolidationAgent Avro Source
+#注(4)
+flumeConsolidationAgent.sources.s1.type = avro
+flumeConsolidationAgent.sources.s1.channels = c1
+flumeConsolidationAgent.sources.s1.bind = kafka103
+flumeConsolidationAgent.sources.s1.port = 44444
+
+#flumeConsolidationAgent FileChannel
+flumeConsolidationAgent.channels.c1.type = file
+flumeConsolidationAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
+flumeConsolidationAgent.channels.c1.dataDirs = /data/flume/spool/data
+flumeConsolidationAgent.channels.c1.capacity = 200000000
+flumeConsolidationAgent.channels.c1.keep-alive = 30
+flumeConsolidationAgent.channels.c1.write-timeout = 30
+flumeConsolidationAgent.channels.c1.checkpoint-timeout=600
+
+##flumeConsolidationAgent Memory Channel
+#flumeConsolidationAgent.channels.c1.type = memory
+#flumeConsolidationAgent.channels.c1.capacity = 10000
+#flumeConsolidationAgent.channels.c1.transactionCapacity = 10000
+#flumeConsolidationAgent.channels.c1.byteCapacityBufferPercentage = 20
+#flumeConsolidationAgent.channels.c1.byteCapacity = 800000
+
+#flumeConsolidationAgent Sinks
+#注(5)
+flumeConsolidationAgent.sinks.k1.channel= c1
+flumeConsolidationAgent.sinks.k1.type = file_roll
+flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
+flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
+flumeConsolidationAgent.sinks.k1.batchSize = 10000
+</code></pre><font style="color:red">  sinks 采用 file_roll 类型，数据保存到 /data/tmp目录中 </font>
+
+
+
+<h5 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h5><pre><code>#flumeConsolidationAgent Sinks
+#注(5)
+#flumeConsolidationAgent.sinks.k1.channel= c1
+#flumeConsolidationAgent.sinks.k1.type = file_roll
+#flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
+#flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
+#flumeConsolidationAgent.sinks.k1.batchSize = 10000
+</code></pre><p>上面的注释掉加上下面的内容</p>
+<pre><code>#set sink to hdfs
+flumeConsolidationAgent.sinks.k1.type=org.apache.flume.sink.kafka.KafkaSink
+flumeConsolidationAgent.sinks.k1.topic = ScalaTopic
+flumeConsolidationAgent.sinks.k1.brokerList = kafka102:9092, kafka103:9092, kafka104:9092
+flumeConsolidationAgent.sinks.k1.requiredAcks = 1
+flumeConsolidationAgent.sinks.k1.batchSize = 20
+flumeConsolidationAgent.sinks.k1.channel=c1
+</code></pre><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>启动flume server</p>
+<pre><code>[root@yaliceshi-1-3 ~]#/usr/local/flume/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-server.conf --name flumeConsolidationAgent -Dflume.root.logger=INFO,console
+</code></pre><p>启动flume client</p>
+<pre><code>[root@yaliceshi-1-2 ~]#/usr/local/apache-flume-1.7.0-bin/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-client.conf --name flumeAgent -Dflume.root.logger=INFO,console
+</code></pre><p>启动 kafka 的消费者</p>
+<pre><code>[root@yaliceshi-1-1 ~]/usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
+</code></pre><p>拷个文件到flume客户端监听目录</p>
+<pre><code>[root@yaliceshi-1-2 ~]# echo &quot;test wqc&quot; &gt; test.log;cp test.log  /data/logs
+</code></pre><p>拷个文件到flume客户端监听目录</p>
+<pre><code>[root@yaliceshi-1-1 ~]#  /usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
+
+test wqc
+</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>&gt;</p>
+<ul>
+<li><a href="http://blog.csdn.net/strongyoung88/article/details/52937835" target="_blank" rel="external">http://blog.csdn.net/strongyoung88/article/details/52937835</a></li>
+<li><a href="http://blog.csdn.net/minicto/article/details/53643496" target="_blank" rel="external">http://blog.csdn.net/minicto/article/details/53643496</a></li>
+<li><a href="http://blog.csdn.net/shouhuzhezhishen/article/details/64904848" target="_blank" rel="external">http://blog.csdn.net/shouhuzhezhishen/article/details/64904848</a></li>
+<li><a href="http://blog.csdn.net/candysleep/article/details/53241268" target="_blank" rel="external">http://blog.csdn.net/candysleep/article/details/53241268</a></li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/20/2017-09-21-flume-kafka-1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2017-09-18-cluster-flume-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2140,191 +2325,6 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/09/20/2017-09-18-cluster-flume-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2017-09-21-flume-kafka-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/20/2017-09-21-flume-kafka-1/">kafka-flume集群环境搭建【3】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/20/2017-09-21-flume-kafka-1/" class="archive-article-date">
-  	<time datetime="2017-09-20T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h3 id="1-Flume与Kafka整合-把flume中的数据sink到Kafka"><a href="#1-Flume与Kafka整合-把flume中的数据sink到Kafka" class="headerlink" title="1.  Flume与Kafka整合 把flume中的数据sink到Kafka"></a>1.  Flume与Kafka整合 把flume中的数据sink到Kafka</h3><ol>
-<li>kafka 集群已经完成</li>
-<li>flume 集群已经完成</li>
-<li>flume 的数据存入kafka</li>
-</ol>
-<p>flume client -&gt; flume server -&gt; kafka 这样也是说只要改flume server中sink配置即可</p>
-<h3 id="2-配置flume"><a href="#2-配置flume" class="headerlink" title="2. 配置flume"></a>2. 配置flume</h3><h5 id="flume-client-conf"><a href="#flume-client-conf" class="headerlink" title="flume-client.conf"></a>flume-client.conf</h5><pre><code>[root@yaliceshi-1-2 ~]# cat /usr/local/flume/conf/flume-client.conf 
-#Agent
-flumeAgent.channels = c1
-flumeAgent.sources  = s1
-flumeAgent.sinks    = k1 
-#flumeAgent Spooling Directory Source
-#注(1)
-flumeAgent.sources.s1.type = spooldir
-flumeAgent.sources.s1.spoolDir  =/data/logs/
-flumeAgent.sources.s1.fileHeader = true
-flumeAgent.sources.s1.deletePolicy =immediate
-flumeAgent.sources.s1.batchSize =1000
-flumeAgent.sources.s1.channels =c1
-flumeAgent.sources.s1.deserializer.maxLineLength =1048576
-#flumeAgent FileChannel
-#注(2)
-flumeAgent.channels.c1.type = file
-flumeAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
-flumeAgent.channels.c1.dataDirs = /data/flume/spool/data
-flumeAgent.channels.c1.capacity = 200000000
-flumeAgent.channels.c1.keep-alive = 30
-flumeAgent.channels.c1.write-timeout = 30
-flumeAgent.channels.c1.checkpoint-timeout=600
-# flumeAgent Sinks
-#注(3)
-flumeAgent.sinks.k1.channel = c1
-flumeAgent.sinks.k1.type = avro
-# connect to CollectorMainAgent
-flumeAgent.sinks.k1.hostname = kafka103
-flumeAgent.sinks.k1.port = 44444
-</code></pre><font style="color:red">  sources 采用 spooldir 类型，监控/data/logs/目录中文件的变化 </font>
-
-<h5 id="flume-server-conf"><a href="#flume-server-conf" class="headerlink" title="flume-server.conf"></a>flume-server.conf</h5><pre><code>[root@yaliceshi-1-3 ~]# cat  /usr/local/flume/conf/flume-server.conf
-#flumeConsolidationAgent
-flumeConsolidationAgent.channels = c1
-flumeConsolidationAgent.sources  = s1
-flumeConsolidationAgent.sinks    = k1 
-
-#flumeConsolidationAgent Avro Source
-#注(4)
-flumeConsolidationAgent.sources.s1.type = avro
-flumeConsolidationAgent.sources.s1.channels = c1
-flumeConsolidationAgent.sources.s1.bind = kafka103
-flumeConsolidationAgent.sources.s1.port = 44444
-
-#flumeConsolidationAgent FileChannel
-flumeConsolidationAgent.channels.c1.type = file
-flumeConsolidationAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
-flumeConsolidationAgent.channels.c1.dataDirs = /data/flume/spool/data
-flumeConsolidationAgent.channels.c1.capacity = 200000000
-flumeConsolidationAgent.channels.c1.keep-alive = 30
-flumeConsolidationAgent.channels.c1.write-timeout = 30
-flumeConsolidationAgent.channels.c1.checkpoint-timeout=600
-
-##flumeConsolidationAgent Memory Channel
-#flumeConsolidationAgent.channels.c1.type = memory
-#flumeConsolidationAgent.channels.c1.capacity = 10000
-#flumeConsolidationAgent.channels.c1.transactionCapacity = 10000
-#flumeConsolidationAgent.channels.c1.byteCapacityBufferPercentage = 20
-#flumeConsolidationAgent.channels.c1.byteCapacity = 800000
-
-#flumeConsolidationAgent Sinks
-#注(5)
-flumeConsolidationAgent.sinks.k1.channel= c1
-flumeConsolidationAgent.sinks.k1.type = file_roll
-flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
-flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
-flumeConsolidationAgent.sinks.k1.batchSize = 10000
-</code></pre><font style="color:red">  sinks 采用 file_roll 类型，数据保存到 /data/tmp目录中 </font>
-
-
-
-<h5 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h5><pre><code>#flumeConsolidationAgent Sinks
-#注(5)
-#flumeConsolidationAgent.sinks.k1.channel= c1
-#flumeConsolidationAgent.sinks.k1.type = file_roll
-#flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
-#flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
-#flumeConsolidationAgent.sinks.k1.batchSize = 10000
-</code></pre><p>上面的注释掉加上下面的内容</p>
-<pre><code>#set sink to hdfs
-flumeConsolidationAgent.sinks.k1.type=org.apache.flume.sink.kafka.KafkaSink
-flumeConsolidationAgent.sinks.k1.topic = ScalaTopic
-flumeConsolidationAgent.sinks.k1.brokerList = kafka102:9092, kafka103:9092, kafka104:9092
-flumeConsolidationAgent.sinks.k1.requiredAcks = 1
-flumeConsolidationAgent.sinks.k1.batchSize = 20
-flumeConsolidationAgent.sinks.k1.channel=c1
-</code></pre><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>启动flume server</p>
-<pre><code>[root@yaliceshi-1-3 ~]#/usr/local/flume/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-server.conf --name flumeConsolidationAgent -Dflume.root.logger=INFO,console
-</code></pre><p>启动flume client</p>
-<pre><code>[root@yaliceshi-1-2 ~]#/usr/local/apache-flume-1.7.0-bin/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-client.conf --name flumeAgent -Dflume.root.logger=INFO,console
-</code></pre><p>启动 kafka 的消费者</p>
-<pre><code>[root@yaliceshi-1-1 ~]/usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
-</code></pre><p>拷个文件到flume客户端监听目录</p>
-<pre><code>[root@yaliceshi-1-2 ~]# echo &quot;test wqc&quot; &gt; test.log;cp test.log  /data/logs
-</code></pre><p>拷个文件到flume客户端监听目录</p>
-<pre><code>[root@yaliceshi-1-1 ~]#  /usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
-
-test wqc
-</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>&gt;</p>
-<ul>
-<li><a href="http://blog.csdn.net/strongyoung88/article/details/52937835" target="_blank" rel="external">http://blog.csdn.net/strongyoung88/article/details/52937835</a></li>
-<li><a href="http://blog.csdn.net/minicto/article/details/53643496" target="_blank" rel="external">http://blog.csdn.net/minicto/article/details/53643496</a></li>
-<li><a href="http://blog.csdn.net/shouhuzhezhishen/article/details/64904848" target="_blank" rel="external">http://blog.csdn.net/shouhuzhezhishen/article/details/64904848</a></li>
-<li><a href="http://blog.csdn.net/candysleep/article/details/53241268" target="_blank" rel="external">http://blog.csdn.net/candysleep/article/details/53241268</a></li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/20/2017-09-21-flume-kafka-1/">展开全文 >></a>
         </p>
       
 
