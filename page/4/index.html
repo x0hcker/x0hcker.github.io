@@ -57,7 +57,7 @@
 
 	<nav class="header-menu">
 	
-		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/devops/">devops</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
 	
 	</nav>
 		<nav class="header-smart-menu">
@@ -157,19 +157,19 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-2015-05-20-training-python-13" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2015-04-27-training-python-7" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-05-20-training-python-13/">python技术分享[13]－ Flask实现restful接口</a>
+      <a class="article-title" href="/2017/09/15/2015-04-27-training-python-7/">python技术分享[7]－ 自定义数据库连接池</a>
     </h1>
   
 
         
-        <a href="/2017/09/15/2015-05-20-training-python-13/" class="archive-article-date">
+        <a href="/2017/09/15/2015-04-27-training-python-7/" class="archive-article-date">
   	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
 </a>
         
@@ -177,17 +177,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="1-安装扩展"><a href="#1-安装扩展" class="headerlink" title="1.安装扩展"></a>1.安装扩展</h4><ul>
-<li>pip install flask</li>
-<li>pip install flask-restful</li>
-<li>pip install sqlalchemy</li>
-<li>网方文档地址：<br><a href="http://flask-restful.readthedocs.org/en/0.3.3/" target="_blank" rel="external">http://flask-restful.readthedocs.org/en/0.3.3/</a></li>
-</ul>
-<h4 id="2-models代码："><a href="#2-models代码：" class="headerlink" title="2.models代码："></a>2.models代码：</h4><figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/python</span></div><div class="line"><span class="meta">#coding=utf-8</span></div><div class="line"></div><div class="line">‘’‘</div><div class="line">功能：定义数据表结构，生成需要生成数据表时，直接python models.py</div><div class="line">’‘’</div><div class="line"><span class="title">from</span> sqlalchemy <span class="keyword">import</span> Column</div><div class="line"><span class="title">from</span> sqlalchemy <span class="keyword">import</span> Integer</div><div class="line"><span class="title">from</span> sqlalchemy <span class="keyword">import</span> String</div><div class="line"><span class="title">from</span> sqlalchemy.ext.declarative <span class="keyword">import</span> declarative_base</div><div class="line"></div><div class="line"><span class="type">Base</span> = declarative_base()</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="type">Todo</span>(<span class="type">Base</span>):</span></div><div class="line"><span class="class">    __tablename__ = 'todos'</span></div><div class="line"><span class="class"></span></div><div class="line"><span class="class">    id = <span class="type">Column</span>(<span class="type">Integer</span>, <span class="title">primary_key</span>=<span class="type">True</span>)</span></div><div class="line"><span class="class">    task = <span class="type">Column</span>(<span class="type">String(255)</span>)</span></div><div class="line"><span class="class">‘’‘</span></div><div class="line"><span class="class">if __name__ == "__main__":</span></div><div class="line"><span class="class">    from sqlalchemy import create_engine</span></div><div class="line"><span class="class">    from settings import <span class="type">DB_URI</span></span></div><div class="line"><span class="class">    engine = create_engine(<span class="type">DB_URI</span>)</span></div><div class="line"><span class="class">    <span class="type">Base</span>.metadata.drop_all(<span class="title">engine</span>)</span></div><div class="line"><span class="class">    <span class="type">Base</span>.metadata.create_all(<span class="title">engine</span>)</span></div><div class="line"><span class="class"></span></div><div class="line"><span class="class">’‘’</span></div></pre></td></tr></table></figure>
-<h4 id="3-db代码："><a href="#3-db代码：" class="headerlink" title="3.db代码："></a>3.db代码：</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> create_engine</div><div class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> scoped_session</div><div class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> sessionmaker</div><div class="line">#<span class="keyword">from</span> settings <span class="keyword">import</span> DB_URI</div><div class="line"></div><div class="line">DB_URI = <span class="string">'mysql://root:@localhost:3306/test?charset=utf8'</span></div><div class="line"></div><div class="line">Session = sessionmaker(autocommit=<span class="literal">False</span>,</div><div class="line">                       autoflush=<span class="literal">False</span>,</div><div class="line">                       bind=create_engine(DB_URI))</div><div class="line">session = scoped_session(Session)</div></pre></td></tr></table></figure>
-<h4 id="4-resources代码："><a href="#4-resources代码：" class="headerlink" title="4.resources代码："></a>4.resources代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="string">功能：引入上面的models文件，将数据表数据进行对象化，定义restful资源，返回前数据利用marshal_with装饰器做序列化</span></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="keyword">from</span> models <span class="keyword">import</span> Todo</div><div class="line"><span class="keyword">from</span> db <span class="keyword">import</span> session</div><div class="line"></div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> reqparse</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> abort</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> Resource</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> fields</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> marshal_with</div><div class="line"></div><div class="line">todo_fields = &#123;</div><div class="line">    <span class="string">'id'</span>: fields.Integer,</div><div class="line">    <span class="string">'task'</span>: fields.String,</div><div class="line">    <span class="string">'uri'</span>: fields.Url(<span class="string">'todo'</span>, absolute=<span class="keyword">True</span>),</div><div class="line">&#125;</div><div class="line"></div><div class="line">parser = reqparse.RequestParser()</div><div class="line">parser.add_argument(<span class="string">'task'</span>, type=str)</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TodoResource</span><span class="params">(Resource)</span>:</span></div><div class="line"><span class="meta">    @marshal_with(todo_fields)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, id)</span>:</span></div><div class="line">        todo = session.query(Todo).filter(Todo.id == id).first()</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> todo:</div><div class="line">            abort(<span class="number">404</span>, message=<span class="string">"Todo &#123;&#125; doesn't exist"</span>.format(id))</div><div class="line">        <span class="keyword">return</span> todo</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self, id)</span>:</span></div><div class="line">        todo = session.query(Todo).filter(Todo.id == id).first()</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> todo:</div><div class="line">            abort(<span class="number">404</span>, message=<span class="string">"Todo &#123;&#125; doesn't exist"</span>.format(id))</div><div class="line">        session.delete(todo)</div><div class="line">        session.commit()</div><div class="line">        <span class="keyword">return</span> &#123;&#125;, <span class="number">204</span></div><div class="line"></div><div class="line"><span class="meta">    @marshal_with(todo_fields)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, id)</span>:</span></div><div class="line">        parsed_args = parser.parse_args()</div><div class="line">        <span class="keyword">print</span> parsed_args</div><div class="line">        todo = session.query(Todo).filter(Todo.id == id).first()</div><div class="line">        todo.task = parsed_args[<span class="string">'task'</span>]</div><div class="line">        session.add(todo)</div><div class="line">        session.commit()</div><div class="line">        <span class="keyword">return</span> todo, <span class="number">201</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TodoListResource</span><span class="params">(Resource)</span>:</span></div><div class="line"><span class="meta">    @marshal_with(todo_fields)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></div><div class="line">        todos = session.query(Todo).all()</div><div class="line">        <span class="keyword">return</span> todos</div><div class="line"></div><div class="line"><span class="meta">    @marshal_with(todo_fields)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self)</span>:</span></div><div class="line">        parsed_args = parser.parse_args()</div><div class="line">        todo = Todo(task=parsed_args[<span class="string">'task'</span>])</div><div class="line">        session.add(todo)</div><div class="line">        session.commit()</div><div class="line">        <span class="keyword">return</span> todo, <span class="number">201</span></div></pre></td></tr></table></figure>
-<h4 id="5-app代码："><a href="#5-app代码：" class="headerlink" title="5.app代码："></a>5.app代码：</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> Api</div><div class="line"></div><div class="line">app = Flask(__name__)</div><div class="line">api = Api(app)</div><div class="line"></div><div class="line"><span class="keyword">from</span> resources <span class="keyword">import</span> TodoListResource</div><div class="line"><span class="keyword">from</span> resources <span class="keyword">import</span> TodoResource</div><div class="line"></div><div class="line">api.add_resource(TodoListResource, <span class="string">'/todos'</span>, endpoint=<span class="string">'todos'</span>)</div><div class="line">api.add_resource(TodoResource, <span class="string">'/todos/&lt;string:id&gt;'</span>, endpoint=<span class="string">'todo'</span>)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    app.run(debug=<span class="literal">True</span>)</div></pre></td></tr></table></figure>
-<h4 id="5-test代码："><a href="#5-test代码：" class="headerlink" title="5.test代码："></a>5.test代码：</h4><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> requests, json</div><div class="line"><span class="built_in">print</span> requests.<span class="built_in">get</span>(<span class="string">'http://localhost:5000/todos'</span>).json()</div><div class="line"><span class="built_in">print</span> requests.post(<span class="string">'http://localhost:5000/todos'</span>,</div><div class="line">                 headers=&#123;<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>&#125;,</div><div class="line">                 data=json.dumps(&#123;<span class="string">'task'</span>: <span class="string">'go outside!'</span>&#125;)).json()</div><div class="line"><span class="built_in">print</span> requests.<span class="built_in">get</span>(<span class="string">'http://localhost:5000/todos/1'</span>).json()</div><div class="line"><span class="built_in">print</span> requests.<span class="built_in">put</span>(<span class="string">'http://localhost:5000/todos/1'</span>,</div><div class="line">                headers=&#123;<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>&#125;,</div><div class="line">                data=json.dumps(&#123;<span class="string">'task'</span>: <span class="string">'go to the gym'</span>&#125;)).json()</div><div class="line"><span class="built_in">print</span> requests.<span class="keyword">delete</span>(<span class="string">'http://localhost:5000/todos/1'</span>)</div><div class="line"><span class="built_in">print</span> requests.<span class="built_in">get</span>(<span class="string">'http://localhost:5000/todos'</span>).json()</div></pre></td></tr></table></figure>
+        <h4 id="1-数据库连接池原理："><a href="#1-数据库连接池原理：" class="headerlink" title="1.数据库连接池原理："></a>1.数据库连接池原理：</h4><p>&gt;<br>连接池基本的思想是在系统初始化的时候，将数据库连接作为对象存储在内存中，当用户需要访问数据库时，并非建立一个新的连接，而是从连接池中取出一个已建立的空闲连接对象。使用完毕后，用户也并非将连接关闭，而是将连接放回连接池中，以供下一个请求访问使用。而连接的建立、断开都由连接池自身来管理。同时，还可以通过设置连接池的参数来控制连接池中的初始连接数、连接的上下限数以及每个连接的最大使用次数、最大空闲时间等等。也可以通过其自身的管理机制来监视数据库连接的数量、使用情况等。</p>
+<h4 id="2-代码："><a href="#2-代码：" class="headerlink" title="2.代码："></a>2.代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"> </div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PooledConnection</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, maxconnections, dbtype)</span>:</span></div><div class="line">        <span class="keyword">from</span> Queue <span class="keyword">import</span> Queue</div><div class="line">        self._pool = Queue(maxconnections) <span class="comment"># create the queue</span></div><div class="line">    </div><div class="line">        self.dbtype=dbtype</div><div class="line">        self.maxconnections=maxconnections</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(maxconnections):</div><div class="line">                self.fillConnection(self.CreateConnection(dbtype))</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> e</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fillConnection</span><span class="params">(self,conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.put(conn)</div><div class="line"></div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"fillConnection error:"</span>+str(e)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">returnConnection</span><span class="params">(self, conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.put(conn)</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"returnConnection error:"</span>+str(e)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getConnection</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">return</span> self._pool.get()</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"getConnection error:"</span>+str(e)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">ColseConnection</span><span class="params">(self,conn)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self._pool.get().close()</div><div class="line">            self.fillConnection(self.CreateConnection(dbtype))</div><div class="line">        <span class="keyword">except</span> Exception,e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">"CloseConnection error:"</span>+str(e)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">CreateConnection</span><span class="params">(self, dbtype)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            conndb=MySQLdb.connect(db=<span class="string">'test'</span>,host=<span class="string">'127.0.0.1'</span>,user=<span class="string">'root'</span>,passwd=<span class="string">''</span>);</div><div class="line">            conndb.clientinfo = <span class="string">'datasync connection pool from datasync.py'</span>;</div><div class="line">            conndb.ping();</div><div class="line">            <span class="keyword">return</span> conndb</div><div class="line">        <span class="keyword">except</span> Exception, e:</div><div class="line">            <span class="keyword">raise</span> <span class="string">'conn targetdb datasource Excepts,%s!!!(%s).'</span>%(<span class="string">'127.0.0.1'</span>,str(e))</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">			</div><div class="line">DB = PooledConnection(<span class="number">10</span>,<span class="string">"mysql"</span>)</div><div class="line">    </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sub_mod</span><span class="params">( ip, data)</span>:</span></div><div class="line">	</div><div class="line">	<span class="keyword">global</span> DB</div><div class="line">	conn = DB.getConnection()</div><div class="line">	cursor = conn.cursor()</div><div class="line">	cursor.execute(<span class="string">"""insert into pool (name) values('wwwww')"""</span>)</div><div class="line">	<span class="comment">#result = cursor.fetchall();</span></div><div class="line">	<span class="comment">#print  cursor.description</span></div><div class="line">	</div><div class="line"></div><div class="line">    </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MtaskConnection</span><span class="params">(object)</span>:</span></div><div class="line">     </div><div class="line">     </div><div class="line">    stream_set = set([])</div><div class="line">    </div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,stream, address)</span>:</span></div><div class="line">        </div><div class="line">        self.stream = stream</div><div class="line">        self.address = address</div><div class="line">        self.stream_set.add(self.stream)</div><div class="line">        self.stream.set_close_callback(self._on_close)</div><div class="line">        self.stream.read_until(<span class="string">'\n'</span>, self._on_read_line)</div><div class="line">        </div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_on_read_line</span><span class="params">(self, data)</span>:</span></div><div class="line"> </div><div class="line"></div><div class="line">        sub_mod(self.address[<span class="number">0</span>], data)</div><div class="line">      </div><div class="line">        </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_on_close</span><span class="params">(self)</span>:</span></div><div class="line">   </div><div class="line">        MtaskConnection.stream_set.remove(self.stream)</div><div class="line">         </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MonitorTCPServer</span><span class="params">(TCPServer)</span>:</span></div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        TCPServer.__init__(self)  </div><div class="line">		</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_stream</span><span class="params">(self, stream, address)</span>:</span></div><div class="line">        MtaskConnection(stream,address)</div><div class="line">		</div><div class="line">	<span class="comment">#def __del__(self):</span></div><div class="line">	<span class="comment">#	self.pool.ColseConnection()</span></div><div class="line">         </div><div class="line"></div><div class="line">     </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    </div><div class="line">    <span class="keyword">from</span> tornado <span class="keyword">import</span> process</div><div class="line">	<span class="keyword">from</span> tornado <span class="keyword">import</span> web,netutil</div><div class="line">	<span class="keyword">from</span> tornado.tcpserver <span class="keyword">import</span> TCPServer</div><div class="line">	<span class="keyword">from</span> tornado <span class="keyword">import</span> ioloop</div><div class="line"></div><div class="line">	<span class="keyword">import</span> MySQLdb</div><div class="line">	<span class="keyword">import</span> json,time</div><div class="line">	<span class="keyword">import</span> sys,os,string</div><div class="line">	<span class="keyword">import</span> socket, select</div><div class="line">	<span class="keyword">import</span> syslog</div><div class="line">	<span class="keyword">import</span> base64</div><div class="line"></div><div class="line">    sockets = netutil.bind_sockets(<span class="number">32777</span>)</div><div class="line">    process.fork_processes(<span class="number">0</span>)</div><div class="line">    server = MonitorTCPServer()</div><div class="line">    server.add_sockets(sockets)</div><div class="line">    ioloop.IOLoop.instance().start()</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#经两次fork实现脱终端，成为守护进程</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">daemon</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        pid = os.fork()</div><div class="line">        <span class="keyword">if</span> pid &gt; <span class="number">0</span>:</div><div class="line">            sys.exit(<span class="number">0</span>)</div><div class="line">        os.setsid()</div><div class="line">        os.umask(<span class="number">0</span>)</div><div class="line">        pid = os.fork()</div><div class="line">        <span class="keyword">if</span> pid &gt; <span class="number">0</span>: <span class="comment"># exit from second parent</span></div><div class="line">            sys.exit(<span class="number">0</span>)</div><div class="line"></div><div class="line"></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">65</span>):</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                os.close(i)</div><div class="line">            <span class="keyword">except</span>:</div><div class="line">                <span class="keyword">continue</span></div><div class="line"></div><div class="line">        sys.stdin = open(<span class="string">"/dev/null"</span>, <span class="string">"r+"</span>)</div><div class="line">        sys.stdout = sys.stdin</div><div class="line">        sys.stderr = sys.stdin</div><div class="line"></div><div class="line">    <span class="keyword">except</span> OSError, e:</div><div class="line">        syslog.syslog(syslog.LOG_ERR, <span class="string">"fork failed: (%s)"</span> % e)</div><div class="line">        sys.exit(<span class="number">1</span>)</div><div class="line"></div><div class="line">    </div><div class="line">     </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	 main()</div><div class="line">     <span class="comment">#syslog.openlog("monitor_svr", 0, syslog.LOG_LOCAL6)</span></div><div class="line">     <span class="comment">#daemon()</span></div><div class="line">     <span class="comment">#syslog.closelog()</span></div></pre></td></tr></table></figure>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
 
       
@@ -223,7 +214,86 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-05-20-training-python-13/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/09/15/2015-04-27-training-python-7/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2017-04-20-training-python-15" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/15/2017-04-20-training-python-15/">python技术分享[15]－ 视频教程</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/15/2017-04-20-training-python-15/" class="archive-article-date">
+  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>###为了培训python录的视频，每周更新，欢迎拍砖！</p>
+<h3 id="请用无线观看，每个约200M大小"><a href="#请用无线观看，每个约200M大小" class="headerlink" title="请用无线观看，每个约200M大小"></a>请用无线观看，每个约200M大小</h3><embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=z0395naxllw&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
+
+<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=n0395xrwzdg&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
+
+<p>&gt;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/15/2017-04-20-training-python-15/">展开全文 >></a>
         </p>
       
 
@@ -321,19 +391,19 @@
 
 
   
-    <article id="post-2017-04-20-training-python-15" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2015-05-17-training-python-12" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2017-04-20-training-python-15/">python技术分享[15]－ 视频教程</a>
+      <a class="article-title" href="/2017/09/15/2015-05-17-training-python-12/">python技术分享[12]－ 利用BeautifulSoup进行采集</a>
     </h1>
   
 
         
-        <a href="/2017/09/15/2017-04-20-training-python-15/" class="archive-article-date">
+        <a href="/2017/09/15/2015-05-17-training-python-12/" class="archive-article-date">
   	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
 </a>
         
@@ -341,14 +411,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>###为了培训python录的视频，每周更新，欢迎拍砖！</p>
-<h3 id="请用无线观看，每个约200M大小"><a href="#请用无线观看，每个约200M大小" class="headerlink" title="请用无线观看，每个约200M大小"></a>请用无线观看，每个约200M大小</h3><embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=z0395naxllw&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
-
-<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=n0395xrwzdg&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
-
-<p>&gt;</p>
+        <h4 id="1-BeautifulSoup操作："><a href="#1-BeautifulSoup操作：" class="headerlink" title="1.BeautifulSoup操作："></a>1.BeautifulSoup操作：</h4><ul>
+<li>Beautiful Soup 是一个可以从HTML或XML文件中提取数据的Python库.它像其它网络爬虫一样，可以便捷的操作html，<br>如果你有jquery的使用经验，请使用Beautiful Soup 4.</li>
+<li>安装时：pip install Beautiful Soup 4 </li>
+<li>网方文档地址：<br><a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/index.zh.html" target="_blank" rel="external">http://www.crummy.com/software/BeautifulSoup/bs4/doc/index.zh.html</a></li>
+</ul>
+<h4 id="2-糗百内容采集代码："><a href="#2-糗百内容采集代码：" class="headerlink" title="2.糗百内容采集代码："></a>2.糗百内容采集代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line">‘’‘</div><div class="line">功能：演示BeautifulSoup  MySQLdb Process的使用</div><div class="line">’‘’</div><div class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process, Pool, Pipe, cpu_count, active_children</div><div class="line"><span class="keyword">import</span> time,requests</div><div class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</div><div class="line"><span class="keyword">from</span> db.mysql <span class="keyword">import</span> Custom_MySQL</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">RebotQB</span><span class="params">(Process)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, child_conn, data)</span>:</span></div><div class="line">        Process.__init__(self)</div><div class="line">        self.data = data</div><div class="line">        self.child_conn = child_conn</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">insert_qiubai_content</span><span class="params">(self, datas)</span>:</span></div><div class="line">        <span class="string">'''</span></div><div class="line"><span class="string">        记录采集入口到数据库</span></div><div class="line"><span class="string">        '''</span></div><div class="line">        self.mysql = Custom_MySQL(<span class="string">'test'</span>)</div><div class="line">        <span class="comment"># 查看当年当月当天的入口</span></div><div class="line">        <span class="comment"># 演示 mysql count</span></div><div class="line">        sql = <span class="string">'select count(*) as count from qiubai\</span></div><div class="line"><span class="string">            where year = %(year)s and month = %(month)s and day = %(day)s and page = %(page)s and `index`= %(index)s'</span>% datas</div><div class="line"></div><div class="line">        <span class="comment"># print sql</span></div><div class="line">        result = self.mysql.count(sql)</div><div class="line">        count = result[<span class="string">'count'</span>]</div><div class="line">        <span class="comment"># 如果不存在</span></div><div class="line">        <span class="keyword">if</span> int(count) == <span class="number">0</span>:</div><div class="line">            <span class="comment"># 演示insert</span></div><div class="line">            self.mysql.insert(<span class="string">'qiubai'</span>, **datas)</div><div class="line">        <span class="comment"># 如果存在</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="comment"># 演示update</span></div><div class="line">            self.mysql.update(<span class="string">'qiubai'</span>,</div><div class="line">                              <span class="string">' year = %(year)s and  month =%(month)s and day = %(day)s and  page=%(page)s and `index`=%(index)s'</span> % datas,</div><div class="line">                              **datas)</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">print</span> self.data[<span class="string">'url'</span>]</div><div class="line">        <span class="comment"># 获取页面内容</span></div><div class="line">        content = requests.get(self.data[<span class="string">'url'</span>]).text</div><div class="line">        <span class="keyword">if</span> content == <span class="keyword">None</span>:</div><div class="line">            self.child_conn.put(&#123;<span class="string">'count'</span>: <span class="number">0</span>&#125;)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">        <span class="comment"># 变成soup可认内容</span></div><div class="line">        soup = BeautifulSoup(content, from_encoding=<span class="string">"utf-8"</span>)</div><div class="line">        <span class="comment"># 抓取笑话内容</span></div><div class="line">        <span class="comment"># 规范请参考http://www.crummy.com/software/BeautifulSoup/bs4/doc/</span></div><div class="line">        <span class="comment"># 同jquery选择器一样</span></div><div class="line">        tag_index = <span class="number">0</span></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> soup.select(<span class="string">'[id^="qiushi_tag"]'</span>):</div><div class="line">            <span class="comment"># 确定是第几个笑话</span></div><div class="line">            tag_index = tag_index + <span class="number">1</span></div><div class="line">            <span class="comment"># 去掉内容和图片上次的内容</span></div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                <span class="keyword">del</span> self.data[<span class="string">'content'</span>]</div><div class="line">                <span class="keyword">del</span> self.data[<span class="string">'img'</span>]</div><div class="line">            <span class="keyword">except</span>:</div><div class="line">                <span class="keyword">pass</span></div><div class="line"></div><div class="line">            <span class="comment"># 内容和图片变量</span></div><div class="line">            content = <span class="keyword">None</span></div><div class="line">            img = <span class="keyword">None</span></div><div class="line">            <span class="comment"># 连接数据库并确认是本页的第几个笑话</span></div><div class="line">            self.mysql = Custom_MySQL(<span class="string">'test'</span>)</div><div class="line">            self.data.update(&#123;<span class="string">'index'</span>: tag_index&#125;)</div><div class="line">            <span class="comment"># 采集笑话内容</span></div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                content = i.find(<span class="string">"div"</span>, attrs=&#123;<span class="string">'class'</span>: <span class="string">"content"</span>&#125;)</div><div class="line">                content = content.string</div><div class="line">                self.data.update(&#123;<span class="string">'content'</span>: content.encode(<span class="string">'gbk'</span>)&#125;)</div><div class="line">            <span class="keyword">except</span>:</div><div class="line">                <span class="keyword">pass</span></div><div class="line">            <span class="comment"># 采集笑话中的图片</span></div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                img = i.find(<span class="string">"div"</span>, attrs=&#123;<span class="string">'class'</span>: <span class="string">"thumb"</span>&#125;)</div><div class="line">                img = img.find(<span class="string">'img'</span>).attrs[<span class="string">'src'</span>]</div><div class="line">                self.data.update(&#123;<span class="string">'img'</span>: img&#125;)</div><div class="line">            <span class="keyword">except</span>:</div><div class="line">                <span class="keyword">pass</span></div><div class="line">            <span class="comment"># 内容入库</span></div><div class="line">            result = self.insert_qiubai_content(self.data)</div><div class="line">        <span class="comment"># 统计每页要采集多少个笑话</span></div><div class="line">        self.child_conn.put(&#123;<span class="string">'count'</span>: tag_index&#125;)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    <span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process, Queue</div><div class="line">    q = Queue()</div><div class="line">    data =&#123;<span class="string">'id'</span>:<span class="number">2</span>,<span class="string">'url'</span>:<span class="string">'http://www.qiushibaike.com/history'</span>&#125;</div><div class="line">    r = RebotQB(q,data)</div><div class="line">    r.start()</div></pre></td></tr></table></figure>
+<h4 id="3-利用进程池代码："><a href="#3-利用进程池代码：" class="headerlink" title="3.利用进程池代码："></a>3.利用进程池代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="string">功能：采集糗百笑话，利用进程池,更改了一下系统pool的默认行为支持daemon模式</span></div><div class="line"><span class="string">'''</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> multiprocessing</div><div class="line"><span class="comment">#我们必须显示声明引进multiprocessing模块，而不是Process</span></div><div class="line"><span class="keyword">import</span> multiprocessing.pool</div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">from</span> random <span class="keyword">import</span> randint</div><div class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TaskProcess</span><span class="params">(Process)</span>:</span></div><div class="line">	<span class="string">'''</span></div><div class="line"><span class="string">	替成自己的业务类即可</span></div><div class="line"><span class="string">	'''</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        Process.__init__(self)</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__del__</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">pass</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">print</span> <span class="string">'TaskProcess is running '</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">NoDaemonProcess</span><span class="params">(multiprocessing.Process)</span>:</span></div><div class="line">    <span class="comment"># 使进程总是daemon模式</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_get_daemon</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_set_daemon</span><span class="params">(self, value)</span>:</span></div><div class="line">        <span class="keyword">pass</span></div><div class="line">		</div><div class="line">    daemon = property(_get_daemon, _set_daemon, <span class="keyword">None</span>,</div><div class="line">                      doc=<span class="string">'make "daemon" attribute always return False'</span>)</div><div class="line"></div><div class="line"><span class="comment">#我们用multiprocessing.pool.Pool 代替 multiprocessing.Pool</span></div><div class="line"><span class="comment">#因为这里只有最新的包装器函数, 而不是一个类.</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomPool</span><span class="params">(multiprocessing.pool.Pool)</span>:</span></div><div class="line">    Process = NoDaemonProcess</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">work</span><span class="params">(num_procs)</span>:</span></div><div class="line">    print(<span class="string">"Creating %i (daemon) workers and jobs in child."</span> % num_procs)</div><div class="line">    <span class="comment"># 自己的业务进程</span></div><div class="line">    p = TaskProcess()</div><div class="line">    p.start()</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></div><div class="line">    print(<span class="string">"Creating 5 (non-daemon) workers and jobs in main process."</span>)</div><div class="line">    year = [x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">2008</span>, <span class="number">2014</span>)]</div><div class="line">    pool = CustomPool(len(year) * <span class="number">4</span>)</div><div class="line">    result = pool.map(work, year)</div><div class="line">    pool.close()</div><div class="line">    pool.join()</div><div class="line">    <span class="comment"># print(result)</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    test()</div></pre></td></tr></table></figure>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
       
 
       
@@ -382,162 +452,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2017-04-20-training-python-15/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2015-04-10-training-python-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-04-10-training-python-1/">python技术分享[1]－python初步感观</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/15/2015-04-10-training-python-1/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>###1、环境简介</p>
-<ul>
-<li>os系统：centos6.5</li>
-<li>python:2.7.7 或者 2.7.8</li>
-<li>扩展要求:<pre><code>setuptools ,pip     ,MySQL-python    
-</code></pre></li>
-<li>如果你的python版本过低，可以用下面的脚本升级为2.7.7</li>
-<li><p>脚本下载：<a href="http://pan.baidu.com/s/1jGDvFzo" target="_blank" rel="external">http://pan.baidu.com/s/1jGDvFzo</a>      </p>
-</li>
-<li><p>###1.1 python使用方式</p>
-<ul>
-<li>进入python shell环境</li>
-<li>执行脚本模式 python demo.py</li>
-</ul>
-</li>
-</ul>
-<p>###2、初步感观<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"><span class="comment">#!/usr/bin/python2.7</span></div><div class="line"></div><div class="line"><span class="comment">###################################################</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#      python 第一个显示程序，用于初步感观</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">###################################################</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">()</span>:</span></div><div class="line">  <span class="string">'''</span></div><div class="line"><span class="string">  a generator that produces the fibonacci series's elements</span></div><div class="line"><span class="string">  '''</span></div><div class="line"> </div><div class="line">  a = <span class="number">1</span></div><div class="line">  b = <span class="number">1</span></div><div class="line">  <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">    a, b = a + b, a</div><div class="line">    <span class="keyword">yield</span> a</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">nth</span><span class="params">(series, n)</span>:</span></div><div class="line">  <span class="string">'''</span></div><div class="line"><span class="string">  returns the nth element of a series,</span></div><div class="line"><span class="string">  consuming the series' earlier elements.</span></div><div class="line"><span class="string">  '''</span></div><div class="line"> </div><div class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> series:</div><div class="line">    n -= <span class="number">1</span></div><div class="line">    <span class="keyword">if</span> n &lt;= <span class="number">0</span>: <span class="keyword">return</span> x</div><div class="line"> </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	print(<span class="string">'Executed from the command line'</span>)</div><div class="line">	<span class="keyword">print</span> nth(fib(), <span class="number">10</span>)</div></pre></td></tr></table></figure></p>
-<ul>
-<li>执行 </li>
-<li>python demo.py </li>
-<li>输出</li>
-<li>Executed from the command line</li>
-<li>144</li>
-</ul>
-<p>###3、Python格言</p>
-<ul>
-<li>输入python 进入python shell环境</li>
-<li>import this </li>
-<li><p>显示python之禅</p>
-</li>
-<li><h5 id="3-1-Python之禅"><a href="#3-1-Python之禅" class="headerlink" title="3.1 Python之禅"></a>3.1 Python之禅</h5><ul>
-<li>Beautiful is better than ugly.  </li>
-<li>漂亮的代码要比丑陋的代码要好得多。  </li>
-<li>Explicit is better than implicit.  </li>
-<li>明确的定义比 隐式定义更好。  </li>
-<li>Simple is better than complex.  </li>
-<li>简单比负责要好。  </li>
-<li>Complex is better than complicated.  </li>
-<li>负责要比搞复杂要好。  </li>
-<li>Flat is better than nested.  </li>
-<li>扁平结构要比嵌套结构好。  </li>
-<li>Sparse is better than dense.  </li>
-<li>简洁明了的代码要比稠密的代码要好。  </li>
-<li>Readability counts.  </li>
-<li>可读写的计数。  </li>
-<li>Special cases aren’t special enough to break the rules.  </li>
-<li>专门的用例不是特殊到足以违反规则。  </li>
-<li>Although practicality beats purity.  </li>
-<li>是的，实用性练就纯度。  </li>
-<li>Errors should never pass silently.  </li>
-<li>错误永远都不会沉默。  </li>
-<li>Unless explicitly silenced.  </li>
-<li>除非明确啥也不干。  </li>
-<li>In the face of ambiguity, refuse the temptation to guess.  </li>
-<li>面对模糊定义、拒绝视图拍脑袋猜。  </li>
-<li>There should be one– and preferably only one –obvious way to do it.  </li>
-<li>Although that way may not be obvious at first unless you’re Dutch.  </li>
-<li>虽然一开始不那面明确,我们会选择更清晰一条到走。  </li>
-<li>Now is better than never.  </li>
-<li>现在开始总比不开始的要好。  </li>
-<li>Although never is often better than <em>right</em> now.  </li>
-<li>虽然从不尝试总比现在开始尝试好。  </li>
-<li>If the implementation is hard to explain, it’s a bad idea.  </li>
-<li>如果实现难以说明，那它是个坏主意。  </li>
-<li>If the implementation is easy to explain, it may be a good idea.  </li>
-<li>如果实现容易说明，那它是个好主意。  </li>
-<li>Namespaces are one honking great idea – let’s do more of those!  </li>
-<li>名称空间是一个好东西——让我们做更多那样的东西!  </li>
-</ul>
-</li>
-<li><h5 id="3-2-Python“八荣八耻”"><a href="#3-2-Python“八荣八耻”" class="headerlink" title="3.2 Python“八荣八耻”"></a>3.2 Python“八荣八耻”</h5><ul>
-<li>以动手实践为荣 , 以只看不练为耻;</li>
-<li>以打印日志为荣 , 以单步跟踪为耻;</li>
-<li>以空格缩进为荣 , 以制表缩进为耻;</li>
-<li>以单元测试为荣 , 以人工测试为耻;</li>
-<li>以模块复用为荣 , 以复制粘贴为耻;</li>
-<li>以多态应用为荣 , 以分支判断为耻;</li>
-<li>以Pythonic为荣 , 以冗余拖沓为耻;</li>
-<li>以总结分享为荣 , 以跪求其解为耻;</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-04-10-training-python-1/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/09/15/2015-05-17-training-python-12/">展开全文 >></a>
         </p>
       
 
@@ -646,6 +561,154 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/09/15/2015-04-14-training-python-3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2015-04-17-training-python-4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/15/2015-04-17-training-python-4/">python技术分享[4]－使用pylint约束代码规范</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/15/2015-04-17-training-python-4/" class="archive-article-date">
+  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>pylint是一个Python代码风格的检查工具, 它依据的标准是Guido van Rossum的PEP8<br>* Pylint:  <a href="http://www.logilab.org/project/pylint" target="_blank" rel="external">http://www.logilab.org/project/pylint</a></li>
+<li>Pep8:    <a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="external">https://www.python.org/dev/peps/pep-0008/</a></li>
+<li>Pep8中文: <a href="http://code.google.com/p/zhong-wiki/wiki/PEP8" target="_blank" rel="external">http://code.google.com/p/zhong-wiki/wiki/PEP8</a> </li>
+<li>原谅我用2007年译的版本，我只是觉得当年这篇比较靠近原意。</li>
+</ul>
+<h4 id="1-扩展安装："><a href="#1-扩展安装：" class="headerlink" title="1.扩展安装："></a>1.扩展安装：</h4><ul>
+<li>pip install pylint</li>
+<li>可以这样用 pylint demo.py </li>
+<li></li>
+<li>pip install pep8</li>
+<li>pep8 –show-source –show-pep8  demo.py </li>
+</ul>
+<h4 id="2-Pylint-的输出"><a href="#2-Pylint-的输出" class="headerlink" title="2.Pylint 的输出"></a>2.Pylint 的输出</h4><ul>
+<li>对于每一个 Python 模块，Pylint 的结果中首先显示一些”*”字符 , 后面紧跟模块的名字，然后是一系列的 message, </li>
+<li>message 的格式如下：</li>
+<li>MESSAGE_TYPE: LINE_NUM:[OBJECT:] MESSAGE <ul>
+<li>MESSAGE_TYPE 有如下几种：</li>
+<li>(C) 惯例。违反了编码风格标准</li>
+<li>(R) 重构。写得非常糟糕的代码。</li>
+<li>(W) 警告。某些 Python 特定的问题。</li>
+<li>(E) 错误。很可能是代码中的错误。</li>
+<li>(F) 致命错误。阻止 Pylint 进一步运行的错误。</li>
+</ul>
+</li>
+</ul>
+<p>####3.样本实例<br>demo.py在 <a href="http://djshell.github.io/python/training-python-1.html" target="_blank" rel="external">http://djshell.github.io/python/training-python-1.html</a></p>
+<p>######3.1检查python格式</p>
+<ul>
+<li>pylint demo.py <ul>
+<li>No config file found, using default configuration</li>
+<li><strong><strong><strong>*</strong></strong></strong> Module demo</li>
+<li>W: 11, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
+<li>W: 15, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
+<li>W: 16, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
+<li>W: 17, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
+<li>W: 18, 0: Bad indentation. Found 4 spaces, expected 8 (bad-indentation)</li>
+<li>W: 19, 0: Bad indentation. Found 4 spaces, expected 8 (bad-indentation)</li>
+<li>W: 22, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
+<li>W: 27, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
+<li>W: 28, 0: Bad indentation. Found 4 spaces, expected 8 (bad-indentation)</li>
+<li>W: 29, 0: Bad indentation. Found 4 spaces, expected 8 (bad-indentation)</li>
+<li>C: 32, 0: Unnecessary parens after u’print’ keyword (superfluous-parens)</li>
+<li>C:  1, 0: Missing module docstring (missing-docstring)</li>
+<li>C: 15, 2: Invalid variable name “a” (invalid-name)</li>
+<li>C: 16, 2: Invalid variable name “b” (invalid-name)</li>
+<li>C: 18, 4: Invalid variable name “a” (invalid-name)</li>
+<li>C: 18, 7: Invalid variable name “b” (invalid-name)</li>
+<li>C: 21, 0: Invalid argument name “n” (invalid-name)</li>
+<li>C: 27, 6: Invalid variable name “x” (invalid-name)</li>
+<li>C: 29,15: More than one statement on a single line (multiple-statements)</li>
+<li>…………</li>
+<li>…………省略多行，下面是得分</li>
+<li>Your code has been rated at -2.67/10<br><br><br><br></li>
+</ul>
+</li>
+<li>可能是在页面复制贴粘时空格数据发生改变了，我们只得了负分现在我们来按照提示整理格式<ul>
+<li>Bad indentation. Found 2 spaces, expected 4 (bad-indentation) 空格期望四个，错误缩进</li>
+<li>Unnecessary parens after u’print’ keyword (superfluous-parens) print 之后多余的小括号</li>
+<li>Missing module docstring (missing-docstring) 没有模块文档说明</li>
+<li>Invalid variable name “a” (invalid-name) 非法的变量</li>
+<li>No space allowed around keyword argument assignment 不要在用于指定<br>关键字参数 (keyword argument) 或默认参数值的 ‘=’ 号周围使用空格</li>
+<li>Trailing whitespace (trailing-whitespace) 尾随空白，行尾有空白字符，需要删除</li>
+</ul>
+</li>
+</ul>
+<p><br><br></p>
+<ul>
+<li>按照提示更改代码直到得到10分<ul>
+<li>Your code has been rated at 10.00/10 (previous run: 10.00/10, +0.00)</li>
+</ul>
+</li>
+</ul>
+<p>####更改完的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"><span class="comment">#!/usr/bin/python2.7</span></div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="string">python pylint demo</span></div><div class="line"><span class="string">'''</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">()</span>:</span></div><div class="line">    <span class="string">'''</span></div><div class="line"><span class="string">    a generator that produces the fibonacci series's elements</span></div><div class="line"><span class="string">    '''</span></div><div class="line"></div><div class="line">    int_a = <span class="number">1</span></div><div class="line">    int_b = <span class="number">1</span></div><div class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">        int_a, int_b = int_a + int_b, int_a</div><div class="line">        <span class="keyword">yield</span> int_a</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">nth</span><span class="params">(series, num)</span>:</span></div><div class="line">    <span class="string">'''</span></div><div class="line"><span class="string">   returns the nth element of a series, consuming the series' earlier elements.    '''</span></div><div class="line"></div><div class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> series:</div><div class="line">        num -= <span class="number">1</span></div><div class="line">        <span class="keyword">if</span> num &lt;= <span class="number">0</span>:</div><div class="line">            <span class="keyword">return</span> key</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    <span class="keyword">print</span> <span class="string">'Executed from the command line'</span></div><div class="line">    <span class="keyword">print</span> nth(fib(), <span class="number">10</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/15/2015-04-17-training-python-4/">展开全文 >></a>
         </p>
       
 
@@ -967,153 +1030,6 @@ Error while executing topic command : replication factor: 3 larger than availabl
 
 
   
-    <article id="post-Internal-value-representation-in-PHP-7-part-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/29/Internal-value-representation-in-PHP-7-part-2/">PHP7扩展开发官方译文[2]</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/29/Internal-value-representation-in-PHP-7-part-2/" class="archive-article-date">
-  	<time datetime="2017-08-29T11:51:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><em>本文第一部分和第二均翻译自Nikita Popov(nikic，PHP 官方开发组成员，柏林科技大学的学生) 的<a href="http://nikic.github.io/" target="_blank" rel="external">博客</a>。为了更符合汉语的阅读习惯，文中并不会逐字逐句的翻译。</em></p>
-<p><em>要理解本文，你应该对 PHP5 中变量的实现有了一些了解，本文重点在于解释 PHP7 中 zval 的变化。</em></p>
-<p>第一部分讲了 PHP5 和 PHP7 中关于变量最基础的实现和变化。这里再重复一下，主要的变化就是 zval 不再单独分配内存，不自己存储引用计数。整型浮点型等简单类型直接存储在 zval 中。复杂类型则通过指针指向一个独立的结构体。</p>
-<p>复杂的 zval 数据值有一个共同的头，其结构由 <code>zend_refcounted</code> 定义：</p>
-<figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">_zend_refcounted</span> &#123;</span></div><div class="line">    uint32_t refcount;</div><div class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></div><div class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">            ZEND_ENDIAN_LOHI_3(</div><div class="line">                zend_uchar    <span class="keyword">type</span>,</div><div class="line">                zend_uchar    flags,</div><div class="line">                uint16_t      gc_info)</div><div class="line">        &#125; v;</div><div class="line">        uint32_t type_info;</div><div class="line">    &#125; u;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>这个头存储有 <code>refcount</code>（引用计数），值的类型 <code>type</code> 和循环回收的相关信息 <code>gc_info</code> 以及类型标志位 <code>flags</code>。</p>
-<p>接下来会对每种复杂类型的实现单独进行分析并和 PHP5 的实现进行比较。引用虽然也属于复杂类型，但是上一部分已经介绍过了，这里就不再赘述。另外这里也不会讲到资源类型（因为作者觉得资源类型没什么好讲的）。</p>
-<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><p>PHP7 中定义了一个新的结构体 <code>zend_string</code> 用于存储字符串变量：</p>
-<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">struct _zend_string &#123;</div><div class="line">    zend_refcounted   gc<span class="comment">;</span></div><div class="line">    zend_ulong        h<span class="comment">;        /* hash value */</span></div><div class="line">    size_t            len<span class="comment">;</span></div><div class="line">    char              val[<span class="number">1</span>]<span class="comment">;</span></div><div class="line">&#125;<span class="comment">;</span></div></pre></td></tr></table></figure>
-<p>除了引用计数的头以外，字符串还包含哈希缓存 <code>h</code>，字符串长度 <code>len</code> 以及字符串的值 <code>val</code>。哈希缓存的存在是为了防止使用字符串做为 hashtable 的 key 在查找时需要重复计算其哈希值，所以这个在使用之前就对其进行初始化。</p>
-<p>如果你对 C 语言了解的不是很深入的话，可能会觉得 <code>val</code> 的定义有些奇怪：这个声明只有一个元素，但是显然我们想存储的字符串偿付肯定大于一个字符的长度。这里其实使用的是结构体的一个『黑』方法：在声明数组时只定义一个元素，但是实际创建 <code>zend_string</code> 时再分配足够的内存来存储整个字符串。这样我们还是可以通过 <code>val</code> 访问完整的字符串。</p>
-<p>当然这属于非常规的实现手段，因为我们实际的读和写的内容都超过了单字符数组的边界。但是 C 语言编译器却不知道你是这么做的。虽然 C99 也曾明确规定过支持『柔性数组』，但是感谢我们的好朋友微软，没人能在不同的平台上保证 C99 的一致性（所以这种手段是为了解决 Windows 平台下柔性数组的支持问题）。</p>
-<p>新的字符串类型的结构比原生的 C 字符串更方便使用：第一是因为直接存储了字符串的长度，这样就不用每次使用时都去计算。第二是字符串也有引用计数的头，这样也就可以在不同的地方共享字符串本身而无需使用 zval。一个经常使用的地方就是共享 hashtable 的 key。</p>
-<p>但是新的字符串类型也有一个很不好的地方：虽然可以很方便的从 zend_string 中取出 C 字符串（使用 <code>str-&gt;val</code> 即可），但反过来，如果将 C 字符串变成 zend_string 就需要先分配 zend_string 需要的内存，再将字符串复制到 zend_string 中。这在实际使用的过程中并不是很方便。</p>
-<p>字符串也有一些特有的标志（存储在 GC 的标志位中的）：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_STR_PERSISTENT           (1&lt;&lt;0) <span class="comment">/* allocated using malloc */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_STR_INTERNED             (1&lt;&lt;1) <span class="comment">/* interned string */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> IS_STR_PERMANENT            (1&lt;&lt;2) <span class="comment">/* interned string surviving request boundary */</span></span></div></pre></td></tr></table></figure>
-<p>持久化的字符串需要的内存直接从系统本身分配而不是 zend 内存管理器（ZMM），这样它就可以一直存在而不是只在单次请求中有效。给这种特殊的分配打上标记便于 zval 使用持久化字符串。在 PHP5 中并不是这样处理的，是在使用前复制一份到 ZMM 中。</p>
-<p>保留字符（interned strings）有点特殊，它会一直存在直到请求结束时才销毁，所以也就无需进行引用计数。保留字符串也不可重复（duplicate），所以在创建新的保留字符时也会先检查是否有同样字符的已经存在。所有 PHP 源码中不可变的字符串都是保留字符（包括字符串常量、变量名函数名等）。持久化字符串也是请求开始之前已经创建好的保留字符。但普通的保留字符在请求结束后会销毁，持久化字符串却始终存在。</p>
-<p>如果使用了 opcache 的话保留字符会被存储在共享内存（SHM）中这样就可以在所有 PHP 进程质检共享。这种情况下持久化字符串也就没有存在的意义了，因为保留字符也是不会被销毁的。</p>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>因为<a href="http://nikic.github.io/2014/12/22/PHPs-new-hashtable-implementation.html" target="_blank" rel="external">之前的文章</a>有讲过新的数组实现，所以这里就不再详细描述了。虽然最近有些变化导致之前的描述不是十分准确了，但是基本的概念还是一致的。</p>
-<p>这里要说的是之前的文章中没有提到的数组相关的概念：不可变数组。其本质上和保留字符类似：没有引用计数且在请求结束之前一直存在（也可能在请求结束之后还存在）。</p>
-<p>因为某些内存管理方便的原因，不可变数组只会在开启 opcache 时会使用到。我们来看看实际使用的例子，先看以下的脚本：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?php</span></span></div><div class="line"><span class="php"><span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; <span class="number">1000000</span>; ++$i) &#123;</span></div><div class="line"><span class="php">    $array[] = [<span class="string">'foo'</span>];</span></div><div class="line"><span class="php">&#125;</span></div><div class="line"><span class="php">var_dump(memory_get_usage());</span></div></pre></td></tr></table></figure>
-<p>开启 opcache 时，以上代码会使用 32MB 的内存，不开启的情况下因为 <code>$array</code> 每个元素都会复制一份 <code>[&#39;foo&#39;]</code> ，所以需要 390MB。这里会进行完整的复制而不是增加引用计数值的原因是防止 zend 虚拟机操作符执行的时候出现共享内存出错的情况。我希望不使用 opcache 时内存暴增的问题以后能得到改善。</p>
-<h2 id="PHP5-中的对象"><a href="#PHP5-中的对象" class="headerlink" title="PHP5 中的对象"></a>PHP5 中的对象</h2><p>在了解 PHP7 中的对象实现直线我们先看一下 PHP5 的并且看一下有什么效率上的问题。PHP5 中的 zval 会存储一个 <code>zend_object_value</code> 结构，其定义如下：</p>
-<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">typedef struct <span class="number">_</span>zend<span class="number">_</span><span class="keyword">object</span><span class="number">_</span><span class="keyword">value</span> &#123;</div><div class="line">    zend<span class="number">_</span><span class="keyword">object</span><span class="number">_</span>handle handle;</div><div class="line">    const zend<span class="number">_</span><span class="keyword">object</span><span class="number">_</span>handlers *handlers;</div><div class="line">&#125; zend<span class="number">_</span><span class="keyword">object</span><span class="number">_</span><span class="keyword">value</span>;</div></pre></td></tr></table></figure>
-<p><code>handle</code> 是对象的唯一 ID，可以用于查找对象数据。<code>handles</code> 是保存对象各种属性方法的虚函数表指针。通常情况下 PHP 对象都有着同样的 handler 表，但是 PHP 扩展创建的对象也可以通过操作符重载等方式对其行为自定义。</p>
-<p>对象句柄（handler）是作为索引用于『对象存储』，对象存储本身是一个存储容器（bucket）的数组，bucket 定义如下：</p>
-<figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">typedef <span class="class"><span class="keyword">struct</span> <span class="title">_zend_object_store_bucket</span> &#123;</span></div><div class="line">    zend_bool destructor_called;</div><div class="line">    zend_bool valid;</div><div class="line">    zend_uchar apply_count;</div><div class="line">    <span class="class"><span class="keyword">union</span> <span class="title">_store_bucket</span> &#123;</span></div><div class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">_store_object</span> &#123;</span></div><div class="line">            void *object;</div><div class="line">            zend_objects_store_dtor_t dtor;</div><div class="line">            zend_objects_free_object_storage_t free_storage;</div><div class="line">            zend_objects_store_clone_t clone;</div><div class="line">            const zend_object_handlers *handlers;</div><div class="line">            zend_uint refcount;</div><div class="line">            gc_root_buffer *buffered;</div><div class="line">        &#125; obj;</div><div class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">            int <span class="keyword">next</span>;</div><div class="line">        &#125; free_list;</div><div class="line">    &#125; bucket;</div><div class="line">&#125; zend_object_store_bucket;</div></pre></td></tr></table></figure>
-<p>这个结构体包含了很多东西。前三个成员只是些普通的元数据（对象的析构函数是否被调用过、bucke 是否被使用过以及对象被递归调用过多少次）。接下来的联合体用于区分 bucket 是处于使用中的状态还是空闲状态。上面的结构中最重要的是 <code>struct _store_object</code> 子结构体：</p>
-<p>第一个成员 <code>object</code> 是指向实际对象（也就是对象最终存储的位置）的指针。对象实际并不是直接嵌入到对象存储的 bucket 中的，因为对象不是定长的。对象指针下面是三个用于管理对象销毁、释放与克隆的操作句柄（handler）。这里要注意的是 PHP 销毁和释放对象是不同的步骤，前者在某些情况下有可能会被跳过（不完全释放）。克隆操作实际上几乎几乎不会被用到，因为这里包含的操作不是普通对象本身的一部分，所以（任何时候）他们在每个对象中他们都会被单独复制（duplicate）一份而不是共享。</p>
-<p>这些对象存储操作句柄后面是一个普通的对象 <code>handlers</code> 指针。存储这几个数据是因为有时候可能会在 zval 未知的情况下销毁对象（通常情况下这些操作都是针对 zval 进行的）。</p>
-<p>bucket 也包含了 <code>refcount</code> 的字段，不过这种行为在 PHP5 中显得有些奇怪，因为 zval 本身已经存储了引用计数。为什么还需要一个多余的计数呢？问题在于虽然通常情况下 zval 的『复制』行为都是简单的增加引用计数即可，但是偶尔也会有深度复制的情况出现，比如创建一个全新的 zval 但是保存同样的 <code>zend_object_value</code>。这种情况下两个不同的 zval 就用到了同一个对象存储的 bucket，所以 bucket 自身也需要进行引用计数。这种『双重计数』的方式是 PHP5 的实现内在的问题。GC 根缓冲区中的 <code>buffered</code> 指针也是由于同样的原因才需要进行完全复制（duplicate）。</p>
-<p>现在看看对象存储中指针指向的实际的 <code>object</code> 的结构，通常情况下用户层面的对象定义如下：</p>
-<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">typedef struct _zend_object &#123;</div><div class="line">    zend_class_entry *ce<span class="comment">;</span></div><div class="line">    HashTable *properties<span class="comment">;</span></div><div class="line">    zval **properties_table<span class="comment">;</span></div><div class="line">    HashTable *guards<span class="comment">;</span></div><div class="line">&#125; zend_object<span class="comment">;</span></div></pre></td></tr></table></figure>
-<p><code>zend_class_entry</code> 指针指向的是对象实现的类原型。接下来的两个元素是使用不同的方式存储对象属性。动态属性（运行时添加的而不是在类中定义的）全部存在 <code>properties</code> 中，不过只是属性名和值的简单匹配。</p>
-<p>不过这里有针对已经声明的属性的一个优化：编译期间每个属性都会被指定一个索引并且属性本身是存储在 <code>properties_table</code> 的索引中。属性名称和索引的匹配存储在类原型的 hashtable 中。这样就可以防止每个对象使用的内存超过 hashtable 的上限，并且属性的索引会在运行时有多处缓存。</p>
-<p><code>guards</code> 的哈希表是用于实现魔术方法的递归行为的，比如 <code>__get</code>，这里我们不深入讨论。</p>
-<p>除了上文提到过的双重计数的问题，这种实现还有一个问题是一个最小的只有一个属性的对象也需要 136 个字节的内存（这还不算 zval 需要的内存）。而且中间存在很多间接访问动作：比如要从对象 zval 中取出一个元素，先需要取出对象存储 bucket，然后是 <code>zend object</code>，然后才能通过指针找到对象属性表和 zval。这样这里至少就有 4 层间接访问（并且实际使用中可能最少需要七层）。</p>
-<h2 id="PHP7-中的对象"><a href="#PHP7-中的对象" class="headerlink" title="PHP7 中的对象"></a>PHP7 中的对象</h2><p>PHP7 的实现中试图解决上面这些问题，包括去掉双重引用计数、减少内存使用以及间接访问。新的 <code>zend_object</code> 结构体如下：</p>
-<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">struct _zend_object &#123;</div><div class="line">    zend_refcounted   gc<span class="comment">;</span></div><div class="line">    uint32_t          handle<span class="comment">;</span></div><div class="line">    zend_class_entry *ce<span class="comment">;</span></div><div class="line">    const zend_object_handlers *handlers<span class="comment">;</span></div><div class="line">    HashTable        *properties<span class="comment">;</span></div><div class="line">    zval              properties_table[<span class="number">1</span>]<span class="comment">;</span></div><div class="line">&#125;<span class="comment">;</span></div></pre></td></tr></table></figure>
-<p>可以看到现在这个结构体几乎就是一个对象的全部内容了：<code>zend_object_value</code> 已经被替换成一个直接指向对象和对象存储的指针，虽然没有完全移除，但已经是很大的提升了。</p>
-<p>除了 PHP7 中惯用的 <code>zend_refcounted</code> 头以外，<code>handle</code> 和 对象的 <code>handlers</code> 现在也被放到了 <code>zend_object</code> 中。这里的 <code>properties_table</code> 同样用到了 C 结构体的小技巧，这样 <code>zend_object</code> 和属性表就会得到一整块内存。当然，现在属性表是直接嵌入到 zval 中的而不是指针。</p>
-<p>现在对象结构体中没有了 <code>guards</code> 表，现在如果需要的话这个字段的值会被存储在 <code>properties_table</code> 的第一位中，也就是使用 <code>__get</code> 等方法的时候。不过如果没有使用魔术方法的话，guards 表会被省略。</p>
-<p><code>dtor</code>、<code>free_storage</code>  和  <code>clone</code> 三个操作句柄之前是存储在对象操作 bucket 中，现在直接存在 <code>handlers</code> 表中，其结构体定义如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">zend_object_handlers</span> &#123;</span></div><div class="line">    <span class="comment">/* offset of real object header (usually zero) */</span></div><div class="line">    <span class="keyword">int</span>                                     offset;</div><div class="line">    <span class="comment">/* general object functions */</span></div><div class="line">    <span class="keyword">zend_object_free_obj_t</span>                  free_obj;</div><div class="line">    <span class="keyword">zend_object_dtor_obj_t</span>                  dtor_obj;</div><div class="line">    <span class="keyword">zend_object_clone_obj_t</span>                 clone_obj;</div><div class="line">    <span class="comment">/* individual object functions */</span></div><div class="line">    <span class="comment">// ... rest is about the same in PHP 5</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>handler 表的第一个成员是 <code>offset</code>，很显然这不是一个操作句柄。这个 offset 是现在的实现中必须存在的，因为虽然内部的对象总是嵌入到标准的 <code>zend_object</code> 中，但是也总会有添加一些成员进去的需求。在 PHP5 中解决这个问题的方法是添加一些内容到标准的对象后面：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">custom_object</span> &#123;</span></div><div class="line">    zend_object <span class="built_in">std</span>;</div><div class="line">    <span class="keyword">uint32_t</span> something;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>这样如果你可以轻易的将 <code>zend_object*</code> 添加到 <code>struct custom_object*</code> 中。这也是 C 语言中常用的结构体继承的做法。但是在 PHP7 中这种实现会有一个问题：因为 <code>zend_object</code> 在存储属性表时用了结构体 hack 的技巧，<code>zend_object</code> 尾部存储的 PHP 属性会覆盖掉后续添加进去的内部成员。所以 PHP7 的实现中会把自己添加的成员添加到标准对象结构的前面：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">custom_object</span> &#123;</span></div><div class="line">    <span class="keyword">uint32_t</span> something;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    zend_object <span class="built_in">std</span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>不过这样也就意味着现在无法直接在 <code>zend_object*</code> 和 <code>struct custom_object*</code> 进行简单的转换了，因为两者都一个偏移分割开了。所以这个偏移量就需要被存储在对象 handler 表中的第一个元素中，这样在编译时通过 <code>offsetof()</code> 宏就能确定具体的偏移值。</p>
-<p>也许你会好奇既然现在已经直接（在 <code>zend_value</code> 中）存储了 <code>zend_object</code> 的指针，那现在就不需要再到对象存储中去查找对象了，为什么 PHP7 的对象者还保留着 <code>handle</code> 字段呢？</p>
-<p>这是因为现在对象存储仍然存在，虽然得到了极大的简化，所以保留 handle 仍然是有必要的。现在它只是一个指向对象的指针数组。当对象被创建时，会有一个指针插入到对象存储中并且其索引会保存在 <code>handle</code> 中，当对象被释放时，索引也会被移除。</p>
-<p>那么为什么现在还需要对象存储呢？因为在请求结束的阶段会在存在某个节点，在这之后再去执行用户代码并且取指针数据时就不安全了。为了避免这种情况出现 PHP 会在更早的节点上执行所有对象的析构函数并且之后就不再有此类操作，所以就需要一个活跃对象的列表。</p>
-<p>并且 handle 对于调试也是很有用的，它让每个对象都有了一个唯一的 ID，这样就很容易区分两个对象是同一个还是只是有相同的内容。虽然 HHVM 没有对象存储的概念，但它也存了对象的 handle。</p>
-<p>和 PHP5 相比，现在的实现中只有一个引用计数（zval 自身不计数），并且内存的使用量有了很大的缩减：40 个字节用于基础对象，每个属性需要 16 个字节，并且这还是算了 zval 之后的。间接访问的情况也有了显著的改善，因为现在中间层的结构体要么被去掉了，要么就是直接嵌入的，所以现在读取一个属性只有一层访问而不再是四层。</p>
-<h2 id="间接-zval"><a href="#间接-zval" class="headerlink" title="间接 zval"></a>间接 zval</h2><p>到现在我们已经基本提到过了所有正常的 zval 类型，但是也有一对特殊类型用于某些特定的情况的，其中之一就是 PHP7 新添加的 <code>IS_INDIRECT</code>。</p>
-<p>间接 zval 指的就是其真正的值是存储在其他地方的。注意这个 <code>IS_REFERENCE</code> 类型是不同的，间接 zval 是直接指向另外一个 zval 而不是像 <code>zend_reference</code> 结构体一样嵌入 zval。</p>
-<p>为了理解在什么时候会出现这种情况，我们来看一下 PHP 中变量的实现（实际上对象属性的存储也是一样的情况）。</p>
-<p>所有在编译过程中已知的变量都会被指定一个索引并且其值会被存在编译变量（CV）表的相应位置中。但是 PHP 也允许你动态的引用变量，不管是局部变量还是全局变量（比如 <code>$GLOBALS</code>），只要出现这种情况，PHP 就会为脚本或者函数创建一个符号表，这其中包含了变量名和它们的值之间的映射关系。</p>
-<p>但是问题在于：怎么样才能实现两个表的同时访问呢？我们需要在 CV 表中能够访问普通变量，也需要能在符号表中访问编译变量。在 PHP5 中 CV 表用了双重指针 <code>zval**</code>，通常这些指针指向中间的 <code>zval*</code> 的表，<code>zval*</code> 最终指向的才是实际的 zval:</p>
-<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">+------ CV_ptr_ptr[0]</div><div class="line">|<span class="string"> +---- CV_ptr_ptr[1]</span></div><div class="line">|<span class="string"> </span>|<span class="string"> +-- CV_ptr_ptr[2]</span></div><div class="line">|<span class="string"> </span>|<span class="string"> </span>|</div><div class="line">|<span class="string"> </span>|<span class="string"> +-&gt; CV_ptr[0] --&gt; some zval</span></div><div class="line">|<span class="string"> +---&gt; CV_ptr[1] --&gt; some zval</span></div><div class="line"><span class="string">+-----&gt; CV_ptr[2] --&gt; some zval</span></div></pre></td></tr></table></figure>
-<p>当需要使用符号表时存储 <code>zval*</code> 的中间表其实是没有用到的而 <code>zval**</code> 指针会被更新到 hashtable buckets 的响应位置中。我们假定有 <code>$a</code>、<code>$b</code> 和 <code>$c</code> 三个变量，下面是简单的示意图：</p>
-<figure class="highlight xl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">CV_<span class="function"><span class="title">ptr_ptr</span>[0] --&gt;</span> S<span class="function"><span class="title">ymbolTable</span>["a"].pDataPtr --&gt;</span> some zval</div><div class="line">CV_<span class="function"><span class="title">ptr_ptr</span>[1] --&gt;</span> S<span class="function"><span class="title">ymbolTable</span>["b"].pDataPtr --&gt;</span> some zval</div><div class="line">CV_<span class="function"><span class="title">ptr_ptr</span>[2] --&gt;</span> S<span class="function"><span class="title">ymbolTable</span>["c"].pDataPtr --&gt;</span> some zval</div></pre></td></tr></table></figure>
-<p>但是 PHP7 的用法中已经没有这个问题了，因为 PHP7 中的 hashtable 大小发生变化时 hashtable bucket 就失效了。所以 PHP7 用了一个相反的策略：为了访问 CV 表中存储的变量，符号表中存储 <code>INDIRECT</code> 来指向 CV 表。CV 表在符号表的生命周期内不会重新分配，所以也就不会存在有无效指针的问题了。</p>
-<p>所以加入你有一个函数并且在 CV 表中有 <code>$a</code>、<code>$b</code> 和 <code>$c</code>，同时还有一个动态分配的变量 <code>$d</code>，符号表的结构看起来大概就是这个样子：</p>
-<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="type">SymbolTable</span>[<span class="string">"a"</span>].<span class="keyword">value</span> = <span class="type">INDIRECT</span> --&gt; <span class="type">CV</span>[<span class="number">0</span>] = <span class="type">LONG</span> <span class="number">42</span></div><div class="line"><span class="type">SymbolTable</span>[<span class="string">"b"</span>].<span class="keyword">value</span> = <span class="type">INDIRECT</span> --&gt; <span class="type">CV</span>[<span class="number">1</span>] = <span class="type">DOUBLE</span> <span class="number">42.0</span></div><div class="line"><span class="type">SymbolTable</span>[<span class="string">"c"</span>].<span class="keyword">value</span> = <span class="type">INDIRECT</span> --&gt; <span class="type">CV</span>[<span class="number">2</span>] = <span class="type">STRING</span> --&gt; zend_string(<span class="string">"42"</span>)</div><div class="line"><span class="type">SymbolTable</span>[<span class="string">"d"</span>].<span class="keyword">value</span> = <span class="type">ARRAY</span> --&gt; zend_array([<span class="number">4</span>, <span class="number">2</span>])</div></pre></td></tr></table></figure>
-<p>间接 zval 也可以是一个指向 <code>IS_UNDEF</code> 类型 zval 的指针，当 hashtable 没有和它关联的 key 时就会出现这种情况。所以当使用 <code>unset($a)</code> 将 <code>CV[0]</code> 的类型标记为 <code>UNDEF</code> 时就会判定符号表不存在键值为 <code>a</code> 的数据。</p>
-<h2 id="常量和-AST"><a href="#常量和-AST" class="headerlink" title="常量和 AST"></a>常量和 AST</h2><p>还有两个需要说一下的在 PHP5 和 PHP7 中都存在的特殊类型 <code>IS_CONSTANT</code> 和 <code>IS_CONSTANT_AST</code>。要了解他们我们还是先看以下的例子：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">($a = ANSWER,</span></span></div><div class="line"><span class="function"><span class="params">              $b = ANSWER * ANSWER)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> $a + $b;</div><div class="line">&#125;</div><div class="line"></div><div class="line">define(<span class="string">'ANSWER'</span>, <span class="number">42</span>);</div><div class="line">var_dump(test()); <span class="comment">// int(42 + 42 * 42)·</span></div></pre></td></tr></table></figure>
-<p><code>test()</code> 函数的两个参数的默认值都是由常量 <code>ANSWER</code>构成，但是函数声明时常量的值尚未定义。常量的具体值只有通过 <code>define()</code> 定义时才知道。</p>
-<p>由于以上问题的存在，参数和属性的默认值、常量以及其他接受『静态表达式』的东西都支持『延时绑定』直到首次使用时。</p>
-<p>常量（或者类的静态属性）这些需要『延时绑定』的数据就是最常需要用到 <code>IS_CONSTANT</code> 类型 zval 的地方。如果这个值是表达式，就会使用 <code>IS_CONSTANT_AST</code> 类型的 zval 指向表达式的抽象语法树（AST）。</p>
-<p>到这里我们就结束了对 PHP7 中变量实现的分析。后面我可能还会写两篇文章来介绍一些虚拟机优化、新的命名约定以及一些编译器基础结构的优化的内容（这是作者原话）。</p>
-<p><em>译者注：两篇文章篇幅较长，翻译中可能有疏漏或不正确的地方，如果发现了请及时指正。</em></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/29/Internal-value-representation-in-PHP-7-part-2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1230,6 +1146,10 @@ Error while executing topic command : replication factor: 3 larger than availabl
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
