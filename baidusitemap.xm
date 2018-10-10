@@ -4,8 +4,48 @@
 
     
   <url>
+    <loc>//www.zwting.com/2018/10/08/2018-10-10-k8s-03/</loc>
+    <lastmod>2018-10-10T09:10:33.590Z</lastmod>
+    <data>
+        <display>
+        <title>利用ansible安装k8s集群</title>
+        <pubTime>2018-10-08T03:00:00.000Z</pubTime>
+        
+        <tag>devops</tag>
+         
+         
+           
+             
+              <breadCrumb title="devops" url="//www.zwting.com/categories/devops/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>//www.zwting.com/2018/10/08/2018-10-10-k8s-02/</loc>
+    <lastmod>2018-10-10T06:36:43.460Z</lastmod>
+    <data>
+        <display>
+        <title>安装中控机的ansible环境</title>
+        <pubTime>2018-10-08T03:00:00.000Z</pubTime>
+        
+        <tag>devops</tag>
+         
+         
+           
+             
+              <breadCrumb title="devops" url="//www.zwting.com/categories/devops/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>//www.zwting.com/2018/10/08/2018-10-10-k8s-01/</loc>
-    <lastmod>2018-10-10T04:09:01.110Z</lastmod>
+    <lastmod>2018-10-10T04:12:17.150Z</lastmod>
     <data>
         <display>
         <title>jenkins和k8s结合的自动化目标模型</title>
@@ -354,6 +394,26 @@
 
     
   <url>
+    <loc>//www.zwting.com/2017/08/10/2016-02-10-php-ext-10/</loc>
+    <lastmod>2017-09-18T07:26:21.000Z</lastmod>
+    <data>
+        <display>
+        <title>php7扩展开发[10] 怎么样创建类详细</title>
+        <pubTime>2017-08-10T09:09:59.000Z</pubTime>
+        
+        <tag>PHP7扩展开发</tag>
+         
+         
+           
+             
+              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>//www.zwting.com/2017/08/11/2016-02-11-php-ext-11/</loc>
     <lastmod>2017-09-18T07:26:21.000Z</lastmod>
     <data>
@@ -374,12 +434,12 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/08/10/2016-02-10-php-ext-10/</loc>
+    <loc>//www.zwting.com/2017/08/12/2016-02-12-php-ext-12/</loc>
     <lastmod>2017-09-18T07:26:21.000Z</lastmod>
     <data>
         <display>
-        <title>php7扩展开发[10] 怎么样创建类详细</title>
-        <pubTime>2017-08-10T09:09:59.000Z</pubTime>
+        <title>php7扩展开发[12] autoload机制实现</title>
+        <pubTime>2017-08-12T09:09:59.000Z</pubTime>
         
         <tag>PHP7扩展开发</tag>
          
@@ -407,26 +467,6 @@
            
              
               <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>//www.zwting.com/2017/08/12/2016-02-12-php-ext-12/</loc>
-    <lastmod>2017-09-18T07:26:21.000Z</lastmod>
-    <data>
-        <display>
-        <title>php7扩展开发[12] autoload机制实现</title>
-        <pubTime>2017-08-12T09:09:59.000Z</pubTime>
-        
-        <tag>PHP7扩展开发</tag>
-         
-         
-           
-             
-              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
           
         </display>
     </data>
@@ -494,46 +534,6 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/08/04/2016-02-04-php-ext-4/</loc>
-    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>php7扩展开发[4]读取php.ini内容</title>
-        <pubTime>2017-08-04T09:09:59.000Z</pubTime>
-        
-        <tag>PHP7扩展开发</tag>
-         
-         
-           
-             
-              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>//www.zwting.com/2017/08/06/2016-02-06-php-ext-6/</loc>
-    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>php7扩展开发[6] 调试Segmentation fault</title>
-        <pubTime>2017-08-06T09:09:59.000Z</pubTime>
-        
-        <tag>PHP7扩展开发</tag>
-         
-         
-           
-             
-              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>//www.zwting.com/2017/09/15/2015-04-23-training-python-6/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
@@ -574,11 +574,11 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-05-12-training-python-9/</loc>
+    <loc>//www.zwting.com/2017/09/15/2015-05-10-training-python-8/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
         <display>
-        <title>python技术分享[9]－ 数据库操作之MongoDB</title>
+        <title>python技术分享[8]－ 数据库操作之MySQLdb</title>
         <pubTime>2017-09-15T11:30:59.000Z</pubTime>
         
         <tag>python技术分享</tag>
@@ -594,11 +594,11 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-05-14-training-python-10/</loc>
+    <loc>//www.zwting.com/2017/09/15/2015-05-12-training-python-9/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
         <display>
-        <title>python技术分享[10]－ 日志－记文件log</title>
+        <title>python技术分享[9]－ 数据库操作之MongoDB</title>
         <pubTime>2017-09-15T11:30:59.000Z</pubTime>
         
         <tag>python技术分享</tag>
@@ -634,12 +634,32 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/08/02/2016-02-02-php-ext-2/</loc>
+    <loc>//www.zwting.com/2017/09/15/2015-05-14-training-python-10/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
         <display>
-        <title>php7扩展开发[2]-怎么样定义一个类</title>
-        <pubTime>2017-08-02T09:09:59.000Z</pubTime>
+        <title>python技术分享[10]－ 日志－记文件log</title>
+        <pubTime>2017-09-15T11:30:59.000Z</pubTime>
+        
+        <tag>python技术分享</tag>
+         
+         
+           
+             
+              <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>//www.zwting.com/2017/08/07/2016-02-07-php-ext-7/</loc>
+    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>php7扩展开发[7]含有两个类的扩展模块</title>
+        <pubTime>2017-08-07T09:09:59.000Z</pubTime>
         
         <tag>PHP7扩展开发</tag>
          
@@ -654,12 +674,12 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/08/07/2016-02-07-php-ext-7/</loc>
+    <loc>//www.zwting.com/2017/08/04/2016-02-04-php-ext-4/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
         <display>
-        <title>php7扩展开发[7]含有两个类的扩展模块</title>
-        <pubTime>2017-08-07T09:09:59.000Z</pubTime>
+        <title>php7扩展开发[4]读取php.ini内容</title>
+        <pubTime>2017-08-04T09:09:59.000Z</pubTime>
         
         <tag>PHP7扩展开发</tag>
          
@@ -694,12 +714,12 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/08/01/2016-02-01-php-ext-1/</loc>
+    <loc>//www.zwting.com/2017/08/02/2016-02-02-php-ext-2/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
         <display>
-        <title>php7扩展开发[1]-helloword</title>
-        <pubTime>2017-08-01T09:09:59.000Z</pubTime>
+        <title>php7扩展开发[2]-怎么样定义一个类</title>
+        <pubTime>2017-08-02T09:09:59.000Z</pubTime>
         
         <tag>PHP7扩展开发</tag>
          
@@ -714,19 +734,19 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-05-10-training-python-8/</loc>
+    <loc>//www.zwting.com/2017/08/01/2016-02-01-php-ext-1/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
         <display>
-        <title>python技术分享[8]－ 数据库操作之MySQLdb</title>
-        <pubTime>2017-09-15T11:30:59.000Z</pubTime>
+        <title>php7扩展开发[1]-helloword</title>
+        <pubTime>2017-08-01T09:09:59.000Z</pubTime>
         
-        <tag>python技术分享</tag>
+        <tag>PHP7扩展开发</tag>
          
          
            
              
-              <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
+              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
           
         </display>
     </data>
@@ -767,6 +787,26 @@
            
              
               <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>//www.zwting.com/2017/08/06/2016-02-06-php-ext-6/</loc>
+    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>php7扩展开发[6] 调试Segmentation fault</title>
+        <pubTime>2017-08-06T09:09:59.000Z</pubTime>
+        
+        <tag>PHP7扩展开发</tag>
+         
+         
+           
+             
+              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
           
         </display>
     </data>

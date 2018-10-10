@@ -157,6 +157,310 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2015-04-13-training-python-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/15/2015-04-13-training-python-2/">python技术分享[2]－list dict 基本使用</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/15/2015-04-13-training-python-2/" class="archive-article-date">
+  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>定义:<ul>
+<li>list:链表,有序的项目, 通过索引进行查找,使用方括号”[]”;</li>
+<li>tuple:元组,元组将多样的对象集合到一起,不能修改,通过索引进行查找, 使用括号”()”;</li>
+<li>dict:字典,字典是一组键(key)和值(value)的组合,通过键(key)进行查找,没有顺序, 使用大括号”{}”;</li>
+<li>set:集合,无序,元素只出现一次, 自动去重,使用”set([])”</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">#样例</div><div class="line">mylist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="string">'Oh'</span>]  </div><div class="line">mytuple = (<span class="number">1</span>, <span class="number">2</span>, <span class="string">'Hello'</span>, (<span class="number">4</span>, <span class="number">5</span>))  </div><div class="line">mydict = &#123;<span class="string">'Wang'</span> : <span class="number">1</span>, <span class="string">'Hu'</span> : <span class="number">2</span>, <span class="string">'Liu'</span> : <span class="number">4</span>&#125;  </div><div class="line">myset = set([<span class="string">'Wang'</span>, <span class="string">'Hu'</span>, <span class="string">'Liu'</span>, <span class="number">4</span>, <span class="string">'Wang'</span>])  </div><div class="line">  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mylist)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mytuple)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(mydict)</span></span>  </div><div class="line"><span class="function"><span class="title">print</span><span class="params">(myset)</span></span></div></pre></td></tr></table></figure>
+<ul>
+<li><p>输出</p>
+<ul>
+<li>[1, 2, 3, 4, ‘Oh’]  </li>
+<li>(1, 2, ‘Hello’, (4, 5))  </li>
+<li>{‘Liu’: 4, ‘Wang’: 1, ‘Hu’: 2}  </li>
+<li>set([‘Liu’, 4, ‘Wang’, ‘Hu’]) </li>
+</ul>
+</li>
+</ul>
+<p>我们重点讲字典和列表</p>
+<p>####一、List操作<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：python入门引导 </div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">#定义函数</div><div class="line">def list_test():</div><div class="line">    #初始化列表</div><div class="line">    sample_list = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">3</span>]</div><div class="line">    print sample_list</div><div class="line">      </div><div class="line">    #得到列表中的某一个值</div><div class="line">    value_start = sample_list[<span class="number">1</span>:<span class="number">3</span>]</div><div class="line">    print value_start</div><div class="line">      </div><div class="line">    end_value = sample_list[<span class="number">-1</span>]</div><div class="line">    print end_value</div><div class="line">      </div><div class="line">    #删除列表的第一个值</div><div class="line">    del sample_list[<span class="number">0</span>]</div><div class="line">      </div><div class="line">    #在列表中插入一个值</div><div class="line">    sample_list[<span class="number">0</span>] = [<span class="string">'sample value'</span>]</div><div class="line">    sample_list[<span class="number">2</span>] = <span class="string">'second'</span></div><div class="line">    sample_list.append(<span class="string">'three'</span>)</div><div class="line">      </div><div class="line">    #得到列表的长度</div><div class="line">    list_length = len(sample_list)</div><div class="line">    print list_length</div><div class="line">      </div><div class="line">    #列表遍历</div><div class="line">    for element <span class="keyword">in</span> sample_list:</div><div class="line">        print(element)</div><div class="line">      </div><div class="line">    #用同一个值初始化，形成一个含有六个元素的列表</div><div class="line">    sample_list = [<span class="string">'test'</span>]*<span class="number">6</span></div><div class="line">    for element <span class="keyword">in</span> sample_list:</div><div class="line">        print(element)</div><div class="line">        </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    #调用函数</div><div class="line">    list_test()</div></pre></td></tr></table></figure></p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line">#coding=utf<span class="number">-8</span></div><div class="line"></div><div class="line"></div><div class="line">###################################################</div><div class="line">#  </div><div class="line">#  功能：python入门引导 </div><div class="line">#        </div><div class="line">####################################################</div><div class="line"></div><div class="line">def dict_test():</div><div class="line">    #初始化字典    </div><div class="line">    sample_dict = &#123;<span class="string">'a'</span>:<span class="string">'a'</span>,<span class="string">'2'</span>:<span class="string">'b'</span>,<span class="number">3</span>:<span class="string">'c'</span>&#125;</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #获取指定的key的值</div><div class="line">    pop = sample_dict.pop(<span class="string">'2'</span>)</div><div class="line">    print pop</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    get = sample_dict.get(<span class="string">'a'</span>)</div><div class="line">    print get</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    print sample_dict[<span class="number">3</span>]</div><div class="line"></div><div class="line">    #删除指定key的值</div><div class="line">    pop = sample_dict.pop(<span class="number">3</span>)</div><div class="line">    print pop</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #在字典中插入一个值</div><div class="line">    sample_dict.update(&#123;<span class="number">3</span>:<span class="string">'c'</span>,<span class="string">'2'</span>:<span class="string">'b'</span>&#125;)</div><div class="line">    print sample_dict</div><div class="line"></div><div class="line">    #获取字典长度</div><div class="line">    print len(sample_dict)</div><div class="line"></div><div class="line">    #字典遍历</div><div class="line">    for element <span class="keyword">in</span> sample_dict:</div><div class="line">        print element,sample_dict[element]</div><div class="line"></div><div class="line">    for (k, v) <span class="keyword">in</span> sample_dict.items():</div><div class="line">        print <span class="string">"sample_dict[%s] ="</span> % k, v</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    dict_test()</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/15/2015-04-13-training-python-2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2017-09-11-cluster-kafka-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/11/2017-09-11-cluster-kafka-1/">kafka-flume集群环境搭建【1】</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/11/2017-09-11-cluster-kafka-1/" class="archive-article-date">
+  	<time datetime="2017-09-11T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h3 id="1-前期准备"><a href="#1-前期准备" class="headerlink" title="1. 前期准备"></a>1. 前期准备</h3><h4 id="1-1-操作系统"><a href="#1-1-操作系统" class="headerlink" title="1.1 操作系统"></a>1.1 操作系统</h4><pre><code>172.16.61.102,centos6.9
+172.16.61.103,centos6.9
+172.16.61.104,centos6.9
+</code></pre><h3 id="1-2-etc-hosts-（3主机均需要）"><a href="#1-2-etc-hosts-（3主机均需要）" class="headerlink" title="1.2 /etc/hosts  （3主机均需要）"></a>1.2 /etc/hosts  （3主机均需要）</h3><pre><code>172.16.61.102  kafka01
+172.16.61.103  kafka02
+172.16.61.104  kafka03
+</code></pre><h3 id="1-3-安装Java-（3主机均需要）"><a href="#1-3-安装Java-（3主机均需要）" class="headerlink" title="1.3 安装Java （3主机均需要）"></a>1.3 安装Java （3主机均需要）</h3><pre><code>yum install java-1.8.0-openjdk -y
+</code></pre><h3 id="1-4-下载安装kafka-（3主机均需要）"><a href="#1-4-下载安装kafka-（3主机均需要）" class="headerlink" title="1.4 下载安装kafka （3主机均需要）"></a>1.4 下载安装kafka （3主机均需要）</h3><pre><code>cd ~
+wget http://mirrors.hust.edu.cn/apache/kafka/0.11.0.0/kafka_2.11-0.11.0.0.tgz
+tar -xf kafka_2.11-0.11.0.0.tgz -C /usr/local/
+ln -sv /usr/local/kafka_2.11-0.11.0.0 /usr/local/kafka
+ll  /usr/local/kafka
+</code></pre><h3 id="2-配置zookeeper"><a href="#2-配置zookeeper" class="headerlink" title="2. 配置zookeeper"></a>2. 配置zookeeper</h3><h5 id="2-1-zookeeper-配置"><a href="#2-1-zookeeper-配置" class="headerlink" title="2.1 zookeeper 配置"></a>2.1 zookeeper 配置</h5><p>[root@kafka102 ] cat /usr/local/kafka/config/zookeeper.properties</p>
+<pre><code>dataDir=/data/zookeeper
+clientPort=2181
+tickTime=2000
+initLimit=20
+syncLimit=10
+server.102=172.16.61.102:2888:3888
+server.103=172.16.61.103:2888:3888
+server.104=172.16.61.104:2888:3888
+</code></pre><p>[root@kafka103 ] cat /usr/local/kafka/config/zookeeper.properties</p>
+<pre><code>dataDir=/data/zookeeper
+clientPort=2181
+tickTime=2000
+initLimit=20
+syncLimit=10
+server.102=172.16.61.102:2888:3888
+server.103=172.16.61.103:2888:3888
+server.104=172.16.61.104:2888:3888
+</code></pre><p>[root@kafka104 ] cat /usr/local/kafka/config/zookeeper.properties</p>
+<pre><code>dataDir=/data/zookeeper
+clientPort=2181
+tickTime=2000
+initLimit=20
+syncLimit=10
+server.102=172.16.61.102:2888:3888
+server.103=172.16.61.103:2888:3888
+server.104=172.16.61.104:2888:3888
+</code></pre><h5 id="2-2-创建数据目录-（3主机均需要）"><a href="#2-2-创建数据目录-（3主机均需要）" class="headerlink" title="2.2 创建数据目录 （3主机均需要）"></a>2.2 创建数据目录 （3主机均需要）</h5><pre><code>[root@kafka102 ] mkdir -p /data/zookeeper 
+[root@kafka103 ] mkdir -p /data/zookeeper 
+[root@kafka104] mkdir -p /data/zookeeper 
+</code></pre><h5 id="2-3-写zookeeper标识（3主机均需要）"><a href="#2-3-写zookeeper标识（3主机均需要）" class="headerlink" title="2.3 写zookeeper标识（3主机均需要）"></a>2.3 写zookeeper标识（3主机均需要）</h5><pre><code>[root@kafka102 ] echo 102 &gt; /data/zookeeper/myid
+[root@kafka103 ] echo 103 &gt; /data/zookeeper/myid
+[root@kafka104 ] echo 104 &gt; /data/zookeeper/myid
+</code></pre><font color="red"> 注意数字要zookeeper.properties中一致</font> 
+
+<h5 id="2-4-启动zookeeper"><a href="#2-4-启动zookeeper" class="headerlink" title="2.4 启动zookeeper"></a>2.4 启动zookeeper</h5><pre><code>[root@kafka102 ]# nohup /usr/local/kafka/bin/zookeeper-server-start.sh /usr/local/kafka/config/zookeeper.properties &amp;
+
+[root@kafka103 ]# nohup /usr/local/kafka/bin/zookeeper-server-start.sh /usr/local/kafka/config/zookeeper.properties &amp;
+
+[root@kafka104 ]# nohup /usr/local/kafka/bin/zookeeper-server-start.sh /usr/local/kafka/config/zookeeper.properties &amp;
+</code></pre><h5 id="2-5-停止zookeeper"><a href="#2-5-停止zookeeper" class="headerlink" title="2.5 停止zookeeper"></a>2.5 停止zookeeper</h5><pre><code>/usr/local/kafka/bin/zookeeper-server-stop.sh
+</code></pre><h3 id="3-配置kafka"><a href="#3-配置kafka" class="headerlink" title="3. 配置kafka"></a>3. 配置kafka</h3><h5 id="3-1-server-properties-修改-broker-id、zookeeper-connect"><a href="#3-1-server-properties-修改-broker-id、zookeeper-connect" class="headerlink" title="3.1 server.properties 修改 broker.id、zookeeper.connect"></a>3.1 server.properties 修改 broker.id、zookeeper.connect</h5><p>[root@kafka102 ~]# grep -v ^#  /usr/local/kafka/config/server.properties|sed ‘/^$/d’</p>
+<pre><code>broker.id=102
+num.network.threads=3
+num.io.threads=8
+socket.send.buffer.bytes=102400
+socket.receive.buffer.bytes=102400
+socket.request.max.bytes=104857600
+log.dirs=/tmp/kafka-logs
+num.partitions=1
+num.recovery.threads.per.data.dir=1
+offsets.topic.replication.factor=1
+transaction.state.log.replication.factor=1
+transaction.state.log.min.isr=1
+log.retention.hours=168
+log.segment.bytes=1073741824
+log.retention.check.interval.ms=300000
+zookeeper.connect=172.16.61.102:2181,172.16.61.103:2181,172.16.61.104:2181
+zookeeper.connection.timeout.ms=6000
+group.initial.rebalance.delay.ms=0
+</code></pre><p>[root@kafka103 ~]# grep -v ^#  /usr/local/kafka/config/server.properties|sed ‘/^$/d’</p>
+<pre><code>broker.id=103
+num.network.threads=3
+num.io.threads=8
+socket.send.buffer.bytes=102400
+socket.receive.buffer.bytes=102400
+socket.request.max.bytes=104857600
+log.dirs=/tmp/kafka-logs
+num.partitions=1
+num.recovery.threads.per.data.dir=1
+offsets.topic.replication.factor=1
+transaction.state.log.replication.factor=1
+transaction.state.log.min.isr=1
+log.retention.hours=168
+log.segment.bytes=1073741824
+log.retention.check.interval.ms=300000
+zookeeper.connect=172.16.61.102:2181,172.16.61.103:2181,172.16.61.104:2181
+zookeeper.connection.timeout.ms=6000
+group.initial.rebalance.delay.ms=0
+</code></pre><p>[root@kafka104 ~]# grep -v ^#  /usr/local/kafka/config/server.properties|sed ‘/^$/d’</p>
+<pre><code>broker.id=104
+num.network.threads=3
+num.io.threads=8
+socket.send.buffer.bytes=102400
+socket.receive.buffer.bytes=102400
+socket.request.max.bytes=104857600
+log.dirs=/tmp/kafka-logs
+num.partitions=1
+num.recovery.threads.per.data.dir=1
+offsets.topic.replication.factor=1
+transaction.state.log.replication.factor=1
+transaction.state.log.min.isr=1
+log.retention.hours=168
+log.segment.bytes=1073741824
+log.retention.check.interval.ms=300000
+zookeeper.connect=172.16.61.102:2181,172.16.61.103:2181,172.16.61.104:2181
+zookeeper.connection.timeout.ms=6000
+group.initial.rebalance.delay.ms=0
+</code></pre><h5 id="3-2-启动kafka"><a href="#3-2-启动kafka" class="headerlink" title="3.2 启动kafka"></a>3.2 启动kafka</h5><pre><code>[root@kafka102 zookeeper]# nohup /usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties &amp;
+[root@kafka103 zookeeper]# nohup /usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties &amp;
+[root@kafka104 zookeeper]# nohup /usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties &amp;
+</code></pre><h5 id="3-3-停止kafka"><a href="#3-3-停止kafka" class="headerlink" title="3.3 停止kafka"></a>3.3 停止kafka</h5><pre><code>/usr/local/kafka/bin/kafka-server-stop.sh
+</code></pre><h3 id="3-4-查看各机器端口"><a href="#3-4-查看各机器端口" class="headerlink" title="3.4 查看各机器端口"></a>3.4 查看各机器端口</h3><pre><code>netstat -nlpt | grep -E &quot;2181|2888|3888|9092&quot;
+</code></pre><h3 id="4-kafka日常操作"><a href="#4-kafka日常操作" class="headerlink" title="4. kafka日常操作"></a>4. kafka日常操作</h3><h5 id="4-1-创建主题"><a href="#4-1-创建主题" class="headerlink" title="4.1 创建主题"></a>4.1 创建主题</h5><pre><code>[root@kafka102 ~]# /usr/local/kafka/bin/kafka-topics.sh --create --zookeeper 172.16.61.102:2181 --replication-factor 3 --partitions 1 --topic test000
+</code></pre><h5 id="4-2-查看主题列表"><a href="#4-2-查看主题列表" class="headerlink" title="4.2 查看主题列表"></a>4.2 查看主题列表</h5><pre><code>[root@kafka102 ~]# /usr/local/kafka/bin/kafka-topics.sh --list --zookeeper 172.16.61.102:2181
+</code></pre><h5 id="4-3-查看主题详细内容"><a href="#4-3-查看主题详细内容" class="headerlink" title="4.3 查看主题详细内容"></a>4.3 查看主题详细内容</h5><pre><code>[root@kafka102 ~]# /usr/local/kafka/bin/kafka-topics.sh --describe --zookeeper 172.16.61.102:2181 --topic test000
+</code></pre><h5 id="4-4-生产者-和-消费者"><a href="#4-4-生产者-和-消费者" class="headerlink" title="4.4 生产者 和 消费者"></a>4.4 生产者 和 消费者</h5><pre><code>[root@kafka01 ~]# /usr/local/kafka/bin/kafka-console-producer.sh --broker-list 172.16.61.102:2181 --topic test000
+
+[root@kafka01 ~]# /usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic test000 --from-beginning
+
+会有如下提示，需要用最新的指令 0.9+
+Using the ConsoleConsumer with old consumer is deprecated and will be removed in a future major release. Consider using the new consumer by passing [bootstrap-server] instead of [zookeeper].
+
+
+ /usr/local/kafka/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test --producer.config /usr/local/kafka/config/producer.properties
+
+
+ /usr/local/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --new-consumer --from-beginning --consumer.config /usr/local/kafka/config/consumer.properties
+</code></pre><h3 id="5-kafka问题实录："><a href="#5-kafka问题实录：" class="headerlink" title="5. kafka问题实录："></a>5. kafka问题实录：</h3><h5 id="5-1-Q：因为没有启动kafka"><a href="#5-1-Q：因为没有启动kafka" class="headerlink" title="5.1 Q：因为没有启动kafka"></a>5.1 Q：因为没有启动kafka</h5><pre><code>[root@kafka102 ~]# /usr/local/kafka/bin/kafka-topics.sh --create --zookeeper 172.16.61.102:2181 --replication-factor 3 --partitions 1 --topic test000
+
+Error while executing topic command : replication factor: 3 larger than available brokers: 0
+[2017-09-12 16:42:56,533] ERROR org.apache.kafka.common.errors.InvalidReplicationFactorException: replication factor: 3 larger than available brokers: 0
+ (kafka.admin.TopicCommand$)
+</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>&gt;<br><a href="http://blog.csdn.net/ddcowboy/article/details/54617740" target="_blank" rel="external">http://blog.csdn.net/ddcowboy/article/details/54617740</a><br><a href="http://orchome.com/454" target="_blank" rel="external">http://orchome.com/454</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/11/2017-09-11-cluster-kafka-1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Internal-value-representation-in-PHP-7-part-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -767,175 +1071,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/08/09/2016-02-09-php-ext-9/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2016-02-08-php-ext-8" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/08/2016-02-08-php-ext-8/">php7扩展开发[8]类方法之间的调用</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/08/2016-02-08-php-ext-8/" class="archive-article-date">
-  	<time datetime="2017-08-08T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight mel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">在一个扩展模块里，类之间方法的调用，上面第<span class="number">7</span>个有例子简介，就不多说了</div><div class="line">首先我们先创建<span class="keyword">play</span>扩展模块，再创建adf扩展模块，最后创建udf扩展模块，</div><div class="line">我们要做到的是php -m中显示加载了<span class="keyword">play</span>,我们可以调用adf类和udf类。</div></pre></td></tr></table></figure>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">第一步：</div><div class="line">	在adf和udf类中各实现<span class="builtin-name">set</span> get方法，然后初始化minit中的内容</div><div class="line">	运行成功后，将adf.c php_adf.h和udf.c php_udf.h拷入play文件中</div><div class="line">	</div><div class="line">第二步</div><div class="line">修改play文件夹中的config.m4：</div><div class="line"><span class="keyword">if</span> test -z <span class="string">"<span class="variable">$PHP_DEBUG</span>"</span> ; then </div><div class="line">  PHP_NEW_EXTENSION(play, play.c udf.c adf.c, <span class="variable">$ext_shared</span>,, <span class="attribute">-DZEND_ENABLE_STATIC_TSRMLS_CACHE</span>=1)</div><div class="line">  </div><div class="line">在play.c的MINIT函数中加上</div><div class="line">	ZEND_MODULE_STARTUP_N(udf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">	ZEND_MODULE_STARTUP_N(adf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">  </div><div class="line">第三步执行</div><div class="line">phpize </div><div class="line">./configure <span class="attribute">--with-php-config</span>=/usr/bin/php-config --enable-debug</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">在adf.c中加一个静态方法</div><div class="line"></div><div class="line"><span class="keyword">const</span> zend_function_entry adf_functions[] = &#123;</div><div class="line"></div><div class="line">	PHP_ME(adf, __construct,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)</div><div class="line">	PHP_ME(adf,<span class="built_in">set</span>,global_setkey_arg,ZEND_ACC_PUBLIC)</div><div class="line">	PHP_ME(adf,get,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC)</div><div class="line">	PHP_ME(adf,calladf,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC|ZEND_ACC_STATIC) </div><div class="line"></div><div class="line">	PHP_FE_END	<span class="comment">/* Must be the last line in adf_functions[] */</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line">加上这个一行 	PHP_ME(adf,calladf,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC|ZEND_ACC_STATIC) </div><div class="line"></div><div class="line">再实现一个空方法</div><div class="line">ZEND_METHOD(adf,calladf)&#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">在udf.c 中定义了一个get方法，它用来调用adf.c中的calladf的静态方法</div><div class="line">ZEND<span class="number">_M</span>ETHOD(udf,get)&#123;</div><div class="line"></div><div class="line">    <span class="comment">//创建类实例</span></div><div class="line">    zval *<span class="keyword">object</span><span class="number">_n</span>ame;</div><div class="line">    </div><div class="line">    <span class="comment">//函数名i</span></div><div class="line">    zval <span class="keyword">function</span><span class="number">_n</span>ame;</div><div class="line">    ZVAL<span class="number">_</span>STRING(&amp;<span class="keyword">function</span><span class="number">_n</span>ame, <span class="string">"calladf"</span>);</div><div class="line"> </div><div class="line">    <span class="comment">//zend_call_method_with_0_params(object_name,adf_ce,NULL,"calladf",return_value);</span></div><div class="line">    zend<span class="number">_</span>call<span class="number">_m</span>ethod(<span class="keyword">object</span><span class="number">_n</span>ame,adf<span class="number">_</span>ce,NULL,<span class="string">"calladf"</span>,sizeof(<span class="string">"calladf"</span>)-<span class="number">1</span>,<span class="keyword">return</span><span class="number">_</span><span class="keyword">value</span>,<span class="number">0</span>,NULL,NULL);</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">在 Zend/zend<span class="number">_</span>interfaces 下函数原型：</div><div class="line"></div><div class="line"><span class="number">#def</span>ine zend<span class="number">_</span>call<span class="number">_m</span>ethod<span class="number">_</span>with<span class="number">_0_p</span>arams(obj, obj<span class="number">_</span>ce, fn<span class="number">_p</span>roxy, <span class="keyword">function</span><span class="number">_n</span>ame, retval) \</div><div class="line">	zend<span class="number">_</span>call<span class="number">_m</span>ethod(obj, obj<span class="number">_</span>ce, fn<span class="number">_p</span>roxy, <span class="keyword">function</span><span class="number">_n</span>ame, sizeof(<span class="keyword">function</span><span class="number">_n</span>ame)-<span class="number">1</span>, retval, <span class="number">0</span>, NULL, NULL)</div><div class="line"></div><div class="line"><span class="number">#def</span>ine zend<span class="number">_</span>call<span class="number">_m</span>ethod<span class="number">_</span>with<span class="number">_1_p</span>arams(obj, obj<span class="number">_</span>ce, fn<span class="number">_p</span>roxy, <span class="keyword">function</span><span class="number">_n</span>ame, retval, arg<span class="number">1</span>) \</div><div class="line">	zend<span class="number">_</span>call<span class="number">_m</span>ethod(obj, obj<span class="number">_</span>ce, fn<span class="number">_p</span>roxy, <span class="keyword">function</span><span class="number">_n</span>ame, sizeof(<span class="keyword">function</span><span class="number">_n</span>ame)-<span class="number">1</span>, retval, <span class="number">1</span>, arg<span class="number">1</span>, NULL)</div><div class="line"></div><div class="line"><span class="number">#def</span>ine zend<span class="number">_</span>call<span class="number">_m</span>ethod<span class="number">_</span>with<span class="number">_2_p</span>arams(obj, obj<span class="number">_</span>ce, fn<span class="number">_p</span>roxy, <span class="keyword">function</span><span class="number">_n</span>ame, retval, arg<span class="number">1</span>, arg<span class="number">2</span>) \</div><div class="line">	zend<span class="number">_</span>call<span class="number">_m</span>ethod(obj, obj<span class="number">_</span>ce, fn<span class="number">_p</span>roxy, <span class="keyword">function</span><span class="number">_n</span>ame, sizeof(<span class="keyword">function</span><span class="number">_n</span>ame)-<span class="number">1</span>, retval, <span class="number">2</span>, arg<span class="number">1</span>, arg<span class="number">2</span>)</div><div class="line"></div><div class="line">上面三个调用下面的：</div><div class="line"></div><div class="line">ZEND<span class="number">_</span>API zval* zend<span class="number">_</span>call<span class="number">_m</span>ethod(zval *<span class="keyword">object</span><span class="number">_p</span>p, zend<span class="number">_</span><span class="keyword">class</span><span class="number">_</span>entry *obj<span class="number">_</span>ce, zend<span class="number">_f</span>unction **fn<span class="number">_p</span>roxy, const char *<span class="keyword">function</span><span class="number">_n</span>ame, size<span class="number">_</span>t <span class="keyword">function</span><span class="number">_n</span>ame<span class="number">_</span>len, zval *retval, int param<span class="number">_</span>count, zval* arg<span class="number">1</span>, zval* arg<span class="number">2</span>);</div></pre></td></tr></table></figure>
-<pre><code>在Zend/zend_API.h下,上面调用zend_call_function：
-ZEND_API int zend_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache);
-
-typedef struct _zend_fcall_info {
-        size_t size;
-        HashTable *function_table;
-        zval function_name;
-        zend_array *symbol_table;
-        zval *retval;
-        zval *params;
-        zend_object *object;
-        zend_bool no_separation;
-        uint32_t param_count;
-} zend_fcall_info;
-</code></pre><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/08/2016-02-08-php-ext-8/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2016-02-07-php-ext-7" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/07/2016-02-07-php-ext-7/">php7扩展开发[7]含有两个类的扩展模块</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/07/2016-02-07-php-ext-7/" class="archive-article-date">
-  	<time datetime="2017-08-07T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight mel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">在我们写扩展时，就像YAF不会是用一个类文件来完成一个扩展功能，所以我们要在一个扩展模块里</div><div class="line">调起几个类的实例，同类之间的方法，可以相互调用，不同类之间的实例，应该也可以调用，下面我</div><div class="line">们就用一个例子来说明。</div><div class="line">首先我们先创建<span class="keyword">play</span>扩展模块，再创建adf扩展模块，最后创建udf扩展模块，</div><div class="line">我们要做到的是php -m中显示加载了<span class="keyword">play</span>,我们可以调用adf类和udf类。</div></pre></td></tr></table></figure>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">第一步：</div><div class="line">	在adf和udf类中各实现<span class="builtin-name">set</span> get方法，然后初始化minit中的内容</div><div class="line">	运行成功后，将adf.c php_adf.h和udf.c php_udf.h拷入play文件中</div><div class="line">	</div><div class="line">第二步</div><div class="line">修改play文件夹中的config.m4：</div><div class="line"><span class="keyword">if</span> test -z <span class="string">"<span class="variable">$PHP_DEBUG</span>"</span> ; then </div><div class="line">  PHP_NEW_EXTENSION(play, play.c udf.c adf.c, <span class="variable">$ext_shared</span>,, <span class="attribute">-DZEND_ENABLE_STATIC_TSRMLS_CACHE</span>=1)</div><div class="line">  </div><div class="line">在play.c的MINIT函数中加上</div><div class="line">	ZEND_MODULE_STARTUP_N(udf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">	ZEND_MODULE_STARTUP_N(adf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">  </div><div class="line">第三步执行</div><div class="line">phpize </div><div class="line">./configure <span class="attribute">--with-php-config</span>=/usr/bin/php-config --enable-debug</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div></pre></td><td class="code"><pre><div class="line">adf.c </div><div class="line"></div><div class="line"></div><div class="line">zend<span class="number">_</span><span class="keyword">class</span><span class="number">_</span>entry *adf<span class="number">_</span>ce;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//新增定义</span></div><div class="line">ZEND<span class="number">_</span>BEGIN<span class="number">_</span>ARG<span class="number">_</span>INFO<span class="number">_</span>EX(global<span class="number">_</span>setkey<span class="number">_</span>arg, <span class="number">0</span>, <span class="number">0</span>, <span class="number">2</span>)</div><div class="line">    ZEND<span class="number">_</span>ARG<span class="number">_</span>INFO(<span class="number">0</span>, key<span class="number">1</span>)</div><div class="line">    ZEND<span class="number">_</span>ARG<span class="number">_</span>INFO(<span class="number">0</span>, key<span class="number">2</span>)</div><div class="line">ZEND<span class="number">_</span>END<span class="number">_</span>ARG<span class="number">_</span>INFO()</div><div class="line"></div><div class="line">ZEND<span class="number">_M</span>ETHOD(adf,<span class="number">__</span>construct)&#123;</div><div class="line"></div><div class="line">	RETURN<span class="number">_</span>NULL();</div><div class="line">&#125;</div><div class="line"></div><div class="line">ZEND<span class="number">_M</span>ETHOD(adf,set)&#123;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">	zval *param<span class="number">1</span>;</div><div class="line">	zval *param<span class="number">2</span>;</div><div class="line"></div><div class="line">	array<span class="number">_</span>init(param<span class="number">2</span>);</div><div class="line"></div><div class="line">	<span class="comment">//int zend_parse_parameters ( int num_args TSRMLS_DC, char* type_spec, ... )</span></div><div class="line"></div><div class="line">	<span class="keyword">if</span> (zend<span class="number">_p</span>arse<span class="number">_p</span>arameters(ZEND<span class="number">_</span>NUM<span class="number">_</span>ARGS(), <span class="string">"z|z"</span>,&amp;param<span class="number">1</span>,&amp;param<span class="number">2</span>) == FAILURE) &#123;</div><div class="line">		RETURN<span class="number">_</span>FALSE;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	zend<span class="number">_u</span>pdate<span class="number">_p</span>roperty(adf<span class="number">_</span>ce, getThis(), <span class="string">"param1"</span>, sizeof(<span class="string">"param1"</span>)-<span class="number">1</span>, param<span class="number">1</span> TSRMLS<span class="number">_</span>CC);</div><div class="line">	zend<span class="number">_u</span>pdate<span class="number">_p</span>roperty(adf<span class="number">_</span>ce, getThis(), <span class="string">"param2"</span>, sizeof(<span class="string">"param2"</span>)-<span class="number">1</span>, param<span class="number">2</span> TSRMLS<span class="number">_</span>CC);</div><div class="line"></div><div class="line">	RETURN<span class="number">_</span>NULL();</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">ZEND<span class="number">_M</span>ETHOD(adf,get)&#123;</div><div class="line"></div><div class="line">	array<span class="number">_</span>init(<span class="keyword">return</span><span class="number">_</span><span class="keyword">value</span>);</div><div class="line"></div><div class="line">	zval  *get<span class="number">1</span>;</div><div class="line">	zval  *get<span class="number">2</span>;</div><div class="line"></div><div class="line">	zval  param<span class="number">1</span>; <span class="comment">//php &gt;=7.0</span></div><div class="line">	zval  param<span class="number">2</span>; <span class="comment">//php &gt;=7.0</span></div><div class="line"></div><div class="line">	get<span class="number">1</span> = zend<span class="number">_</span>read<span class="number">_p</span>roperty(adf<span class="number">_</span>ce, getThis(), <span class="string">"param1"</span>, sizeof(<span class="string">"param1"</span>)-<span class="number">1</span>, <span class="number">0</span>, &amp;param<span class="number">1</span> TSRMLS<span class="number">_</span>DC);</div><div class="line">	get<span class="number">2</span> = zend<span class="number">_</span>read<span class="number">_p</span>roperty(adf<span class="number">_</span>ce, getThis(), <span class="string">"param2"</span>, sizeof(<span class="string">"param2"</span>)-<span class="number">1</span>, <span class="number">0</span>, &amp;param<span class="number">2</span> TSRMLS<span class="number">_</span>DC);</div><div class="line"></div><div class="line"></div><div class="line">	add<span class="number">_n</span>ext<span class="number">_</span>index<span class="number">_</span>string(<span class="keyword">return</span><span class="number">_</span><span class="keyword">value</span>,Z<span class="number">_</span>STRVAL<span class="number">_P</span>(get<span class="number">1</span>));</div><div class="line">	add<span class="number">_n</span>ext<span class="number">_</span>index<span class="number">_</span>string(<span class="keyword">return</span><span class="number">_</span><span class="keyword">value</span>,Z<span class="number">_</span>STRVAL<span class="number">_P</span>(get<span class="number">2</span>));</div><div class="line">	<span class="comment">//add_assoc_string(return_value, "param1", ZEND_STRL("test1"));</span></div><div class="line">	<span class="comment">//add_assoc_string(return_value, "param2", ZEND_STRL("test2"));</span></div><div class="line"></div><div class="line">	RETURN<span class="number">_</span>ZVAL(<span class="keyword">return</span><span class="number">_</span><span class="keyword">value</span>, <span class="number">1</span>, <span class="number">0</span>);</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">const zend<span class="number">_f</span>unction<span class="number">_</span>entry adf<span class="number">_f</span>unctions[] = &#123;</div><div class="line"></div><div class="line">	PHP<span class="number">_M</span>E(adf, <span class="number">__</span>construct,NULL,ZEND<span class="number">_</span>ACC<span class="number">_P</span>UBLIC|ZEND<span class="number">_</span>ACC<span class="number">_</span>CTOR)</div><div class="line">	PHP<span class="number">_M</span>E(adf,set,global<span class="number">_</span>setkey<span class="number">_</span>arg,ZEND<span class="number">_</span>ACC<span class="number">_P</span>UBLIC)</div><div class="line">	PHP<span class="number">_M</span>E(adf,get,NULL,ZEND<span class="number">_</span>ACC<span class="number">_P</span>UBLIC)</div><div class="line">	PHP<span class="number">_M</span>E(adf,calladf,NULL,ZEND<span class="number">_</span>ACC<span class="number">_P</span>UBLIC|ZEND<span class="number">_</span>ACC<span class="number">_</span>STATIC)</div><div class="line"></div><div class="line">	PHP<span class="number">_</span>FE<span class="number">_</span>END	<span class="comment">/* Must be the last line in adf_functions[] */</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line">PHP<span class="number">_M</span>INIT<span class="number">_</span>FUNCTION(adf)</div><div class="line">&#123;</div><div class="line">	<span class="comment">/* If you have INI entries, uncomment these lines</span></div><div class="line"><span class="comment">	REGISTER_INI_ENTRIES();</span></div><div class="line"><span class="comment">	*/</span></div><div class="line"></div><div class="line">        zend<span class="number">_</span><span class="keyword">class</span><span class="number">_</span>entry ce;</div><div class="line">        INIT<span class="number">_</span>CLASS<span class="number">_</span>ENTRY(ce, <span class="string">"adf"</span>, adf<span class="number">_f</span>unctions);</div><div class="line">	adf<span class="number">_</span>ce = zend<span class="number">_</span>register<span class="number">_</span>internal<span class="number">_</span><span class="keyword">class</span>(&amp;ce TSRMLS<span class="number">_</span>CC);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">play</span><span class="selector-class">.c</span>中代码：</div><div class="line"></div><div class="line"><span class="selector-tag">PHP_MINIT_FUNCTION</span>(play)</div><div class="line">&#123;</div><div class="line">	<span class="comment">/* If you have INI entries, uncomment these lines</span></div><div class="line"><span class="comment">	REGISTER_INI_ENTRIES();</span></div><div class="line"><span class="comment">	*/</span></div><div class="line"></div><div class="line">	<span class="selector-tag">ZEND_MODULE_STARTUP_N</span>(udf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">	<span class="selector-tag">ZEND_MODULE_STARTUP_N</span>(adf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">	<span class="selector-tag">return</span> <span class="selector-tag">SUCCESS</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/07/2016-02-07-php-ext-7/">展开全文 >></a>
         </p>
       
 

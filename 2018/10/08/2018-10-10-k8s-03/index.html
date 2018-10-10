@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//www.zwting.com">
-  <title>Tag: Erlang程序设计的读书笔记 | 醉翁亭</title>
+  <title>利用ansible安装k8s集群 | 醉翁亭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="活在当下，求的不过是顺心意。工作十年了，记录一些生活、工作的经历聊以慰藉。">
-<meta name="keywords" content="前端,js,jquery,javascript,html5,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验,运维,运维开发">
-<meta property="og:type" content="website">
-<meta property="og:title" content="醉翁亭">
-<meta property="og:url" content="//www.zwting.com/tags/Erlang程序设计的读书笔记/index.html">
+  <meta name="description" content="利用ansible安装k8s集群">
+<meta name="keywords" content="devops">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用ansible安装k8s集群">
+<meta property="og:url" content="//www.zwting.com/2018/10/08/2018-10-10-k8s-03/index.html">
 <meta property="og:site_name" content="醉翁亭">
-<meta property="og:description" content="活在当下，求的不过是顺心意。工作十年了，记录一些生活、工作的经历聊以慰藉。">
+<meta property="og:description" content="利用ansible安装k8s集群">
+<meta property="og:updated_time" content="2018-10-10T09:10:33.590Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="醉翁亭">
-<meta name="twitter:description" content="活在当下，求的不过是顺心意。工作十年了，记录一些生活、工作的经历聊以慰藉。">
+<meta name="twitter:title" content="利用ansible安装k8s集群">
+<meta name="twitter:description" content="利用ansible安装k8s集群">
   
     <link rel="alternative" href="/atom.xml" title="醉翁亭" type="application/atom+xml">
   
@@ -155,365 +156,275 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-2018-10-10-k8s-03" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      利用ansible安装k8s集群
+    </h1>
+  
+
+        
+        <a href="/2018/10/08/2018-10-10-k8s-03/" class="archive-article-date">
+  	<time datetime="2018-10-08T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-08</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="服务器列表"><a href="#服务器列表" class="headerlink" title="服务器列表"></a>服务器列表</h3><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>内网IP</th>
+<th>外网IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deploy</td>
+<td>192.168.111.69</td>
+<td>172.16.153.70</td>
+</tr>
+<tr>
+<td>kmaster</td>
+<td>192.168.111.74</td>
+<td>172.16.153.71</td>
+</tr>
+<tr>
+<td>knode01</td>
+<td>192.168.111.71</td>
+<td>172.16.153.72</td>
+</tr>
+<tr>
+<td>knode02</td>
+<td>192.168.111.68</td>
+<td>172.16.153.73</td>
+</tr>
+<tr>
+<td>knode03</td>
+<td>192.168.111.70</td>
+<td>172.16.153.74</td>
+</tr>
+<tr>
+<td>knode04</td>
+<td>192.168.111.72</td>
+<td>172.16.153.75</td>
+</tr>
+<tr>
+<td>knode05</td>
+<td>192.168.111.73</td>
+<td>172.16.153.76</td>
+</tr>
+</tbody>
+</table>
+<h3 id="etc-hosts追加内容"><a href="#etc-hosts追加内容" class="headerlink" title="/etc/hosts追加内容"></a>/etc/hosts追加内容</h3><table>
+<thead>
+<tr>
+<th>内网IP</th>
+<th>别名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.111.69</td>
+<td>deploy</td>
+</tr>
+<tr>
+<td>192.168.111.74</td>
+<td>kmaster </td>
+</tr>
+<tr>
+<td>192.168.111.71</td>
+<td>knode01</td>
+</tr>
+<tr>
+<td>192.168.111.68</td>
+<td>knode02</td>
+</tr>
+<tr>
+<td>192.168.111.70</td>
+<td>knode03</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>knode04</td>
+</tr>
+<tr>
+<td>192.168.111.73</td>
+<td>knode05</td>
+</tr>
+<tr>
+<td>192.168.111.70</td>
+<td>etcd01</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>etcd02</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>etcd03</td>
+</tr>
+</tbody>
+</table>
+<p>##获取 kubeasz<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">git clone <span class="string">https:</span><span class="comment">//github.com/gjmzj/kubeasz.git</span></div><div class="line"></div><div class="line">cd kubeasz/</div><div class="line"></div><div class="line">git checkout v1102-r1</div><div class="line"></div><div class="line">mkdir -p <span class="regexp">/etc/</span>ansible</div><div class="line">mv * <span class="regexp">/etc/</span>ansible</div></pre></td></tr></table></figure></p>
+<p>##获取安装依赖的二进制包</p>
+<p>国内请从分享的百度云链接下载 <a href="https://pan.baidu.com/s/1c4RFaA" target="_blank" rel="external">https://pan.baidu.com/s/1c4RFaA</a></p>
+<p>下载已打包好的binaries，解压到/etc/ansible/bin目录</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">tar zxvf k8s.<span class="number">1102</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span></div><div class="line">mkdir -<span class="selector-tag">p</span> /etc/ansible</div><div class="line">mv -f bin<span class="comment">/* /etc/ansible/bin</span></div></pre></td></tr></table></figure>
+<h2 id="配置ansible的hosts文件"><a href="#配置ansible的hosts文件" class="headerlink" title="配置ansible的hosts文件"></a>配置ansible的hosts文件</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/ansible</div><div class="line"></div><div class="line">cp example/hosts<span class="selector-class">.s-master</span><span class="selector-class">.example</span> hosts</div></pre></td></tr></table></figure>
+<h2 id="hosts文件具体内容-all是测试时用的"><a href="#hosts文件具体内容-all是测试时用的" class="headerlink" title="hosts文件具体内容  all是测试时用的"></a>hosts文件具体内容  all是测试时用的</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div></pre></td><td class="code"><pre><div class="line">[all]</div><div class="line"></div><div class="line">kmaster </div><div class="line"></div><div class="line">knode01</div><div class="line"></div><div class="line">knode02</div><div class="line"></div><div class="line">knode03</div><div class="line"></div><div class="line">knode04</div><div class="line"></div><div class="line">knode05</div><div class="line"></div><div class="line">[deploy]</div><div class="line"></div><div class="line">deploy</div><div class="line"></div><div class="line"><span class="comment"># etcd集群请提供如下NODE_NAME、NODE_IP变量,请注意etcd集群必须是1,3,5,7...奇数个节点</span></div><div class="line"></div><div class="line">[etcd]</div><div class="line"></div><div class="line">192.168.111.70 <span class="attribute">NODE_NAME</span>=etcd1 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.70"</span></div><div class="line"></div><div class="line">192.168.111.72 <span class="attribute">NODE_NAME</span>=etcd2 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.72"</span></div><div class="line"></div><div class="line">192.168.111.73 <span class="attribute">NODE_NAME</span>=etcd3 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.73"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[kube-master]</div><div class="line"></div><div class="line">192.168.111.74 <span class="attribute">NODE_NAME</span>=kmaster <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.74"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[kube-node]</div><div class="line"></div><div class="line">192.168.111.71  <span class="attribute">NODE_NAME</span>=knode01  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.71"</span></div><div class="line"></div><div class="line">192.168.111.68  <span class="attribute">NODE_NAME</span>=knode02  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.68"</span></div><div class="line"></div><div class="line">192.168.111.70  <span class="attribute">NODE_NAME</span>=knode03  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.70"</span></div><div class="line"></div><div class="line">192.168.111.72  <span class="attribute">NODE_NAME</span>=knode04  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.72"</span></div><div class="line"></div><div class="line">192.168.111.73  <span class="attribute">NODE_NAME</span>=knode05  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.73"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 如果启用harbor，请配置后面harbor相关参数</span></div><div class="line"></div><div class="line">[harbor]</div><div class="line"></div><div class="line"><span class="comment">#192.168.111.8 NODE_IP="192.168.111.8"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 预留组，后续添加node节点使用</span></div><div class="line"></div><div class="line">[new-node]</div><div class="line"></div><div class="line"><span class="comment">#192.168.111.xx NODE_IP="192.168.111.xx"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[all:vars]</div><div class="line"></div><div class="line"><span class="comment"># ---------集群主要参数---------------</span></div><div class="line"></div><div class="line"><span class="comment">#集群部署模式：allinone, single-master, multi-master</span></div><div class="line"></div><div class="line"><span class="attribute">DEPLOY_MODE</span>=single-master</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#集群 MASTER IP</span></div><div class="line"></div><div class="line"><span class="attribute">MASTER_IP</span>=<span class="string">"kmaster"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#集群 APISERVER</span></div><div class="line"></div><div class="line"><span class="attribute">KUBE_APISERVER</span>=<span class="string">"https://kmaster:6443"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#TLS Bootstrapping 使用的 Token，使用 head -c 16 /dev/urandom | od -An -t x | tr -d ' ' 生成</span></div><div class="line"></div><div class="line"><span class="attribute">BOOTSTRAP_TOKEN</span>=<span class="string">"d18f94b5fa585c7123f56803d925d2e7"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群网络插件，目前支持calico和flannel</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_NETWORK</span>=<span class="string">"calico"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 部分calico相关配置，更全配置可以去roles/calico/templates/calico.yaml.j2自定义</span></div><div class="line"></div><div class="line"><span class="comment"># 设置 CALICO_IPV4POOL_IPIP=“off”,可以提高网络性能，条件限制详见 05.安装calico网络组件.md</span></div><div class="line"></div><div class="line"><span class="attribute">CALICO_IPV4POOL_IPIP</span>=<span class="string">"always"</span></div><div class="line"></div><div class="line"><span class="comment"># 设置 calico-node使用的host IP，bgp邻居通过该地址建立，可手动指定端口"interface=eth0"或使用如下自动发现</span></div><div class="line"></div><div class="line"><span class="comment"># IP_AUTODETECTION_METHOD="can-reach=223.5.5.5"</span></div><div class="line"></div><div class="line"><span class="attribute">IP_AUTODETECTION_METHOD</span>=<span class="string">"interface=eth0"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 部分flannel配置，详见roles/flannel/templates/kube-flannel.yaml.j2</span></div><div class="line"></div><div class="line"><span class="attribute">FLANNEL_BACKEND</span>=<span class="string">"vxlan"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 服务网段 (Service CIDR），部署前路由不可达，部署后集群内使用 IP:Port 可达</span></div><div class="line"></div><div class="line"><span class="attribute">SERVICE_CIDR</span>=<span class="string">"10.68.0.0/16"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># POD 网段 (Cluster CIDR），部署前路由不可达，**部署后**路由可达</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_CIDR</span>=<span class="string">"172.20.0.0/16"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 服务端口范围 (NodePort Range)</span></div><div class="line"></div><div class="line"><span class="attribute">NODE_PORT_RANGE</span>=<span class="string">"20000-40000"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># kubernetes 服务 IP (预分配，一般是 SERVICE_CIDR 中第一个IP)</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_KUBERNETES_SVC_IP</span>=<span class="string">"10.68.0.1"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群 DNS 服务 IP (从 SERVICE_CIDR 中预分配)</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_DNS_SVC_IP</span>=<span class="string">"10.68.0.2"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群 DNS 域名</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_DNS_DOMAIN</span>=<span class="string">"cluster.local."</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># etcd 集群间通信的IP和端口, **根据实际 etcd 集群成员设置**</span></div><div class="line"></div><div class="line"><span class="attribute">ETCD_NODES</span>=<span class="string">"etcd1=https://192.168.111.70:2380,etcd2=https://192.168.111.72:2380,etcd3=https://192.168.111.73:2380"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># etcd 集群服务地址列表, **根据实际 etcd 集群成员设置**</span></div><div class="line"></div><div class="line"><span class="attribute">ETCD_ENDPOINTS</span>=<span class="string">"https://192.168.111.70:2379,https://192.168.111.72:2379,https://192.168.111.73:2379"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群basic auth 使用的用户名和密码</span></div><div class="line"></div><div class="line"><span class="attribute">BASIC_AUTH_USER</span>=<span class="string">"admin"</span></div><div class="line"></div><div class="line"><span class="attribute">BASIC_AUTH_PASS</span>=<span class="string">"test1234"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># ---------附加参数--------------------</span></div><div class="line"></div><div class="line"><span class="comment">#默认二进制文件目录</span></div><div class="line"></div><div class="line"><span class="attribute">bin_dir</span>=<span class="string">"/opt/kube/bin"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#证书目录</span></div><div class="line"></div><div class="line"><span class="attribute">ca_dir</span>=<span class="string">"/etc/kubernetes/ssl"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#部署目录，即 ansible 工作目录</span></div><div class="line"></div><div class="line"><span class="attribute">base_dir</span>=<span class="string">"/etc/ansible"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#私有仓库 harbor服务器 (域名或者IP)</span></div><div class="line"></div><div class="line"><span class="comment">#HARBOR_IP="192.168.111.8"</span></div><div class="line"></div><div class="line"><span class="comment">#HARBOR_DOMAIN="harbor.yourdomain.com"</span></div></pre></td></tr></table></figure>
+<h3 id="分步安装"><a href="#分步安装" class="headerlink" title="分步安装"></a>分步安装</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ansible-playbook <span class="number">01</span><span class="selector-class">.prepare</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">02</span><span class="selector-class">.etcd</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">03</span><span class="selector-class">.docker</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">04</span><span class="selector-class">.kube-master</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">05</span><span class="selector-class">.kube-node</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">06</span><span class="selector-class">.network</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">07</span><span class="selector-class">.cluster-addon</span><span class="selector-class">.yml</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixindashang.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/21/2017-11-21-erlang-05/" class="archive-article-date">
-  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/21/2017-11-21-erlang-05/">Erlang程序设计(第2版) 读书笔记【第五章】</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.zwting.com/2018/10/08/2018-10-10-k8s-03/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/21/2017-11-21-erlang-07/" class="archive-article-date">
-  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/21/2017-11-21-erlang-07/">Erlang程序设计(第2版) 读书笔记【第八章】</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/21/2017-11-24-erlang-11/" class="archive-article-date">
-  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/21/2017-11-24-erlang-11/">Erlang程序设计(第2版) 读书笔记【第十一章】</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/20/2017-11-20-erlang-03/" class="archive-article-date">
-  	<time datetime="2017-11-20T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/20/2017-11-20-erlang-03/">Erlang程序设计(第2版) 读书笔记【第三章】</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/20/2017-11-20-erlang-04/" class="archive-article-date">
-  	<time datetime="2017-11-20T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/20/2017-11-20-erlang-04/">Erlang程序设计(第2版) 读书笔记【第四章】</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/12/2017-11-13-erlang-01/" class="archive-article-date">
-  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/12/2017-11-13-erlang-01/">Erlang程序设计(第2版) 读书笔记【第一章】</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/12/2017-11-14-erlang-02/" class="archive-article-date">
-  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/12/2017-11-14-erlang-02/">Erlang程序设计(第2版) 读书笔记【第二章】</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2018/10/08/2018-10-10-k8s-01/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">jenkins和k8s结合的自动化目标模型</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+  <div class="duoshuo">
+	<div class="ds-thread" data-thread-key="2018-10-10-k8s-03" data-title="利用ansible安装k8s集群" data-url="//www.zwting.com/2018/10/08/2018-10-10-k8s-03/"></div>
+
+	<div id="uyan_frame"></div>
+	<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2023055"></script>
+</div>
+
+
   
 
-    
+
 
 
           </div>
@@ -538,9 +449,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",

@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//www.zwting.com">
-  <title>Tag: Erlang程序设计的读书笔记 | 醉翁亭</title>
+  <title>安装中控机的ansible环境 | 醉翁亭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="活在当下，求的不过是顺心意。工作十年了，记录一些生活、工作的经历聊以慰藉。">
-<meta name="keywords" content="前端,js,jquery,javascript,html5,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验,运维,运维开发">
-<meta property="og:type" content="website">
-<meta property="og:title" content="醉翁亭">
-<meta property="og:url" content="//www.zwting.com/tags/Erlang程序设计的读书笔记/index.html">
+  <meta name="description" content="devops开工之前先定安装ansible">
+<meta name="keywords" content="devops">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安装中控机的ansible环境">
+<meta property="og:url" content="//www.zwting.com/2018/10/08/2018-10-10-k8s-02/index.html">
 <meta property="og:site_name" content="醉翁亭">
-<meta property="og:description" content="活在当下，求的不过是顺心意。工作十年了，记录一些生活、工作的经历聊以慰藉。">
+<meta property="og:description" content="devops开工之前先定安装ansible">
+<meta property="og:updated_time" content="2018-10-10T06:36:43.460Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="醉翁亭">
-<meta name="twitter:description" content="活在当下，求的不过是顺心意。工作十年了，记录一些生活、工作的经历聊以慰藉。">
+<meta name="twitter:title" content="安装中控机的ansible环境">
+<meta name="twitter:description" content="devops开工之前先定安装ansible">
   
     <link rel="alternative" href="/atom.xml" title="醉翁亭" type="application/atom+xml">
   
@@ -155,365 +156,295 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-2018-10-10-k8s-02" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      安装中控机的ansible环境
+    </h1>
+  
+
+        
+        <a href="/2018/10/08/2018-10-10-k8s-02/" class="archive-article-date">
+  	<time datetime="2018-10-08T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-08</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="服务器列表"><a href="#服务器列表" class="headerlink" title="服务器列表"></a>服务器列表</h3><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>内网IP</th>
+<th>外网IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deploy</td>
+<td>192.168.111.69</td>
+<td>172.16.153.70</td>
+</tr>
+<tr>
+<td>kmaster</td>
+<td>192.168.111.74</td>
+<td>172.16.153.71</td>
+</tr>
+<tr>
+<td>knode01</td>
+<td>192.168.111.71</td>
+<td>172.16.153.72</td>
+</tr>
+<tr>
+<td>knode02</td>
+<td>192.168.111.68</td>
+<td>172.16.153.73</td>
+</tr>
+<tr>
+<td>knode03</td>
+<td>192.168.111.70</td>
+<td>172.16.153.74</td>
+</tr>
+<tr>
+<td>knode04</td>
+<td>192.168.111.72</td>
+<td>172.16.153.75</td>
+</tr>
+<tr>
+<td>knode05</td>
+<td>192.168.111.73</td>
+<td>172.16.153.76</td>
+</tr>
+</tbody>
+</table>
+<h3 id="etc-hosts追加内容"><a href="#etc-hosts追加内容" class="headerlink" title="/etc/hosts追加内容"></a>/etc/hosts追加内容</h3><table>
+<thead>
+<tr>
+<th>内网IP</th>
+<th>别名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.111.69</td>
+<td>deploy</td>
+</tr>
+<tr>
+<td>192.168.111.74</td>
+<td>kmaster </td>
+</tr>
+<tr>
+<td>192.168.111.71</td>
+<td>knode01</td>
+</tr>
+<tr>
+<td>192.168.111.68</td>
+<td>knode02</td>
+</tr>
+<tr>
+<td>192.168.111.70</td>
+<td>knode03</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>knode04</td>
+</tr>
+<tr>
+<td>192.168.111.73</td>
+<td>knode05</td>
+</tr>
+<tr>
+<td>192.168.111.70</td>
+<td>etcd01</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>etcd02</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>etcd03</td>
+</tr>
+</tbody>
+</table>
+<h3 id="配置ssh密钥登陆"><a href="#配置ssh密钥登陆" class="headerlink" title="配置ssh密钥登陆"></a>配置ssh密钥登陆</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -q -t rsa -b <span class="number">2048</span> -f ~/.ssh/id_rsa -C <span class="string">''</span> -N <span class="string">''</span></div><div class="line"></div><div class="line"><span class="comment">#$IP为本虚机地址，按照提示输入yes 和root密码</span></div><div class="line"></div><div class="line">ssh-<span class="keyword">copy</span><span class="bash">-id 172.16.153.70</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.71</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.72</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.73</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.74</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.75</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.76</span></div></pre></td></tr></table></figure>
+<h3 id="安装Ansible"><a href="#安装Ansible" class="headerlink" title="安装Ansible"></a>安装Ansible</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum -y <span class="keyword">install</span> epel-<span class="keyword">release</span></div><div class="line">yum <span class="keyword">install</span> ansible</div></pre></td></tr></table></figure>
+<h5 id="打开host-key-checking-vim-etc-ansible-ansible-cfg"><a href="#打开host-key-checking-vim-etc-ansible-ansible-cfg" class="headerlink" title="打开host_key_checking vim /etc/ansible/ansible.cfg"></a>打开host_key_checking vim /etc/ansible/ansible.cfg</h5><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">host_key_checking</span> = <span class="literal">False</span></div></pre></td></tr></table></figure>
+<h5 id="配置ansible的hosts文件-vim-etc-ansible-hosts"><a href="#配置ansible的hosts文件-vim-etc-ansible-hosts" class="headerlink" title="配置ansible的hosts文件 vim /etc/ansible/hosts"></a>配置ansible的hosts文件 vim /etc/ansible/hosts</h5><figure class="highlight gcode"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[all]</div><div class="line"></div><div class="line">kmaster </div><div class="line"></div><div class="line">k<span class="symbol">node01</span></div><div class="line"></div><div class="line">k<span class="symbol">node02</span></div><div class="line"></div><div class="line">k<span class="symbol">node03</span></div><div class="line"></div><div class="line">k<span class="symbol">node04</span></div><div class="line"></div><div class="line">k<span class="symbol">node05</span></div></pre></td></tr></table></figure>
+<h5 id="执行-ansible-m-ping-all"><a href="#执行-ansible-m-ping-all" class="headerlink" title="执行 ansible -m ping all"></a>执行 ansible -m ping all</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">knode05 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode04 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode01 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode02 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> kmaster | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode03 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<h5 id="利用ansible初始化各个K8S的节点服务器环境"><a href="#利用ansible初始化各个K8S的节点服务器环境" class="headerlink" title="利用ansible初始化各个K8S的节点服务器环境"></a>利用ansible初始化各个K8S的节点服务器环境</h5><pre><code> # 安装yum源
+ ansible -m shell -a &apos;yum -y install epel-release&apos; all 
+
+ # 关闭所有服务器防火墙
+ ansible -m shell -a &apos;systemctl stop firewalld &amp; systemctl disable firewalld &amp; &apos; all
+
+ # 同步同钟
+ ansible -m shell -a &apos;yum -y install ntp &amp; systemctl start ntpd &amp; systemctl enable ntpd  &apos; all 
+
+ # 拷贝/etc/hosts文件到各节点
+ ansible all -m copy -a &quot;src=/etc/hosts dest=/etc/&quot; 
+
+# 删除 这个不用执行，这个在证书不对时要用
+ ansible etcd -m file -a &quot;path=/etc/etcd/ssl state=absent&quot;
+</code></pre>
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixindashang.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/21/2017-11-21-erlang-05/" class="archive-article-date">
-  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/21/2017-11-21-erlang-05/">Erlang程序设计(第2版) 读书笔记【第五章】</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.zwting.com/2018/10/08/2018-10-10-k8s-02/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/21/2017-11-21-erlang-07/" class="archive-article-date">
-  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/21/2017-11-21-erlang-07/">Erlang程序设计(第2版) 读书笔记【第八章】</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/21/2017-11-24-erlang-11/" class="archive-article-date">
-  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/21/2017-11-24-erlang-11/">Erlang程序设计(第2版) 读书笔记【第十一章】</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/20/2017-11-20-erlang-03/" class="archive-article-date">
-  	<time datetime="2017-11-20T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/20/2017-11-20-erlang-03/">Erlang程序设计(第2版) 读书笔记【第三章】</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/20/2017-11-20-erlang-04/" class="archive-article-date">
-  	<time datetime="2017-11-20T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/20/2017-11-20-erlang-04/">Erlang程序设计(第2版) 读书笔记【第四章】</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/12/2017-11-13-erlang-01/" class="archive-article-date">
-  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/12/2017-11-13-erlang-01/">Erlang程序设计(第2版) 读书笔记【第一章】</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/12/2017-11-14-erlang-02/" class="archive-article-date">
-  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/12/2017-11-14-erlang-02/">Erlang程序设计(第2版) 读书笔记【第二章】</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+    <a href="/2018/10/08/2018-10-10-k8s-01/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          jenkins和k8s结合的自动化目标模型
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2018/03/08/2018-03-08-android-02/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Appium测试【第二章】</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+  <div class="duoshuo">
+	<div class="ds-thread" data-thread-key="2018-10-10-k8s-02" data-title="安装中控机的ansible环境" data-url="//www.zwting.com/2018/10/08/2018-10-10-k8s-02/"></div>
+
+	<div id="uyan_frame"></div>
+	<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2023055"></script>
+</div>
+
+
   
 
-    
+
 
 
           </div>
@@ -538,9 +469,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",

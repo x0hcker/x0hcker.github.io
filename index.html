@@ -157,6 +157,182 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2018-10-10-k8s-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/08/2018-10-10-k8s-03/">利用ansible安装k8s集群</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/08/2018-10-10-k8s-03/" class="archive-article-date">
+  	<time datetime="2018-10-08T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="服务器列表"><a href="#服务器列表" class="headerlink" title="服务器列表"></a>服务器列表</h3><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>内网IP</th>
+<th>外网IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deploy</td>
+<td>192.168.111.69</td>
+<td>172.16.153.70</td>
+</tr>
+<tr>
+<td>kmaster</td>
+<td>192.168.111.74</td>
+<td>172.16.153.71</td>
+</tr>
+<tr>
+<td>knode01</td>
+<td>192.168.111.71</td>
+<td>172.16.153.72</td>
+</tr>
+<tr>
+<td>knode02</td>
+<td>192.168.111.68</td>
+<td>172.16.153.73</td>
+</tr>
+<tr>
+<td>knode03</td>
+<td>192.168.111.70</td>
+<td>172.16.153.74</td>
+</tr>
+<tr>
+<td>knode04</td>
+<td>192.168.111.72</td>
+<td>172.16.153.75</td>
+</tr>
+<tr>
+<td>knode05</td>
+<td>192.168.111.73</td>
+<td>172.16.153.76</td>
+</tr>
+</tbody>
+</table>
+<h3 id="etc-hosts追加内容"><a href="#etc-hosts追加内容" class="headerlink" title="/etc/hosts追加内容"></a>/etc/hosts追加内容</h3><table>
+<thead>
+<tr>
+<th>内网IP</th>
+<th>别名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.111.69</td>
+<td>deploy</td>
+</tr>
+<tr>
+<td>192.168.111.74</td>
+<td>kmaster </td>
+</tr>
+<tr>
+<td>192.168.111.71</td>
+<td>knode01</td>
+</tr>
+<tr>
+<td>192.168.111.68</td>
+<td>knode02</td>
+</tr>
+<tr>
+<td>192.168.111.70</td>
+<td>knode03</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>knode04</td>
+</tr>
+<tr>
+<td>192.168.111.73</td>
+<td>knode05</td>
+</tr>
+<tr>
+<td>192.168.111.70</td>
+<td>etcd01</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>etcd02</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>etcd03</td>
+</tr>
+</tbody>
+</table>
+<p>##获取 kubeasz<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">git clone <span class="string">https:</span><span class="comment">//github.com/gjmzj/kubeasz.git</span></div><div class="line"></div><div class="line">cd kubeasz/</div><div class="line"></div><div class="line">git checkout v1102-r1</div><div class="line"></div><div class="line">mkdir -p <span class="regexp">/etc/</span>ansible</div><div class="line">mv * <span class="regexp">/etc/</span>ansible</div></pre></td></tr></table></figure></p>
+<p>##获取安装依赖的二进制包</p>
+<p>国内请从分享的百度云链接下载 <a href="https://pan.baidu.com/s/1c4RFaA" target="_blank" rel="external">https://pan.baidu.com/s/1c4RFaA</a></p>
+<p>下载已打包好的binaries，解压到/etc/ansible/bin目录</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">tar zxvf k8s.<span class="number">1102</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span></div><div class="line">mkdir -<span class="selector-tag">p</span> /etc/ansible</div><div class="line">mv -f bin<span class="comment">/* /etc/ansible/bin</span></div></pre></td></tr></table></figure>
+<h2 id="配置ansible的hosts文件"><a href="#配置ansible的hosts文件" class="headerlink" title="配置ansible的hosts文件"></a>配置ansible的hosts文件</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/ansible</div><div class="line"></div><div class="line">cp example/hosts<span class="selector-class">.s-master</span><span class="selector-class">.example</span> hosts</div></pre></td></tr></table></figure>
+<h2 id="hosts文件具体内容-all是测试时用的"><a href="#hosts文件具体内容-all是测试时用的" class="headerlink" title="hosts文件具体内容  all是测试时用的"></a>hosts文件具体内容  all是测试时用的</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div></pre></td><td class="code"><pre><div class="line">[all]</div><div class="line"></div><div class="line">kmaster </div><div class="line"></div><div class="line">knode01</div><div class="line"></div><div class="line">knode02</div><div class="line"></div><div class="line">knode03</div><div class="line"></div><div class="line">knode04</div><div class="line"></div><div class="line">knode05</div><div class="line"></div><div class="line">[deploy]</div><div class="line"></div><div class="line">deploy</div><div class="line"></div><div class="line"><span class="comment"># etcd集群请提供如下NODE_NAME、NODE_IP变量,请注意etcd集群必须是1,3,5,7...奇数个节点</span></div><div class="line"></div><div class="line">[etcd]</div><div class="line"></div><div class="line">192.168.111.70 <span class="attribute">NODE_NAME</span>=etcd1 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.70"</span></div><div class="line"></div><div class="line">192.168.111.72 <span class="attribute">NODE_NAME</span>=etcd2 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.72"</span></div><div class="line"></div><div class="line">192.168.111.73 <span class="attribute">NODE_NAME</span>=etcd3 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.73"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[kube-master]</div><div class="line"></div><div class="line">192.168.111.74 <span class="attribute">NODE_NAME</span>=kmaster <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.74"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[kube-node]</div><div class="line"></div><div class="line">192.168.111.71  <span class="attribute">NODE_NAME</span>=knode01  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.71"</span></div><div class="line"></div><div class="line">192.168.111.68  <span class="attribute">NODE_NAME</span>=knode02  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.68"</span></div><div class="line"></div><div class="line">192.168.111.70  <span class="attribute">NODE_NAME</span>=knode03  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.70"</span></div><div class="line"></div><div class="line">192.168.111.72  <span class="attribute">NODE_NAME</span>=knode04  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.72"</span></div><div class="line"></div><div class="line">192.168.111.73  <span class="attribute">NODE_NAME</span>=knode05  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.73"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 如果启用harbor，请配置后面harbor相关参数</span></div><div class="line"></div><div class="line">[harbor]</div><div class="line"></div><div class="line"><span class="comment">#192.168.111.8 NODE_IP="192.168.111.8"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 预留组，后续添加node节点使用</span></div><div class="line"></div><div class="line">[new-node]</div><div class="line"></div><div class="line"><span class="comment">#192.168.111.xx NODE_IP="192.168.111.xx"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[all:vars]</div><div class="line"></div><div class="line"><span class="comment"># ---------集群主要参数---------------</span></div><div class="line"></div><div class="line"><span class="comment">#集群部署模式：allinone, single-master, multi-master</span></div><div class="line"></div><div class="line"><span class="attribute">DEPLOY_MODE</span>=single-master</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#集群 MASTER IP</span></div><div class="line"></div><div class="line"><span class="attribute">MASTER_IP</span>=<span class="string">"kmaster"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#集群 APISERVER</span></div><div class="line"></div><div class="line"><span class="attribute">KUBE_APISERVER</span>=<span class="string">"https://kmaster:6443"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#TLS Bootstrapping 使用的 Token，使用 head -c 16 /dev/urandom | od -An -t x | tr -d ' ' 生成</span></div><div class="line"></div><div class="line"><span class="attribute">BOOTSTRAP_TOKEN</span>=<span class="string">"d18f94b5fa585c7123f56803d925d2e7"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群网络插件，目前支持calico和flannel</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_NETWORK</span>=<span class="string">"calico"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 部分calico相关配置，更全配置可以去roles/calico/templates/calico.yaml.j2自定义</span></div><div class="line"></div><div class="line"><span class="comment"># 设置 CALICO_IPV4POOL_IPIP=“off”,可以提高网络性能，条件限制详见 05.安装calico网络组件.md</span></div><div class="line"></div><div class="line"><span class="attribute">CALICO_IPV4POOL_IPIP</span>=<span class="string">"always"</span></div><div class="line"></div><div class="line"><span class="comment"># 设置 calico-node使用的host IP，bgp邻居通过该地址建立，可手动指定端口"interface=eth0"或使用如下自动发现</span></div><div class="line"></div><div class="line"><span class="comment"># IP_AUTODETECTION_METHOD="can-reach=223.5.5.5"</span></div><div class="line"></div><div class="line"><span class="attribute">IP_AUTODETECTION_METHOD</span>=<span class="string">"interface=eth0"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 部分flannel配置，详见roles/flannel/templates/kube-flannel.yaml.j2</span></div><div class="line"></div><div class="line"><span class="attribute">FLANNEL_BACKEND</span>=<span class="string">"vxlan"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 服务网段 (Service CIDR），部署前路由不可达，部署后集群内使用 IP:Port 可达</span></div><div class="line"></div><div class="line"><span class="attribute">SERVICE_CIDR</span>=<span class="string">"10.68.0.0/16"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># POD 网段 (Cluster CIDR），部署前路由不可达，**部署后**路由可达</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_CIDR</span>=<span class="string">"172.20.0.0/16"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 服务端口范围 (NodePort Range)</span></div><div class="line"></div><div class="line"><span class="attribute">NODE_PORT_RANGE</span>=<span class="string">"20000-40000"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># kubernetes 服务 IP (预分配，一般是 SERVICE_CIDR 中第一个IP)</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_KUBERNETES_SVC_IP</span>=<span class="string">"10.68.0.1"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群 DNS 服务 IP (从 SERVICE_CIDR 中预分配)</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_DNS_SVC_IP</span>=<span class="string">"10.68.0.2"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群 DNS 域名</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_DNS_DOMAIN</span>=<span class="string">"cluster.local."</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># etcd 集群间通信的IP和端口, **根据实际 etcd 集群成员设置**</span></div><div class="line"></div><div class="line"><span class="attribute">ETCD_NODES</span>=<span class="string">"etcd1=https://192.168.111.70:2380,etcd2=https://192.168.111.72:2380,etcd3=https://192.168.111.73:2380"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># etcd 集群服务地址列表, **根据实际 etcd 集群成员设置**</span></div><div class="line"></div><div class="line"><span class="attribute">ETCD_ENDPOINTS</span>=<span class="string">"https://192.168.111.70:2379,https://192.168.111.72:2379,https://192.168.111.73:2379"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群basic auth 使用的用户名和密码</span></div><div class="line"></div><div class="line"><span class="attribute">BASIC_AUTH_USER</span>=<span class="string">"admin"</span></div><div class="line"></div><div class="line"><span class="attribute">BASIC_AUTH_PASS</span>=<span class="string">"test1234"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># ---------附加参数--------------------</span></div><div class="line"></div><div class="line"><span class="comment">#默认二进制文件目录</span></div><div class="line"></div><div class="line"><span class="attribute">bin_dir</span>=<span class="string">"/opt/kube/bin"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#证书目录</span></div><div class="line"></div><div class="line"><span class="attribute">ca_dir</span>=<span class="string">"/etc/kubernetes/ssl"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#部署目录，即 ansible 工作目录</span></div><div class="line"></div><div class="line"><span class="attribute">base_dir</span>=<span class="string">"/etc/ansible"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#私有仓库 harbor服务器 (域名或者IP)</span></div><div class="line"></div><div class="line"><span class="comment">#HARBOR_IP="192.168.111.8"</span></div><div class="line"></div><div class="line"><span class="comment">#HARBOR_DOMAIN="harbor.yourdomain.com"</span></div></pre></td></tr></table></figure>
+<h3 id="分步安装"><a href="#分步安装" class="headerlink" title="分步安装"></a>分步安装</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ansible-playbook <span class="number">01</span><span class="selector-class">.prepare</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">02</span><span class="selector-class">.etcd</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">03</span><span class="selector-class">.docker</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">04</span><span class="selector-class">.kube-master</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">05</span><span class="selector-class">.kube-node</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">06</span><span class="selector-class">.network</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">07</span><span class="selector-class">.cluster-addon</span><span class="selector-class">.yml</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/08/2018-10-10-k8s-03/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2018-10-10-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -220,6 +396,193 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/10/08/2018-10-10-k8s-01/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2018-10-10-k8s-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/08/2018-10-10-k8s-02/">安装中控机的ansible环境</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/08/2018-10-10-k8s-02/" class="archive-article-date">
+  	<time datetime="2018-10-08T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="服务器列表"><a href="#服务器列表" class="headerlink" title="服务器列表"></a>服务器列表</h3><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>内网IP</th>
+<th>外网IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deploy</td>
+<td>192.168.111.69</td>
+<td>172.16.153.70</td>
+</tr>
+<tr>
+<td>kmaster</td>
+<td>192.168.111.74</td>
+<td>172.16.153.71</td>
+</tr>
+<tr>
+<td>knode01</td>
+<td>192.168.111.71</td>
+<td>172.16.153.72</td>
+</tr>
+<tr>
+<td>knode02</td>
+<td>192.168.111.68</td>
+<td>172.16.153.73</td>
+</tr>
+<tr>
+<td>knode03</td>
+<td>192.168.111.70</td>
+<td>172.16.153.74</td>
+</tr>
+<tr>
+<td>knode04</td>
+<td>192.168.111.72</td>
+<td>172.16.153.75</td>
+</tr>
+<tr>
+<td>knode05</td>
+<td>192.168.111.73</td>
+<td>172.16.153.76</td>
+</tr>
+</tbody>
+</table>
+<h3 id="etc-hosts追加内容"><a href="#etc-hosts追加内容" class="headerlink" title="/etc/hosts追加内容"></a>/etc/hosts追加内容</h3><table>
+<thead>
+<tr>
+<th>内网IP</th>
+<th>别名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.111.69</td>
+<td>deploy</td>
+</tr>
+<tr>
+<td>192.168.111.74</td>
+<td>kmaster </td>
+</tr>
+<tr>
+<td>192.168.111.71</td>
+<td>knode01</td>
+</tr>
+<tr>
+<td>192.168.111.68</td>
+<td>knode02</td>
+</tr>
+<tr>
+<td>192.168.111.70</td>
+<td>knode03</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>knode04</td>
+</tr>
+<tr>
+<td>192.168.111.73</td>
+<td>knode05</td>
+</tr>
+<tr>
+<td>192.168.111.70</td>
+<td>etcd01</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>etcd02</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>etcd03</td>
+</tr>
+</tbody>
+</table>
+<h3 id="配置ssh密钥登陆"><a href="#配置ssh密钥登陆" class="headerlink" title="配置ssh密钥登陆"></a>配置ssh密钥登陆</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -q -t rsa -b <span class="number">2048</span> -f ~/.ssh/id_rsa -C <span class="string">''</span> -N <span class="string">''</span></div><div class="line"></div><div class="line"><span class="comment">#$IP为本虚机地址，按照提示输入yes 和root密码</span></div><div class="line"></div><div class="line">ssh-<span class="keyword">copy</span><span class="bash">-id 172.16.153.70</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.71</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.72</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.73</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.74</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.75</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.76</span></div></pre></td></tr></table></figure>
+<h3 id="安装Ansible"><a href="#安装Ansible" class="headerlink" title="安装Ansible"></a>安装Ansible</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum -y <span class="keyword">install</span> epel-<span class="keyword">release</span></div><div class="line">yum <span class="keyword">install</span> ansible</div></pre></td></tr></table></figure>
+<h5 id="打开host-key-checking-vim-etc-ansible-ansible-cfg"><a href="#打开host-key-checking-vim-etc-ansible-ansible-cfg" class="headerlink" title="打开host_key_checking vim /etc/ansible/ansible.cfg"></a>打开host_key_checking vim /etc/ansible/ansible.cfg</h5><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">host_key_checking</span> = <span class="literal">False</span></div></pre></td></tr></table></figure>
+<h5 id="配置ansible的hosts文件-vim-etc-ansible-hosts"><a href="#配置ansible的hosts文件-vim-etc-ansible-hosts" class="headerlink" title="配置ansible的hosts文件 vim /etc/ansible/hosts"></a>配置ansible的hosts文件 vim /etc/ansible/hosts</h5><figure class="highlight gcode"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[all]</div><div class="line"></div><div class="line">kmaster </div><div class="line"></div><div class="line">k<span class="symbol">node01</span></div><div class="line"></div><div class="line">k<span class="symbol">node02</span></div><div class="line"></div><div class="line">k<span class="symbol">node03</span></div><div class="line"></div><div class="line">k<span class="symbol">node04</span></div><div class="line"></div><div class="line">k<span class="symbol">node05</span></div></pre></td></tr></table></figure>
+<h5 id="执行-ansible-m-ping-all"><a href="#执行-ansible-m-ping-all" class="headerlink" title="执行 ansible -m ping all"></a>执行 ansible -m ping all</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">knode05 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode04 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode01 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode02 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> kmaster | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode03 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<h5 id="利用ansible初始化各个K8S的节点服务器环境"><a href="#利用ansible初始化各个K8S的节点服务器环境" class="headerlink" title="利用ansible初始化各个K8S的节点服务器环境"></a>利用ansible初始化各个K8S的节点服务器环境</h5><pre><code> # 安装yum源
+ ansible -m shell -a &apos;yum -y install epel-release&apos; all 
+
+ # 关闭所有服务器防火墙
+ ansible -m shell -a &apos;systemctl stop firewalld &amp; systemctl disable firewalld &amp; &apos; all
+
+ # 同步同钟
+ ansible -m shell -a &apos;yum -y install ntp &amp; systemctl start ntpd &amp; systemctl enable ntpd  &apos; all 
+
+ # 拷贝/etc/hosts文件到各节点
+ ansible all -m copy -a &quot;src=/etc/hosts dest=/etc/&quot; 
+
+# 删除 这个不用执行，这个在证书不对时要用
+ ansible etcd -m file -a &quot;path=/etc/etcd/ssl state=absent&quot;
+</code></pre>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/08/2018-10-10-k8s-02/">展开全文 >></a>
         </p>
       
 
@@ -604,107 +967,6 @@ source ~/.bash_profile
 
 
   
-    <article id="post-2017-11-21-erlang-07" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/21/2017-11-21-erlang-07/">Erlang程序设计(第2版) 读书笔记【第八章】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/11/21/2017-11-21-erlang-07/" class="archive-article-date">
-  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="8-10-动态代码载入"><a href="#8-10-动态代码载入" class="headerlink" title="8.10    动态代码载入"></a>8.10    动态代码载入</h5><ul>
-<li>b.erl</li>
-</ul>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(b)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([x/<span class="number">0</span>])</span>.</div><div class="line"></div><div class="line"><span class="function"><span class="title">x</span><span class="params">()</span> -&gt;</span> <span class="number">2</span>.</div></pre></td></tr></table></figure>
-<ul>
-<li>a.erl</li>
-</ul>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(a)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-compile</span><span class="params">(export_all)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([])</span>.</div><div class="line"></div><div class="line"><span class="function"><span class="title">start</span><span class="params">(Tag)</span> -&gt;</span></div><div class="line"></div><div class="line">  spawn(<span class="keyword">fun</span>() -&gt; loop(Tag) <span class="keyword">end</span>).</div><div class="line"></div><div class="line"><span class="function"><span class="title">loop</span><span class="params">(Tag)</span> -&gt;</span></div><div class="line"></div><div class="line">  sleep(),</div><div class="line">  Val = b:x(),</div><div class="line">  io:format(<span class="string">"Vsn2 (~p) b:x() = ~p~n"</span>,[Tag, Val]),</div><div class="line">  loop(Tag).</div><div class="line"></div><div class="line"><span class="function"><span class="title">sleep</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  <span class="keyword">receive</span></div><div class="line"></div><div class="line">    <span class="keyword">after</span> <span class="number">3000</span> -&gt; <span class="literal">true</span></div><div class="line">  <span class="keyword">end</span>.</div></pre></td></tr></table></figure>
-<ul>
-<li>在任一时刻，Erlang允许一个模块的两个版本同时运行：当前版和旧版。重新编译某个模块时，任何运行旧版代码的进程都会被终止，当前版成为旧版，新编译的版本则成为当前版。可以把这想象成一个带有两个版本代码的移位寄存器。当添加新代码时，最老的版本就被清除了。一些进程可以运行旧版代码，与此同时，另一些则可以运行新版代码</li>
-</ul>
-<h5 id="8-1-进程字典"><a href="#8-1-进程字典" class="headerlink" title="8.1    进程字典"></a>8.1    进程字典</h5><p>每个Erlang进程都有一个被称为进程字典（process dictionary）的私有数据存储区域。进程字典是一个关联数组（在其他语言里可能被称作map、hashmap或者散列表），它由若干个键和值组成。每个键只有一个值。</p>
-<ul>
-<li><p>put(Key,Val).<br>给进程字典添加一个Key, Value组合。put的值是OldValue，也就是Key之前关联的值。如果没有之前的值，就返回原子undefined。</p>
-</li>
-<li><p>get(Key).<br>查找Key的值。如果字典里存在Key, Value组合就返回Value，否则返回原子undefined。</p>
-</li>
-<li><p>get().<br>返回整个字典，形式是一个由{Key,Value}元组所构成的列表。</p>
-</li>
-<li><p>get_keys().<br>返回一个列表，内含字典里所有值为Value的键。</p>
-</li>
-<li><p>erase(x).<br>返回Key的关联值，如果不存在则返回原子undefined。最后，删除Key的关联值。</p>
-</li>
-<li><p>erase().<br>删除整个进程字典。返回值是一个由{Key,Value}元组所构成的列表，代表了字典删除之前的状态。</p>
-</li>
-</ul>
-<blockquote>
-<p>这样吧</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/21/2017-11-21-erlang-07/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2017-11-24-erlang-11" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -809,19 +1071,19 @@ source ~/.bash_profile
 
 
   
-    <article id="post-2017-11-21-erlang-05" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2017-11-21-erlang-07" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/21/2017-11-21-erlang-05/">Erlang程序设计(第2版) 读书笔记【第五章】</a>
+      <a class="article-title" href="/2017/11/21/2017-11-21-erlang-07/">Erlang程序设计(第2版) 读书笔记【第八章】</a>
     </h1>
   
 
         
-        <a href="/2017/11/21/2017-11-21-erlang-05/" class="archive-article-date">
+        <a href="/2017/11/21/2017-11-21-erlang-07/" class="archive-article-date">
   	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
 </a>
         
@@ -829,144 +1091,33 @@ source ~/.bash_profile
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h5 id="第5章-记录与映射组"><a href="#第5章-记录与映射组" class="headerlink" title="第5章 记录与映射组"></a>第5章 记录与映射组</h5><ul>
-<li>元组用于保存固定数量的元素，而列表用于保存可变数量的元素。</li>
-<li>记录（record）和映射组（map）。记录其实就是元组的另一种形式。通过使用记录，可以给元组里的各个元素关联一个名称。</li>
+        <h5 id="8-10-动态代码载入"><a href="#8-10-动态代码载入" class="headerlink" title="8.10    动态代码载入"></a>8.10    动态代码载入</h5><ul>
+<li>b.erl</li>
 </ul>
-<h6 id="记录适合以下的情形：："><a href="#记录适合以下的情形：：" class="headerlink" title="记录适合以下的情形：："></a>记录适合以下的情形：：</h6><ul>
-<li>当你可以用一些预先确定且数量固定的原子来表示数据时；</li>
-<li>当记录里的元素数量和元素名称不会随时间而改变时；</li>
-<li>当存储空间是个问题时，典型的案例是你有一大堆元组，并且每个元组都有相同的结构。</li>
-</ul>
-<figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby"><span class="class"><span class="keyword">module</span>(<span class="title">myconf</span>).</span></span></div><div class="line"><span class="ruby">-record(server_opts, &#123;port, ip = <span class="string">"127.0.0.1"</span>, max_connections = <span class="number">10</span>&#125;).</span></div><div class="line"><span class="ruby"></span></div><div class="line"><span class="ruby"><span class="string">%%#server_opts&#123;port = 8000,ip = "192.168.56.101",</span></span></div><div class="line"><span class="ruby"><span class="string">%%max_connections = 10&#125;</span></span></div><div class="line"><span class="ruby"><span class="string">%%</span></span></div><div class="line"><span class="ruby"><span class="string">%%Opts#server_opts.port.</span></span></div></pre></td></tr></table></figure>
-<h6 id="映射组适合以下的情形："><a href="#映射组适合以下的情形：" class="headerlink" title="映射组适合以下的情形："></a>映射组适合以下的情形：</h6><ul>
-<li>当键不能预先知道时用来表示键值数据结构；</li>
-<li>当存在大量不同的键时用来表示数据；</li>
-<li>当方便使用很重要而效率无关紧要时作为万能的数据结构使用；</li>
-<li>用作“自解释型”的数据结构，也就是说，用户容易从键名猜出值的含义；</li>
-<li>用来表示键值解析树，例如XML或配置文件；</li>
-<li>用JSON来和其他编程语言通信。</li>
-<li>映射组在系统内部是作为有序集合存储的，打印时总是使用各键排序后的顺序，与映射组的创建方式无关。</li>
-<li>使用映射组的最佳方式是在首次定义某个键时总是使用Key =&gt; Val，而在修改具体某个键的值时都使用Key := Val</li>
-</ul>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Facts = <span class="comment">#&#123;a =&gt;1, b=&gt;2&#125;.</span></div></pre></td></tr></table></figure>
-<h5 id="json"><a href="#json" class="headerlink" title="json"></a>json</h5><pre><code>maps:to_json(Map) -&gt;Bin
-maps:from_json(Bin) -&gt;Map
-maps:safe_from_json(Bin) -&gt;Map
-</code></pre><blockquote>
-<p>这样吧</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/21/2017-11-21-erlang-05/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2017-11-20-erlang-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/20/2017-11-20-erlang-03/">Erlang程序设计(第2版) 读书笔记【第三章】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/11/20/2017-11-20-erlang-03/" class="archive-article-date">
-  	<time datetime="2017-11-20T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="第3章-基本概念"><a href="#第3章-基本概念" class="headerlink" title="第3章 基本概念"></a>第3章 基本概念</h3><h5 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h5><blockquote>
-<p>记得上学的时候，数学老师曾说过：“如果一个等式中有好几处X，那么所有X都是一样的。”我们就是这么解方程的：如果知道X+Y=10且XY=2，那么这两个等式里的X就都等于6，Y都等于4.</p>
-</blockquote>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(b)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([x/<span class="number">0</span>])</span>.</div><div class="line"></div><div class="line"><span class="function"><span class="title">x</span><span class="params">()</span> -&gt;</span> <span class="number">2</span>.</div></pre></td></tr></table></figure>
 <ul>
-<li>Erlang的变量是一次性赋值变量（single-assignment variable）,在Erlang里，变量只不过是对某个值的引用：Erlang的实现方式用指针代表绑定变量，指向一个包含值的存储区。这个值不能被修改。</li>
-<li><span style="color:red">注意 f()命令让shell忘记现有的任何绑定。在这个命令之后，所有变量都会变成未绑定状态</span></li>
-<li>在大多数语言里，=表示一个赋值语句。而在Erlang里，=是一次模式匹配操作。Lhs = Rhs的真正意思是：计算右侧（Rhs）的值，然后将结果与左侧（Lhs）的模式相匹配。</li>
+<li>a.erl</li>
 </ul>
-<h5 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h5><ul>
-<li>N div M是让N除以M然后舍去余数。N rem M是N除以M后剩下的余数。</li>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(a)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-compile</span><span class="params">(export_all)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([])</span>.</div><div class="line"></div><div class="line"><span class="function"><span class="title">start</span><span class="params">(Tag)</span> -&gt;</span></div><div class="line"></div><div class="line">  spawn(<span class="keyword">fun</span>() -&gt; loop(Tag) <span class="keyword">end</span>).</div><div class="line"></div><div class="line"><span class="function"><span class="title">loop</span><span class="params">(Tag)</span> -&gt;</span></div><div class="line"></div><div class="line">  sleep(),</div><div class="line">  Val = b:x(),</div><div class="line">  io:format(<span class="string">"Vsn2 (~p) b:x() = ~p~n"</span>,[Tag, Val]),</div><div class="line">  loop(Tag).</div><div class="line"></div><div class="line"><span class="function"><span class="title">sleep</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  <span class="keyword">receive</span></div><div class="line"></div><div class="line">    <span class="keyword">after</span> <span class="number">3000</span> -&gt; <span class="literal">true</span></div><div class="line">  <span class="keyword">end</span>.</div></pre></td></tr></table></figure>
+<ul>
+<li>在任一时刻，Erlang允许一个模块的两个版本同时运行：当前版和旧版。重新编译某个模块时，任何运行旧版代码的进程都会被终止，当前版成为旧版，新编译的版本则成为当前版。可以把这想象成一个带有两个版本代码的移位寄存器。当添加新代码时，最老的版本就被清除了。一些进程可以运行旧版代码，与此同时，另一些则可以运行新版代码</li>
 </ul>
-<h5 id="原子"><a href="#原子" class="headerlink" title="原子"></a>原子</h5><ul>
-<li>在Erlang里，原子是全局性的，而且不需要宏定义或包含文件就能实现</li>
-<li>原子以小写字母开头，后接一串字母、数字、下划线（）或a（t<br>cat、meters、yards、joe@somehost和a_long_name</li>
-<li>原子还可以放在单引号（’）内。可以用这种引号形式创建以大写字母开头（否则会被解释成变量）或包含字母数字以外字符的原子，例如’Monday’、’Tuesday’、’+’、’*’和’an atom with spaces’。甚至可以给无需引号的原子加上引号，因此’a’和a的意思完全一致。在某些语言里，单引号和双引号可以互换使用。Erlang里不是这样。单引号的用法如前面所示，双引号用于给字符串字面量（string literal）定界。<br>一个原子的值就是它本身。所以，如果输入一个原子作为命令，Erlang shell就会打印出这个原子的值。</li>
+<h5 id="8-1-进程字典"><a href="#8-1-进程字典" class="headerlink" title="8.1    进程字典"></a>8.1    进程字典</h5><p>每个Erlang进程都有一个被称为进程字典（process dictionary）的私有数据存储区域。进程字典是一个关联数组（在其他语言里可能被称作map、hashmap或者散列表），它由若干个键和值组成。每个键只有一个值。</p>
+<ul>
+<li><p>put(Key,Val).<br>给进程字典添加一个Key, Value组合。put的值是OldValue，也就是Key之前关联的值。如果没有之前的值，就返回原子undefined。</p>
+</li>
+<li><p>get(Key).<br>查找Key的值。如果字典里存在Key, Value组合就返回Value，否则返回原子undefined。</p>
+</li>
+<li><p>get().<br>返回整个字典，形式是一个由{Key,Value}元组所构成的列表。</p>
+</li>
+<li><p>get_keys().<br>返回一个列表，内含字典里所有值为Value的键。</p>
+</li>
+<li><p>erase(x).<br>返回Key的关联值，如果不存在则返回原子undefined。最后，删除Key的关联值。</p>
+</li>
+<li><p>erase().<br>删除整个进程字典。返回值是一个由{Key,Value}元组所构成的列表，代表了字典删除之前的状态。</p>
+</li>
 </ul>
-<h5 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h5><ul>
-<li>如果想把一些数量固定的项目归组成单一的实体，就会使用元组（tuple）。创建元组的方法是用大括号把想要表示的值括起来，并用逗号分隔它们。</li>
-<li>匹配时，等号两侧的元组必须有相同数量的元素，而且两侧的对应元素必须绑定为相同的值。</li>
-</ul>
-<figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby"> <span class="number">1</span>&gt; P = &#123;person,&#123;name, joe,armstrong&#125;,&#123;footsize,<span class="number">42</span>&#125;&#125;.</span></div><div class="line"><span class="ruby">- <span class="number">2</span>&gt; &#123;\<span class="number">_</span>,&#123;\<span class="number">_</span>,Who,\<span class="number">_</span>&#125;,\<span class="number">_</span>&#125; = P.</span></div><div class="line"><span class="ruby">- <span class="number">3</span>&gt; Who.</span></div><div class="line"><span class="ruby">- joe</span></div></pre></td></tr></table></figure>
-<h5 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h5><ul>
-<li>列表（list）被用来存放任意数量的事物。创建列表的方法是用中括号把列表元素括起来， 并用逗号分隔它们。</li>
-<li>表的第一个元素被称为列表头（head）。假设把列表头去掉，剩下的就被称为列表尾（tail）。举个例子，如果有一个列表[1,2,3,4,5] ， 那么列表头就是整数1 ，列表尾则是列表<br>[2,3,4,5]。请注意列表头可以是任何事物，但列表尾通常仍然是个列表。<br>访问列表头是一种非常高效的操作，因此基本上所有的列表处理函数都从提取列表头开始， 然后对它做一些操作，接着处理列表尾。</li>
-<li>如果T是一个列表，那么[H|T]也是一个列表，它的头是H，尾是T。竖线（|）把列表的头与尾分隔开。[]是一个空列表。<br>LISP程序员请注意：[H|T]是一个CAR为H、CDR为T的CONS单元。此语法用在模式里会解析出CAR和CDR，用在表达式里则会构建一个CONS单元。<br>无论何时，只要用[…|T]语法构建一个列表，就应该确保T是列表。如果它是，那么新列表就是“格式正确的”。如果T不是列表，那么新列表就被称为“不正确的列表”。大多数库函数假定列表有正确的形式，无法用于不正确的列表。<br>可以给T的开头添加不止一个元素，写法是[E1,E2,..,En|T]。</li>
-</ul>
-<h5 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h5><ul>
-<li>严格来说，Erlang里没有字符串。要在Erlang里表示字符串，可以选择一个由整数组成的列表或者一个二进制型。<h5 id="模式匹配"><a href="#模式匹配" class="headerlink" title="模式匹配"></a>模式匹配</h5></li>
-</ul>
-<pre><code>{X,abc} = {123,abc}    | 成功：X = 123
-{X,Y,Z} = {222,def,&quot;cat&quot;}    | 成功：X = 222，Y = def，Z = &quot;cat&quot;
-{X,Y} = {333,ghi,&quot;cat&quot;}    | 失败：元组的形状不同
-X = true    | 成功：X = true
-{X,Y,X} = {{abc,12},42,{abc,12}}    | 成功：X = {abc,12}，Y = 42
-{X,Y,X} = {{abc,12},42,true}    | 失败：X不能既是{abc,12}又是true
-[H \ T] = [1,2,3,4,5]    | 成功：H = 1，T = [2,3,4,5]
-[H \ T] = &quot;cat&quot; | 成功：H = 99，T = &quot;at&quot;
-[A,B,C \ T] = [a,b,c,d,e,f]    | 成功：A = a，B = b，C = c，T = [d,e,f]
-</code></pre><blockquote>
+<blockquote>
 <p>这样吧</p>
 </blockquote>
 
@@ -1003,7 +1154,7 @@ X = true    | 成功：X = true
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/20/2017-11-20-erlang-03/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/11/21/2017-11-21-erlang-07/">展开全文 >></a>
         </p>
       
 
