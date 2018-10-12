@@ -157,6 +157,359 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-team-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/30/team-2/">业务环境概述</a>
+    </h1>
+  
+
+        
+        <a href="/2017/06/30/team-2/" class="archive-article-date">
+  	<time datetime="2017-06-30T02:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h2 id="业务架构思路"><a href="#业务架构思路" class="headerlink" title="业务架构思路"></a>业务架构思路</h2><p>以公司级通用信息、通用服务、游戏可规范数据为依托，构建企业级运营分析平台。将账号充值支付系统和广告接入系统和游戏数据打通，扩展游戏与用户之间的关系，提高用户行为分析精确度。以为运营平台为入口，管控多个游戏，屏蔽多游戏间的不同点，方便快速接入管理工具，减少游戏后端每个游戏都做一遍管理工具的 。以统一账号支付系统为入口，管控多个游戏，屏蔽多游戏间的不同点，方便快速接入第三渠道，减少游戏后端工作量，保持游戏包的纯净。</p>
+<h2 id="管理流程"><a href="#管理流程" class="headerlink" title="管理流程"></a>管理流程</h2><ul>
+<li>1、事件管理</li>
+<li>2、问题管理 </li>
+<li>3、配置管理</li>
+<li>4、变更管理</li>
+<li>5、发布管理</li>
+</ul>
+<p>事件管理的目标是在不影响业务的情况下，尽可能快速的恢复服务，从而保证最佳的效率和服务的可持续性。事件管理流程的建立包括事件分类，确定事件的优先级和建立事件的升级机制。</p>
+<p>问题管理是调查基础设施和所有可用信息，包括事件数据库，来确定引起事件发生的真正潜在原因，以及提供的服务中可能存在的故障。</p>
+<p>配置管理的目标是：定义和控制服务与基础设施的部件，并保持准确的配置信息。<br>变更管理的目标是：以受控的方式，确保所有变更得到评估、批准、实施和评审。<br>发布管理的目标是：在实际运行环境的发布中，交付、分发并跟踪一个或多个变更。</p>
+<h2 id="核心模块"><a href="#核心模块" class="headerlink" title="核心模块"></a>核心模块</h2><p>服务台：服务台是IT部门和IT服务用户之间的单一联系点。它通过提供一个集中和专职的服务联系点促进了组织业务流程与服务管理基础架构集成。服务台的主要目标是协调客户（用户）和IT部门之间的联系，为IT服务运作提供支持，从而提高客户的满意度。</p>
+<p>事故管理：事故管理负责记录、归类和安排专家处理事故并监督整个处理过程直至事故得到解决和终止。事故管理的目的是在尽可能最小地影响客户和用户业务的情况下使IT系统恢复到服务级别协议所定义的服务级别。</p>
+<p>问题管理：问题管理是指通过调查和分析IT基础架构的薄弱环节、查明事故产生的潜在原因，并制定解决事故的方案和防止事故再次发生的措施，将由于问题和事故对业务产生的负面影响减小到最低的服务管理流程。与事故管理强调事故恢复的速度不同，问题管理强调的是找出事故产生的根源，从而制定恰当的解决方案或防止其再次发生的预防措施。</p>
+<p>配置管理：配置管理是识别和确认系统的配置项，记录和报告配置项状态和变更请求，检验配置项的正确性和完整性等活动构成的过程，其目的是提供IT基础架构的逻辑模型，支持其它服务管理流程特别是变更管理和发布管理的运作。</p>
+<p>变更管理：变更管理是指为在最短的中断时间内完成基础架构或服务的任一方面的变更而对其进行控制的服务管理流程。变更管理的目标是确保在变更实施过程中使用标准的方法和步骤，尽快地实施变更，以将由变更所导致的业务中断对业务的影响减小到最低。</p>
+<p>发布管理：发布管理是指对经过测试后导入实际应用的新增或修改后的配置项进行分发和宣传的管理流程。发布管理以前又称为软件控制与分发，它由变更管理流程控制。</p>
+<p>服务级别管理：服务级别管理是为签订服务级别协议（SLAs）而进行的计划、草拟、协商、监控和报告以及签订服务级别协议后对服务绩效的评价等一系列活动所组成的一个服务管理流程。服务级别管理旨在确保组织所需的IT服务质量在成本合理的范围内得以维持并逐渐提高。</p>
+<p>IT服务财务管理：IT服务财务管理是负责预算和核算IT服务提供方提供IT服务所需的成本，并向客户收取相应服务费用的管理流程，它包括IT投资预算、IT服务成本核算和服务计费三个子流程，其目标是通过量化服务成本减少成本超支的风险、减少不必要的浪费、合理引导客户的行为，从而最终保证所提供的IT服务符合成本效益的原则。IT服务财务管理流程产生的预算和核算信息可以为服务级别管理、能力管理、IT服务持续性管理和变更管理等管理流程提供决策依据。</p>
+<p>IT服务持续性管理：IT服务持续性管理是指确保发生灾难后有足够的技术、财务和管理资源来确保IT服务持续性的管理流程。IT服务持续性管理关注的焦点是在发生服务故障后仍然能够提供预定级别的IT服务，从而支持组织的业务持续运作的能力。</p>
+<p>能力管理：能力管理是指在成本和业务需求的双重约束下，通过配置合理的服务能力使组织的IT资源发挥最大效能的服务管理流程。能力管理流程包括业务能力管理、服务能力管理和资源能力管理三个子流程。</p>
+<p>可用性管理：可用性管理是通过分析用户和业务方的可用性需求并据以优化和设计IT基础架构的可用性，从而确保以合理的成本满足不断增长的可用性需求的管理流程。可用性管理是一个前瞻性的管理流程，它通过对业务和用户可用性需求的定位，使得IT服务的设计建立在真实需求的基础上，从而避免IT服务运作中采用了过度的可用性级别，节约了IT服务的运作成本。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">开发</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">QA</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SDK开发</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术管理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/游戏支撑团队如何建立/" class="article-tag-list-link color1">游戏支撑团队如何建立</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/06/30/team-2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-tech-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/27/tech-2/">php的mongodb报错socket-timeout-calling-ismaster.md</a>
+    </h1>
+  
+
+        
+        <a href="/2017/05/27/tech-2/" class="archive-article-date">
+  	<time datetime="2017-05-27T10:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>使用php的mongodb的扩展时报如下错误 No suitable servers found (<code>serverSelectionTryOnce</code> set): [socket timeout calling ismaster on ‘xxx.xxx.xxx.xxx:xx’<br>
+        
+          <a class="article-more-a" href="/2017/05/27/tech-2/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/27/tech-2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-manage-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/24/manage-1/">一个创业管理者的内心读白</a>
+    </h1>
+  
+
+        
+        <a href="/2017/05/24/manage-1/" class="archive-article-date">
+  	<time datetime="2017-05-24T00:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h3 id="别太拿自己当回事儿"><a href="#别太拿自己当回事儿" class="headerlink" title="别太拿自己当回事儿"></a>别太拿自己当回事儿</h3><p>创业，如果放不下架子，放不下面子，你没有机会享受高风险的回报，即使有，你也不配<br>常常是自己的所谓“为了项目好”，最后一意孤行，闹得所有人都开心，已有的计划无法继续，所有人都失去信心，如果项目黄了，你要承担多少责任？<br>
+        
+          <a class="article-more-a" href="/2017/05/24/manage-1/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">新人入职</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">培训管理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/怎么样做团队建设/" class="article-tag-list-link color4">怎么样做团队建设</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/24/manage-1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-manage-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/17/manage-2/">如何有效地帮助新人融入项目中</a>
+    </h1>
+  
+
+        
+        <a href="/2017/05/17/manage-2/" class="archive-article-date">
+  	<time datetime="2017-05-17T03:13:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>　　新同事的学习和领悟能力自然是非常重要，然而一个好的“师傅”能够带他进门，也会极大降低学习的门槛。在这里，分享一点自己的心得，我一般按照下面几步进行介绍，而我自己在进入到一个新项目中一般也是按照这几步进行学习的。</p>
+<h4 id="一、项目背景"><a href="#一、项目背景" class="headerlink" title="一、项目背景"></a>一、项目背景</h4><p>　　在这个环节，我会介绍为什么会有这个项目，项目的目标是什么，当前的状态以及项目组的组织结构等。这里，一定不要忘记把当前的产品展示新同事，使其有一个直观的印象。</p>
+<p>　　虽然我们都是搞技术的，但是对于一个新同事，一上来就直接深入细节而抛开项目背景，显然是不合适的。因为，一个人是否可以把事情做好，除了取决于他的技术能力；还和他是否对项目或者业务方向有认可度，是否愿意投入精力去用心让项目成果。如果一个人对项目本身的目标都不认可，怎么可能会做好呢。<br>
+        
+          <a class="article-more-a" href="/2017/05/17/manage-2/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">新人入职</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">培训管理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/怎么样做团队建设/" class="article-tag-list-link color4">怎么样做团队建设</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/17/manage-2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-team-6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -533,397 +886,9 @@
 
 
   
-    <article id="post-team-4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/27/team-4/">怎样搭建自助式运维平台</a>
-    </h1>
-  
-
-        
-        <a href="/2017/04/27/team-4/" class="archive-article-date">
-  	<time datetime="2017-04-27T07:51:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>   由于运维的琐碎、故障出现的不确定性以及解决问题的不可控性的存在，所以让运维人痛并快乐着。好的架构不是设计出来的，而是一步步的演进出来的。命运就是这么难以捉摸,当你拼尽一切前进时才发现前无大道,想放弃一切后退之时却后路尽绝,最后生无可恋的纵身一跃时,希望却不知何时悄然而至。<br>
-        
-          <a class="article-more-a" href="/2017/04/27/team-4/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">开发</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">QA</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SDK开发</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术管理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/游戏支撑团队如何建立/" class="article-tag-list-link color1">游戏支撑团队如何建立</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/04/27/team-4/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-team-3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/27/team-3/">怎样搭建CMDB管理平台</a>
-    </h1>
-  
-
-        
-        <a href="/2017/04/27/team-3/" class="archive-article-date">
-  	<time datetime="2017-04-27T07:51:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>公司级业务支撑平台工程环境搭建需要依赖的最基本因素就是信息。信息间的层次感直接会导致业务级平台的层次构成。数据+API 是信息化工程的基本要素，我们在支撑业务搭建过程中要做到数据的集中化管理，数据在集中化过程中不断的分享数据，使数据流通起来，这样使得数据间形成一个闭环，相互促进、相互监督，在分享中提高质量，在提高过程中不断的分享。<br>数据库的设计并非越复杂越好，简单明了，在遵守第一范式和第二范式的同时，要适当的冗余数据，业务流程复杂程序会承几何式下降。在做数据设计时尽量做到适度适时适合！<br>
-        
-          <a class="article-more-a" href="/2017/04/27/team-3/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">开发</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">QA</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SDK开发</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术管理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/游戏支撑团队如何建立/" class="article-tag-list-link color1">游戏支撑团队如何建立</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/04/27/team-3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-team-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/27/team-1/">支撑部门介绍</a>
-    </h1>
-  
-
-        
-        <a href="/2017/04/27/team-1/" class="archive-article-date">
-  	<time datetime="2017-04-27T07:51:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>一个部门的成立，总是要有理由的；一个项目的建立，总是要有目的的。游戏支撑团队的为什么存在？简单的概括一下：</p>
-<ul>
-<li>1.研发手里面开发的工作忙不过来</li>
-<li>2.周边系统的业务偏离研发主体业务</li>
-<li>3.自己做不专业达不到要求团队诉求</li>
-<li>4.有些领域研发真的搞不定，需要专业的人</li>
-</ul>
-<p>于是，研发体系中打杂部分分离开来，首先出现的是运维和业务支撑系统的开发人员，其他人员会随着业务的分离和专业性要求不断的出现在部门体系中。个人建议在部门最初建时最好有QA部门，因为只有生产部门没有质检部门，会出现质量下降，做而无果的现象出现，对于整个组织发展来讲，会是一个很大的损失，所以一开始就在尽量避免此类事情的发生。好下面我们来定义部门的组织加构和支撑部门到底是怎样的一个部门。<br>
-        
-          <a class="article-more-a" href="/2017/04/27/team-1/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">开发</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">QA</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SDK开发</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术管理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/游戏支撑团队如何建立/" class="article-tag-list-link color1">游戏支撑团队如何建立</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/04/27/team-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-team-0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/04/team-0/">目录索引</a>
-    </h1>
-  
-
-        
-        <a href="/2017/04/04/team-0/" class="archive-article-date">
-  	<time datetime="2017-04-04T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><h2 id="1-支撑部门介绍"><a href="#1-支撑部门介绍" class="headerlink" title="1. 支撑部门介绍"></a>1. <a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-1" target="_blank" rel="external">支撑部门介绍</a></h2><h4 id="1-１-部门定义及组织架构"><a href="#1-１-部门定义及组织架构" class="headerlink" title="1.１ 部门定义及组织架构"></a>1.１ 部门定义及组织架构</h4><h4 id="1-2-部门业务定位"><a href="#1-2-部门业务定位" class="headerlink" title="1.2 部门业务定位"></a>1.2 部门业务定位</h4><h4 id="1-３-部门管理理念"><a href="#1-３-部门管理理念" class="headerlink" title="1.３ 部门管理理念"></a>1.３ 部门管理理念</h4><h2 id="2-业务环境概述"><a href="#2-业务环境概述" class="headerlink" title="2.业务环境概述"></a>2.<a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-2" target="_blank" rel="external">业务环境概述</a></h2><h4 id="2-1-游戏服务器架构"><a href="#2-1-游戏服务器架构" class="headerlink" title="2.1 游戏服务器架构"></a>2.1 游戏服务器架构</h4><h4 id="2-1-支撑体系架构"><a href="#2-1-支撑体系架构" class="headerlink" title="2.1 支撑体系架构"></a>2.1 支撑体系架构</h4><h2 id="3-怎样搭建CMDB管理平台"><a href="#3-怎样搭建CMDB管理平台" class="headerlink" title="3.怎样搭建CMDB管理平台"></a>3.<a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-3" target="_blank" rel="external">怎样搭建CMDB管理平台</a></h2><h4 id="3-1-业务背景"><a href="#3-1-业务背景" class="headerlink" title="3.1 业务背景"></a>3.1 业务背景</h4><h4 id="3-2-业务架构"><a href="#3-2-业务架构" class="headerlink" title="3.2 业务架构"></a>3.2 业务架构</h4><h4 id="3-3-数据组织结构"><a href="#3-3-数据组织结构" class="headerlink" title="3.3 数据组织结构"></a>3.3 数据组织结构</h4><h2 id="４-怎样搭建自助式运维平台"><a href="#４-怎样搭建自助式运维平台" class="headerlink" title="４.怎样搭建自助式运维平台"></a>４.<a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-4" target="_blank" rel="external">怎样搭建自助式运维平台</a></h2><h4 id="4-1-业务背景"><a href="#4-1-业务背景" class="headerlink" title="4.1 业务背景"></a>4.1 业务背景</h4><h4 id="4-2-业务架构"><a href="#4-2-业务架构" class="headerlink" title="4.2 业务架构"></a>4.2 业务架构</h4><h4 id="4-3-服务器结构"><a href="#4-3-服务器结构" class="headerlink" title="4.3 服务器结构"></a>4.3 服务器结构</h4><h2 id="5-怎样搭建手游自助式出包平台"><a href="#5-怎样搭建手游自助式出包平台" class="headerlink" title="5.怎样搭建手游自助式出包平台"></a>5.<a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-5" target="_blank" rel="external">怎样搭建手游自助式出包平台</a></h2><h2 id="6-怎样搭建自助式游戏业务系统"><a href="#6-怎样搭建自助式游戏业务系统" class="headerlink" title="6.怎样搭建自助式游戏业务系统"></a>6.<a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-6" target="_blank" rel="external">怎样搭建自助式游戏业务系统</a></h2><h2 id="7-怎样搭建自助式WEB业务系统"><a href="#7-怎样搭建自助式WEB业务系统" class="headerlink" title="7.怎样搭建自助式WEB业务系统"></a>7.<a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-6" target="_blank" rel="external">怎样搭建自助式WEB业务系统</a></h2><h2 id="8-怎样搭建自助式GM管理平台"><a href="#8-怎样搭建自助式GM管理平台" class="headerlink" title="8.怎样搭建自助式GM管理平台"></a>8.<a href="https://www.zwting.com/2017/04/27/游戏技术支撑团队如何建立-6" target="_blank" rel="external">怎样搭建自助式GM管理平台</a></h2><h2 id="9-怎样搭建登录充账平台"><a href="#9-怎样搭建登录充账平台" class="headerlink" title="9.怎样搭建登录充账平台"></a>9.怎样搭建登录充账平台</h2><h2 id="10-怎样搭建广告平台"><a href="#10-怎样搭建广告平台" class="headerlink" title="10.怎样搭建广告平台"></a>10.怎样搭建广告平台</h2><h2 id="11-怎样搭建数据管理平台"><a href="#11-怎样搭建数据管理平台" class="headerlink" title="11.怎样搭建数据管理平台"></a>11.怎样搭建数据管理平台</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">开发</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">QA</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SDK开发</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术管理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/游戏支撑团队如何建立/" class="article-tag-list-link color1">游戏支撑团队如何建立</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/04/04/team-0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span>
+      <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/9/">Next &raquo;</a>
     </nav>
   
 
@@ -1036,11 +1001,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">devops</a>
+                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
+                <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
