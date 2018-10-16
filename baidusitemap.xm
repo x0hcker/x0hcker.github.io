@@ -4,6 +4,46 @@
 
     
   <url>
+    <loc>//www.zwting.com/2018/10/15/2018-10-15-k8s-02/</loc>
+    <lastmod>2018-10-16T06:03:42.050Z</lastmod>
+    <data>
+        <display>
+        <title>利用Jenkins打Docker镜像</title>
+        <pubTime>2018-10-15T06:00:00.000Z</pubTime>
+        
+        <tag>devops</tag>
+         
+         
+           
+             
+              <breadCrumb title="devops" url="//www.zwting.com/categories/devops/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>//www.zwting.com/2018/10/15/2018-10-15-k8s-01/</loc>
+    <lastmod>2018-10-15T09:25:21.500Z</lastmod>
+    <data>
+        <display>
+        <title>Gitlab和Jenkins和Harbor整合使用</title>
+        <pubTime>2018-10-15T04:00:00.000Z</pubTime>
+        
+        <tag>devops</tag>
+         
+         
+           
+             
+              <breadCrumb title="devops" url="//www.zwting.com/categories/devops/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-02/</loc>
     <lastmod>2018-10-12T02:55:45.660Z</lastmod>
     <data>
@@ -474,26 +514,6 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/08/11/2016-02-11-php-ext-11/</loc>
-    <lastmod>2017-09-18T07:26:21.000Z</lastmod>
-    <data>
-        <display>
-        <title>php7扩展开发[11] MVC之自动加载文件</title>
-        <pubTime>2017-08-11T09:09:59.000Z</pubTime>
-        
-        <tag>PHP7扩展开发</tag>
-         
-         
-           
-             
-              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>//www.zwting.com/2017/08/12/2016-02-12-php-ext-12/</loc>
     <lastmod>2017-09-18T07:26:21.000Z</lastmod>
     <data>
@@ -574,6 +594,26 @@
 
     
   <url>
+    <loc>//www.zwting.com/2017/08/11/2016-02-11-php-ext-11/</loc>
+    <lastmod>2017-09-18T07:26:21.000Z</lastmod>
+    <data>
+        <display>
+        <title>php7扩展开发[11] MVC之自动加载文件</title>
+        <pubTime>2017-08-11T09:09:59.000Z</pubTime>
+        
+        <tag>PHP7扩展开发</tag>
+         
+         
+           
+             
+              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>//www.zwting.com/2017/09/15/2015-05-15-training-python-11/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
@@ -587,46 +627,6 @@
            
              
               <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>//www.zwting.com/2017/09/15/2015-05-12-training-python-9/</loc>
-    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>python技术分享[9]－ 数据库操作之MongoDB</title>
-        <pubTime>2017-09-15T11:30:59.000Z</pubTime>
-        
-        <tag>python技术分享</tag>
-         
-         
-           
-             
-              <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>//www.zwting.com/2017/08/08/2016-02-08-php-ext-8/</loc>
-    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>php7扩展开发[8]类方法之间的调用</title>
-        <pubTime>2017-08-08T09:09:59.000Z</pubTime>
-        
-        <tag>PHP7扩展开发</tag>
-         
-         
-           
-             
-              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
           
         </display>
     </data>
@@ -674,6 +674,26 @@
 
     
   <url>
+    <loc>//www.zwting.com/2017/09/15/2015-05-10-training-python-8/</loc>
+    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>python技术分享[8]－ 数据库操作之MySQLdb</title>
+        <pubTime>2017-09-15T11:30:59.000Z</pubTime>
+        
+        <tag>python技术分享</tag>
+         
+         
+           
+             
+              <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>//www.zwting.com/2017/09/15/2015-05-14-training-python-10/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
@@ -687,6 +707,26 @@
            
              
               <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>//www.zwting.com/2017/08/08/2016-02-08-php-ext-8/</loc>
+    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>php7扩展开发[8]类方法之间的调用</title>
+        <pubTime>2017-08-08T09:09:59.000Z</pubTime>
+        
+        <tag>PHP7扩展开发</tag>
+         
+         
+           
+             
+              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
           
         </display>
     </data>
@@ -874,11 +914,11 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-05-10-training-python-8/</loc>
+    <loc>//www.zwting.com/2017/09/15/2015-05-12-training-python-9/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
         <display>
-        <title>python技术分享[8]－ 数据库操作之MySQLdb</title>
+        <title>python技术分享[9]－ 数据库操作之MongoDB</title>
         <pubTime>2017-09-15T11:30:59.000Z</pubTime>
         
         <tag>python技术分享</tag>

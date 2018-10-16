@@ -157,6 +157,119 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2017-11-20-erlang-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/20/2017-11-20-erlang-03/">Erlang程序设计(第2版) 读书笔记【第三章】</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/20/2017-11-20-erlang-03/" class="archive-article-date">
+  	<time datetime="2017-11-20T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="第3章-基本概念"><a href="#第3章-基本概念" class="headerlink" title="第3章 基本概念"></a>第3章 基本概念</h3><h5 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h5><blockquote>
+<p>记得上学的时候，数学老师曾说过：“如果一个等式中有好几处X，那么所有X都是一样的。”我们就是这么解方程的：如果知道X+Y=10且XY=2，那么这两个等式里的X就都等于6，Y都等于4.</p>
+</blockquote>
+<ul>
+<li>Erlang的变量是一次性赋值变量（single-assignment variable）,在Erlang里，变量只不过是对某个值的引用：Erlang的实现方式用指针代表绑定变量，指向一个包含值的存储区。这个值不能被修改。</li>
+<li><span style="color:red">注意 f()命令让shell忘记现有的任何绑定。在这个命令之后，所有变量都会变成未绑定状态</span></li>
+<li>在大多数语言里，=表示一个赋值语句。而在Erlang里，=是一次模式匹配操作。Lhs = Rhs的真正意思是：计算右侧（Rhs）的值，然后将结果与左侧（Lhs）的模式相匹配。</li>
+</ul>
+<h5 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h5><ul>
+<li>N div M是让N除以M然后舍去余数。N rem M是N除以M后剩下的余数。</li>
+</ul>
+<h5 id="原子"><a href="#原子" class="headerlink" title="原子"></a>原子</h5><ul>
+<li>在Erlang里，原子是全局性的，而且不需要宏定义或包含文件就能实现</li>
+<li>原子以小写字母开头，后接一串字母、数字、下划线（）或a（t<br>cat、meters、yards、joe@somehost和a_long_name</li>
+<li>原子还可以放在单引号（’）内。可以用这种引号形式创建以大写字母开头（否则会被解释成变量）或包含字母数字以外字符的原子，例如’Monday’、’Tuesday’、’+’、’*’和’an atom with spaces’。甚至可以给无需引号的原子加上引号，因此’a’和a的意思完全一致。在某些语言里，单引号和双引号可以互换使用。Erlang里不是这样。单引号的用法如前面所示，双引号用于给字符串字面量（string literal）定界。<br>一个原子的值就是它本身。所以，如果输入一个原子作为命令，Erlang shell就会打印出这个原子的值。</li>
+</ul>
+<h5 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h5><ul>
+<li>如果想把一些数量固定的项目归组成单一的实体，就会使用元组（tuple）。创建元组的方法是用大括号把想要表示的值括起来，并用逗号分隔它们。</li>
+<li>匹配时，等号两侧的元组必须有相同数量的元素，而且两侧的对应元素必须绑定为相同的值。</li>
+</ul>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby"> <span class="number">1</span>&gt; P = &#123;person,&#123;name, joe,armstrong&#125;,&#123;footsize,<span class="number">42</span>&#125;&#125;.</span></div><div class="line"><span class="ruby">- <span class="number">2</span>&gt; &#123;\<span class="number">_</span>,&#123;\<span class="number">_</span>,Who,\<span class="number">_</span>&#125;,\<span class="number">_</span>&#125; = P.</span></div><div class="line"><span class="ruby">- <span class="number">3</span>&gt; Who.</span></div><div class="line"><span class="ruby">- joe</span></div></pre></td></tr></table></figure>
+<h5 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h5><ul>
+<li>列表（list）被用来存放任意数量的事物。创建列表的方法是用中括号把列表元素括起来， 并用逗号分隔它们。</li>
+<li>表的第一个元素被称为列表头（head）。假设把列表头去掉，剩下的就被称为列表尾（tail）。举个例子，如果有一个列表[1,2,3,4,5] ， 那么列表头就是整数1 ，列表尾则是列表<br>[2,3,4,5]。请注意列表头可以是任何事物，但列表尾通常仍然是个列表。<br>访问列表头是一种非常高效的操作，因此基本上所有的列表处理函数都从提取列表头开始， 然后对它做一些操作，接着处理列表尾。</li>
+<li>如果T是一个列表，那么[H|T]也是一个列表，它的头是H，尾是T。竖线（|）把列表的头与尾分隔开。[]是一个空列表。<br>LISP程序员请注意：[H|T]是一个CAR为H、CDR为T的CONS单元。此语法用在模式里会解析出CAR和CDR，用在表达式里则会构建一个CONS单元。<br>无论何时，只要用[…|T]语法构建一个列表，就应该确保T是列表。如果它是，那么新列表就是“格式正确的”。如果T不是列表，那么新列表就被称为“不正确的列表”。大多数库函数假定列表有正确的形式，无法用于不正确的列表。<br>可以给T的开头添加不止一个元素，写法是[E1,E2,..,En|T]。</li>
+</ul>
+<h5 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h5><ul>
+<li>严格来说，Erlang里没有字符串。要在Erlang里表示字符串，可以选择一个由整数组成的列表或者一个二进制型。<h5 id="模式匹配"><a href="#模式匹配" class="headerlink" title="模式匹配"></a>模式匹配</h5></li>
+</ul>
+<pre><code>{X,abc} = {123,abc}    | 成功：X = 123
+{X,Y,Z} = {222,def,&quot;cat&quot;}    | 成功：X = 222，Y = def，Z = &quot;cat&quot;
+{X,Y} = {333,ghi,&quot;cat&quot;}    | 失败：元组的形状不同
+X = true    | 成功：X = true
+{X,Y,X} = {{abc,12},42,{abc,12}}    | 成功：X = {abc,12}，Y = 42
+{X,Y,X} = {{abc,12},42,true}    | 失败：X不能既是{abc,12}又是true
+[H \ T] = [1,2,3,4,5]    | 成功：H = 1，T = [2,3,4,5]
+[H \ T] = &quot;cat&quot; | 成功：H = 99，T = &quot;at&quot;
+[A,B,C \ T] = [a,b,c,d,e,f]    | 成功：A = a，B = b，C = c，T = [d,e,f]
+</code></pre><blockquote>
+<p>这样吧</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/20/2017-11-20-erlang-03/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2017-11-13-erlang-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -246,6 +359,126 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/11/12/2017-11-13-erlang-01/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2017-11-14-erlang-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/12/2017-11-14-erlang-02/">Erlang程序设计(第2版) 读书笔记【第二章】</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/12/2017-11-14-erlang-02/" class="archive-article-date">
+  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="第2章-Erlang速览"><a href="#第2章-Erlang速览" class="headerlink" title="第2章 Erlang速览"></a>第2章 Erlang速览</h3><h5 id="变量和原子的语法"><a href="#变量和原子的语法" class="headerlink" title="变量和原子的语法"></a>变量和原子的语法</h5><ul>
+<li>Erlang的变量只能绑定一次。</li>
+<li>Erlang的变量以大写字母开头。</li>
+</ul>
+<h5 id="在-shell-里编译并运行-Hello-World"><a href="#在-shell-里编译并运行-Hello-World" class="headerlink" title="在 shell 里编译并运行 Hello World"></a>在 shell 里编译并运行 Hello World</h5><p>erl文件命令成 hello.erl 输入以下内容</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- <span class="keyword">module</span>(hello).</div><div class="line">- <span class="keyword">export</span>([start/<span class="number">0</span>]).</div><div class="line"></div><div class="line">start()-&gt;</div><div class="line">	io:format(<span class="string">"hello world ~n"</span>).</div><div class="line">```	</div><div class="line">编译并运行它，我们从保存hello.erl的目录里启动Erlang shell</div></pre></td></tr></table></figure>
+<p>erl<br>Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]</p>
+<p>Eshell V8.2  (abort with ^G)</p>
+<p>1&gt; c(hello,debug_info).<br>{ok,hello}<br>9&gt; hello:start().<br>hello world<br>ok<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##### 并发</div><div class="line">- Erlang的基本并发单元是进程（process）。</div><div class="line">- 只能通过发送和接收消息来与其他进程通信。</div><div class="line">- loop函数永远不会返回，利用尾部的优化，意思是此函数的运行空间是固定的，不会耗尽栈空间</div><div class="line">- Erlang编译器和运行时系统会正确推断出如何在收到消息时运行适当的代码。不需要编写任何的<span class="keyword">if</span>-then-else或switch语句来设定该做什么。这是模式匹配带来的乐趣之一，会为你节省大量工作</div><div class="line"></div><div class="line"></div><div class="line">##### server</div></pre></td></tr></table></figure></p>
+<p>cat afile_server.erl</p>
+<p>-module(afile_server).<br>-export([start/1,loop/1]).</p>
+<p>start(Dir) -&gt;</p>
+<p>  spawn(afile_server,loop, [Dir]).</p>
+<p>loop(Dir) -&gt;</p>
+<p>  receive</p>
+<pre><code>{Client, list_dir} -&gt;
+
+  Client ! { self(), file:list_dir(Dir)};
+
+{Client, {get_file, File}} -&gt;
+
+  Full = filename:join(Dir, File),
+  Client ! {self(), file:read(Full)}
+</code></pre><p>  end,<br>  loop(Dir).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
+<p>➜  src erl<br>Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]</p>
+<p>Eshell V8.2  (abort with ^G)<br>1&gt; c(afile_server).<br>{ok,afile_server}<br>2&gt; FS =  afile_server:start(“.”).</p>
+<p><0.64.0><br>3&gt; FS ! {self(),list_dir}<br>3&gt; .<br>{<0.57.0>,list_dir}<br>4&gt; receive X-&gt;X end.<br>{<0.64.0>,<br> {ok,[“afile_server.beam”,”afile_server.erl”,<br>      “file_server.beam”,”hello.beam”,”hello.erl”,”test.beam”,<br>      “test.erl”]}}<br>5&gt;<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##### client</div></pre></td></tr></table></figure></0.64.0></0.57.0></0.64.0></p>
+<p>-module(afile_client).<br>-export([ls/1, get_file/2]).</p>
+<p>ls(Server) -&gt;</p>
+<p>  Server ! {self(), list_dir},</p>
+<p>  receive</p>
+<pre><code>{Server, FileList} -&gt;
+
+  FileList
+</code></pre><p>  end.</p>
+<p>get_file(Server, File) -&gt;</p>
+<p>  Server ! {self(), {get_file, File}},</p>
+<p>  receive</p>
+<pre><code>{Server, Content} -&gt;
+
+  Content
+</code></pre><p>  end.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+<p>1&gt; c(afile_server).<br>{ok,afile_server}<br>2&gt; c(afile_client).<br>{ok,afile_client}<br>3&gt; FS =  afile_server:start(“.”).</p>
+<p><0.69.0><br>4&gt; afile_client:ls(“./“).<br>** exception error: bad argument<br>     in function  afile_client:ls/1 (afile_client.erl, line 15)<br>5&gt; afile_client:ls(FS).<br>{ok,[“afile_client.beam”,”afile_client.erl”,<br>     “afile_server.beam”,”afile_server.erl”,”file_server.beam”,<br>     “hello.beam”,”hello.erl”,”test.beam”,”test.erl”]}<br>```</0.69.0></p>
+<blockquote>
+<p>这样吧</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/12/2017-11-14-erlang-02/">展开全文 >></a>
         </p>
       
 
@@ -2075,228 +2308,6 @@ test wqc
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/09/20/2017-09-21-flume-kafka-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2015-05-15-training-python-11" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-05-15-training-python-11/">python技术分享[11]－ 日志－日志记录到mongodb中</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/15/2015-05-15-training-python-11/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="1-日志操作："><a href="#1-日志操作：" class="headerlink" title="1.日志操作："></a>1.日志操作：</h4><p>&gt;<br>    日志文件操作在工作中最常用的操作类库之一，今天贴出来我常用的文件操作类，一直在用，也一直在不断优化，暂时可以满足业务</p>
-<h4 id="2-日志操作代码："><a href="#2-日志操作代码：" class="headerlink" title="2.日志操作代码："></a>2.日志操作代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> logging</div><div class="line"><span class="keyword">import</span> getpass</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</div><div class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> gethostname</div><div class="line"><span class="keyword">from</span> pymongo.connection <span class="keyword">import</span> Connection</div><div class="line"><span class="keyword">from</span> bson <span class="keyword">import</span> InvalidDocument</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MongoFormatter</span><span class="params">(logging.Formatter)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">format</span><span class="params">(self, record)</span>:</span></div><div class="line">        <span class="string">"""Format exception object as a string"""</span></div><div class="line">        data = record.__dict__.copy()</div><div class="line"></div><div class="line">        <span class="keyword">if</span> record.args:</div><div class="line">            record.msg = record.msg % record.args</div><div class="line"></div><div class="line">        data.update(</div><div class="line">            username=getpass.getuser(),</div><div class="line">            time=datetime.now(),</div><div class="line">            host=gethostname(),</div><div class="line">            message=record.msg,</div><div class="line">            args=tuple(unicode(arg) <span class="keyword">for</span> arg <span class="keyword">in</span> record.args)</div><div class="line">        )</div><div class="line">        <span class="keyword">if</span> <span class="string">'exc_info'</span> <span class="keyword">in</span> data <span class="keyword">and</span> data[<span class="string">'exc_info'</span>]:</div><div class="line">            data[<span class="string">'exc_info'</span>] = self.formatException(data[<span class="string">'exc_info'</span>])</div><div class="line">        <span class="keyword">return</span> data</div><div class="line">    </div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MongoHandler</span><span class="params">(logging.Handler)</span>:</span></div><div class="line">    <span class="string">""" Custom log handler</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Logs all messages to a mongo collection. This  handler is </span></div><div class="line"><span class="string">    designed to be used with the standard python logging mechanism.</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line"><span class="meta">    @classmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">to</span><span class="params">(cls, db, collection, host=<span class="string">'localhost'</span>, port=None, level=logging.NOTSET)</span>:</span></div><div class="line">        <span class="string">""" Create a handler for a given  """</span></div><div class="line">        <span class="keyword">return</span> cls(Connection(host, port)[db][collection], level)</div><div class="line">        </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, collection, db=<span class="string">'mongolog'</span>, host=<span class="string">'localhost'</span>, port=None, level=logging.NOTSET)</span>:</span></div><div class="line">        <span class="string">""" Init log handler and store the collection handle """</span></div><div class="line">        logging.Handler.__init__(self, level)</div><div class="line">        <span class="keyword">if</span> (type(collection) == str):</div><div class="line">            self.collection = Connection(host, port)[db][collection]</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            self.collection = collection</div><div class="line">        self.formatter = MongoFormatter()</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">emit</span><span class="params">(self,record)</span>:</span></div><div class="line">        <span class="string">""" Store the record to the collection. Async insert """</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self.collection.save(self.format(record))</div><div class="line">        <span class="keyword">except</span> InvalidDocument, e:</div><div class="line">            logging.error(<span class="string">"Unable to save log record: %s"</span>, e.message ,exc_info=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-05-15-training-python-11/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2015-04-17-training-python-4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-04-17-training-python-4/">python技术分享[4]－使用pylint约束代码规范</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/15/2015-04-17-training-python-4/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>pylint是一个Python代码风格的检查工具, 它依据的标准是Guido van Rossum的PEP8<br>* Pylint:  <a href="http://www.logilab.org/project/pylint" target="_blank" rel="external">http://www.logilab.org/project/pylint</a></li>
-<li>Pep8:    <a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="external">https://www.python.org/dev/peps/pep-0008/</a></li>
-<li>Pep8中文: <a href="http://code.google.com/p/zhong-wiki/wiki/PEP8" target="_blank" rel="external">http://code.google.com/p/zhong-wiki/wiki/PEP8</a> </li>
-<li>原谅我用2007年译的版本，我只是觉得当年这篇比较靠近原意。</li>
-</ul>
-<h4 id="1-扩展安装："><a href="#1-扩展安装：" class="headerlink" title="1.扩展安装："></a>1.扩展安装：</h4><ul>
-<li>pip install pylint</li>
-<li>可以这样用 pylint demo.py </li>
-<li></li>
-<li>pip install pep8</li>
-<li>pep8 –show-source –show-pep8  demo.py </li>
-</ul>
-<h4 id="2-Pylint-的输出"><a href="#2-Pylint-的输出" class="headerlink" title="2.Pylint 的输出"></a>2.Pylint 的输出</h4><ul>
-<li>对于每一个 Python 模块，Pylint 的结果中首先显示一些”*”字符 , 后面紧跟模块的名字，然后是一系列的 message, </li>
-<li>message 的格式如下：</li>
-<li>MESSAGE_TYPE: LINE_NUM:[OBJECT:] MESSAGE <ul>
-<li>MESSAGE_TYPE 有如下几种：</li>
-<li>(C) 惯例。违反了编码风格标准</li>
-<li>(R) 重构。写得非常糟糕的代码。</li>
-<li>(W) 警告。某些 Python 特定的问题。</li>
-<li>(E) 错误。很可能是代码中的错误。</li>
-<li>(F) 致命错误。阻止 Pylint 进一步运行的错误。</li>
-</ul>
-</li>
-</ul>
-<p>####3.样本实例<br>demo.py在 <a href="http://djshell.github.io/python/training-python-1.html" target="_blank" rel="external">http://djshell.github.io/python/training-python-1.html</a></p>
-<p>######3.1检查python格式</p>
-<ul>
-<li>pylint demo.py <ul>
-<li>No config file found, using default configuration</li>
-<li><strong><strong><strong>*</strong></strong></strong> Module demo</li>
-<li>W: 11, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
-<li>W: 15, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
-<li>W: 16, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
-<li>W: 17, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
-<li>W: 18, 0: Bad indentation. Found 4 spaces, expected 8 (bad-indentation)</li>
-<li>W: 19, 0: Bad indentation. Found 4 spaces, expected 8 (bad-indentation)</li>
-<li>W: 22, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
-<li>W: 27, 0: Bad indentation. Found 2 spaces, expected 4 (bad-indentation)</li>
-<li>W: 28, 0: Bad indentation. Found 4 spaces, expected 8 (bad-indentation)</li>
-<li>W: 29, 0: Bad indentation. Found 4 spaces, expected 8 (bad-indentation)</li>
-<li>C: 32, 0: Unnecessary parens after u’print’ keyword (superfluous-parens)</li>
-<li>C:  1, 0: Missing module docstring (missing-docstring)</li>
-<li>C: 15, 2: Invalid variable name “a” (invalid-name)</li>
-<li>C: 16, 2: Invalid variable name “b” (invalid-name)</li>
-<li>C: 18, 4: Invalid variable name “a” (invalid-name)</li>
-<li>C: 18, 7: Invalid variable name “b” (invalid-name)</li>
-<li>C: 21, 0: Invalid argument name “n” (invalid-name)</li>
-<li>C: 27, 6: Invalid variable name “x” (invalid-name)</li>
-<li>C: 29,15: More than one statement on a single line (multiple-statements)</li>
-<li>…………</li>
-<li>…………省略多行，下面是得分</li>
-<li>Your code has been rated at -2.67/10<br><br><br><br></li>
-</ul>
-</li>
-<li>可能是在页面复制贴粘时空格数据发生改变了，我们只得了负分现在我们来按照提示整理格式<ul>
-<li>Bad indentation. Found 2 spaces, expected 4 (bad-indentation) 空格期望四个，错误缩进</li>
-<li>Unnecessary parens after u’print’ keyword (superfluous-parens) print 之后多余的小括号</li>
-<li>Missing module docstring (missing-docstring) 没有模块文档说明</li>
-<li>Invalid variable name “a” (invalid-name) 非法的变量</li>
-<li>No space allowed around keyword argument assignment 不要在用于指定<br>关键字参数 (keyword argument) 或默认参数值的 ‘=’ 号周围使用空格</li>
-<li>Trailing whitespace (trailing-whitespace) 尾随空白，行尾有空白字符，需要删除</li>
-</ul>
-</li>
-</ul>
-<p><br><br></p>
-<ul>
-<li>按照提示更改代码直到得到10分<ul>
-<li>Your code has been rated at 10.00/10 (previous run: 10.00/10, +0.00)</li>
-</ul>
-</li>
-</ul>
-<p>####更改完的代码如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"><span class="comment">#!/usr/bin/python2.7</span></div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="string">python pylint demo</span></div><div class="line"><span class="string">'''</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">()</span>:</span></div><div class="line">    <span class="string">'''</span></div><div class="line"><span class="string">    a generator that produces the fibonacci series's elements</span></div><div class="line"><span class="string">    '''</span></div><div class="line"></div><div class="line">    int_a = <span class="number">1</span></div><div class="line">    int_b = <span class="number">1</span></div><div class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">        int_a, int_b = int_a + int_b, int_a</div><div class="line">        <span class="keyword">yield</span> int_a</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">nth</span><span class="params">(series, num)</span>:</span></div><div class="line">    <span class="string">'''</span></div><div class="line"><span class="string">   returns the nth element of a series, consuming the series' earlier elements.    '''</span></div><div class="line"></div><div class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> series:</div><div class="line">        num -= <span class="number">1</span></div><div class="line">        <span class="keyword">if</span> num &lt;= <span class="number">0</span>:</div><div class="line">            <span class="keyword">return</span> key</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    <span class="keyword">print</span> <span class="string">'Executed from the command line'</span></div><div class="line">    <span class="keyword">print</span> nth(fib(), <span class="number">10</span>)</div></pre></td></tr></table></figure>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-04-17-training-python-4/">展开全文 >></a>
         </p>
       
 

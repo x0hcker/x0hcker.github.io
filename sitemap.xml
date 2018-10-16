@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>//www.zwting.com/2018/10/15/2018-10-15-k8s-02/</loc>
+    
+    <lastmod>2018-10-16T06:03:42.050Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>//www.zwting.com/2018/10/15/2018-10-15-k8s-01/</loc>
+    
+    <lastmod>2018-10-15T09:25:21.500Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-02/</loc>
     
     <lastmod>2018-10-12T02:55:45.660Z</lastmod>
@@ -170,13 +184,6 @@
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/08/11/2016-02-11-php-ext-11/</loc>
-    
-    <lastmod>2017-09-18T07:26:21.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>//www.zwting.com/2017/08/12/2016-02-12-php-ext-12/</loc>
     
     <lastmod>2017-09-18T07:26:21.000Z</lastmod>
@@ -205,21 +212,14 @@
   </url>
   
   <url>
+    <loc>//www.zwting.com/2017/08/11/2016-02-11-php-ext-11/</loc>
+    
+    <lastmod>2017-09-18T07:26:21.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>//www.zwting.com/2017/09/15/2015-05-15-training-python-11/</loc>
-    
-    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>//www.zwting.com/2017/09/15/2015-05-12-training-python-9/</loc>
-    
-    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>//www.zwting.com/2017/08/08/2016-02-08-php-ext-8/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     
@@ -240,7 +240,21 @@
   </url>
   
   <url>
+    <loc>//www.zwting.com/2017/09/15/2015-05-10-training-python-8/</loc>
+    
+    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>//www.zwting.com/2017/09/15/2015-05-14-training-python-10/</loc>
+    
+    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>//www.zwting.com/2017/08/08/2016-02-08-php-ext-8/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     
@@ -310,7 +324,7 @@
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-05-10-training-python-8/</loc>
+    <loc>//www.zwting.com/2017/09/15/2015-05-12-training-python-9/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     

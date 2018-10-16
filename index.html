@@ -157,6 +157,309 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2018-10-15-k8s-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/15/2018-10-15-k8s-02/">利用Jenkins打Docker镜像</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/15/2018-10-15-k8s-02/" class="archive-article-date">
+  	<time datetime="2018-10-15T06:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-思路整理"><a href="#1-思路整理" class="headerlink" title="1.思路整理"></a>1.思路整理</h3><ul>
+<li>目的： 打一个可以运行Flask的Python镜像</li>
+<li>过程：<ul>
+<li>利用CentOS7镜像启动一个容器，在容器中运行</li>
+<li>将运行过程中使用的指令整理到dockerfile中</li>
+<li>在pipeline中加入打镜像步骤，成功后推到harbor上</li>
+<li>启动harbor上的镜像</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-制作过程"><a href="#2-制作过程" class="headerlink" title="2.制作过程"></a>2.制作过程</h3><p>git仓库结构如下<br><img src="./img/devops-101.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="2-1启动基础容器"><a href="#2-1启动基础容器" class="headerlink" title="2.1启动基础容器"></a>2.1启动基础容器</h5><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker <span class="built_in">run</span> -it <span class="number">172.16</span><span class="number">.153</span><span class="number">.70</span>/library/centos7-<span class="built_in">image</span>-base:<span class="number">1.0</span> <span class="string">'/bin/bash'</span></div></pre></td></tr></table></figure>
+<h5 id="2-2-在基础容器中执行所需指令"><a href="#2-2-在基础容器中执行所需指令" class="headerlink" title="2.2 在基础容器中执行所需指令"></a>2.2 在基础容器中执行所需指令</h5><p><img src="./img/devops-100.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="2-3制作Dockerfile"><a href="#2-3制作Dockerfile" class="headerlink" title="2.3制作Dockerfile"></a>2.3制作Dockerfile</h5><p>在上面的指令中选择自己所需要的内容</p>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="string">FROM </span><span class="string">172.</span><span class="string">16.</span><span class="string">153.</span><span class="string">70/</span><span class="string">library/</span><span class="string">centos7-image-base:1.</span>0</div><div class="line"></div><div class="line"><span class="string">WORKDIR </span>/<span class="string">app</span></div><div class="line"><span class="string">COPY </span>. /<span class="string">app</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">RUN </span><span class="string">curl </span><span class="string">https:</span>//<span class="string">bootstrap.</span><span class="string">pypa.</span><span class="string">io/</span><span class="built_in">get-pip.py</span> -o <span class="built_in">get-pip.py</span></div><div class="line"><span class="built_in">RUN</span> <span class="string">python </span><span class="built_in">get-pip.py</span></div><div class="line"><span class="built_in">RUN</span> <span class="string">pip </span><span class="string">install </span><span class="built_in">--trusted-host</span> <span class="string">pypi.</span><span class="string">python.</span><span class="string">org </span>-r <span class="string">requirements.</span><span class="string">txt</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">ENV </span><span class="string">NAME </span><span class="string">World</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">EXPOSE </span><span class="string">80</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">CMD </span>[<span class="string">"python"</span>, <span class="string">"app.py"</span>]</div></pre></td></tr></table></figure>
+<h5 id="app-py"><a href="#app-py" class="headerlink" title="app.py"></a>app.py</h5><figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">from flask <span class="built_in">import</span> Flask</div><div class="line">from redis <span class="built_in">import</span> Redis, RedisError</div><div class="line"><span class="built_in">import</span> os</div><div class="line"><span class="built_in">import</span> socket</div><div class="line"></div><div class="line"><span class="comment"># Connect to Redis</span></div><div class="line"><span class="attr">redis</span> = Redis(<span class="attr">host="redis",</span> <span class="attr">db=0,</span> <span class="attr">socket_connect_timeout=2,</span> <span class="attr">socket_timeout=2)</span></div><div class="line"></div><div class="line"><span class="attr">app</span> = Flask(__name__)</div><div class="line"></div><div class="line">@app.route(<span class="string">"/"</span>)</div><div class="line">def hello():</div><div class="line">    try:</div><div class="line">        <span class="attr">visits</span> = redis.incr(<span class="string">"counter"</span>)</div><div class="line">    except RedisError:</div><div class="line">        <span class="attr">visits</span> = <span class="string">"&lt;i&gt;cannot connect to Redis, counter disabled&lt;/i&gt;"</span></div><div class="line"></div><div class="line">    <span class="attr">html</span> = <span class="string">"&lt;h3&gt;Hello &#123;name&#125;!&lt;/h3&gt;"</span> \</div><div class="line">           <span class="string">"&lt;b&gt;Hostname:&lt;/b&gt; &#123;hostname&#125;&lt;br/&gt;"</span> \</div><div class="line">           <span class="string">"&lt;b&gt;Visits:&lt;/b&gt; &#123;visits&#125;"</span></div><div class="line">    return html.format(<span class="attr">name=os.getenv("NAME",</span> <span class="string">"world"</span>), <span class="attr">hostname=socket.gethostname(),</span> <span class="attr">visits=visits)</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> <span class="attr">__name__</span> == <span class="string">"__main__"</span>:</div><div class="line">    app.run(<span class="attr">host='0.0.0.0',</span> <span class="attr">port=80)</span></div></pre></td></tr></table></figure>
+<h6 id="requirements-txt"><a href="#requirements-txt" class="headerlink" title="requirements.txt"></a>requirements.txt</h6><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">Flask</span></div><div class="line"><span class="attribute">Redis</span></div></pre></td></tr></table></figure>
+<h5 id="jenkins内容添加docker打镜像内容"><a href="#jenkins内容添加docker打镜像内容" class="headerlink" title="jenkins内容添加docker打镜像内容"></a>jenkins内容添加docker打镜像内容</h5><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">pipeline &#123;</div><div class="line">    agent any</div><div class="line"></div><div class="line">    stages &#123;</div><div class="line">        </div><div class="line">        stage('Build Flask') &#123;</div><div class="line">            steps &#123;</div><div class="line">                echo 'Build Flask....'</div><div class="line">                withCredentials([usernamePassword( credentialsId: 'Harbor69', usernameVariable: "DOCKER_USR", passwordVariable: "DOCKER_PWD")]) &#123;</div><div class="line">                     </div><div class="line">                            sh ("/opt/kube/bin/docker build -t flaskhello .")</div><div class="line">                            sh ("/opt/kube/bin/docker login -u $&#123;DOCKER_USR&#125; -p  $&#123;DOCKER_PWD&#125; 172.16.153.70")</div><div class="line">                            sh ("/opt/kube/bin/docker tag flaskhello:latest  172.16.153.70/library/flaskhello:1.0")</div><div class="line">                            sh ("/opt/kube/bin/docker push  172.16.153.70/library/flaskhello:1.0")</div><div class="line">                           </div><div class="line">                 &#125;</div><div class="line">               </div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="在Jenkins中测试集成"><a href="#在Jenkins中测试集成" class="headerlink" title="在Jenkins中测试集成"></a>在Jenkins中测试集成</h3><p><img src="./img/devops-102.jpg" alt="devops-1.png" style="width:800px;"><br>成功后会在harbor中出现<br><img src="./img/devops-103.png" alt="devops-1.png" style="width:800px;"></p>
+<h3 id="测试使用harbor中的镜像"><a href="#测试使用harbor中的镜像" class="headerlink" title="测试使用harbor中的镜像"></a>测试使用harbor中的镜像</h3><p>将容器中的80端口映射到物理机的4000<br><figure class="highlight dns"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -p <span class="number">4000:80 172</span>.<span class="number">16.153.70</span>/library/flaskhello:<span class="number">1</span>.<span class="number">0</span></div></pre></td></tr></table></figure></p>
+<p>运行后在浏览器中输入<a href="http://172.16.153.70:4000" target="_blank" rel="external">http://172.16.153.70:4000</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/15/2018-10-15-k8s-02/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2018-10-15-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/15/2018-10-15-k8s-01/">Gitlab和Jenkins和Harbor整合使用</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/15/2018-10-15-k8s-01/" class="archive-article-date">
+  	<time datetime="2018-10-15T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="前期环境准备"><a href="#前期环境准备" class="headerlink" title="前期环境准备"></a>前期环境准备</h3><h5 id="1-1设置gitlab"><a href="#1-1设置gitlab" class="headerlink" title="1.1设置gitlab"></a>1.1设置gitlab</h5><p>利用root账号设置gitlab可以跨站请求</p>
+<p>Q:gitlab使用webhook向jenkins发送请求，报错 Requests to the local network are not allowed</p>
+<p><img src="./img/devops-50.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="1-2设置jenkins"><a href="#1-2设置jenkins" class="headerlink" title="1.2设置jenkins"></a>1.2设置jenkins</h5><p>利用root账号设置 jenkins可以接受跨站请求<br><img src="./img/devops-51.png" alt="devops-1.png" style="width:800px;"></p>
+<p>使用gitlab的webhook时，可以用账号密码形式的 也可以用匿名的，如果用匿名形式的设置匿名账号可以做哪些事<br><img src="./img/devops-52.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="1-3设置jenkins账号执行Docker的权限"><a href="#1-3设置jenkins账号执行Docker的权限" class="headerlink" title="1.3设置jenkins账号执行Docker的权限"></a>1.3设置jenkins账号执行Docker的权限</h5><p>在jenkins的脚本中执行docker时，需要设置jenkins有权限使用docker，观察下docker启动的用户和组设置jenkins权限到组中</p>
+<p>Q: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post </p>
+<p><img src="./img/devops-53.png" alt="devops-1.png" style="width:800px;"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span><span class="bash"> sudo groupadd docker</span></div><div class="line"><span class="meta">$</span><span class="bash"> sudo usermod -aG docker jenkins</span></div></pre></td></tr></table></figure>
+<h5 id="1-4设置docker可以登录harbor"><a href="#1-4设置docker可以登录harbor" class="headerlink" title="1.4设置docker可以登录harbor"></a>1.4设置docker可以登录harbor</h5><p>docker login -u admin -p Harbor12345 172.16.153.70 </p>
+<p>Q: WARNING! Using –password via the CLI is insecure. Use –password-stdin.<br>Error response from daemon: Get <a href="https://172.16.153.70/v2/" target="_blank" rel="external">https://172.16.153.70/v2/</a>: x509: certificate signed by unknown authority</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp <span class="regexp">/etc/</span>kubernetes<span class="regexp">/ssl/</span>ca.pem <span class="regexp">/etc/</span>docker<span class="regexp">/certs.d/</span><span class="number">172.16</span>.<span class="number">153.70</span><span class="regexp">/ca.crt</span></div></pre></td></tr></table></figure>
+<h5 id="1-5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）"><a href="#1-5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）" class="headerlink" title="1.5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）"></a>1.5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）</h5><p><img src="./img/devops-56.png" alt="devops-1.png" style="width:800px;"></p>
+<h3 id="建立GITLAB测试项目"><a href="#建立GITLAB测试项目" class="headerlink" title="建立GITLAB测试项目"></a>建立GITLAB测试项目</h3><p>地址：git@172.16.153.70:root/test.git</p>
+<h5 id="2-1在仓库中加入Jenkinsfile"><a href="#2-1在仓库中加入Jenkinsfile" class="headerlink" title="2.1在仓库中加入Jenkinsfile"></a>2.1在仓库中加入Jenkinsfile</h5><figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">pipeline &#123;</div><div class="line">    agent any</div><div class="line"></div><div class="line">    stages &#123;</div><div class="line">        </div><div class="line">        stage(<span class="string">'Check'</span>) &#123;</div><div class="line">            steps &#123;</div><div class="line">                 echo <span class="string">'docker --version'</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">         </div><div class="line">          </div><div class="line">        stage(<span class="string">'Build'</span>) &#123;</div><div class="line">            steps &#123;</div><div class="line">                sh <span class="string">'sh ./build_centos7_image.sh'</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        stage(<span class="string">'Deploy'</span>) &#123;</div><div class="line">            steps &#123;</div><div class="line">                echo <span class="string">'Deploying....'</span></div><div class="line">                </div><div class="line">                 withCredentials([usernamePassword( credentialsId: <span class="string">'Harbor69'</span>, usernameVariable: <span class="string">"DOCKER_USR"</span>, passwordVariable: <span class="string">"DOCKER_PWD"</span>)]) &#123;</div><div class="line">                     </div><div class="line">                            sh (<span class="string">"/opt/kube/bin/docker login -u $&#123;DOCKER_USR&#125; -p  $&#123;DOCKER_PWD&#125; 172.16.153.70"</span>)</div><div class="line">                            sh (<span class="string">"/opt/kube/bin/docker tag centos7-image-base:latest  172.16.153.70/library/centos7-image-base:1.0"</span>)</div><div class="line">                            sh (<span class="string">"/opt/kube/bin/docker push  172.16.153.70/library/centos7-image-base:1.0"</span>)</div><div class="line">                           </div><div class="line">                 &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="2-2实现pipeline中调用bash脚本build-centos7-image-sh"><a href="#2-2实现pipeline中调用bash脚本build-centos7-image-sh" class="headerlink" title=".2.2实现pipeline中调用bash脚本build_centos7_image.sh"></a>.2.2实现pipeline中调用bash脚本build_centos7_image.sh</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="comment"># 上面这个一定不要忘记，要不pileline会报错</span></div><div class="line"></div><div class="line"><span class="built_in">export</span> PATH=/opt/kube/bin:<span class="variable">$PATH</span></div><div class="line"></div><div class="line"><span class="comment"># 可以打进去 yum vim telnet 等定制化的准备</span></div><div class="line">supermin5 -v --prepare bash coreutils yum  -o supermin.d</div><div class="line"></div><div class="line">supermin5 -v --build --format chroot supermin.d -o appliance.d</div><div class="line"></div><div class="line"><span class="comment"># centos7</span></div><div class="line"><span class="built_in">echo</span> 7 &gt; appliance.d/etc/yum/vars/releasever</div><div class="line"></div><div class="line"><span class="comment"># 打包</span></div><div class="line">tar --numeric-owner -cpf centos7-image-base.tar -C appliance.d .</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock</span></div><div class="line"><span class="comment"># 执行下面解决 不是最优化的解决方案</span></div><div class="line"><span class="comment">#sudo usermod -a -G root jenkins</span></div><div class="line"><span class="comment">#sudo service jenkins restart</span></div><div class="line"></div><div class="line"><span class="comment">#docker login -u admin -p Harbor12345 192.168.111.69</span></div><div class="line"></div><div class="line"><span class="comment"># 导入到docker</span></div><div class="line">cat centos7-image-base.tar | docker import - centos7-image-base</div></pre></td></tr></table></figure>
+<h3 id="建立Jenkins测试项目"><a href="#建立Jenkins测试项目" class="headerlink" title="建立Jenkins测试项目"></a>建立Jenkins测试项目</h3><h5 id="建立测试项目，我们选择流水线pipeline模式的"><a href="#建立测试项目，我们选择流水线pipeline模式的" class="headerlink" title="建立测试项目，我们选择流水线pipeline模式的"></a>建立测试项目，我们选择流水线pipeline模式的</h5><p><img src="./img/devops-54.png" alt="devops-1.png" style="width:800px;"></p>
+<p>Jenkinsfile文件从<a href="http://172.16.153.70/root/test.git读取" target="_blank" rel="external">http://172.16.153.70/root/test.git读取</a><br>做为入口仓库</p>
+<p><img src="./img/devops-55.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样"><a href="#选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样" class="headerlink" title="选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样"></a>选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样</h5><p><img src="./img/devops-57.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="在JENKINS中设置GITLAB所需要的WEBHOOK"><a href="#在JENKINS中设置GITLAB所需要的WEBHOOK" class="headerlink" title="在JENKINS中设置GITLAB所需要的WEBHOOK"></a>在JENKINS中设置GITLAB所需要的WEBHOOK</h5><p><img src="./img/devops-58.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="设置GITLAB所需要的WEBHOOK"><a href="#设置GITLAB所需要的WEBHOOK" class="headerlink" title="设置GITLAB所需要的WEBHOOK"></a>设置GITLAB所需要的WEBHOOK</h5><p><img src="./img/devops-59.png" alt="devops-1.png" style="width:800px;"></p>
+<h3 id="测试项目"><a href="#测试项目" class="headerlink" title="测试项目"></a>测试项目</h3><h5 id="5-1-点击左侧的立即执行可以测试是否成功"><a href="#5-1-点击左侧的立即执行可以测试是否成功" class="headerlink" title="5.1 点击左侧的立即执行可以测试是否成功"></a>5.1 点击左侧的立即执行可以测试是否成功</h5><h5 id="5-2-修改GITLAB中的代码看是否触发执行"><a href="#5-2-修改GITLAB中的代码看是否触发执行" class="headerlink" title="5.2 修改GITLAB中的代码看是否触发执行"></a>5.2 修改GITLAB中的代码看是否触发执行</h5>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/15/2018-10-15-k8s-01/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2018-10-11-k8s-04" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/11/2018-10-11-k8s-04/">Gitlab  和 Jenkins  融合使用</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/11/2018-10-11-k8s-04/" class="archive-article-date">
+  	<time datetime="2018-10-11T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Jenkins-中的安装和设置"><a href="#Jenkins-中的安装和设置" class="headerlink" title="Jenkins 中的安装和设置"></a>Jenkins 中的安装和设置</h3><ul>
+<li>安装 gitlab pulgin   其它有gitlab web hook 但是是2014年就不维护了</li>
+</ul>
+<p><img src="./img/devops-01.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h5><p><img src="./img/devops-02.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="设置GITLAB地址"><a href="#设置GITLAB地址" class="headerlink" title="设置GITLAB地址"></a>设置GITLAB地址</h5><ul>
+<li>凭证中使用SSH来打通的GITLAB项目</li>
+</ul>
+<p><img src="./img/devops-03.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="构建触发器"><a href="#构建触发器" class="headerlink" title="构建触发器"></a>构建触发器</h5><ul>
+<li>注意红色的部分 一会儿gitlab hook中要用，前面格式改成 <a href="http://用户:密码@IP:PORT/" target="_blank" rel="external">http://用户:密码@IP:PORT/</a></li>
+<li>否则会报403<br><img src="./img/devops-05.png" alt="devops-1.png" style="width:800px;"></li>
+</ul>
+<h5 id="构建测试"><a href="#构建测试" class="headerlink" title="构建测试"></a>构建测试</h5><ul>
+<li>创建一个文件 打印点东西</li>
+</ul>
+<p><img src="./img/devops-06.png" alt="devops-1.png" style="width:800px;"></p>
+<h3 id="GITLAB-中的安装和设置"><a href="#GITLAB-中的安装和设置" class="headerlink" title="GITLAB 中的安装和设置"></a>GITLAB 中的安装和设置</h3><h5 id="创建项目-1"><a href="#创建项目-1" class="headerlink" title="创建项目"></a>创建项目</h5><p><img src="./img/devops-07.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="创建-hook"><a href="#创建-hook" class="headerlink" title="创建  hook"></a>创建  hook</h5><ul>
+<li>注意红色部分  与  Jenkins 自动生成的有区别<br><img src="./img/devops-08.png" alt="devops-1.png" style="width:800px;"></li>
+</ul>
+<h5 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h5><p><img src="./img/devops-09.png" alt="devops-1.png" style="width:800px;"></p>
+<p>FAQ:</p>
+<ul>
+<li>gitlab使用webhook向jenkins发送请求，报错 Requests to the local network are not allowed</li>
+</ul>
+<p><img src="./img/devops-10.png" alt="devops-1.png" style="width:800px;"></p>
+<ul>
+<li>在webhook触发时发生如下错误：Error 403 anonymous is missing the Job/Build permission  </li>
+<li>这个直接用账号密码 也没有这个问题 ，这个答案网上可能是错误的 ，有几个403，报错误不一样</li>
+</ul>
+<p><img src="./img/devops-11.png" alt="devops-1.png" style="width:800px;"></p>
+<ul>
+<li>jenkins.BadHTTPException: Error communicating with server<br><img src="./img/devops-12.png" alt="devops-1.png" style="width:800px;"></li>
+</ul>
+<ul>
+<li>Error 403 anonymous is missing<br>默认安装的情况下，匿名用户是没有任何权限的，这里修改配置，让匿名用户只拥有 查看Job、Job Configure 权限</li>
+</ul>
+<p>点击 Manage Jenkins - Configure Global Security</p>
+<p><img src="./img/devops-13.jpg" alt="devops-1.png" style="width:800px;"></p>
+<p>修改 Access Control - Authorization 部分的配置，选择 Project-based Matrix Authorization Strategy</p>
+<p>这里需要添加一个 root 用户，步骤为在 User/group to add: 填入 root，然后点击 Add，移到最右侧，点击 ✔️，让 root 用户拥有所有权限，此步非常重要，不然保存后会导致 admin is missing the Overall/Read permission 错误</p>
+<p>匿名用户勾选 Overall 的 Read 权限，Job 的 Configure 和 Read 权限，如下图：</p>
+<p><img src="./img/devops-14.jpg" alt="devops-1.png" style="width:800px;"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-04/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2018-10-11-k8s-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -329,122 +632,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-02/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2018-10-11-k8s-04" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/11/2018-10-11-k8s-04/">Gitlab  和 Jenkins  融合使用</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/11/2018-10-11-k8s-04/" class="archive-article-date">
-  	<time datetime="2018-10-11T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="Jenkins-中的安装和设置"><a href="#Jenkins-中的安装和设置" class="headerlink" title="Jenkins 中的安装和设置"></a>Jenkins 中的安装和设置</h3><ul>
-<li>安装 gitlab pulgin   其它有gitlab web hook 但是是2014年就不维护了</li>
-</ul>
-<p><img src="./img/devops-01.png" alt="devops-1.png" style="width:800px;"></p>
-<h5 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h5><p><img src="./img/devops-02.png" alt="devops-1.png" style="width:800px;"></p>
-<h5 id="设置GITLAB地址"><a href="#设置GITLAB地址" class="headerlink" title="设置GITLAB地址"></a>设置GITLAB地址</h5><ul>
-<li>凭证中使用SSH来打通的GITLAB项目</li>
-</ul>
-<p><img src="./img/devops-03.png" alt="devops-1.png" style="width:800px;"></p>
-<h5 id="构建触发器"><a href="#构建触发器" class="headerlink" title="构建触发器"></a>构建触发器</h5><ul>
-<li>注意红色的部分 一会儿gitlab hook中要用，前面格式改成 <a href="http://用户:密码@IP:PORT/" target="_blank" rel="external">http://用户:密码@IP:PORT/</a></li>
-<li>否则会报403<br><img src="./img/devops-05.png" alt="devops-1.png" style="width:800px;"></li>
-</ul>
-<h5 id="构建测试"><a href="#构建测试" class="headerlink" title="构建测试"></a>构建测试</h5><ul>
-<li>创建一个文件 打印点东西</li>
-</ul>
-<p><img src="./img/devops-06.png" alt="devops-1.png" style="width:800px;"></p>
-<h3 id="GITLAB-中的安装和设置"><a href="#GITLAB-中的安装和设置" class="headerlink" title="GITLAB 中的安装和设置"></a>GITLAB 中的安装和设置</h3><h5 id="创建项目-1"><a href="#创建项目-1" class="headerlink" title="创建项目"></a>创建项目</h5><p><img src="./img/devops-07.png" alt="devops-1.png" style="width:800px;"></p>
-<h5 id="创建-hook"><a href="#创建-hook" class="headerlink" title="创建  hook"></a>创建  hook</h5><ul>
-<li>注意红色部分  与  Jenkins 自动生成的有区别<br><img src="./img/devops-08.png" alt="devops-1.png" style="width:800px;"></li>
-</ul>
-<h5 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h5><p><img src="./img/devops-09.png" alt="devops-1.png" style="width:800px;"></p>
-<p>FAQ:</p>
-<ul>
-<li>gitlab使用webhook向jenkins发送请求，报错 Requests to the local network are not allowed</li>
-</ul>
-<p><img src="./img/devops-10.png" alt="devops-1.png" style="width:800px;"></p>
-<ul>
-<li>在webhook触发时发生如下错误：Error 403 anonymous is missing the Job/Build permission  </li>
-<li>这个直接用账号密码 也没有这个问题 ，这个答案网上可能是错误的 ，有几个403，报错误不一样</li>
-</ul>
-<p><img src="./img/devops-11.png" alt="devops-1.png" style="width:800px;"></p>
-<ul>
-<li>jenkins.BadHTTPException: Error communicating with server<br><img src="./img/devops-12.png" alt="devops-1.png" style="width:800px;"></li>
-</ul>
-<ul>
-<li>Error 403 anonymous is missing<br>默认安装的情况下，匿名用户是没有任何权限的，这里修改配置，让匿名用户只拥有 查看Job、Job Configure 权限</li>
-</ul>
-<p>点击 Manage Jenkins - Configure Global Security</p>
-<p><img src="./img/devops-13.jpg" alt="devops-1.png" style="width:800px;"></p>
-<p>修改 Access Control - Authorization 部分的配置，选择 Project-based Matrix Authorization Strategy</p>
-<p>这里需要添加一个 root 用户，步骤为在 User/group to add: 填入 root，然后点击 Add，移到最右侧，点击 ✔️，让 root 用户拥有所有权限，此步非常重要，不然保存后会导致 admin is missing the Overall/Read permission 错误</p>
-<p>匿名用户勾选 Overall 的 Read 权限，Job 的 Configure 和 Read 权限，如下图：</p>
-<p><img src="./img/devops-14.jpg" alt="devops-1.png" style="width:800px;"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-04/">展开全文 >></a>
         </p>
       
 
@@ -798,338 +985,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-03/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2018-10-10-k8s-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/10/2018-10-10-k8s-02/">安装中控机的ansible环境</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/10/2018-10-10-k8s-02/" class="archive-article-date">
-  	<time datetime="2018-10-10T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="服务器列表"><a href="#服务器列表" class="headerlink" title="服务器列表"></a>服务器列表</h3><table>
-<thead>
-<tr>
-<th>主机名</th>
-<th>内网IP</th>
-<th>外网IP</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>deploy</td>
-<td>192.168.111.69</td>
-<td>172.16.153.70</td>
-</tr>
-<tr>
-<td>kmaster</td>
-<td>192.168.111.74</td>
-<td>172.16.153.71</td>
-</tr>
-<tr>
-<td>knode01</td>
-<td>192.168.111.71</td>
-<td>172.16.153.72</td>
-</tr>
-<tr>
-<td>knode02</td>
-<td>192.168.111.68</td>
-<td>172.16.153.73</td>
-</tr>
-<tr>
-<td>knode03</td>
-<td>192.168.111.70</td>
-<td>172.16.153.74</td>
-</tr>
-<tr>
-<td>knode04</td>
-<td>192.168.111.72</td>
-<td>172.16.153.75</td>
-</tr>
-<tr>
-<td>knode05</td>
-<td>192.168.111.73</td>
-<td>172.16.153.76</td>
-</tr>
-</tbody>
-</table>
-<h3 id="etc-hosts追加内容"><a href="#etc-hosts追加内容" class="headerlink" title="/etc/hosts追加内容"></a>/etc/hosts追加内容</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.69</span> <span class="selector-tag">deploy</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.74</span> <span class="selector-tag">kmaster</span> </div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.71</span> <span class="selector-tag">knode01</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.68</span> <span class="selector-tag">knode02</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.70</span> <span class="selector-tag">knode03</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">knode04</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.73</span> <span class="selector-tag">knode05</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.70</span> <span class="selector-tag">etcd01</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">etcd02</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">etcd03</span></div></pre></td></tr></table></figure>
-<h3 id="配置ssh密钥登陆"><a href="#配置ssh密钥登陆" class="headerlink" title="配置ssh密钥登陆"></a>配置ssh密钥登陆</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -q -t rsa -b <span class="number">2048</span> -f ~/.ssh/id_rsa -C <span class="string">''</span> -N <span class="string">''</span></div><div class="line"></div><div class="line"><span class="comment">#$IP为本虚机地址，按照提示输入yes 和root密码</span></div><div class="line"></div><div class="line">ssh-<span class="keyword">copy</span><span class="bash">-id 172.16.153.70</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.71</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.72</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.73</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.74</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.75</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.76</span></div></pre></td></tr></table></figure>
-<h3 id="安装Ansible"><a href="#安装Ansible" class="headerlink" title="安装Ansible"></a>安装Ansible</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum -y <span class="keyword">install</span> epel-<span class="keyword">release</span></div><div class="line">yum <span class="keyword">install</span> ansible</div></pre></td></tr></table></figure>
-<h5 id="打开host-key-checking-vim-etc-ansible-ansible-cfg"><a href="#打开host-key-checking-vim-etc-ansible-ansible-cfg" class="headerlink" title="打开host_key_checking vim /etc/ansible/ansible.cfg"></a>打开host_key_checking vim /etc/ansible/ansible.cfg</h5><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">host_key_checking</span> = <span class="literal">False</span></div></pre></td></tr></table></figure>
-<h5 id="配置ansible的hosts文件-vim-etc-ansible-hosts"><a href="#配置ansible的hosts文件-vim-etc-ansible-hosts" class="headerlink" title="配置ansible的hosts文件 vim /etc/ansible/hosts"></a>配置ansible的hosts文件 vim /etc/ansible/hosts</h5><figure class="highlight gcode"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[all]</div><div class="line">kmaster </div><div class="line">k<span class="symbol">node01</span></div><div class="line">k<span class="symbol">node02</span></div><div class="line">k<span class="symbol">node03</span></div><div class="line">k<span class="symbol">node04</span></div><div class="line">k<span class="symbol">node05</span></div></pre></td></tr></table></figure>
-<h5 id="执行-ansible-m-ping-all"><a href="#执行-ansible-m-ping-all" class="headerlink" title="执行 ansible -m ping all"></a>执行 ansible -m ping all</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">knode05 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode04 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode01 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode02 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> kmaster | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode03 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<h5 id="利用ansible初始化各个K8S的节点服务器环境"><a href="#利用ansible初始化各个K8S的节点服务器环境" class="headerlink" title="利用ansible初始化各个K8S的节点服务器环境"></a>利用ansible初始化各个K8S的节点服务器环境</h5><pre><code> # 安装yum源
- ansible -m shell -a &apos;yum -y install epel-release&apos; all 
-
- # 关闭所有服务器防火墙
- ansible -m shell -a &apos;systemctl stop firewalld &amp; systemctl disable firewalld &amp; &apos; all
-
- # 同步同钟
- ansible -m shell -a &apos;yum -y install ntp &amp; systemctl start ntpd &amp; systemctl enable ntpd  &apos; all 
-
- # 拷贝/etc/hosts文件到各节点
- ansible all -m copy -a &quot;src=/etc/hosts dest=/etc/&quot; 
-
-# 删除 这个不用执行，这个在证书不对时要用
- ansible etcd -m file -a &quot;path=/etc/etcd/ssl state=absent&quot;
-</code></pre>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/devops/" class="article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-02/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2018-03-08-android-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/08/2018-03-08-android-02/">Appium测试【第二章】</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/08/2018-03-08-android-02/" class="archive-article-date">
-  	<time datetime="2018-03-08T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="懒人手记"><a href="#懒人手记" class="headerlink" title="懒人手记"></a>懒人手记</h3><p>手机做测试时需要监听数据，要么开热点转发，要么ADB，每次都是很麻烦，突然发奇想，在HACK工具中有ARP欺骗导入数据的 ettercap， 所以我们可以利用这个工具，不再用热点、数据线、ADB一堆的东西，直接欺骗手机的网关位置，来骗取数据到本地。</p>
-<h5 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h5><pre><code>brew install ettercap
-</code></pre><h5 id="启动转发"><a href="#启动转发" class="headerlink" title="启动转发"></a>启动转发</h5><pre><code>sudo sysctl -w net.inet.ip.forwarding=1
-sudo sysctl -w net.inet6.ip6.forwarding=1
-</code></pre><h5 id="macosx开启转发"><a href="#macosx开启转发" class="headerlink" title="macosx开启转发"></a>macosx开启转发</h5><p>新加一个文件：/etc/pf.anchors/http</p>
-<pre><code>rdr pass on lo0 inet proto tcp from any to any port 80 -&gt; 127.0.0.1 port 8080
-rdr pass on lo0 inet proto tcp from any to any port 443 -&gt; 127.0.0.1 port 4443
-rdr pass on en0 inet proto tcp from any to any port 80 -&gt; 127.0.0.1 port 8080
-rdr pass on en0 inet proto tcp from any to any port 443 -&gt; 127.0.0.1 port 4443
-</code></pre><p>检查其正确性：</p>
-<pre><code>pfctl -vnf /etc/pf.anchors/http
-</code></pre><p>在 rdr-anchor “com.apple/*” 下添加</p>
-<pre><code>rdr-anchor &quot;http-forwarding&quot;
-</code></pre><p>在 load anchor “com.apple” from “/etc/pf.anchors/com.apple” 下添加</p>
-<pre><code>load anchor &quot;http-forwarding&quot; from &quot;/etc/pf.anchors/http&quot;
-</code></pre><p>最后导入并允许运行：</p>
-<pre><code>pfctl -ef /etc/pf.conf
-</code></pre><p>使用 -e 命令启用</p>
-<pre><code>sudo pfctl -E
-</code></pre><p>使用 -d 命令关闭 pf：</p>
-<pre><code>sudo pfctl -d
-</code></pre><h5 id="启动arp"><a href="#启动arp" class="headerlink" title="启动arp"></a>启动arp</h5><pre><code>sudo ettercap -i en0 -Tq -M arp:remote /192.168.3.23///
-192.168.3.23 这个IP是手机IP
-</code></pre><h5 id="用nginx测试"><a href="#用nginx测试" class="headerlink" title="用nginx测试"></a>用nginx测试</h5><p>监听8080 在web上访问80看看 可不可以正常</p>
-<pre><code>brew services start nginx
-brew services stop nginx
-</code></pre><h5 id="开启wireshark-开始监听吧。。。。"><a href="#开启wireshark-开始监听吧。。。。" class="headerlink" title="开启wireshark 开始监听吧。。。。"></a>开启wireshark 开始监听吧。。。。</h5><hr>
-<h3 id="ettercap参数说明"><a href="#ettercap参数说明" class="headerlink" title="ettercap参数说明"></a>ettercap参数说明</h3><pre><code>参数介绍：
-攻击和嗅探类
-
-    -M, --mitm
-
-        ARP欺骗，参数 -M arp
-
-            remote  #双向模式，同时arp欺骗通信的双方，参数 -M arp:remote
-            oneway       #单向模式，只arp欺骗第一个目标到第二个目标的通信，参数 -M arp:oneway
-
-        icmp欺骗，参数 -M icmp:(MAC/IP)
-        DHCP欺骗，参数 -M dhcp:(ip_pool/netmask/dns)，如 -M dhcp:192.168.0.30,35,50-60/255.255.255.0/192.168.0.1是给新接入的主机提供ip地址，子网掩码和网关，-M dhcp:/255.255.255.0/192.168.0.1则不提供ip地址，只欺骗子网掩码和网关
-        Port Stealing，这个没搞懂～
-
-    -o, --only-mitm   #只进行中间人攻击，不进行嗅探
-    -f , --pcapfilter     #加载过滤器
-    -B, --bridge    #Bridged sniffing
-
-离线类参数
-
-    -r, --read       #读取本地文件
-    -w, --write      #将嗅探数据保存到本地
-
-界面显示类
-
-    -T, --text       #文本模式显示  
-    -q, --quiet        #安静模式，不显示嗅探数据
-    -s, --script        #加载脚本
-    -C, --curses       #curses-UI模式
-    -G, --gtk       #GTK-UI模式
-    -D, --daemonize       #daemonize后台模式
-
-普通选项：
-
-    -b, --broadcast        #嗅探广播地址
-    -i, --iface         #选择网卡
-    -I, --iflist            #列出可用网卡
-    -Y, --secondary         #后备网卡
-    -A, --address          #ip地址，针对一网卡多ip的情况
-    -n, --netmask             
-    -R, --reversed
-    -z, --silent              #不进行arp毒化和主机扫描
-    -p, --nopromisc
-    -S, --nosslmitm                 #不使用ssl中间人攻击
-    -t, --proto         #协议，tcp/udp/all，默认为all
-    -u, --unoffensive
-    -j, --load-hosts                #加载保存的主机地址
-    -k, --save-hosts                #保存扫描到的主机地址
-    -P, --plugin                 #载入插件
-    -F, --filter                     #载入过滤器文件
-    -W, --wifi-key            #载入wifi密码：
-
-              --wifi-key wep:128:p:secret
-              --wifi-key wep:128:s:ettercapwep0
-              --wifi-key &apos;wep:64:s:\x01\x02\x03\x04\x05&apos;
-              --wifi-key wpa:pwd:ettercapwpa:ssid
-              --wifi-key wpa:psk:663eb260e87cf389c6bd7331b28d82f5203b0cae4e315f9cbb7602f3236708a6
-
-    -a, --config                #载入并使用一个非默认配置文件
-    --certificate              #ssl攻击使用指定的 证书文件
-    --private-key            #ssl攻击使用指定的私钥文件
-
-可视化参数
-
-    -e, --regex         #使用一个正则表达式
-    -V, --visual           #显示方式
-        hex            #16进制
-        ascii           #ASCII码
-        text            
-        ebcdic
-        html
-        utf8
-    -d, --dns           #把ip地址转化为主机名
-    -E, --ext-headers
-    -Q, --superquiet          #超级安静模式，啥信息都不显示，只保存
-
-日志记录选项
-
-    -L, --log             #把所有数据包保存log文件
-    -l, --log-info           #读取离线log文件信息
-    -m, --log-msg              #显示存储在log文件里所有用户用ettercap抓取的信息
-    -c, --compress            #通过gzip算法压缩log文件
-    -o, --only-local           #只存储本地局域网主机配置信息
-    -O, --only-remote           #只存储远程主机配置信息
-
-
-常见的参数组合：
-
-ettercap -Tqi eth0 -M ARP // //           #arp毒化eth0所在的网段，安静模式文本显示
-
-ettercap -Tzq /10.0.0.1/21,22,23  -w hack.pcap          #监听10.0.0.1的ftp，ssh，telnet信息,并保存到本地
-
-ettercap -Tq -P dns_spoof -M arp /192.168.1.120/ //        #对192.168.1.120进行dns欺骗，使用默认网卡eth0,文本模式安静显示
-
-ettercap -Tqi eth0 -L sniffed_data -F filter.ef -M arp:remote /10.0.0.2/80 //     #使用过滤并监听10.0.0.2在80端口的所有通信，安静模式文本显示，保存数据到本地
-</code></pre>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Appium测试</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Appium测试/" class="article-tag-list-link color4">Appium测试</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/08/2018-03-08-android-02/">展开全文 >></a>
         </p>
       
 
