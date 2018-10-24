@@ -789,112 +789,6 @@ X = true    | 成功：X = true
 
 
   
-    <article id="post-2017-11-13-erlang-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/12/2017-11-13-erlang-01/">Erlang程序设计(第2版) 读书笔记【第一章】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/11/12/2017-11-13-erlang-01/" class="archive-article-date">
-  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="第1章-什么是并发"><a href="#第1章-什么是并发" class="headerlink" title="第1章 什么是并发"></a>第1章 什么是并发</h3><h5 id="并发和并行含义"><a href="#并发和并行含义" class="headerlink" title="并发和并行含义"></a>并发和并行含义</h5><ul>
-<li><p>区分基于操作系统的并发和基于语言的并发很重要，因为如果使用基于操作系统的并发，那么程序在不同的操作系统上就会有不同的工作方式。Erlang的并发在所有操作系统上都有着相同的工作方式。要用Erlang编写并发程序，只需掌握Erlang，而不必掌握操作系统的并发机制</p>
-</li>
-<li><p>并发程序是一种用并发编程语言编写的程序。编写并发程序是为了提升性能、可扩展性和容错性。（nodejs erlang）</p>
-</li>
-<li><p>并发编程语言拥有专门用于编写并发程序的语言结构。这些结构是编程语言的主要部分， 在所有操作系统上都有着相同的表现。</p>
-</li>
-<li>并行计算机是一种有多个处理单元（CPU或核心）同时运行的计算机。</li>
-</ul>
-<h5 id="模块和函数"><a href="#模块和函数" class="headerlink" title="模块和函数"></a>模块和函数</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(test)</span>. <span class="comment">%%模块声明</span></div><div class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></div><div class="line">	io:format(<span class="string">"~w~n"</span>,[Name]).</div></pre></td></tr></table></figure>
-<ul>
-<li>模块名必须以一个小写字母开头。</li>
-<li>导出声明指明了模块里哪些函数可以从模块外部进行调用。</li>
-<li>-export([init/1]).语法的意思是带有一个参数。</li>
-<li>-export([funcname1/1，funcname2/1，funcname3/1，]). 导出多个函数列表的写法。</li>
-</ul>
-<h5 id="erlang起进程"><a href="#erlang起进程" class="headerlink" title="erlang起进程"></a>erlang起进程</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(test)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"><span class="keyword">-export</span><span class="params">([start/<span class="number">0</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">start</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  debugger:start(),</div><div class="line"></div><div class="line">  spawn(test,init,[<span class="string">"hello"</span>]).</div><div class="line"></div><div class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></div><div class="line"></div><div class="line">  io:format(<span class="string">"~w~n"</span>,[Name]).</div></pre></td></tr></table></figure>
-<ul>
-<li><p>spawn(ModName,FunName,[Arg1,Arg2,….])</p>
-</li>
-<li><p>当Erlang运行时系统执行spawn时，它会创建一个新进程（不是操作系统的进程，而是一个由Erlang系统管理的轻量级进程）。当进程创建完毕后，它便开始执行参数所指定的代码。ModName 是包含想要执行代码的模块名。FuncName是模块里的函数名，而[Arg1, Arg2, …]是一个列表，包含了想要执行的函数参数。因此，下面这个调用的意思是启动一个执行函数person:init(“hello”)的进程</p>
-</li>
-</ul>
-<h5 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h5><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Susannah!&#123;<span class="keyword">self</span>(),<span class="string">"send message"</span>&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>Pid ! Msg语法的意思是发送消息Msg到进程Pid。大括号里的self()参数标明了发送消息的进程（在此处是Joe）。</li>
-</ul>
-<h5 id="接收消息"><a href="#接收消息" class="headerlink" title="接收消息"></a>接收消息</h5><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">receive</div><div class="line">	&#123;From, Message&#125; -&gt;</div><div class="line">		......</div><div class="line">end</div></pre></td></tr></table></figure>
-<ul>
-<li>当Susannah的进程接收到一条消息时，变量From会绑定为Joe，这样Susannah就知道消息来自何处，变量Message则会包含此消息</li>
-</ul>
-<blockquote>
-<p>这样吧</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/12/2017-11-13-erlang-01/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2017-11-14-erlang-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -998,6 +892,109 @@ X = true    | 成功：X = true
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/11/12/2017-11-14-erlang-02/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2017-11-13-git-hacker" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/12/2017-11-13-git-hacker/">在台机器上登录两个GITHUB账号</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/12/2017-11-13-git-hacker/" class="archive-article-date">
+  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>###<br>    git config –global –unset user.name<br>    git config –global –unset user.email</p>
+<pre><code>ssh-keygen -t rsa -C &quot;TEST2@gmail.com&quot; -f ~/.ssh/TEST2
+ssh-keygen -t rsa -C &quot;TEST1@gmail.com&quot; -f ~/.ssh/TEST1
+</code></pre><h3 id="TEST1-and-TEST2两个账号在GITHUB上"><a href="#TEST1-and-TEST2两个账号在GITHUB上" class="headerlink" title="TEST1 and TEST2两个账号在GITHUB上"></a>TEST1 and TEST2两个账号在GITHUB上</h3><pre><code>cat ~/.ssh/config
+
+Host gitlab.test.com
+  HostName gitlab.test.com
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/innergit
+
+Host TEST1.github.com
+  HostName github.com
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/TEST1
+
+
+Host TEST2.github.com
+  HostName github.com
+  User TEST2
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/TEST2
+</code></pre><h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><pre><code>git clone git@TEST2.github.com:TEST2/Alcman.git
+cd project_name1
+git config  user.name &quot;TEST2&quot;
+git config  user.email &quot;TEST2@gmail.com&quot;
+
+
+cd project_name2
+git clone git@TEST1.github.com:TEST1/rake-flow.git
+git config  user.name &quot;TEST1&quot;
+git config  user.email &quot;TEST1@gmail.com&quot;
+</code></pre>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/12/2017-11-13-git-hacker/">展开全文 >></a>
         </p>
       
 
@@ -1130,15 +1127,15 @@ X = true    | 成功：X = true
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">ansible</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1158,11 +1155,11 @@ X = true    | 成功：X = true
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+                <a href="javascript:void(0)" class="js-tag color5">ceph</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ceph</a>
+                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
               </li>
              
               <li class="article-tag-list-item">
