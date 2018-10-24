@@ -157,19 +157,19 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-2017-11-13-erlang-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2017-11-13-git-hacker" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/12/2017-11-13-erlang-01/">Erlang程序设计(第2版) 读书笔记【第一章】</a>
+      <a class="article-title" href="/2017/11/12/2017-11-13-git-hacker/">在台机器上登录两个GITHUB账号</a>
     </h1>
   
 
         
-        <a href="/2017/11/12/2017-11-13-erlang-01/" class="archive-article-date">
+        <a href="/2017/11/12/2017-11-13-git-hacker/" class="archive-article-date">
   	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
 </a>
         
@@ -177,41 +177,38 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="第1章-什么是并发"><a href="#第1章-什么是并发" class="headerlink" title="第1章 什么是并发"></a>第1章 什么是并发</h3><h5 id="并发和并行含义"><a href="#并发和并行含义" class="headerlink" title="并发和并行含义"></a>并发和并行含义</h5><ul>
-<li><p>区分基于操作系统的并发和基于语言的并发很重要，因为如果使用基于操作系统的并发，那么程序在不同的操作系统上就会有不同的工作方式。Erlang的并发在所有操作系统上都有着相同的工作方式。要用Erlang编写并发程序，只需掌握Erlang，而不必掌握操作系统的并发机制</p>
-</li>
-<li><p>并发程序是一种用并发编程语言编写的程序。编写并发程序是为了提升性能、可扩展性和容错性。（nodejs erlang）</p>
-</li>
-<li><p>并发编程语言拥有专门用于编写并发程序的语言结构。这些结构是编程语言的主要部分， 在所有操作系统上都有着相同的表现。</p>
-</li>
-<li>并行计算机是一种有多个处理单元（CPU或核心）同时运行的计算机。</li>
-</ul>
-<h5 id="模块和函数"><a href="#模块和函数" class="headerlink" title="模块和函数"></a>模块和函数</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(test)</span>. <span class="comment">%%模块声明</span></div><div class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></div><div class="line">	io:format(<span class="string">"~w~n"</span>,[Name]).</div></pre></td></tr></table></figure>
-<ul>
-<li>模块名必须以一个小写字母开头。</li>
-<li>导出声明指明了模块里哪些函数可以从模块外部进行调用。</li>
-<li>-export([init/1]).语法的意思是带有一个参数。</li>
-<li>-export([funcname1/1，funcname2/1，funcname3/1，]). 导出多个函数列表的写法。</li>
-</ul>
-<h5 id="erlang起进程"><a href="#erlang起进程" class="headerlink" title="erlang起进程"></a>erlang起进程</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(test)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"><span class="keyword">-export</span><span class="params">([start/<span class="number">0</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">start</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  debugger:start(),</div><div class="line"></div><div class="line">  spawn(test,init,[<span class="string">"hello"</span>]).</div><div class="line"></div><div class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></div><div class="line"></div><div class="line">  io:format(<span class="string">"~w~n"</span>,[Name]).</div></pre></td></tr></table></figure>
-<ul>
-<li><p>spawn(ModName,FunName,[Arg1,Arg2,….])</p>
-</li>
-<li><p>当Erlang运行时系统执行spawn时，它会创建一个新进程（不是操作系统的进程，而是一个由Erlang系统管理的轻量级进程）。当进程创建完毕后，它便开始执行参数所指定的代码。ModName 是包含想要执行代码的模块名。FuncName是模块里的函数名，而[Arg1, Arg2, …]是一个列表，包含了想要执行的函数参数。因此，下面这个调用的意思是启动一个执行函数person:init(“hello”)的进程</p>
-</li>
-</ul>
-<h5 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h5><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Susannah!&#123;<span class="keyword">self</span>(),<span class="string">"send message"</span>&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>Pid ! Msg语法的意思是发送消息Msg到进程Pid。大括号里的self()参数标明了发送消息的进程（在此处是Joe）。</li>
-</ul>
-<h5 id="接收消息"><a href="#接收消息" class="headerlink" title="接收消息"></a>接收消息</h5><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">receive</div><div class="line">	&#123;From, Message&#125; -&gt;</div><div class="line">		......</div><div class="line">end</div></pre></td></tr></table></figure>
-<ul>
-<li>当Susannah的进程接收到一条消息时，变量From会绑定为Joe，这样Susannah就知道消息来自何处，变量Message则会包含此消息</li>
-</ul>
-<blockquote>
-<p>这样吧</p>
-</blockquote>
+        <p>###<br>    git config –global –unset user.name<br>    git config –global –unset user.email</p>
+<pre><code>ssh-keygen -t rsa -C &quot;TEST2@gmail.com&quot; -f ~/.ssh/TEST2
+ssh-keygen -t rsa -C &quot;TEST1@gmail.com&quot; -f ~/.ssh/TEST1
+</code></pre><h3 id="TEST1-and-TEST2两个账号在GITHUB上"><a href="#TEST1-and-TEST2两个账号在GITHUB上" class="headerlink" title="TEST1 and TEST2两个账号在GITHUB上"></a>TEST1 and TEST2两个账号在GITHUB上</h3><pre><code>cat ~/.ssh/config
 
+Host gitlab.test.com
+  HostName gitlab.test.com
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/innergit
+
+Host TEST1.github.com
+  HostName github.com
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/TEST1
+
+
+Host TEST2.github.com
+  HostName github.com
+  User TEST2
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/TEST2
+</code></pre><h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><pre><code>git clone git@TEST2.github.com:TEST2/Alcman.git
+cd project_name1
+git config  user.name &quot;TEST2&quot;
+git config  user.email &quot;TEST2@gmail.com&quot;
+
+
+cd project_name2
+git clone git@TEST1.github.com:TEST1/rake-flow.git
+git config  user.name &quot;TEST1&quot;
+git config  user.email &quot;TEST1@gmail.com&quot;
+</code></pre>
       
 
       
@@ -224,7 +221,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
         		</li>
       		
 		</ul>
@@ -236,7 +233,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
         		</li>
       		
 		</ul>
@@ -245,7 +242,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/12/2017-11-13-erlang-01/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/11/12/2017-11-13-git-hacker/">展开全文 >></a>
         </p>
       
 
@@ -1469,6 +1466,191 @@
 
 
   
+    <article id="post-2017-09-21-flume-kafka-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/20/2017-09-21-flume-kafka-1/">kafka-flume集群环境搭建【3】</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/20/2017-09-21-flume-kafka-1/" class="archive-article-date">
+  	<time datetime="2017-09-20T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h3 id="1-Flume与Kafka整合-把flume中的数据sink到Kafka"><a href="#1-Flume与Kafka整合-把flume中的数据sink到Kafka" class="headerlink" title="1.  Flume与Kafka整合 把flume中的数据sink到Kafka"></a>1.  Flume与Kafka整合 把flume中的数据sink到Kafka</h3><ol>
+<li>kafka 集群已经完成</li>
+<li>flume 集群已经完成</li>
+<li>flume 的数据存入kafka</li>
+</ol>
+<p>flume client -&gt; flume server -&gt; kafka 这样也是说只要改flume server中sink配置即可</p>
+<h3 id="2-配置flume"><a href="#2-配置flume" class="headerlink" title="2. 配置flume"></a>2. 配置flume</h3><h5 id="flume-client-conf"><a href="#flume-client-conf" class="headerlink" title="flume-client.conf"></a>flume-client.conf</h5><pre><code>[root@yaliceshi-1-2 ~]# cat /usr/local/flume/conf/flume-client.conf 
+#Agent
+flumeAgent.channels = c1
+flumeAgent.sources  = s1
+flumeAgent.sinks    = k1 
+#flumeAgent Spooling Directory Source
+#注(1)
+flumeAgent.sources.s1.type = spooldir
+flumeAgent.sources.s1.spoolDir  =/data/logs/
+flumeAgent.sources.s1.fileHeader = true
+flumeAgent.sources.s1.deletePolicy =immediate
+flumeAgent.sources.s1.batchSize =1000
+flumeAgent.sources.s1.channels =c1
+flumeAgent.sources.s1.deserializer.maxLineLength =1048576
+#flumeAgent FileChannel
+#注(2)
+flumeAgent.channels.c1.type = file
+flumeAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
+flumeAgent.channels.c1.dataDirs = /data/flume/spool/data
+flumeAgent.channels.c1.capacity = 200000000
+flumeAgent.channels.c1.keep-alive = 30
+flumeAgent.channels.c1.write-timeout = 30
+flumeAgent.channels.c1.checkpoint-timeout=600
+# flumeAgent Sinks
+#注(3)
+flumeAgent.sinks.k1.channel = c1
+flumeAgent.sinks.k1.type = avro
+# connect to CollectorMainAgent
+flumeAgent.sinks.k1.hostname = kafka103
+flumeAgent.sinks.k1.port = 44444
+</code></pre><font style="color:red">  sources 采用 spooldir 类型，监控/data/logs/目录中文件的变化 </font>
+
+<h5 id="flume-server-conf"><a href="#flume-server-conf" class="headerlink" title="flume-server.conf"></a>flume-server.conf</h5><pre><code>[root@yaliceshi-1-3 ~]# cat  /usr/local/flume/conf/flume-server.conf
+#flumeConsolidationAgent
+flumeConsolidationAgent.channels = c1
+flumeConsolidationAgent.sources  = s1
+flumeConsolidationAgent.sinks    = k1 
+
+#flumeConsolidationAgent Avro Source
+#注(4)
+flumeConsolidationAgent.sources.s1.type = avro
+flumeConsolidationAgent.sources.s1.channels = c1
+flumeConsolidationAgent.sources.s1.bind = kafka103
+flumeConsolidationAgent.sources.s1.port = 44444
+
+#flumeConsolidationAgent FileChannel
+flumeConsolidationAgent.channels.c1.type = file
+flumeConsolidationAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
+flumeConsolidationAgent.channels.c1.dataDirs = /data/flume/spool/data
+flumeConsolidationAgent.channels.c1.capacity = 200000000
+flumeConsolidationAgent.channels.c1.keep-alive = 30
+flumeConsolidationAgent.channels.c1.write-timeout = 30
+flumeConsolidationAgent.channels.c1.checkpoint-timeout=600
+
+##flumeConsolidationAgent Memory Channel
+#flumeConsolidationAgent.channels.c1.type = memory
+#flumeConsolidationAgent.channels.c1.capacity = 10000
+#flumeConsolidationAgent.channels.c1.transactionCapacity = 10000
+#flumeConsolidationAgent.channels.c1.byteCapacityBufferPercentage = 20
+#flumeConsolidationAgent.channels.c1.byteCapacity = 800000
+
+#flumeConsolidationAgent Sinks
+#注(5)
+flumeConsolidationAgent.sinks.k1.channel= c1
+flumeConsolidationAgent.sinks.k1.type = file_roll
+flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
+flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
+flumeConsolidationAgent.sinks.k1.batchSize = 10000
+</code></pre><font style="color:red">  sinks 采用 file_roll 类型，数据保存到 /data/tmp目录中 </font>
+
+
+
+<h5 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h5><pre><code>#flumeConsolidationAgent Sinks
+#注(5)
+#flumeConsolidationAgent.sinks.k1.channel= c1
+#flumeConsolidationAgent.sinks.k1.type = file_roll
+#flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
+#flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
+#flumeConsolidationAgent.sinks.k1.batchSize = 10000
+</code></pre><p>上面的注释掉加上下面的内容</p>
+<pre><code>#set sink to hdfs
+flumeConsolidationAgent.sinks.k1.type=org.apache.flume.sink.kafka.KafkaSink
+flumeConsolidationAgent.sinks.k1.topic = ScalaTopic
+flumeConsolidationAgent.sinks.k1.brokerList = kafka102:9092, kafka103:9092, kafka104:9092
+flumeConsolidationAgent.sinks.k1.requiredAcks = 1
+flumeConsolidationAgent.sinks.k1.batchSize = 20
+flumeConsolidationAgent.sinks.k1.channel=c1
+</code></pre><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>启动flume server</p>
+<pre><code>[root@yaliceshi-1-3 ~]#/usr/local/flume/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-server.conf --name flumeConsolidationAgent -Dflume.root.logger=INFO,console
+</code></pre><p>启动flume client</p>
+<pre><code>[root@yaliceshi-1-2 ~]#/usr/local/apache-flume-1.7.0-bin/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-client.conf --name flumeAgent -Dflume.root.logger=INFO,console
+</code></pre><p>启动 kafka 的消费者</p>
+<pre><code>[root@yaliceshi-1-1 ~]/usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
+</code></pre><p>拷个文件到flume客户端监听目录</p>
+<pre><code>[root@yaliceshi-1-2 ~]# echo &quot;test wqc&quot; &gt; test.log;cp test.log  /data/logs
+</code></pre><p>拷个文件到flume客户端监听目录</p>
+<pre><code>[root@yaliceshi-1-1 ~]#  /usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
+
+test wqc
+</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>&gt;</p>
+<ul>
+<li><a href="http://blog.csdn.net/strongyoung88/article/details/52937835" target="_blank" rel="external">http://blog.csdn.net/strongyoung88/article/details/52937835</a></li>
+<li><a href="http://blog.csdn.net/minicto/article/details/53643496" target="_blank" rel="external">http://blog.csdn.net/minicto/article/details/53643496</a></li>
+<li><a href="http://blog.csdn.net/shouhuzhezhishen/article/details/64904848" target="_blank" rel="external">http://blog.csdn.net/shouhuzhezhishen/article/details/64904848</a></li>
+<li><a href="http://blog.csdn.net/candysleep/article/details/53241268" target="_blank" rel="external">http://blog.csdn.net/candysleep/article/details/53241268</a></li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/20/2017-09-21-flume-kafka-1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2017-09-18-cluster-flume-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1804,191 +1986,6 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 
 
   
-    <article id="post-2017-09-21-flume-kafka-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/20/2017-09-21-flume-kafka-1/">kafka-flume集群环境搭建【3】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/20/2017-09-21-flume-kafka-1/" class="archive-article-date">
-  	<time datetime="2017-09-20T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h3 id="1-Flume与Kafka整合-把flume中的数据sink到Kafka"><a href="#1-Flume与Kafka整合-把flume中的数据sink到Kafka" class="headerlink" title="1.  Flume与Kafka整合 把flume中的数据sink到Kafka"></a>1.  Flume与Kafka整合 把flume中的数据sink到Kafka</h3><ol>
-<li>kafka 集群已经完成</li>
-<li>flume 集群已经完成</li>
-<li>flume 的数据存入kafka</li>
-</ol>
-<p>flume client -&gt; flume server -&gt; kafka 这样也是说只要改flume server中sink配置即可</p>
-<h3 id="2-配置flume"><a href="#2-配置flume" class="headerlink" title="2. 配置flume"></a>2. 配置flume</h3><h5 id="flume-client-conf"><a href="#flume-client-conf" class="headerlink" title="flume-client.conf"></a>flume-client.conf</h5><pre><code>[root@yaliceshi-1-2 ~]# cat /usr/local/flume/conf/flume-client.conf 
-#Agent
-flumeAgent.channels = c1
-flumeAgent.sources  = s1
-flumeAgent.sinks    = k1 
-#flumeAgent Spooling Directory Source
-#注(1)
-flumeAgent.sources.s1.type = spooldir
-flumeAgent.sources.s1.spoolDir  =/data/logs/
-flumeAgent.sources.s1.fileHeader = true
-flumeAgent.sources.s1.deletePolicy =immediate
-flumeAgent.sources.s1.batchSize =1000
-flumeAgent.sources.s1.channels =c1
-flumeAgent.sources.s1.deserializer.maxLineLength =1048576
-#flumeAgent FileChannel
-#注(2)
-flumeAgent.channels.c1.type = file
-flumeAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
-flumeAgent.channels.c1.dataDirs = /data/flume/spool/data
-flumeAgent.channels.c1.capacity = 200000000
-flumeAgent.channels.c1.keep-alive = 30
-flumeAgent.channels.c1.write-timeout = 30
-flumeAgent.channels.c1.checkpoint-timeout=600
-# flumeAgent Sinks
-#注(3)
-flumeAgent.sinks.k1.channel = c1
-flumeAgent.sinks.k1.type = avro
-# connect to CollectorMainAgent
-flumeAgent.sinks.k1.hostname = kafka103
-flumeAgent.sinks.k1.port = 44444
-</code></pre><font style="color:red">  sources 采用 spooldir 类型，监控/data/logs/目录中文件的变化 </font>
-
-<h5 id="flume-server-conf"><a href="#flume-server-conf" class="headerlink" title="flume-server.conf"></a>flume-server.conf</h5><pre><code>[root@yaliceshi-1-3 ~]# cat  /usr/local/flume/conf/flume-server.conf
-#flumeConsolidationAgent
-flumeConsolidationAgent.channels = c1
-flumeConsolidationAgent.sources  = s1
-flumeConsolidationAgent.sinks    = k1 
-
-#flumeConsolidationAgent Avro Source
-#注(4)
-flumeConsolidationAgent.sources.s1.type = avro
-flumeConsolidationAgent.sources.s1.channels = c1
-flumeConsolidationAgent.sources.s1.bind = kafka103
-flumeConsolidationAgent.sources.s1.port = 44444
-
-#flumeConsolidationAgent FileChannel
-flumeConsolidationAgent.channels.c1.type = file
-flumeConsolidationAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
-flumeConsolidationAgent.channels.c1.dataDirs = /data/flume/spool/data
-flumeConsolidationAgent.channels.c1.capacity = 200000000
-flumeConsolidationAgent.channels.c1.keep-alive = 30
-flumeConsolidationAgent.channels.c1.write-timeout = 30
-flumeConsolidationAgent.channels.c1.checkpoint-timeout=600
-
-##flumeConsolidationAgent Memory Channel
-#flumeConsolidationAgent.channels.c1.type = memory
-#flumeConsolidationAgent.channels.c1.capacity = 10000
-#flumeConsolidationAgent.channels.c1.transactionCapacity = 10000
-#flumeConsolidationAgent.channels.c1.byteCapacityBufferPercentage = 20
-#flumeConsolidationAgent.channels.c1.byteCapacity = 800000
-
-#flumeConsolidationAgent Sinks
-#注(5)
-flumeConsolidationAgent.sinks.k1.channel= c1
-flumeConsolidationAgent.sinks.k1.type = file_roll
-flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
-flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
-flumeConsolidationAgent.sinks.k1.batchSize = 10000
-</code></pre><font style="color:red">  sinks 采用 file_roll 类型，数据保存到 /data/tmp目录中 </font>
-
-
-
-<h5 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h5><pre><code>#flumeConsolidationAgent Sinks
-#注(5)
-#flumeConsolidationAgent.sinks.k1.channel= c1
-#flumeConsolidationAgent.sinks.k1.type = file_roll
-#flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
-#flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
-#flumeConsolidationAgent.sinks.k1.batchSize = 10000
-</code></pre><p>上面的注释掉加上下面的内容</p>
-<pre><code>#set sink to hdfs
-flumeConsolidationAgent.sinks.k1.type=org.apache.flume.sink.kafka.KafkaSink
-flumeConsolidationAgent.sinks.k1.topic = ScalaTopic
-flumeConsolidationAgent.sinks.k1.brokerList = kafka102:9092, kafka103:9092, kafka104:9092
-flumeConsolidationAgent.sinks.k1.requiredAcks = 1
-flumeConsolidationAgent.sinks.k1.batchSize = 20
-flumeConsolidationAgent.sinks.k1.channel=c1
-</code></pre><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>启动flume server</p>
-<pre><code>[root@yaliceshi-1-3 ~]#/usr/local/flume/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-server.conf --name flumeConsolidationAgent -Dflume.root.logger=INFO,console
-</code></pre><p>启动flume client</p>
-<pre><code>[root@yaliceshi-1-2 ~]#/usr/local/apache-flume-1.7.0-bin/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-client.conf --name flumeAgent -Dflume.root.logger=INFO,console
-</code></pre><p>启动 kafka 的消费者</p>
-<pre><code>[root@yaliceshi-1-1 ~]/usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
-</code></pre><p>拷个文件到flume客户端监听目录</p>
-<pre><code>[root@yaliceshi-1-2 ~]# echo &quot;test wqc&quot; &gt; test.log;cp test.log  /data/logs
-</code></pre><p>拷个文件到flume客户端监听目录</p>
-<pre><code>[root@yaliceshi-1-1 ~]#  /usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
-
-test wqc
-</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>&gt;</p>
-<ul>
-<li><a href="http://blog.csdn.net/strongyoung88/article/details/52937835" target="_blank" rel="external">http://blog.csdn.net/strongyoung88/article/details/52937835</a></li>
-<li><a href="http://blog.csdn.net/minicto/article/details/53643496" target="_blank" rel="external">http://blog.csdn.net/minicto/article/details/53643496</a></li>
-<li><a href="http://blog.csdn.net/shouhuzhezhishen/article/details/64904848" target="_blank" rel="external">http://blog.csdn.net/shouhuzhezhishen/article/details/64904848</a></li>
-<li><a href="http://blog.csdn.net/candysleep/article/details/53241268" target="_blank" rel="external">http://blog.csdn.net/candysleep/article/details/53241268</a></li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/20/2017-09-21-flume-kafka-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2015-05-15-training-python-11" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2211,19 +2208,19 @@ test wqc
 
 
   
-    <article id="post-2017-04-20-training-python-15" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2015-04-19-training-python-5" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2017-04-20-training-python-15/">python技术分享[15]－ 视频教程</a>
+      <a class="article-title" href="/2017/09/15/2015-04-19-training-python-5/">python技术分享[5]－ splinter自动登录微博和qq空间</a>
     </h1>
   
 
         
-        <a href="/2017/09/15/2017-04-20-training-python-15/" class="archive-article-date">
+        <a href="/2017/09/15/2015-04-19-training-python-5/" class="archive-article-date">
   	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
 </a>
         
@@ -2231,12 +2228,35 @@ test wqc
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>###为了培训python录的视频，每周更新，欢迎拍砖！</p>
-<h3 id="请用无线观看，每个约200M大小"><a href="#请用无线观看，每个约200M大小" class="headerlink" title="请用无线观看，每个约200M大小"></a>请用无线观看，每个约200M大小</h3><embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=z0395naxllw&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
-
-<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=n0395xrwzdg&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
-
-<p>&gt;</p>
+        <h4 id="1-扩展安装："><a href="#1-扩展安装：" class="headerlink" title="1.扩展安装："></a>1.扩展安装：</h4><ul>
+<li>pip install splinter</li>
+<li>sudo pip install selenium</li>
+<li>sudo pip install mozmill</li>
+<li>要求python2.7+ </li>
+<li>默认使用firefox浏览器，如果需要使用chrom且在mac的情况下可用 brew install chromedriver 安装，不过请使用代理，要不download会失败。</li>
+</ul>
+<h4 id="2-登录微博代码："><a href="#2-登录微博代码：" class="headerlink" title="2.登录微博代码："></a>2.登录微博代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/python</span></div><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="string">利用splinter模块模拟发布微博，仅为QA讲例测试</span></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="keyword">from</span> splinter.browser <span class="keyword">import</span> Browser</div><div class="line"><span class="keyword">import</span> random</div><div class="line"><span class="keyword">import</span> time</div><div class="line"></div><div class="line">web_firefox = Browser(<span class="string">'firefox'</span>)</div><div class="line">web_firefox.visit(<span class="string">'http://weibo.com/login.php'</span>)</div><div class="line"></div><div class="line"><span class="keyword">if</span> web_firefox.find_by_name(<span class="string">'username'</span>):</div><div class="line">    <span class="keyword">print</span> <span class="string">'uname'</span></div><div class="line">    <span class="comment"># web_firefox.find_by_name('username').click()</span></div><div class="line">    <span class="comment"># 这个地方用by_name能找到，但是模拟点击时有问题，改成by_css</span></div><div class="line">    web_firefox.find_by_css(</div><div class="line">        <span class="string">"input[node-type=\"username\"]"</span>).fill(<span class="string">'xxxx@sina.com'</span>)</div><div class="line">time.sleep(random.randint(<span class="number">3</span>, <span class="number">10</span>))</div><div class="line"></div><div class="line"><span class="keyword">if</span> web_firefox.find_by_name(<span class="string">'password'</span>):</div><div class="line">    <span class="keyword">print</span> <span class="string">'passwd'</span></div><div class="line">    web_firefox.find_by_css(<span class="string">"input[node-type=\"password\"]"</span>).fill(<span class="string">'******'</span>)</div><div class="line">    </div><div class="line">time.sleep(random.randint(<span class="number">3</span>, <span class="number">15</span>))</div><div class="line"><span class="keyword">print</span> web_firefox.find_by_css(<span class="string">".loginbox .W_login_form .login_btn div a "</span>)[<span class="number">0</span>].click()</div><div class="line"></div><div class="line">time.sleep(random.randint(<span class="number">3</span>, <span class="number">10</span>))</div><div class="line"><span class="keyword">print</span> web_firefox.find_by_css(<span class="string">".input .W_input"</span>).fill(<span class="string">u'我说不让你用微博测试，你非用，得了吧。。。。 封ip了吧'</span>)</div><div class="line"></div><div class="line">time.sleep(random.randint(<span class="number">3</span>, <span class="number">10</span>))</div><div class="line"><span class="keyword">print</span> web_firefox.find_by_css(<span class="string">"a[node-type=\"submit\"]"</span>).click()</div></pre></td></tr></table></figure>
+<ul>
+<li>效果：<a href="http://pan.baidu.com/s/1pJA3QyR" target="_blank" rel="external">http://pan.baidu.com/s/1pJA3QyR</a></li>
+</ul>
+<h4 id="3-登录QQ空间代码："><a href="#3-登录QQ空间代码：" class="headerlink" title="3.登录QQ空间代码："></a>3.登录QQ空间代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">from</span> splinter <span class="keyword">import</span> Browser</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">splinter</span><span class="params">(url, q, p)</span>:</span></div><div class="line">    <span class="comment"># browser=Browser('chrome')</span></div><div class="line">    <span class="comment">#browser = Browser('webdriver.chrome')</span></div><div class="line">    browser = Browser(<span class="string">'firefox'</span>)</div><div class="line">    browser.visit(url)</div><div class="line">    time.sleep(<span class="number">5</span>)</div><div class="line">    <span class="comment">#fill in account and password</span></div><div class="line">    <span class="keyword">if</span> browser.find_by_id(<span class="string">'login_frame'</span>):</div><div class="line">        <span class="keyword">with</span> browser.get_iframe(<span class="string">'login_frame'</span>) <span class="keyword">as</span> frame:</div><div class="line">            frame.find_by_id(<span class="string">'switcher_plogin'</span>).click()</div><div class="line">            <span class="keyword">print</span> <span class="string">'输入账号...'</span></div><div class="line">            frame.find_by_id(<span class="string">'u'</span>).fill(q)</div><div class="line">            <span class="keyword">print</span> <span class="string">'输入密码...'</span></div><div class="line">            frame.find_by_id(<span class="string">'p'</span>).fill(p)</div><div class="line">            <span class="keyword">print</span> <span class="string">'尝试登录...'</span></div><div class="line">            frame.find_by_id(<span class="string">'login_button'</span>).click()</div><div class="line">            <span class="keyword">print</span> <span class="string">'完成登录动作...'</span></div><div class="line"></div><div class="line">    browser.find_by_id(<span class="string">'aMyFriends'</span>).click()</div><div class="line">    time.sleep(<span class="number">3</span>)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    website = <span class="string">'http://qzone.qq.com'</span></div><div class="line">    qq = <span class="string">'qq号'</span></div><div class="line">    pwd = <span class="string">'***********'</span></div><div class="line">    splinter(website, qq, pwd)</div></pre></td></tr></table></figure>
+<ul>
+<li>效果：<a href="http://pan.baidu.com/s/1hqfAaX2" target="_blank" rel="external">http://pan.baidu.com/s/1hqfAaX2</a></li>
+</ul>
+<h4 id="4-模块简介："><a href="#4-模块简介：" class="headerlink" title="4.模块简介："></a>4.模块简介：</h4><ul>
+<li>Splinter 可以通过api自动模拟用户行为，可以利用Splinter开发浏览器自动化操作。<br>* Splinter:  <a href="https://github.com/cobrateam/splinter" target="_blank" rel="external">https://github.com/cobrateam/splinter</a></li>
+</ul>
+<ul>
+<li>功能：<ul>
+<li>simple api 接口简单</li>
+<li>multi webdrivers (chrome webdriver, firefox webdriver, phantomjs webdriver, zopetestbrowser, - remote webdriver) 多个浏览器驱动</li>
+<li>css and xpath selectors css和xpath作为选择器</li>
+<li>support to iframe and alert 支持iframe和alert</li>
+<li>execute javascript 可执行javascript</li>
+<li>works with ajax and async javascript 支持javascript的ajax的异步操作</li>
+</ul>
+</li>
+</ul>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
 
       
@@ -2272,7 +2292,7 @@ test wqc
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2017-04-20-training-python-15/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/09/15/2015-04-19-training-python-5/">展开全文 >></a>
         </p>
       
 
@@ -2405,15 +2425,15 @@ test wqc
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2433,11 +2453,11 @@ test wqc
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ceph</a>
+                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+                <a href="javascript:void(0)" class="js-tag color5">ceph</a>
               </li>
              
               <li class="article-tag-list-item">

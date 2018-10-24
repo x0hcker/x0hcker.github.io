@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>//www.zwting.com/2018/10/24/2018-10-24-k8s-04/</loc>
+    <lastmod>2018-10-24T11:36:15.060Z</lastmod>
+    <data>
+        <display>
+        <title>ceph使用过程问题集锦</title>
+        <pubTime>2018-10-24T10:00:00.000Z</pubTime>
+        
+        <tag>k8s容器化</tag>
+         
+         
+           
+             
+              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>//www.zwting.com/2018/10/10/2018-10-10-k8s-01/</loc>
     <lastmod>2018-10-24T11:34:12.100Z</lastmod>
     <data>
@@ -152,26 +172,6 @@
         <pubTime>2018-10-24T06:00:00.000Z</pubTime>
         
         <tag>ceph</tag>
-         
-         
-           
-             
-              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>//www.zwting.com/2018/10/24/2018-10-24-k8s-04/</loc>
-    <lastmod>2018-10-24T11:26:16.460Z</lastmod>
-    <data>
-        <display>
-        <title>ceph使用过程问题集锦</title>
-        <pubTime>2018-10-24T10:00:00.000Z</pubTime>
-        
-        <tag>k8s容器化</tag>
          
          
            
@@ -594,6 +594,26 @@
 
     
   <url>
+    <loc>//www.zwting.com/2017/08/10/2016-02-10-php-ext-10/</loc>
+    <lastmod>2017-09-18T07:26:21.000Z</lastmod>
+    <data>
+        <display>
+        <title>php7扩展开发[10] 怎么样创建类详细</title>
+        <pubTime>2017-08-10T09:09:59.000Z</pubTime>
+        
+        <tag>PHP7扩展开发</tag>
+         
+         
+           
+             
+              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>//www.zwting.com/2017/09/15/2017-04-20-training-python-15/</loc>
     <lastmod>2017-09-18T07:26:21.000Z</lastmod>
     <data>
@@ -627,26 +647,6 @@
            
              
               <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>//www.zwting.com/2017/08/09/2016-02-09-php-ext-9/</loc>
-    <lastmod>2017-09-18T07:26:21.000Z</lastmod>
-    <data>
-        <display>
-        <title>php7扩展开发[9] zend_call_method和zend_call_function</title>
-        <pubTime>2017-08-09T09:09:59.000Z</pubTime>
-        
-        <tag>PHP7扩展开发</tag>
-         
-         
-           
-             
-              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
           
         </display>
     </data>
@@ -694,12 +694,12 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/08/10/2016-02-10-php-ext-10/</loc>
+    <loc>//www.zwting.com/2017/08/09/2016-02-09-php-ext-9/</loc>
     <lastmod>2017-09-18T07:26:21.000Z</lastmod>
     <data>
         <display>
-        <title>php7扩展开发[10] 怎么样创建类详细</title>
-        <pubTime>2017-08-10T09:09:59.000Z</pubTime>
+        <title>php7扩展开发[9] zend_call_method和zend_call_function</title>
+        <pubTime>2017-08-09T09:09:59.000Z</pubTime>
         
         <tag>PHP7扩展开发</tag>
          
@@ -814,12 +814,12 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/08/04/2016-02-04-php-ext-4/</loc>
+    <loc>//www.zwting.com/2017/08/03/2016-02-03-php-ext-3/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
         <display>
-        <title>php7扩展开发[4]读取php.ini内容</title>
-        <pubTime>2017-08-04T09:09:59.000Z</pubTime>
+        <title>php7扩展开发[3]类构造函数传参</title>
+        <pubTime>2017-08-03T09:09:59.000Z</pubTime>
         
         <tag>PHP7扩展开发</tag>
          
@@ -834,12 +834,12 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/08/03/2016-02-03-php-ext-3/</loc>
+    <loc>//www.zwting.com/2017/08/04/2016-02-04-php-ext-4/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
         <display>
-        <title>php7扩展开发[3]类构造函数传参</title>
-        <pubTime>2017-08-03T09:09:59.000Z</pubTime>
+        <title>php7扩展开发[4]读取php.ini内容</title>
+        <pubTime>2017-08-04T09:09:59.000Z</pubTime>
         
         <tag>PHP7扩展开发</tag>
          
@@ -894,6 +894,26 @@
 
     
   <url>
+    <loc>//www.zwting.com/2017/09/15/2015-05-17-training-python-12/</loc>
+    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>python技术分享[12]－ 利用BeautifulSoup进行采集</title>
+        <pubTime>2017-09-15T11:30:59.000Z</pubTime>
+        
+        <tag>python技术分享</tag>
+         
+         
+           
+             
+              <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>//www.zwting.com/2017/09/15/2015-05-20-training-python-13/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
@@ -914,11 +934,11 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-05-17-training-python-12/</loc>
+    <loc>//www.zwting.com/2017/09/15/2015-05-10-training-python-8/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
         <display>
-        <title>python技术分享[12]－ 利用BeautifulSoup进行采集</title>
+        <title>python技术分享[8]－ 数据库操作之MySQLdb</title>
         <pubTime>2017-09-15T11:30:59.000Z</pubTime>
         
         <tag>python技术分享</tag>
@@ -974,26 +994,6 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-05-10-training-python-8/</loc>
-    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>python技术分享[8]－ 数据库操作之MySQLdb</title>
-        <pubTime>2017-09-15T11:30:59.000Z</pubTime>
-        
-        <tag>python技术分享</tag>
-         
-         
-           
-             
-              <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>//www.zwting.com/2017/09/15/2015-04-27-training-python-7/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
@@ -1034,11 +1034,11 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-04-10-training-python-1/</loc>
+    <loc>//www.zwting.com/2017/09/15/2015-04-14-training-python-3/</loc>
     <lastmod>2017-09-18T07:21:53.000Z</lastmod>
     <data>
         <display>
-        <title>python技术分享[1]－python初步感观</title>
+        <title>python技术分享[3]－list dict在实际中的应用</title>
         <pubTime>2017-09-15T11:30:59.000Z</pubTime>
         
         <tag>python技术分享</tag>
@@ -1054,11 +1054,11 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-04-14-training-python-3/</loc>
+    <loc>//www.zwting.com/2017/09/15/2015-04-10-training-python-1/</loc>
     <lastmod>2017-09-18T07:21:53.000Z</lastmod>
     <data>
         <display>
-        <title>python技术分享[3]－list dict在实际中的应用</title>
+        <title>python技术分享[1]－python初步感观</title>
         <pubTime>2017-09-15T11:30:59.000Z</pubTime>
         
         <tag>python技术分享</tag>

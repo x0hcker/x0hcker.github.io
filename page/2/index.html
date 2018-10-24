@@ -157,88 +157,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-2018-10-11-k8s-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/11/2018-10-11-k8s-02/">CentOS7安装Gitlab</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/11/2018-10-11-k8s-02/" class="archive-article-date">
-  	<time datetime="2018-10-11T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-基础环境"><a href="#1-基础环境" class="headerlink" title="1.基础环境"></a>1.基础环境</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">## ssh</span></div><div class="line">yum install -y curl policycoreutils-python openssh-server</div><div class="line">systemctl <span class="builtin-name">enable</span> sshd</div><div class="line">systemctl start sshd</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">## mail</span></div><div class="line">yum install postfix</div><div class="line">systemctl <span class="builtin-name">enable</span> postfix</div><div class="line">systemctl start postfix</div></pre></td></tr></table></figure>
-<h3 id="安装-gitlab-ce"><a href="#安装-gitlab-ce" class="headerlink" title="安装 gitlab-ce"></a>安装 gitlab-ce</h3><p>添加 gitlab-ce 国内源 cat /etc/yum.repos.d/gitlab-ce.repo</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="section">[gitlab-ce]</span></div><div class="line"></div><div class="line"><span class="attr">name</span>=gitlab-ce</div><div class="line"></div><div class="line"><span class="attr">baseurl</span>=http://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/yum/el7</div><div class="line"></div><div class="line"><span class="attr">repo_gpgcheck</span>=<span class="number">0</span></div><div class="line"></div><div class="line"><span class="attr">gpgcheck</span>=<span class="number">0</span></div><div class="line"></div><div class="line"><span class="attr">enabled</span>=<span class="number">1</span></div><div class="line"></div><div class="line"><span class="attr">gpgkey</span>=https://packages.gitlab.com/gpg.key</div></pre></td></tr></table></figure>
-<h3 id="安装gitlab-ce"><a href="#安装gitlab-ce" class="headerlink" title="安装gitlab-ce"></a>安装gitlab-ce</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">curl -sS http<span class="variable">s:</span>//packages.gitlab.<span class="keyword">com</span>/install/repositories/gitlab/gitlab-<span class="keyword">ce</span>/script.rpm.<span class="keyword">sh</span> | sudo bash</div><div class="line"></div><div class="line">yum install gitlab-<span class="keyword">ce</span></div></pre></td></tr></table></figure>
-<h3 id="配置并启动-gitlab"><a href="#配置并启动-gitlab" class="headerlink" title="配置并启动 gitlab"></a>配置并启动 gitlab</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="attribute">gitlab-ctl reconfigure</span></div></pre></td></tr></table></figure>
-<h3 id="修改-gitlab-rb-和-gitlab-端口配置"><a href="#修改-gitlab-rb-和-gitlab-端口配置" class="headerlink" title="修改 gitlab.rb 和 gitlab 端口配置"></a>修改 gitlab.rb 和 gitlab 端口配置</h3><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">vi <span class="regexp">/etc/</span>gitlab/gitlab.rb</div><div class="line"></div><div class="line">nginx[<span class="string">'listen_port'</span>] = <span class="number">8000</span></div><div class="line"></div><div class="line">external_url <span class="string">'http://172.16.153.75'</span></div><div class="line"></div><div class="line">vi <span class="regexp">/var/</span>opt<span class="regexp">/gitlab/</span>nginx<span class="regexp">/conf/</span>gitlab-http.conf</div><div class="line"></div><div class="line">listen *:<span class="number">8000</span>; <span class="number">0</span></div><div class="line"></div><div class="line">server_name <span class="number">172.16</span><span class="number">.153</span><span class="number">.75</span>;</div></pre></td></tr></table></figure>
-<h1 id="重启服务"><a href="#重启服务" class="headerlink" title="重启服务"></a>重启服务</h1><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">gitlab-ctl reconfigure</span></div><div class="line"></div><div class="line"><span class="attribute">gitlab-ctl restart</span></div></pre></td></tr></table></figure>
-<h3 id="查看下版本"><a href="#查看下版本" class="headerlink" title="查看下版本"></a>查看下版本</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat <span class="regexp">/opt/gi</span>tlab<span class="regexp">/embedded/</span>service<span class="regexp">/gitlab-rails/</span>VERSION</div></pre></td></tr></table></figure>
-<h3 id="设置root密码"><a href="#设置root密码" class="headerlink" title="设置root密码"></a>设置root密码</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">gitlab-rails console production</div><div class="line"><span class="function"><span class="title">irb</span><span class="params">(main)</span></span>:<span class="number">001</span>:<span class="number">0</span>&gt; user = User.where(id: <span class="number">1</span>)<span class="selector-class">.first</span> <span class="comment">// id为1的是超级管理员</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">irb</span><span class="params">(main)</span></span>:<span class="number">002</span>:<span class="number">0</span>&gt;user<span class="selector-class">.password</span> = <span class="string">'Youle@123game'</span> <span class="comment">// 密码必须至少8个字符</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">irb</span><span class="params">(main)</span></span>:<span class="number">003</span>:<span class="number">0</span>&gt;user.save! <span class="comment">// 如没有问题 返回true</span></div><div class="line"></div><div class="line">exit</div></pre></td></tr></table></figure>
-<h3 id="QA"><a href="#QA" class="headerlink" title="QA:"></a>QA:</h3><h3 id="gitlab报502-Whoops-GitLab-is-taking-too-much-time-to-respond"><a href="#gitlab报502-Whoops-GitLab-is-taking-too-much-time-to-respond" class="headerlink" title="gitlab报502 Whoops, GitLab is taking too much time to respond"></a>gitlab报502 Whoops, GitLab is taking too much time to respond</h3><figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># gitlab-ctl stop</span></div><div class="line">	</div><div class="line"><span class="meta"># vi /etc/gitlab/gitlab.rb   (取消注释并修改端口)</span></div><div class="line">unicorn[<span class="string">'port'</span>] = <span class="number">8801</span></div><div class="line">	</div><div class="line">	</div><div class="line"><span class="meta"># gitlab-ctl reconfigure  (重新生成配置)</span></div><div class="line"><span class="meta"># gitlab-ctl restart</span></div><div class="line"><span class="meta"># lsof -i:8081        (check whether unicorn has started properly)</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">gitlab</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-02/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2018-10-11-k8s-04" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -338,6 +256,88 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-04/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2018-10-11-k8s-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/11/2018-10-11-k8s-02/">CentOS7安装Gitlab</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/11/2018-10-11-k8s-02/" class="archive-article-date">
+  	<time datetime="2018-10-11T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-基础环境"><a href="#1-基础环境" class="headerlink" title="1.基础环境"></a>1.基础环境</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">## ssh</span></div><div class="line">yum install -y curl policycoreutils-python openssh-server</div><div class="line">systemctl <span class="builtin-name">enable</span> sshd</div><div class="line">systemctl start sshd</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">## mail</span></div><div class="line">yum install postfix</div><div class="line">systemctl <span class="builtin-name">enable</span> postfix</div><div class="line">systemctl start postfix</div></pre></td></tr></table></figure>
+<h3 id="安装-gitlab-ce"><a href="#安装-gitlab-ce" class="headerlink" title="安装 gitlab-ce"></a>安装 gitlab-ce</h3><p>添加 gitlab-ce 国内源 cat /etc/yum.repos.d/gitlab-ce.repo</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="section">[gitlab-ce]</span></div><div class="line"></div><div class="line"><span class="attr">name</span>=gitlab-ce</div><div class="line"></div><div class="line"><span class="attr">baseurl</span>=http://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/yum/el7</div><div class="line"></div><div class="line"><span class="attr">repo_gpgcheck</span>=<span class="number">0</span></div><div class="line"></div><div class="line"><span class="attr">gpgcheck</span>=<span class="number">0</span></div><div class="line"></div><div class="line"><span class="attr">enabled</span>=<span class="number">1</span></div><div class="line"></div><div class="line"><span class="attr">gpgkey</span>=https://packages.gitlab.com/gpg.key</div></pre></td></tr></table></figure>
+<h3 id="安装gitlab-ce"><a href="#安装gitlab-ce" class="headerlink" title="安装gitlab-ce"></a>安装gitlab-ce</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">curl -sS http<span class="variable">s:</span>//packages.gitlab.<span class="keyword">com</span>/install/repositories/gitlab/gitlab-<span class="keyword">ce</span>/script.rpm.<span class="keyword">sh</span> | sudo bash</div><div class="line"></div><div class="line">yum install gitlab-<span class="keyword">ce</span></div></pre></td></tr></table></figure>
+<h3 id="配置并启动-gitlab"><a href="#配置并启动-gitlab" class="headerlink" title="配置并启动 gitlab"></a>配置并启动 gitlab</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="attribute">gitlab-ctl reconfigure</span></div></pre></td></tr></table></figure>
+<h3 id="修改-gitlab-rb-和-gitlab-端口配置"><a href="#修改-gitlab-rb-和-gitlab-端口配置" class="headerlink" title="修改 gitlab.rb 和 gitlab 端口配置"></a>修改 gitlab.rb 和 gitlab 端口配置</h3><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">vi <span class="regexp">/etc/</span>gitlab/gitlab.rb</div><div class="line"></div><div class="line">nginx[<span class="string">'listen_port'</span>] = <span class="number">8000</span></div><div class="line"></div><div class="line">external_url <span class="string">'http://172.16.153.75'</span></div><div class="line"></div><div class="line">vi <span class="regexp">/var/</span>opt<span class="regexp">/gitlab/</span>nginx<span class="regexp">/conf/</span>gitlab-http.conf</div><div class="line"></div><div class="line">listen *:<span class="number">8000</span>; <span class="number">0</span></div><div class="line"></div><div class="line">server_name <span class="number">172.16</span><span class="number">.153</span><span class="number">.75</span>;</div></pre></td></tr></table></figure>
+<h1 id="重启服务"><a href="#重启服务" class="headerlink" title="重启服务"></a>重启服务</h1><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">gitlab-ctl reconfigure</span></div><div class="line"></div><div class="line"><span class="attribute">gitlab-ctl restart</span></div></pre></td></tr></table></figure>
+<h3 id="查看下版本"><a href="#查看下版本" class="headerlink" title="查看下版本"></a>查看下版本</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat <span class="regexp">/opt/gi</span>tlab<span class="regexp">/embedded/</span>service<span class="regexp">/gitlab-rails/</span>VERSION</div></pre></td></tr></table></figure>
+<h3 id="设置root密码"><a href="#设置root密码" class="headerlink" title="设置root密码"></a>设置root密码</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">gitlab-rails console production</div><div class="line"><span class="function"><span class="title">irb</span><span class="params">(main)</span></span>:<span class="number">001</span>:<span class="number">0</span>&gt; user = User.where(id: <span class="number">1</span>)<span class="selector-class">.first</span> <span class="comment">// id为1的是超级管理员</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">irb</span><span class="params">(main)</span></span>:<span class="number">002</span>:<span class="number">0</span>&gt;user<span class="selector-class">.password</span> = <span class="string">'Youle@123game'</span> <span class="comment">// 密码必须至少8个字符</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">irb</span><span class="params">(main)</span></span>:<span class="number">003</span>:<span class="number">0</span>&gt;user.save! <span class="comment">// 如没有问题 返回true</span></div><div class="line"></div><div class="line">exit</div></pre></td></tr></table></figure>
+<h3 id="QA"><a href="#QA" class="headerlink" title="QA:"></a>QA:</h3><h3 id="gitlab报502-Whoops-GitLab-is-taking-too-much-time-to-respond"><a href="#gitlab报502-Whoops-GitLab-is-taking-too-much-time-to-respond" class="headerlink" title="gitlab报502 Whoops, GitLab is taking too much time to respond"></a>gitlab报502 Whoops, GitLab is taking too much time to respond</h3><figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># gitlab-ctl stop</span></div><div class="line">	</div><div class="line"><span class="meta"># vi /etc/gitlab/gitlab.rb   (取消注释并修改端口)</span></div><div class="line">unicorn[<span class="string">'port'</span>] = <span class="number">8801</span></div><div class="line">	</div><div class="line">	</div><div class="line"><span class="meta"># gitlab-ctl reconfigure  (重新生成配置)</span></div><div class="line"><span class="meta"># gitlab-ctl restart</span></div><div class="line"><span class="meta"># lsof -i:8081        (check whether unicorn has started properly)</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">gitlab</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-02/">展开全文 >></a>
         </p>
       
 
@@ -628,6 +628,86 @@
 
 
   
+    <article id="post-2018-10-10-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/10/2018-10-10-k8s-01/">jenkins和k8s结合的自动化目标模型</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/10/2018-10-10-k8s-01/" class="archive-article-date">
+  	<time datetime="2018-10-10T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="目标描述"><a href="#目标描述" class="headerlink" title="目标描述"></a>目标描述</h3><ul>
+<li>在将代码上传至 gitlab 时，触发 push 的钩子，在 jenkins 中进行项目的编译；</li>
+<li>自动将编译后的文件打包成 docker 镜像，并上传至（私有）docker hub；</li>
+<li>修改 Kubernetes 的服务配置文件（Service.yaml 和 Deployment.yaml）中的镜像变量；（因为在我将每一个 jenkins 构建的版本号作为了 docker 镜像的版本号，所以每次都要自动改变）</li>
+<li>将 Kubernetes 的服务配置文件上传至 Kubernetes 的 master 服务器；</li>
+<li>在 Jenkins 中执行 kubectl apply -f file.yaml，在 Kubernetes 部署服务；</li>
+</ul>
+<h5 id="目标模型图"><a href="#目标模型图" class="headerlink" title="目标模型图"></a>目标模型图</h5><p><img src="http://www.zwting.com/img/devops-1.png" alt="devops-1.png" style="width:800px;"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-01/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2018-10-10-k8s-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -749,86 +829,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-02/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2018-10-10-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/10/2018-10-10-k8s-01/">jenkins和k8s结合的自动化目标模型</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/10/2018-10-10-k8s-01/" class="archive-article-date">
-  	<time datetime="2018-10-10T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="目标描述"><a href="#目标描述" class="headerlink" title="目标描述"></a>目标描述</h3><ul>
-<li>在将代码上传至 gitlab 时，触发 push 的钩子，在 jenkins 中进行项目的编译；</li>
-<li>自动将编译后的文件打包成 docker 镜像，并上传至（私有）docker hub；</li>
-<li>修改 Kubernetes 的服务配置文件（Service.yaml 和 Deployment.yaml）中的镜像变量；（因为在我将每一个 jenkins 构建的版本号作为了 docker 镜像的版本号，所以每次都要自动改变）</li>
-<li>将 Kubernetes 的服务配置文件上传至 Kubernetes 的 master 服务器；</li>
-<li>在 Jenkins 中执行 kubectl apply -f file.yaml，在 Kubernetes 部署服务；</li>
-</ul>
-<h5 id="目标模型图"><a href="#目标模型图" class="headerlink" title="目标模型图"></a>目标模型图</h5><p><img src="http://www.zwting.com/img/devops-1.png" alt="devops-1.png" style="width:800px;"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-01/">展开全文 >></a>
         </p>
       
 
@@ -1243,15 +1243,15 @@ source ~/.bash_profile
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1271,11 +1271,11 @@ source ~/.bash_profile
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ceph</a>
+                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+                <a href="javascript:void(0)" class="js-tag color5">ceph</a>
               </li>
              
               <li class="article-tag-list-item">
