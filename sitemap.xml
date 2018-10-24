@@ -2,9 +2,58 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-01/</loc>
+    
+    <lastmod>2018-10-24T11:31:40.350Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-02/</loc>
+    
+    <lastmod>2018-10-24T11:31:10.780Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-03/</loc>
+    
+    <lastmod>2018-10-24T11:30:21.100Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-04/</loc>
+    
+    <lastmod>2018-10-24T11:29:50.720Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>//www.zwting.com/2018/10/15/2018-10-15-k8s-01/</loc>
     
-    <lastmod>2018-10-24T11:17:19.160Z</lastmod>
+    <lastmod>2018-10-24T11:28:44.090Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>//www.zwting.com/2018/10/15/2018-10-15-k8s-02/</loc>
+    
+    <lastmod>2018-10-24T11:27:07.030Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>//www.zwting.com/2018/10/24/2018-10-24-k8s-01/</loc>
+    
+    <lastmod>2018-10-24T11:26:37.750Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>//www.zwting.com/2018/10/24/2018-10-24-k8s-04/</loc>
+    
+    <lastmod>2018-10-24T11:26:16.460Z</lastmod>
     
   </url>
   
@@ -30,51 +79,9 @@
   </url>
   
   <url>
-    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-01/</loc>
-    
-    <lastmod>2018-10-24T11:16:09.590Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-02/</loc>
-    
-    <lastmod>2018-10-24T11:15:59.220Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-03/</loc>
-    
-    <lastmod>2018-10-24T11:15:53.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-04/</loc>
-    
-    <lastmod>2018-10-24T11:15:45.980Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>//www.zwting.com/2018/10/15/2018-10-15-k8s-02/</loc>
-    
-    <lastmod>2018-10-24T11:15:28.670Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>//www.zwting.com/2018/10/17/2018-10-17-k8s-01/</loc>
     
     <lastmod>2018-10-24T11:15:21.280Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>//www.zwting.com/2018/10/24/2018-10-24-k8s-01/</loc>
-    
-    <lastmod>2018-10-24T11:15:12.100Z</lastmod>
     
   </url>
   
@@ -89,13 +96,6 @@
     <loc>//www.zwting.com/2018/10/24/2018-10-24-k8s-03/</loc>
     
     <lastmod>2018-10-24T11:14:55.610Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>//www.zwting.com/2018/10/24/2018-10-24-k8s-04/</loc>
-    
-    <lastmod>2018-10-24T11:14:51.460Z</lastmod>
     
   </url>
   
@@ -254,14 +254,7 @@
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/08/06/2016-02-06-php-ext-6/</loc>
-    
-    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>//www.zwting.com/2017/08/08/2016-02-08-php-ext-8/</loc>
+    <loc>//www.zwting.com/2017/09/15/2015-04-23-training-python-6/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     
@@ -275,14 +268,14 @@
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-05-15-training-python-11/</loc>
+    <loc>//www.zwting.com/2017/08/06/2016-02-06-php-ext-6/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/08/05/2016-02-05-php-ext-5/</loc>
+    <loc>//www.zwting.com/2017/08/08/2016-02-08-php-ext-8/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     
@@ -331,6 +324,13 @@
   </url>
   
   <url>
+    <loc>//www.zwting.com/2017/09/15/2015-05-15-training-python-11/</loc>
+    
+    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>//www.zwting.com/2017/09/15/2015-05-14-training-python-10/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
@@ -359,7 +359,7 @@
   </url>
   
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-04-23-training-python-6/</loc>
+    <loc>//www.zwting.com/2017/08/05/2016-02-05-php-ext-5/</loc>
     
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     

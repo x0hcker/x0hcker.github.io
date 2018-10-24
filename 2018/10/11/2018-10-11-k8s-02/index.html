@@ -15,7 +15,7 @@
 <meta property="og:url" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-02/index.html">
 <meta property="og:site_name" content="醉翁亭">
 <meta property="og:description" content="CentOS7安装Gitlab">
-<meta property="og:updated_time" content="2018-10-24T11:15:59.220Z">
+<meta property="og:updated_time" content="2018-10-24T11:31:10.780Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS7安装Gitlab">
 <meta name="twitter:description" content="CentOS7安装Gitlab">
@@ -185,10 +185,7 @@
 <h1 id="重启服务"><a href="#重启服务" class="headerlink" title="重启服务"></a>重启服务</h1><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">gitlab-ctl reconfigure</span></div><div class="line"></div><div class="line"><span class="attribute">gitlab-ctl restart</span></div></pre></td></tr></table></figure>
 <h3 id="查看下版本"><a href="#查看下版本" class="headerlink" title="查看下版本"></a>查看下版本</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat <span class="regexp">/opt/gi</span>tlab<span class="regexp">/embedded/</span>service<span class="regexp">/gitlab-rails/</span>VERSION</div></pre></td></tr></table></figure>
 <h3 id="设置root密码"><a href="#设置root密码" class="headerlink" title="设置root密码"></a>设置root密码</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">gitlab-rails console production</div><div class="line"><span class="function"><span class="title">irb</span><span class="params">(main)</span></span>:<span class="number">001</span>:<span class="number">0</span>&gt; user = User.where(id: <span class="number">1</span>)<span class="selector-class">.first</span> <span class="comment">// id为1的是超级管理员</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">irb</span><span class="params">(main)</span></span>:<span class="number">002</span>:<span class="number">0</span>&gt;user<span class="selector-class">.password</span> = <span class="string">'Youle@123game'</span> <span class="comment">// 密码必须至少8个字符</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">irb</span><span class="params">(main)</span></span>:<span class="number">003</span>:<span class="number">0</span>&gt;user.save! <span class="comment">// 如没有问题 返回true</span></div><div class="line"></div><div class="line">exit</div></pre></td></tr></table></figure>
-<h3 id="QA"><a href="#QA" class="headerlink" title="QA:"></a>QA:</h3><ol>
-<li>gitlab报502 Whoops, GitLab is taking too much time to respond<figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># gitlab-ctl stop</span></div><div class="line"></div><div class="line"><span class="meta"># vi /etc/gitlab/gitlab.rb   (取消注释并修改端口)</span></div><div class="line">unicorn[<span class="string">'port'</span>] = <span class="number">8801</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="meta"># gitlab-ctl reconfigure  (重新生成配置)</span></div><div class="line"><span class="meta"># gitlab-ctl restart</span></div><div class="line"><span class="meta"># lsof -i:8081        (check whether unicorn has started properly)</span></div></pre></td></tr></table></figure>
-</li>
-</ol>
+<h3 id="QA"><a href="#QA" class="headerlink" title="QA:"></a>QA:</h3><h3 id="gitlab报502-Whoops-GitLab-is-taking-too-much-time-to-respond"><a href="#gitlab报502-Whoops-GitLab-is-taking-too-much-time-to-respond" class="headerlink" title="gitlab报502 Whoops, GitLab is taking too much time to respond"></a>gitlab报502 Whoops, GitLab is taking too much time to respond</h3><figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># gitlab-ctl stop</span></div><div class="line">	</div><div class="line"><span class="meta"># vi /etc/gitlab/gitlab.rb   (取消注释并修改端口)</span></div><div class="line">unicorn[<span class="string">'port'</span>] = <span class="number">8801</span></div><div class="line">	</div><div class="line">	</div><div class="line"><span class="meta"># gitlab-ctl reconfigure  (重新生成配置)</span></div><div class="line"><span class="meta"># gitlab-ctl restart</span></div><div class="line"><span class="meta"># lsof -i:8081        (check whether unicorn has started properly)</span></div></pre></td></tr></table></figure>
 
       
 
@@ -319,8 +316,8 @@
     </a>
   
   
-    <a href="/2018/10/11/2018-10-11-k8s-04/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Gitlab  和 Jenkins  融合使用</div>
+    <a href="/2018/10/11/2018-10-11-k8s-01/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">在CentOS7上安装Jenkins</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -453,15 +450,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -477,15 +470,19 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">ceph</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">

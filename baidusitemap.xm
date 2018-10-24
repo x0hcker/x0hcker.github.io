@@ -4,14 +4,154 @@
 
     
   <url>
+    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-01/</loc>
+    <lastmod>2018-10-24T11:31:40.350Z</lastmod>
+    <data>
+        <display>
+        <title>在CentOS7上安装Jenkins</title>
+        <pubTime>2018-10-11T03:00:00.000Z</pubTime>
+        
+        <tag>jenkins</tag>
+         
+         
+           
+             
+              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-02/</loc>
+    <lastmod>2018-10-24T11:31:10.780Z</lastmod>
+    <data>
+        <display>
+        <title>CentOS7安装Gitlab</title>
+        <pubTime>2018-10-11T04:00:00.000Z</pubTime>
+        
+        <tag>gitlab</tag>
+         
+         
+           
+             
+              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-03/</loc>
+    <lastmod>2018-10-24T11:30:21.100Z</lastmod>
+    <data>
+        <display>
+        <title>CentOS7安装Harbor</title>
+        <pubTime>2018-10-11T04:00:00.000Z</pubTime>
+        
+        <tag>harbor</tag>
+         
+         
+           
+             
+              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-04/</loc>
+    <lastmod>2018-10-24T11:29:50.720Z</lastmod>
+    <data>
+        <display>
+        <title>Gitlab  和 Jenkins  融合使用</title>
+        <pubTime>2018-10-11T04:00:00.000Z</pubTime>
+        
+        <tag>jenkins</tag>
+         
+         
+           
+             
+              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>//www.zwting.com/2018/10/15/2018-10-15-k8s-01/</loc>
-    <lastmod>2018-10-24T11:17:19.160Z</lastmod>
+    <lastmod>2018-10-24T11:28:44.090Z</lastmod>
     <data>
         <display>
         <title>Gitlab和Jenkins和Harbor整合使用</title>
         <pubTime>2018-10-15T04:00:00.000Z</pubTime>
         
         <tag>devops</tag>
+         
+         
+           
+             
+              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>//www.zwting.com/2018/10/15/2018-10-15-k8s-02/</loc>
+    <lastmod>2018-10-24T11:27:07.030Z</lastmod>
+    <data>
+        <display>
+        <title>利用Jenkins打Docker镜像</title>
+        <pubTime>2018-10-15T06:00:00.000Z</pubTime>
+        
+        <tag>jenkins</tag>
+         
+         
+           
+             
+              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>//www.zwting.com/2018/10/24/2018-10-24-k8s-01/</loc>
+    <lastmod>2018-10-24T11:26:37.750Z</lastmod>
+    <data>
+        <display>
+        <title>CEPH(mimic版本)安装文档</title>
+        <pubTime>2018-10-24T06:00:00.000Z</pubTime>
+        
+        <tag>ceph</tag>
+         
+         
+           
+             
+              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>//www.zwting.com/2018/10/24/2018-10-24-k8s-04/</loc>
+    <lastmod>2018-10-24T11:26:16.460Z</lastmod>
+    <data>
+        <display>
+        <title>ceph使用过程问题集锦</title>
+        <pubTime>2018-10-24T10:00:00.000Z</pubTime>
+        
+        <tag>k8s容器化</tag>
          
          
            
@@ -84,106 +224,6 @@
 
     
   <url>
-    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-01/</loc>
-    <lastmod>2018-10-24T11:16:09.590Z</lastmod>
-    <data>
-        <display>
-        <title>在CentOS7上安装Jenkins</title>
-        <pubTime>2018-10-11T03:00:00.000Z</pubTime>
-        
-        <tag>jenkins</tag>
-         
-         
-           
-             
-              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-02/</loc>
-    <lastmod>2018-10-24T11:15:59.220Z</lastmod>
-    <data>
-        <display>
-        <title>CentOS7安装Gitlab</title>
-        <pubTime>2018-10-11T04:00:00.000Z</pubTime>
-        
-        <tag>gitlab</tag>
-         
-         
-           
-             
-              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-03/</loc>
-    <lastmod>2018-10-24T11:15:53.000Z</lastmod>
-    <data>
-        <display>
-        <title>CentOS7安装Harbor</title>
-        <pubTime>2018-10-11T04:00:00.000Z</pubTime>
-        
-        <tag>harbor</tag>
-         
-         
-           
-             
-              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>//www.zwting.com/2018/10/11/2018-10-11-k8s-04/</loc>
-    <lastmod>2018-10-24T11:15:45.980Z</lastmod>
-    <data>
-        <display>
-        <title>Gitlab  和 Jenkins  融合使用</title>
-        <pubTime>2018-10-11T04:00:00.000Z</pubTime>
-        
-        <tag>jenkins</tag>
-         
-         
-           
-             
-              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>//www.zwting.com/2018/10/15/2018-10-15-k8s-02/</loc>
-    <lastmod>2018-10-24T11:15:28.670Z</lastmod>
-    <data>
-        <display>
-        <title>利用Jenkins打Docker镜像</title>
-        <pubTime>2018-10-15T06:00:00.000Z</pubTime>
-        
-        <tag>jenkins</tag>
-         
-         
-           
-             
-              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>//www.zwting.com/2018/10/17/2018-10-17-k8s-01/</loc>
     <lastmod>2018-10-24T11:15:21.280Z</lastmod>
     <data>
@@ -192,26 +232,6 @@
         <pubTime>2018-10-17T06:00:00.000Z</pubTime>
         
         <tag>docker</tag>
-         
-         
-           
-             
-              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>//www.zwting.com/2018/10/24/2018-10-24-k8s-01/</loc>
-    <lastmod>2018-10-24T11:15:12.100Z</lastmod>
-    <data>
-        <display>
-        <title>CEPH(mimic版本)安装文档</title>
-        <pubTime>2018-10-24T06:00:00.000Z</pubTime>
-        
-        <tag>ceph</tag>
          
          
            
@@ -250,26 +270,6 @@
         <display>
         <title>客户端挂载 ceph 文件系统</title>
         <pubTime>2018-10-24T06:00:00.000Z</pubTime>
-        
-        <tag>k8s容器化</tag>
-         
-         
-           
-             
-              <breadCrumb title="k8s容器化" url="//www.zwting.com/categories/k8s%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>//www.zwting.com/2018/10/24/2018-10-24-k8s-04/</loc>
-    <lastmod>2018-10-24T11:14:51.460Z</lastmod>
-    <data>
-        <display>
-        <title>ceph使用过程问题集锦</title>
-        <pubTime>2018-10-24T10:00:00.000Z</pubTime>
         
         <tag>k8s容器化</tag>
          
@@ -714,39 +714,19 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/08/06/2016-02-06-php-ext-6/</loc>
+    <loc>//www.zwting.com/2017/09/15/2015-04-23-training-python-6/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
         <display>
-        <title>php7扩展开发[6] 调试Segmentation fault</title>
-        <pubTime>2017-08-06T09:09:59.000Z</pubTime>
+        <title>python技术分享[6]－ 自定义数据库连接池</title>
+        <pubTime>2017-09-15T11:30:59.000Z</pubTime>
         
-        <tag>PHP7扩展开发</tag>
+        <tag>python技术分享</tag>
          
          
            
              
-              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>//www.zwting.com/2017/08/08/2016-02-08-php-ext-8/</loc>
-    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>php7扩展开发[8]类方法之间的调用</title>
-        <pubTime>2017-08-08T09:09:59.000Z</pubTime>
-        
-        <tag>PHP7扩展开发</tag>
-         
-         
-           
-             
-              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
+              <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
           
         </display>
     </data>
@@ -774,19 +754,19 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-05-15-training-python-11/</loc>
+    <loc>//www.zwting.com/2017/08/06/2016-02-06-php-ext-6/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
         <display>
-        <title>python技术分享[11]－ 日志－日志记录到mongodb中</title>
-        <pubTime>2017-09-15T11:30:59.000Z</pubTime>
+        <title>php7扩展开发[6] 调试Segmentation fault</title>
+        <pubTime>2017-08-06T09:09:59.000Z</pubTime>
         
-        <tag>python技术分享</tag>
+        <tag>PHP7扩展开发</tag>
          
          
            
              
-              <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
+              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
           
         </display>
     </data>
@@ -794,12 +774,12 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/08/05/2016-02-05-php-ext-5/</loc>
+    <loc>//www.zwting.com/2017/08/08/2016-02-08-php-ext-8/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
         <display>
-        <title>php7扩展开发[5]本类内函数调用</title>
-        <pubTime>2017-08-05T09:09:59.000Z</pubTime>
+        <title>php7扩展开发[8]类方法之间的调用</title>
+        <pubTime>2017-08-08T09:09:59.000Z</pubTime>
         
         <tag>PHP7扩展开发</tag>
          
@@ -934,6 +914,26 @@
 
     
   <url>
+    <loc>//www.zwting.com/2017/09/15/2015-05-15-training-python-11/</loc>
+    <lastmod>2017-09-18T07:24:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>python技术分享[11]－ 日志－日志记录到mongodb中</title>
+        <pubTime>2017-09-15T11:30:59.000Z</pubTime>
+        
+        <tag>python技术分享</tag>
+         
+         
+           
+             
+              <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>//www.zwting.com/2017/09/15/2015-05-14-training-python-10/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
@@ -1014,19 +1014,19 @@
 
     
   <url>
-    <loc>//www.zwting.com/2017/09/15/2015-04-23-training-python-6/</loc>
+    <loc>//www.zwting.com/2017/08/05/2016-02-05-php-ext-5/</loc>
     <lastmod>2017-09-18T07:24:19.000Z</lastmod>
     <data>
         <display>
-        <title>python技术分享[6]－ 自定义数据库连接池</title>
-        <pubTime>2017-09-15T11:30:59.000Z</pubTime>
+        <title>php7扩展开发[5]本类内函数调用</title>
+        <pubTime>2017-08-05T09:09:59.000Z</pubTime>
         
-        <tag>python技术分享</tag>
+        <tag>PHP7扩展开发</tag>
          
          
            
              
-              <breadCrumb title="python技术分享" url="//www.zwting.com/categories/python%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
+              <breadCrumb title="PHP7扩展开发" url="//www.zwting.com/categories/PHP7%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91/"/>
           
         </display>
     </data>

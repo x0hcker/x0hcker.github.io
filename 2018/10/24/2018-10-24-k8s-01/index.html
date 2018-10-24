@@ -15,12 +15,12 @@
 <meta property="og:url" content="//www.zwting.com/2018/10/24/2018-10-24-k8s-01/index.html">
 <meta property="og:site_name" content="醉翁亭">
 <meta property="og:description" content="安装CEPH的mimic版本">
-<meta property="og:image" content="//www.zwting.com/2018/10/24/2018-10-24-k8s-01/img/devops-150.png">
-<meta property="og:updated_time" content="2018-10-24T11:15:12.100Z">
+<meta property="og:image" content="//www.zwting.com/img/devops-150.png">
+<meta property="og:updated_time" content="2018-10-24T11:26:37.750Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CEPH(mimic版本)安装文档">
 <meta name="twitter:description" content="安装CEPH的mimic版本">
-<meta name="twitter:image" content="//www.zwting.com/2018/10/24/2018-10-24-k8s-01/img/devops-150.png">
+<meta name="twitter:image" content="//www.zwting.com/img/devops-150.png">
   
     <link rel="alternative" href="/atom.xml" title="醉翁亭" type="application/atom+xml">
   
@@ -205,7 +205,7 @@
 <h5 id="创建-ceph-mgr-管理进程服务-自12版本启用"><a href="#创建-ceph-mgr-管理进程服务-自12版本启用" class="headerlink" title="创建 ceph mgr 管理进程服务 自12版本启用"></a>创建 ceph mgr 管理进程服务 自12版本启用</h5><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#添加mgr 此时health: HEALTH_WARN</span></div><div class="line">ceph-deploy <span class="comment">--overwrite-conf mgr create ceph-node1</span></div><div class="line">ceph-deploy <span class="comment">--overwrite-conf mgr create ceph-node2</span></div><div class="line">ceph-deploy <span class="comment">--overwrite-conf mgr create ceph-node3</span></div></pre></td></tr></table></figure>
 <h5 id="创建mon"><a href="#创建mon" class="headerlink" title="创建mon."></a>创建mon.</h5><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">ceph-deploy <span class="comment">--overwrite-conf mon create ceph-node1</span></div><div class="line">ceph-deploy <span class="comment">--overwrite-conf admin ceph-node1</span></div><div class="line">ceph-deploy <span class="comment">--overwrite-conf mon create ceph-node2</span></div><div class="line">ceph-deploy <span class="comment">--overwrite-conf admin ceph-node2</span></div><div class="line">ceph-deploy <span class="comment">--overwrite-conf mon create ceph-node3</span></div><div class="line">ceph-deploy <span class="comment">--overwrite-conf admin ceph-node3</span></div></pre></td></tr></table></figure>
 <p>#启用dashboard (在mon节点)<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">查看是否开启dashboard</div><div class="line"><span class="meta">#</span><span class="bash"> ceph mgr services</span></div><div class="line">&#123;</div><div class="line">    "dashboard": "https://ceph-node1:8443/",</div><div class="line">&#125;</div><div class="line"><span class="meta">#</span><span class="bash">生成并安装自签名证书:</span></div><div class="line"><span class="meta">#</span><span class="bash"> ceph dashboard create-self-signed-cert</span></div><div class="line">Self-signed certificate created</div><div class="line"></div><div class="line">创建具有管理员角色的用户:</div><div class="line"><span class="meta">#</span><span class="bash"> ceph dashboard <span class="built_in">set</span>-login-credentials admin admin</span></div><div class="line">Username and password updated</div><div class="line"></div><div class="line">或者直接下面这样的操作</div><div class="line"></div><div class="line">ceph mgr module enable dashboard</div><div class="line"><span class="meta">#</span><span class="bash"> 设置dashboard的ip和端口</span></div><div class="line">ceph config-key put mgr/dashboard/server_addr ceph-node1</div><div class="line">ceph config-key put mgr/dashboard/server_port 8443</div><div class="line">systemctl restart ceph-mgr@ceph-node1</div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash">生成并安装自签名证书:</span></div><div class="line"><span class="meta">#</span><span class="bash"> ceph dashboard create-self-signed-cert</span></div><div class="line">Self-signed certificate created</div><div class="line"></div><div class="line">创建具有管理员角色的用户:</div><div class="line"><span class="meta">#</span><span class="bash"> ceph dashboard <span class="built_in">set</span>-login-credentials admin admin</span></div><div class="line">Username and password updated</div></pre></td></tr></table></figure></p>
-<p><img src="./img/devops-150.png" alt="devops-150.png" style="width:800px;"></p>
+<p><img src="/img/devops-150.png" alt="devops-150.png" style="width:800px;"></p>
 <p>#参考<br>&gt;<br><a href="http://docs.ceph.org.cn/man/8/ceph-deploy/" target="_blank" rel="external">http://docs.ceph.org.cn/man/8/ceph-deploy/</a><br><a href="http://www.jianshu.com/p/25163032f57f" target="_blank" rel="external">http://www.jianshu.com/p/25163032f57f</a><br><a href="https://www.cnblogs.com/sammyliu/p/5557666.html" target="_blank" rel="external">https://www.cnblogs.com/sammyliu/p/5557666.html</a><br><a href="https://blog.csdn.net/younger_china/article/details/51823571" target="_blank" rel="external">https://blog.csdn.net/younger_china/article/details/51823571</a><br><a href="https://www.cnblogs.com/elvi/p/7897178.html" target="_blank" rel="external">https://www.cnblogs.com/elvi/p/7897178.html</a><br><a href="https://blog.csdn.net/kozazyh/article/details/79519439" target="_blank" rel="external">https://blog.csdn.net/kozazyh/article/details/79519439</a><br><a href="https://blog.csdn.net/wylfengyujiancheng/article/details/78461801" target="_blank" rel="external">https://blog.csdn.net/wylfengyujiancheng/article/details/78461801</a><br><a href="https://www.cnblogs.com/kevingrace/p/9141432.html" target="_blank" rel="external">https://www.cnblogs.com/kevingrace/p/9141432.html</a></p>
 
       
@@ -327,18 +327,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/10/24/2018-10-24-k8s-04/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/10/24/2018-10-24-k8s-02/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          ceph使用过程问题集锦
+          ceph日常使用文档
         
       </div>
     </a>
   
   
-    <a href="/2018/10/24/2018-10-24-k8s-02/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">ceph日常使用文档</div>
+    <a href="/2018/10/24/2018-10-24-k8s-03/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">客户端挂载 ceph 文件系统</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -471,15 +471,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -495,15 +491,19 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">ceph</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">

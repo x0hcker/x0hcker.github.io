@@ -15,21 +15,21 @@
 <meta property="og:url" content="//www.zwting.com/2018/10/15/2018-10-15-k8s-01/index.html">
 <meta property="og:site_name" content="醉翁亭">
 <meta property="og:description" content="Gitlab和Jenkins和Harbor整合使用">
-<meta property="og:image" content="//www.zwting.com/2018/10/15/2018-10-15-k8s-01/img/devops-50.png">
-<meta property="og:image" content="//www.zwting.com/2018/10/15/2018-10-15-k8s-01/img/devops-51.png">
-<meta property="og:image" content="//www.zwting.com/2018/10/15/2018-10-15-k8s-01/img/devops-52.png">
-<meta property="og:image" content="//www.zwting.com/2018/10/15/2018-10-15-k8s-01/img/devops-53.png">
-<meta property="og:image" content="//www.zwting.com/2018/10/15/2018-10-15-k8s-01/img/devops-56.png">
-<meta property="og:image" content="//www.zwting.com/2018/10/15/2018-10-15-k8s-01/img/devops-54.png">
-<meta property="og:image" content="//www.zwting.com/2018/10/15/2018-10-15-k8s-01/img/devops-55.png">
-<meta property="og:image" content="//www.zwting.com/2018/10/15/2018-10-15-k8s-01/img/devops-57.png">
-<meta property="og:image" content="//www.zwting.com/2018/10/15/2018-10-15-k8s-01/img/devops-58.png">
-<meta property="og:image" content="//www.zwting.com/2018/10/15/2018-10-15-k8s-01/img/devops-59.png">
-<meta property="og:updated_time" content="2018-10-24T11:17:19.160Z">
+<meta property="og:image" content="http://www.zwting.com/img/devops-50.png">
+<meta property="og:image" content="http://www.zwting.com/img/devops-51.png">
+<meta property="og:image" content="http://www.zwting.com/img/devops-52.png">
+<meta property="og:image" content="http://www.zwting.com/img/devops-53.png">
+<meta property="og:image" content="http://www.zwting.com/img/devops-56.png">
+<meta property="og:image" content="http://www.zwting.com/img/devops-54.png">
+<meta property="og:image" content="http://www.zwting.com/img/devops-55.png">
+<meta property="og:image" content="http://www.zwting.com/img/devops-57.png">
+<meta property="og:image" content="http://www.zwting.com/img/devops-58.png">
+<meta property="og:image" content="http://www.zwting.com/img/devops-59.png">
+<meta property="og:updated_time" content="2018-10-24T11:28:44.090Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab和Jenkins和Harbor整合使用">
 <meta name="twitter:description" content="Gitlab和Jenkins和Harbor整合使用">
-<meta name="twitter:image" content="//www.zwting.com/2018/10/15/2018-10-15-k8s-01/img/devops-50.png">
+<meta name="twitter:image" content="http://www.zwting.com/img/devops-50.png">
   
     <link rel="alternative" href="/atom.xml" title="醉翁亭" type="application/atom+xml">
   
@@ -189,26 +189,26 @@
       
         <h3 id="前期环境准备"><a href="#前期环境准备" class="headerlink" title="前期环境准备"></a>前期环境准备</h3><h5 id="1-1设置gitlab"><a href="#1-1设置gitlab" class="headerlink" title="1.1设置gitlab"></a>1.1设置gitlab</h5><p>利用root账号设置gitlab可以跨站请求</p>
 <p>Q:gitlab使用webhook向jenkins发送请求，报错 Requests to the local network are not allowed</p>
-<p><img src="./img/devops-50.png" alt="devops-1.png" style="width:800px;"></p>
-<h5 id="1-2设置jenkins"><a href="#1-2设置jenkins" class="headerlink" title="1.2设置jenkins"></a>1.2设置jenkins</h5><p>利用root账号设置 jenkins可以接受跨站请求<br><img src="./img/devops-51.png" alt="devops-1.png" style="width:800px;"></p>
-<p>使用gitlab的webhook时，可以用账号密码形式的 也可以用匿名的，如果用匿名形式的设置匿名账号可以做哪些事<br><img src="./img/devops-52.png" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="http://www.zwting.com/img/devops-50.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="1-2设置jenkins"><a href="#1-2设置jenkins" class="headerlink" title="1.2设置jenkins"></a>1.2设置jenkins</h5><p>利用root账号设置 jenkins可以接受跨站请求<br><img src="http://www.zwting.com/img/devops-51.png" alt="devops-1.png" style="width:800px;"></p>
+<p>使用gitlab的webhook时，可以用账号密码形式的 也可以用匿名的，如果用匿名形式的设置匿名账号可以做哪些事<br><img src="http://www.zwting.com/img/devops-52.png" alt="devops-1.png" style="width:800px;"></p>
 <h5 id="1-3设置jenkins账号执行Docker的权限"><a href="#1-3设置jenkins账号执行Docker的权限" class="headerlink" title="1.3设置jenkins账号执行Docker的权限"></a>1.3设置jenkins账号执行Docker的权限</h5><p>在jenkins的脚本中执行docker时，需要设置jenkins有权限使用docker，观察下docker启动的用户和组设置jenkins权限到组中</p>
 <p>Q: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post </p>
-<p><img src="./img/devops-53.png" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="http://www.zwting.com/img/devops-53.png" alt="devops-1.png" style="width:800px;"></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span><span class="bash"> sudo groupadd docker</span></div><div class="line"><span class="meta">$</span><span class="bash"> sudo usermod -aG docker jenkins</span></div></pre></td></tr></table></figure>
 <h5 id="1-4设置docker可以登录harbor"><a href="#1-4设置docker可以登录harbor" class="headerlink" title="1.4设置docker可以登录harbor"></a>1.4设置docker可以登录harbor</h5><p>docker login -u admin -p Harbor12345 172.16.153.70 </p>
 <p>Q: WARNING! Using –password via the CLI is insecure. Use –password-stdin.<br>Error response from daemon: Get <a href="https://172.16.153.70/v2/" target="_blank" rel="external">https://172.16.153.70/v2/</a>: x509: certificate signed by unknown authority</p>
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp <span class="regexp">/etc/</span>kubernetes<span class="regexp">/ssl/</span>ca.pem <span class="regexp">/etc/</span>docker<span class="regexp">/certs.d/</span><span class="number">172.16</span>.<span class="number">153.70</span><span class="regexp">/ca.crt</span></div></pre></td></tr></table></figure>
-<h5 id="1-5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）"><a href="#1-5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）" class="headerlink" title="1.5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）"></a>1.5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）</h5><p><img src="./img/devops-56.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="1-5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）"><a href="#1-5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）" class="headerlink" title="1.5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）"></a>1.5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）</h5><p><img src="http://www.zwting.com/img/devops-56.png" alt="devops-1.png" style="width:800px;"></p>
 <h3 id="建立GITLAB测试项目"><a href="#建立GITLAB测试项目" class="headerlink" title="建立GITLAB测试项目"></a>建立GITLAB测试项目</h3><p>地址：git@172.16.153.70:root/test.git</p>
 <h5 id="2-1在仓库中加入Jenkinsfile"><a href="#2-1在仓库中加入Jenkinsfile" class="headerlink" title="2.1在仓库中加入Jenkinsfile"></a>2.1在仓库中加入Jenkinsfile</h5><figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">pipeline &#123;</div><div class="line">    agent any</div><div class="line"></div><div class="line">    stages &#123;</div><div class="line">        </div><div class="line">        stage(<span class="string">'Check'</span>) &#123;</div><div class="line">            steps &#123;</div><div class="line">                 echo <span class="string">'docker --version'</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">         </div><div class="line">          </div><div class="line">        stage(<span class="string">'Build'</span>) &#123;</div><div class="line">            steps &#123;</div><div class="line">                sh <span class="string">'sh ./build_centos7_image.sh'</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        stage(<span class="string">'Deploy'</span>) &#123;</div><div class="line">            steps &#123;</div><div class="line">                echo <span class="string">'Deploying....'</span></div><div class="line">                </div><div class="line">                 withCredentials([usernamePassword( credentialsId: <span class="string">'Harbor69'</span>, usernameVariable: <span class="string">"DOCKER_USR"</span>, passwordVariable: <span class="string">"DOCKER_PWD"</span>)]) &#123;</div><div class="line">                     </div><div class="line">                            sh (<span class="string">"/opt/kube/bin/docker login -u $&#123;DOCKER_USR&#125; -p  $&#123;DOCKER_PWD&#125; 172.16.153.70"</span>)</div><div class="line">                            sh (<span class="string">"/opt/kube/bin/docker tag centos7-image-base:latest  172.16.153.70/library/centos7-image-base:1.0"</span>)</div><div class="line">                            sh (<span class="string">"/opt/kube/bin/docker push  172.16.153.70/library/centos7-image-base:1.0"</span>)</div><div class="line">                           </div><div class="line">                 &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h5 id="2-2实现pipeline中调用bash脚本build-centos7-image-sh"><a href="#2-2实现pipeline中调用bash脚本build-centos7-image-sh" class="headerlink" title=".2.2实现pipeline中调用bash脚本build_centos7_image.sh"></a>.2.2实现pipeline中调用bash脚本build_centos7_image.sh</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="comment"># 上面这个一定不要忘记，要不pileline会报错</span></div><div class="line"></div><div class="line"><span class="built_in">export</span> PATH=/opt/kube/bin:<span class="variable">$PATH</span></div><div class="line"></div><div class="line"><span class="comment"># 可以打进去 yum vim telnet 等定制化的准备</span></div><div class="line">supermin5 -v --prepare bash coreutils yum  -o supermin.d</div><div class="line"></div><div class="line">supermin5 -v --build --format chroot supermin.d -o appliance.d</div><div class="line"></div><div class="line"><span class="comment"># centos7</span></div><div class="line"><span class="built_in">echo</span> 7 &gt; appliance.d/etc/yum/vars/releasever</div><div class="line"></div><div class="line"><span class="comment"># 打包</span></div><div class="line">tar --numeric-owner -cpf centos7-image-base.tar -C appliance.d .</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock</span></div><div class="line"><span class="comment"># 执行下面解决 不是最优化的解决方案</span></div><div class="line"><span class="comment">#sudo usermod -a -G root jenkins</span></div><div class="line"><span class="comment">#sudo service jenkins restart</span></div><div class="line"></div><div class="line"><span class="comment">#docker login -u admin -p Harbor12345 192.168.111.69</span></div><div class="line"></div><div class="line"><span class="comment"># 导入到docker</span></div><div class="line">cat centos7-image-base.tar | docker import - centos7-image-base</div></pre></td></tr></table></figure>
-<h3 id="建立Jenkins测试项目"><a href="#建立Jenkins测试项目" class="headerlink" title="建立Jenkins测试项目"></a>建立Jenkins测试项目</h3><h5 id="建立测试项目，我们选择流水线pipeline模式的"><a href="#建立测试项目，我们选择流水线pipeline模式的" class="headerlink" title="建立测试项目，我们选择流水线pipeline模式的"></a>建立测试项目，我们选择流水线pipeline模式的</h5><p><img src="./img/devops-54.png" alt="devops-1.png" style="width:800px;"></p>
+<h3 id="建立Jenkins测试项目"><a href="#建立Jenkins测试项目" class="headerlink" title="建立Jenkins测试项目"></a>建立Jenkins测试项目</h3><h5 id="建立测试项目，我们选择流水线pipeline模式的"><a href="#建立测试项目，我们选择流水线pipeline模式的" class="headerlink" title="建立测试项目，我们选择流水线pipeline模式的"></a>建立测试项目，我们选择流水线pipeline模式的</h5><p><img src="http://www.zwting.com/img/devops-54.png" alt="devops-1.png" style="width:800px;"></p>
 <p>Jenkinsfile文件从<a href="http://172.16.153.70/root/test.git读取" target="_blank" rel="external">http://172.16.153.70/root/test.git读取</a><br>做为入口仓库</p>
-<p><img src="./img/devops-55.png" alt="devops-1.png" style="width:800px;"></p>
-<h5 id="选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样"><a href="#选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样" class="headerlink" title="选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样"></a>选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样</h5><p><img src="./img/devops-57.png" alt="devops-1.png" style="width:800px;"></p>
-<h5 id="在JENKINS中设置GITLAB所需要的WEBHOOK"><a href="#在JENKINS中设置GITLAB所需要的WEBHOOK" class="headerlink" title="在JENKINS中设置GITLAB所需要的WEBHOOK"></a>在JENKINS中设置GITLAB所需要的WEBHOOK</h5><p><img src="./img/devops-58.png" alt="devops-1.png" style="width:800px;"></p>
-<h5 id="设置GITLAB所需要的WEBHOOK"><a href="#设置GITLAB所需要的WEBHOOK" class="headerlink" title="设置GITLAB所需要的WEBHOOK"></a>设置GITLAB所需要的WEBHOOK</h5><p><img src="./img/devops-59.png" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="http://www.zwting.com/img/devops-55.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样"><a href="#选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样" class="headerlink" title="选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样"></a>选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样</h5><p><img src="http://www.zwting.com/img/devops-57.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="在JENKINS中设置GITLAB所需要的WEBHOOK"><a href="#在JENKINS中设置GITLAB所需要的WEBHOOK" class="headerlink" title="在JENKINS中设置GITLAB所需要的WEBHOOK"></a>在JENKINS中设置GITLAB所需要的WEBHOOK</h5><p><img src="http://www.zwting.com/img/devops-58.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="设置GITLAB所需要的WEBHOOK"><a href="#设置GITLAB所需要的WEBHOOK" class="headerlink" title="设置GITLAB所需要的WEBHOOK"></a>设置GITLAB所需要的WEBHOOK</h5><p><img src="http://www.zwting.com/img/devops-59.png" alt="devops-1.png" style="width:800px;"></p>
 <h3 id="测试项目"><a href="#测试项目" class="headerlink" title="测试项目"></a>测试项目</h3><h5 id="5-1-点击左侧的立即执行可以测试是否成功"><a href="#5-1-点击左侧的立即执行可以测试是否成功" class="headerlink" title="5.1 点击左侧的立即执行可以测试是否成功"></a>5.1 点击左侧的立即执行可以测试是否成功</h5><h5 id="5-2-修改GITLAB中的代码看是否触发执行"><a href="#5-2-修改GITLAB中的代码看是否触发执行" class="headerlink" title="5.2 修改GITLAB中的代码看是否触发执行"></a>5.2 修改GITLAB中的代码看是否触发执行</h5>
       
 
@@ -339,8 +339,8 @@
     </a>
   
   
-    <a href="/2018/10/11/2018-10-11-k8s-03/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">CentOS7安装Harbor</div>
+    <a href="/2018/10/11/2018-10-11-k8s-04/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Gitlab  和 Jenkins  融合使用</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -473,15 +473,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -497,15 +493,19 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">ceph</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
