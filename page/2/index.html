@@ -157,110 +157,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-2018-10-11-k8s-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/11/2018-10-11-k8s-03/">CentOS7安装Harbor</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/11/2018-10-11-k8s-03/" class="archive-article-date">
-  	<time datetime="2018-10-11T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="harbor"><a href="#harbor" class="headerlink" title="harbor"></a>harbor</h2><p>Habor是由VMWare中国团队开源的容器镜像仓库。事实上，Habor是在Docker Registry上进行了相应的企业级扩展，从而获得了更加广泛的应用，这些新的企业级特性包括：管理用户界面，基于角色的访问控制 ，水平扩展，同步，AD/LDAP集成以及审计日志等。本文档仅说明部署单个基础harbor服务的步骤。</p>
-<h3 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h3><ol>
-<li><p>在deploy节点下载最新的 <a href="https://github.com/docker/compose/releases" target="_blank" rel="external">docker-compose</a> 二进制文件，改名后把它放到项目 <code>/etc/ansible/bin</code>目录下</p>
- <figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">wget https:<span class="regexp">//gi</span>thub.com<span class="regexp">/docker/</span>compose<span class="regexp">/releases/</span>download<span class="regexp">/1.18.0/</span>docker-compose-Linux-x86_64</div><div class="line">mv docker-compose-Linux-x86_64 <span class="regexp">/etc/</span>ansible<span class="regexp">/bin/</span>	docker-compose</div></pre></td></tr></table></figure>
-</li>
-<li><p>在deploy节点下载最新的 <a href="https://github.com/vmware/harbor/releases" target="_blank" rel="external">harbor</a> 离线安装包，把它放到项目 <code>/etc/ansible/down</code> 目录下</p>
-</li>
-<li><p>由于ansible解压的一些问题，需要将官方的tgz包，重新打包为zip包</p>
-</li>
-<li><p>在deploy节点编辑/etc/ansible/hosts文件</p>
- <figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># 参数 NEW_INSTALL=(<span class="keyword">yes</span>/<span class="keyword">no</span>)：<span class="keyword">yes</span>表示新建 harbor，并配置k8s节点的docker可以使用harbor仓库</div><div class="line"># <span class="keyword">no</span> 表示仅配置k8s节点的docker使用已有的harbor仓库</div><div class="line">[harbor]</div><div class="line"><span class="number">172.16</span><span class="number">.153</span><span class="number">.70</span> HARBOR_DOMAIN=<span class="string">"172.16.153.70"</span></div></pre></td></tr></table></figure>
-</li>
-<li><p>在deploy节点执行 </p>
-</li>
-</ol>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">ansible-playbook /etc/ansible/<span class="number">11.</span>harbor.yml</div><div class="line"></div><div class="line"><span class="number">1.</span> 下载docker-compose可执行文件到$PATH目录</div><div class="line"><span class="number">2.</span> 自注册变量result判断是否已经安装harbor，避免重复安装问题</div><div class="line"><span class="number">3.</span> 解压harbor离线安装包到指定目录</div><div class="line"><span class="number">4.</span> 导入harbor所需 docker images</div><div class="line"><span class="number">5.</span> 创建harbor证书和私钥(复用集群的CA证书)</div><div class="line"><span class="number">6.</span> 修改harbor.cfg配置文件</div><div class="line"><span class="number">7.</span> 启动harbor安装脚本</div></pre></td></tr></table></figure>
-<h3 id="验证harbor"><a href="#验证harbor" class="headerlink" title="验证harbor"></a>验证harbor</h3><ol>
-<li>在harbor节点使用<code>docker ps -a</code> 查看harbor容器组件运行情况</li>
-<li>浏览器访问harbor节点的IP地址 <code>https://$NodeIP</code>，使用账号 admin 和 密码 Harbor12345 (harbor.cfg 配置文件中的默认)登陆系统</li>
-</ol>
-<h3 id="管理harbor"><a href="#管理harbor" class="headerlink" title="管理harbor"></a>管理harbor</h3><ul>
-<li>日志目录 <code>/var/log/harbor</code></li>
-<li>数据目录 <code>/data</code> ，其中最主要是 <code>/data/database</code> 和 <code>/data/registry</code> 目录，如果你要彻底重新安装harbor，删除这两个目录即可</li>
-</ul>
-<p>先进入harbor安装目录 <code>cd /data/harbor</code>，常规操作如下：</p>
-<ol>
-<li>暂停harbor <code>docker-compose stop</code> : docker容器stop，并不删除容器</li>
-<li>恢复harbor <code>docker-compose start</code> : 恢复docker容器运行</li>
-<li>停止harbor <code>docker-compose down -v</code> : 停止并删除docker容器</li>
-<li>启动harbor <code>docker-compose up -d</code> : 启动所有docker容器</li>
-</ol>
-<p>修改harbor的运行配置，需要如下步骤：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 停止 harbor</span></div><div class="line"> docker-compose down -v</div><div class="line"><span class="comment"># 修改配置</span></div><div class="line"> vim harbor.cfg</div><div class="line"><span class="comment"># 执行./prepare已更新配置到docker-compose.yml文件</span></div><div class="line"> ./prepare</div><div class="line"><span class="comment"># 启动 harbor</span></div><div class="line"> docker-compose up -d</div></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">harbor</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-03/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2018-10-11-k8s-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -326,6 +222,122 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-02/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2018-10-11-k8s-04" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/11/2018-10-11-k8s-04/">Gitlab  和 Jenkins  融合使用</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/11/2018-10-11-k8s-04/" class="archive-article-date">
+  	<time datetime="2018-10-11T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Jenkins-中的安装和设置"><a href="#Jenkins-中的安装和设置" class="headerlink" title="Jenkins 中的安装和设置"></a>Jenkins 中的安装和设置</h3><ul>
+<li>安装 gitlab pulgin   其它有gitlab web hook 但是是2014年就不维护了</li>
+</ul>
+<p><img src="http://www.zwting.com/img/devops-01.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h5><p><img src="http://www.zwting.com/img/devops-02.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="设置GITLAB地址"><a href="#设置GITLAB地址" class="headerlink" title="设置GITLAB地址"></a>设置GITLAB地址</h5><ul>
+<li>凭证中使用SSH来打通的GITLAB项目</li>
+</ul>
+<p><img src="http://www.zwting.com/img/devops-03.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="构建触发器"><a href="#构建触发器" class="headerlink" title="构建触发器"></a>构建触发器</h5><ul>
+<li>注意红色的部分 一会儿gitlab hook中要用，前面格式改成 <a href="http://用户:密码@IP:PORT/" target="_blank" rel="external">http://用户:密码@IP:PORT/</a></li>
+<li>否则会报403<br><img src="http://www.zwting.com/img/devops-05.png" alt="devops-1.png" style="width:800px;"></li>
+</ul>
+<h5 id="构建测试"><a href="#构建测试" class="headerlink" title="构建测试"></a>构建测试</h5><ul>
+<li>创建一个文件 打印点东西</li>
+</ul>
+<p><img src="http://www.zwting.com/img/devops-06.png" alt="devops-1.png" style="width:800px;"></p>
+<h3 id="GITLAB-中的安装和设置"><a href="#GITLAB-中的安装和设置" class="headerlink" title="GITLAB 中的安装和设置"></a>GITLAB 中的安装和设置</h3><h5 id="创建项目-1"><a href="#创建项目-1" class="headerlink" title="创建项目"></a>创建项目</h5><p><img src="http://www.zwting.com/img/devops-07.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="创建-hook"><a href="#创建-hook" class="headerlink" title="创建  hook"></a>创建  hook</h5><ul>
+<li>注意红色部分  与  Jenkins 自动生成的有区别<br><img src="http://www.zwting.com/img/devops-08.png" alt="devops-1.png" style="width:800px;"></li>
+</ul>
+<h5 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h5><p><img src="http://www.zwting.com/img/devops-09.png" alt="devops-1.png" style="width:800px;"></p>
+<p>FAQ:</p>
+<ul>
+<li>gitlab使用webhook向jenkins发送请求，报错 Requests to the local network are not allowed</li>
+</ul>
+<p><img src="http://www.zwting.com/img/devops-10.png" alt="devops-1.png" style="width:800px;"></p>
+<ul>
+<li>在webhook触发时发生如下错误：Error 403 anonymous is missing the Job/Build permission  </li>
+<li>这个直接用账号密码 也没有这个问题 ，这个答案网上可能是错误的 ，有几个403，报错误不一样</li>
+</ul>
+<p><img src="http://www.zwting.com/img/devops-11.png" alt="devops-1.png" style="width:800px;"></p>
+<ul>
+<li>jenkins.BadHTTPException: Error communicating with server<br><img src="http://www.zwting.com/img/devops-12.png" alt="devops-1.png" style="width:800px;"></li>
+</ul>
+<ul>
+<li>Error 403 anonymous is missing<br>默认安装的情况下，匿名用户是没有任何权限的，这里修改配置，让匿名用户只拥有 查看Job、Job Configure 权限</li>
+</ul>
+<p>点击 Manage Jenkins - Configure Global Security</p>
+<p><img src="http://www.zwting.com/img/devops-13.jpg" alt="devops-1.png" style="width:800px;"></p>
+<p>修改 Access Control - Authorization 部分的配置，选择 Project-based Matrix Authorization Strategy</p>
+<p>这里需要添加一个 root 用户，步骤为在 User/group to add: 填入 root，然后点击 Add，移到最右侧，点击 ✔️，让 root 用户拥有所有权限，此步非常重要，不然保存后会导致 admin is missing the Overall/Read permission 错误</p>
+<p>匿名用户勾选 Overall 的 Read 权限，Job 的 Configure 和 Read 权限，如下图：</p>
+<p><img src="http://www.zwting.com/img/devops-14.jpg" alt="devops-1.png" style="width:800px;"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">jenkins</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-04/">展开全文 >></a>
         </p>
       
 
@@ -422,144 +434,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-01/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2018-10-10-k8s-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/10/2018-10-10-k8s-02/">安装中控机的ansible环境</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/10/2018-10-10-k8s-02/" class="archive-article-date">
-  	<time datetime="2018-10-10T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="服务器列表"><a href="#服务器列表" class="headerlink" title="服务器列表"></a>服务器列表</h3><table>
-<thead>
-<tr>
-<th>主机名</th>
-<th>内网IP</th>
-<th>外网IP</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>deploy</td>
-<td>192.168.111.69</td>
-<td>172.16.153.70</td>
-</tr>
-<tr>
-<td>kmaster</td>
-<td>192.168.111.74</td>
-<td>172.16.153.71</td>
-</tr>
-<tr>
-<td>knode01</td>
-<td>192.168.111.71</td>
-<td>172.16.153.72</td>
-</tr>
-<tr>
-<td>knode02</td>
-<td>192.168.111.68</td>
-<td>172.16.153.73</td>
-</tr>
-<tr>
-<td>knode03</td>
-<td>192.168.111.70</td>
-<td>172.16.153.74</td>
-</tr>
-<tr>
-<td>knode04</td>
-<td>192.168.111.72</td>
-<td>172.16.153.75</td>
-</tr>
-<tr>
-<td>knode05</td>
-<td>192.168.111.73</td>
-<td>172.16.153.76</td>
-</tr>
-</tbody>
-</table>
-<h3 id="etc-hosts追加内容"><a href="#etc-hosts追加内容" class="headerlink" title="/etc/hosts追加内容"></a>/etc/hosts追加内容</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.69</span> <span class="selector-tag">deploy</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.74</span> <span class="selector-tag">kmaster</span> </div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.71</span> <span class="selector-tag">knode01</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.68</span> <span class="selector-tag">knode02</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.70</span> <span class="selector-tag">knode03</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">knode04</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.73</span> <span class="selector-tag">knode05</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.70</span> <span class="selector-tag">etcd01</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">etcd02</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">etcd03</span></div></pre></td></tr></table></figure>
-<h3 id="配置ssh密钥登陆"><a href="#配置ssh密钥登陆" class="headerlink" title="配置ssh密钥登陆"></a>配置ssh密钥登陆</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -q -t rsa -b <span class="number">2048</span> -f ~/.ssh/id_rsa -C <span class="string">''</span> -N <span class="string">''</span></div><div class="line"></div><div class="line"><span class="comment">#$IP为本虚机地址，按照提示输入yes 和root密码</span></div><div class="line"></div><div class="line">ssh-<span class="keyword">copy</span><span class="bash">-id 172.16.153.70</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.71</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.72</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.73</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.74</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.75</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.76</span></div></pre></td></tr></table></figure>
-<h3 id="安装Ansible"><a href="#安装Ansible" class="headerlink" title="安装Ansible"></a>安装Ansible</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum -y <span class="keyword">install</span> epel-<span class="keyword">release</span></div><div class="line">yum <span class="keyword">install</span> ansible</div></pre></td></tr></table></figure>
-<h5 id="打开host-key-checking-vim-etc-ansible-ansible-cfg"><a href="#打开host-key-checking-vim-etc-ansible-ansible-cfg" class="headerlink" title="打开host_key_checking vim /etc/ansible/ansible.cfg"></a>打开host_key_checking vim /etc/ansible/ansible.cfg</h5><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">host_key_checking</span> = <span class="literal">False</span></div></pre></td></tr></table></figure>
-<h5 id="配置ansible的hosts文件-vim-etc-ansible-hosts"><a href="#配置ansible的hosts文件-vim-etc-ansible-hosts" class="headerlink" title="配置ansible的hosts文件 vim /etc/ansible/hosts"></a>配置ansible的hosts文件 vim /etc/ansible/hosts</h5><figure class="highlight gcode"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[all]</div><div class="line">kmaster </div><div class="line">k<span class="symbol">node01</span></div><div class="line">k<span class="symbol">node02</span></div><div class="line">k<span class="symbol">node03</span></div><div class="line">k<span class="symbol">node04</span></div><div class="line">k<span class="symbol">node05</span></div></pre></td></tr></table></figure>
-<h5 id="执行-ansible-m-ping-all"><a href="#执行-ansible-m-ping-all" class="headerlink" title="执行 ansible -m ping all"></a>执行 ansible -m ping all</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">knode05 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode04 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode01 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode02 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> kmaster | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode03 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<h5 id="利用ansible初始化各个K8S的节点服务器环境"><a href="#利用ansible初始化各个K8S的节点服务器环境" class="headerlink" title="利用ansible初始化各个K8S的节点服务器环境"></a>利用ansible初始化各个K8S的节点服务器环境</h5><pre><code> # 安装yum源
- ansible -m shell -a &apos;yum -y install epel-release&apos; all 
-
- # 关闭所有服务器防火墙
- ansible -m shell -a &apos;systemctl stop firewalld &amp; systemctl disable firewalld &amp; &apos; all
-
- # 同步同钟
- ansible -m shell -a &apos;yum -y install ntp &amp; systemctl start ntpd &amp; systemctl enable ntpd  &apos; all 
-
- # 拷贝/etc/hosts文件到各节点
- ansible all -m copy -a &quot;src=/etc/hosts dest=/etc/&quot; 
-
-# 删除 这个不用执行，这个在证书不对时要用
- ansible etcd -m file -a &quot;path=/etc/etcd/ssl state=absent&quot;
-</code></pre>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">ansible</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-02/">展开全文 >></a>
         </p>
       
 
@@ -754,6 +628,144 @@
 
 
   
+    <article id="post-2018-10-10-k8s-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/10/2018-10-10-k8s-02/">安装中控机的ansible环境</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/10/2018-10-10-k8s-02/" class="archive-article-date">
+  	<time datetime="2018-10-10T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="服务器列表"><a href="#服务器列表" class="headerlink" title="服务器列表"></a>服务器列表</h3><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>内网IP</th>
+<th>外网IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deploy</td>
+<td>192.168.111.69</td>
+<td>172.16.153.70</td>
+</tr>
+<tr>
+<td>kmaster</td>
+<td>192.168.111.74</td>
+<td>172.16.153.71</td>
+</tr>
+<tr>
+<td>knode01</td>
+<td>192.168.111.71</td>
+<td>172.16.153.72</td>
+</tr>
+<tr>
+<td>knode02</td>
+<td>192.168.111.68</td>
+<td>172.16.153.73</td>
+</tr>
+<tr>
+<td>knode03</td>
+<td>192.168.111.70</td>
+<td>172.16.153.74</td>
+</tr>
+<tr>
+<td>knode04</td>
+<td>192.168.111.72</td>
+<td>172.16.153.75</td>
+</tr>
+<tr>
+<td>knode05</td>
+<td>192.168.111.73</td>
+<td>172.16.153.76</td>
+</tr>
+</tbody>
+</table>
+<h3 id="etc-hosts追加内容"><a href="#etc-hosts追加内容" class="headerlink" title="/etc/hosts追加内容"></a>/etc/hosts追加内容</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.69</span> <span class="selector-tag">deploy</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.74</span> <span class="selector-tag">kmaster</span> </div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.71</span> <span class="selector-tag">knode01</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.68</span> <span class="selector-tag">knode02</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.70</span> <span class="selector-tag">knode03</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">knode04</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.73</span> <span class="selector-tag">knode05</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.70</span> <span class="selector-tag">etcd01</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">etcd02</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">etcd03</span></div></pre></td></tr></table></figure>
+<h3 id="配置ssh密钥登陆"><a href="#配置ssh密钥登陆" class="headerlink" title="配置ssh密钥登陆"></a>配置ssh密钥登陆</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -q -t rsa -b <span class="number">2048</span> -f ~/.ssh/id_rsa -C <span class="string">''</span> -N <span class="string">''</span></div><div class="line"></div><div class="line"><span class="comment">#$IP为本虚机地址，按照提示输入yes 和root密码</span></div><div class="line"></div><div class="line">ssh-<span class="keyword">copy</span><span class="bash">-id 172.16.153.70</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.71</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.72</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.73</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.74</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.75</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.76</span></div></pre></td></tr></table></figure>
+<h3 id="安装Ansible"><a href="#安装Ansible" class="headerlink" title="安装Ansible"></a>安装Ansible</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum -y <span class="keyword">install</span> epel-<span class="keyword">release</span></div><div class="line">yum <span class="keyword">install</span> ansible</div></pre></td></tr></table></figure>
+<h5 id="打开host-key-checking-vim-etc-ansible-ansible-cfg"><a href="#打开host-key-checking-vim-etc-ansible-ansible-cfg" class="headerlink" title="打开host_key_checking vim /etc/ansible/ansible.cfg"></a>打开host_key_checking vim /etc/ansible/ansible.cfg</h5><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">host_key_checking</span> = <span class="literal">False</span></div></pre></td></tr></table></figure>
+<h5 id="配置ansible的hosts文件-vim-etc-ansible-hosts"><a href="#配置ansible的hosts文件-vim-etc-ansible-hosts" class="headerlink" title="配置ansible的hosts文件 vim /etc/ansible/hosts"></a>配置ansible的hosts文件 vim /etc/ansible/hosts</h5><figure class="highlight gcode"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[all]</div><div class="line">kmaster </div><div class="line">k<span class="symbol">node01</span></div><div class="line">k<span class="symbol">node02</span></div><div class="line">k<span class="symbol">node03</span></div><div class="line">k<span class="symbol">node04</span></div><div class="line">k<span class="symbol">node05</span></div></pre></td></tr></table></figure>
+<h5 id="执行-ansible-m-ping-all"><a href="#执行-ansible-m-ping-all" class="headerlink" title="执行 ansible -m ping all"></a>执行 ansible -m ping all</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">knode05 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode04 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode01 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode02 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> kmaster | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode03 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<h5 id="利用ansible初始化各个K8S的节点服务器环境"><a href="#利用ansible初始化各个K8S的节点服务器环境" class="headerlink" title="利用ansible初始化各个K8S的节点服务器环境"></a>利用ansible初始化各个K8S的节点服务器环境</h5><pre><code> # 安装yum源
+ ansible -m shell -a &apos;yum -y install epel-release&apos; all 
+
+ # 关闭所有服务器防火墙
+ ansible -m shell -a &apos;systemctl stop firewalld &amp; systemctl disable firewalld &amp; &apos; all
+
+ # 同步同钟
+ ansible -m shell -a &apos;yum -y install ntp &amp; systemctl start ntpd &amp; systemctl enable ntpd  &apos; all 
+
+ # 拷贝/etc/hosts文件到各节点
+ ansible all -m copy -a &quot;src=/etc/hosts dest=/etc/&quot; 
+
+# 删除 这个不用执行，这个在证书不对时要用
+ ansible etcd -m file -a &quot;path=/etc/etcd/ssl state=absent&quot;
+</code></pre>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">ansible</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-02/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2018-10-10-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -781,7 +793,7 @@
 <li>将 Kubernetes 的服务配置文件上传至 Kubernetes 的 master 服务器；</li>
 <li>在 Jenkins 中执行 kubectl apply -f file.yaml，在 Kubernetes 部署服务；</li>
 </ul>
-<h5 id="目标模型图"><a href="#目标模型图" class="headerlink" title="目标模型图"></a>目标模型图</h5><p><img src="./img/devops-1.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="目标模型图"><a href="#目标模型图" class="headerlink" title="目标模型图"></a>目标模型图</h5><p><img src="http://www.zwting.com/img/devops-1.png" alt="devops-1.png" style="width:800px;"></p>
 
       
 
@@ -1231,11 +1243,15 @@ source ~/.bash_profile
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1251,19 +1267,15 @@ source ~/.bash_profile
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">ceph</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
