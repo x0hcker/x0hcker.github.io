@@ -15,24 +15,24 @@
 <meta property="og:url" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/index.html">
 <meta property="og:site_name" content="醉翁亭">
 <meta property="og:description" content="Gitlab  和 Jenkins  融合使用">
-<meta property="og:image" content="http://www.zwting.com/img/devops-01.png">
-<meta property="og:image" content="http://www.zwting.com/img/devops-02.png">
-<meta property="og:image" content="http://www.zwting.com/img/devops-03.png">
-<meta property="og:image" content="http://www.zwting.com/img/devops-05.png">
-<meta property="og:image" content="http://www.zwting.com/img/devops-06.png">
-<meta property="og:image" content="http://www.zwting.com/img/devops-07.png">
-<meta property="og:image" content="http://www.zwting.com/img/devops-08.png">
-<meta property="og:image" content="http://www.zwting.com/img/devops-09.png">
-<meta property="og:image" content="http://www.zwting.com/img/devops-10.png">
-<meta property="og:image" content="http://www.zwting.com/img/devops-11.png">
-<meta property="og:image" content="http://www.zwting.com/img/devops-12.png">
-<meta property="og:image" content="http://www.zwting.com/img/devops-13.jpg">
-<meta property="og:image" content="http://www.zwting.com/img/devops-14.jpg">
-<meta property="og:updated_time" content="2018-10-24T11:29:50.720Z">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/img/devops-01.png">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/img/devops-02.png">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/img/devops-03.png">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/img/devops-05.png">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/img/devops-06.png">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/img/devops-07.png">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/img/devops-08.png">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/img/devops-09.png">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/img/devops-10.png">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/img/devops-11.png">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/img/devops-12.png">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/img/devops-13.jpg">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/img/devops-14.jpg">
+<meta property="og:updated_time" content="2018-10-24T11:15:45.980Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab  和 Jenkins  融合使用">
 <meta name="twitter:description" content="Gitlab  和 Jenkins  融合使用">
-<meta name="twitter:image" content="http://www.zwting.com/img/devops-01.png">
+<meta name="twitter:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-04/img/devops-01.png">
   
     <link rel="alternative" href="/atom.xml" title="醉翁亭" type="application/atom+xml">
   
@@ -193,47 +193,47 @@
         <h3 id="Jenkins-中的安装和设置"><a href="#Jenkins-中的安装和设置" class="headerlink" title="Jenkins 中的安装和设置"></a>Jenkins 中的安装和设置</h3><ul>
 <li>安装 gitlab pulgin   其它有gitlab web hook 但是是2014年就不维护了</li>
 </ul>
-<p><img src="http://www.zwting.com/img/devops-01.png" alt="devops-1.png" style="width:800px;"></p>
-<h5 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h5><p><img src="http://www.zwting.com/img/devops-02.png" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="./img/devops-01.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h5><p><img src="./img/devops-02.png" alt="devops-1.png" style="width:800px;"></p>
 <h5 id="设置GITLAB地址"><a href="#设置GITLAB地址" class="headerlink" title="设置GITLAB地址"></a>设置GITLAB地址</h5><ul>
 <li>凭证中使用SSH来打通的GITLAB项目</li>
 </ul>
-<p><img src="http://www.zwting.com/img/devops-03.png" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="./img/devops-03.png" alt="devops-1.png" style="width:800px;"></p>
 <h5 id="构建触发器"><a href="#构建触发器" class="headerlink" title="构建触发器"></a>构建触发器</h5><ul>
 <li>注意红色的部分 一会儿gitlab hook中要用，前面格式改成 <a href="http://用户:密码@IP:PORT/" target="_blank" rel="external">http://用户:密码@IP:PORT/</a></li>
-<li>否则会报403<br><img src="http://www.zwting.com/img/devops-05.png" alt="devops-1.png" style="width:800px;"></li>
+<li>否则会报403<br><img src="./img/devops-05.png" alt="devops-1.png" style="width:800px;"></li>
 </ul>
 <h5 id="构建测试"><a href="#构建测试" class="headerlink" title="构建测试"></a>构建测试</h5><ul>
 <li>创建一个文件 打印点东西</li>
 </ul>
-<p><img src="http://www.zwting.com/img/devops-06.png" alt="devops-1.png" style="width:800px;"></p>
-<h3 id="GITLAB-中的安装和设置"><a href="#GITLAB-中的安装和设置" class="headerlink" title="GITLAB 中的安装和设置"></a>GITLAB 中的安装和设置</h3><h5 id="创建项目-1"><a href="#创建项目-1" class="headerlink" title="创建项目"></a>创建项目</h5><p><img src="http://www.zwting.com/img/devops-07.png" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="./img/devops-06.png" alt="devops-1.png" style="width:800px;"></p>
+<h3 id="GITLAB-中的安装和设置"><a href="#GITLAB-中的安装和设置" class="headerlink" title="GITLAB 中的安装和设置"></a>GITLAB 中的安装和设置</h3><h5 id="创建项目-1"><a href="#创建项目-1" class="headerlink" title="创建项目"></a>创建项目</h5><p><img src="./img/devops-07.png" alt="devops-1.png" style="width:800px;"></p>
 <h5 id="创建-hook"><a href="#创建-hook" class="headerlink" title="创建  hook"></a>创建  hook</h5><ul>
-<li>注意红色部分  与  Jenkins 自动生成的有区别<br><img src="http://www.zwting.com/img/devops-08.png" alt="devops-1.png" style="width:800px;"></li>
+<li>注意红色部分  与  Jenkins 自动生成的有区别<br><img src="./img/devops-08.png" alt="devops-1.png" style="width:800px;"></li>
 </ul>
-<h5 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h5><p><img src="http://www.zwting.com/img/devops-09.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h5><p><img src="./img/devops-09.png" alt="devops-1.png" style="width:800px;"></p>
 <p>FAQ:</p>
 <ul>
 <li>gitlab使用webhook向jenkins发送请求，报错 Requests to the local network are not allowed</li>
 </ul>
-<p><img src="http://www.zwting.com/img/devops-10.png" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="./img/devops-10.png" alt="devops-1.png" style="width:800px;"></p>
 <ul>
 <li>在webhook触发时发生如下错误：Error 403 anonymous is missing the Job/Build permission  </li>
 <li>这个直接用账号密码 也没有这个问题 ，这个答案网上可能是错误的 ，有几个403，报错误不一样</li>
 </ul>
-<p><img src="http://www.zwting.com/img/devops-11.png" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="./img/devops-11.png" alt="devops-1.png" style="width:800px;"></p>
 <ul>
-<li>jenkins.BadHTTPException: Error communicating with server<br><img src="http://www.zwting.com/img/devops-12.png" alt="devops-1.png" style="width:800px;"></li>
+<li>jenkins.BadHTTPException: Error communicating with server<br><img src="./img/devops-12.png" alt="devops-1.png" style="width:800px;"></li>
 </ul>
 <ul>
 <li>Error 403 anonymous is missing<br>默认安装的情况下，匿名用户是没有任何权限的，这里修改配置，让匿名用户只拥有 查看Job、Job Configure 权限</li>
 </ul>
 <p>点击 Manage Jenkins - Configure Global Security</p>
-<p><img src="http://www.zwting.com/img/devops-13.jpg" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="./img/devops-13.jpg" alt="devops-1.png" style="width:800px;"></p>
 <p>修改 Access Control - Authorization 部分的配置，选择 Project-based Matrix Authorization Strategy</p>
 <p>这里需要添加一个 root 用户，步骤为在 User/group to add: 填入 root，然后点击 Add，移到最右侧，点击 ✔️，让 root 用户拥有所有权限，此步非常重要，不然保存后会导致 admin is missing the Overall/Read permission 错误</p>
 <p>匿名用户勾选 Overall 的 Read 权限，Job 的 Configure 和 Read 权限，如下图：</p>
-<p><img src="http://www.zwting.com/img/devops-14.jpg" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="./img/devops-14.jpg" alt="devops-1.png" style="width:800px;"></p>
 
       
 
@@ -354,11 +354,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/10/11/2018-10-11-k8s-03/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/10/15/2018-10-15-k8s-01/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          CentOS7安装Harbor
+          Gitlab和Jenkins和Harbor整合使用
         
       </div>
     </a>
@@ -478,6 +478,10 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">python技术分享</a>
               </li>
              
@@ -514,11 +518,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
+                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -527,10 +531,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">ceph</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
               </li>
              
               <li class="article-tag-list-item">

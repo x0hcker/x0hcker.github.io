@@ -157,6 +157,277 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2018-10-17-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/17/2018-10-17-k8s-01/">打一个可以运行Flask的Python镜像2</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/17/2018-10-17-k8s-01/" class="archive-article-date">
+  	<time datetime="2018-10-17T06:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>接上一话题，上次flask已经运行成功，但是连redis没有成功。因为我们根本就没有启动redis相关的内容。</p>
+<h3 id="1-制作redis过程"><a href="#1-制作redis过程" class="headerlink" title="1.制作redis过程"></a>1.制作redis过程</h3><h5 id="1-1-启动一个centos的容器"><a href="#1-1-启动一个centos的容器" class="headerlink" title="1.1 启动一个centos的容器"></a>1.1 启动一个centos的容器</h5><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker <span class="built_in">run</span> -it <span class="number">172.16</span><span class="number">.153</span><span class="number">.70</span>/library/centos7-<span class="built_in">image</span>-base:<span class="number">1.0</span> <span class="string">'/bin/bash'</span></div></pre></td></tr></table></figure>
+<h5 id="1-2-在容器内执行安装指令"><a href="#1-2-在容器内执行安装指令" class="headerlink" title="1.2 在容器内执行安装指令"></a>1.2 在容器内执行安装指令</h5><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span>  yum install -y curl tar make gcc wget gzip</div><div class="line"><span class="number">2</span>   wget  http:<span class="comment">//download.redis.io/releases/redis-2.8.13.tar.gz </span></div><div class="line"><span class="number">3</span>  tar zxvf redis<span class="number">-2.8</span><span class="number">.13</span>.tar.gz </div><div class="line"><span class="number">4</span>  cd redis<span class="number">-2.8</span><span class="number">.13</span></div><div class="line"><span class="number">5</span>  make  &amp;&amp; make install</div><div class="line"><span class="number">6</span>  /usr/local/bin/redis-cli </div><div class="line"><span class="number">7</span>  /usr/local/bin/redis-server</div><div class="line"><span class="number">8</span>  history </div><div class="line">```   </div><div class="line">  </div><div class="line"></div><div class="line">##### <span class="number">1.3</span> 制作Dockerfile</div><div class="line">在上面的指令中选择自己所需要的内容</div></pre></td></tr></table></figure>
+<p>FROM  172.16.153.70/library/centos7-image-base:1.0    </p>
+<p>WORKDIR /redis_work</p>
+<p>RUN yum install -y curl tar make gcc wget gzip &amp;&amp; \<br>    wget  <a href="http://download.redis.io/releases/redis-2.8.13.tar.gz" target="_blank" rel="external">http://download.redis.io/releases/redis-2.8.13.tar.gz</a> &amp;&amp; \<br>    tar zxvf redis-2.8.13.tar.gz &amp;&amp; \<br>    cd redis-2.8.13 &amp;&amp;  make &amp;&amp; make install</p>
+<p>RUN rm -rf redis-2.8.13.tar.gz &amp;&amp; \<br>    rm -rf redis-2.8.13</p>
+<p>EXPOSE 6379</p>
+<p>#这里有坑见 <a href="https://docs.docker.com/engine/reference/builder/#cmd" target="_blank" rel="external">https://docs.docker.com/engine/reference/builder/#cmd</a> 必须是双引号 。。<br>CMD [“/usr/local/bin/redis-server”]</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">### 打镜像</div></pre></td></tr></table></figure>
+<p> /opt/kube/bin/docker build -t redis<br> /opt/kube/bin/docker login -u admin -p  Harbor12345 172.16.153.70<br> /opt/kube/bin/docker tag redis:latest  172.16.153.70/library/redis:1.0<br> /opt/kube/bin/docker push  172.16.153.70/library/redis:1.0<br>```</p>
+<h3 id="这个文章主要是演示快速制作Dockerfile的-录了一个视频。"><a href="#这个文章主要是演示快速制作Dockerfile的-录了一个视频。" class="headerlink" title="这个文章主要是演示快速制作Dockerfile的,录了一个视频。"></a>这个文章主要是演示快速制作Dockerfile的,录了一个视频。</h3><p><a href="http://ftp.youle.game/mac/技术/运维/moive/怎么快速的写dockerfile.mov" target="_blank" rel="external">怎么快速的写dockerfile</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">docker</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/17/2018-10-17-k8s-01/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2018-10-15-k8s-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/15/2018-10-15-k8s-02/">利用Jenkins打Docker镜像</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/15/2018-10-15-k8s-02/" class="archive-article-date">
+  	<time datetime="2018-10-15T06:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-思路整理"><a href="#1-思路整理" class="headerlink" title="1.思路整理"></a>1.思路整理</h3><ul>
+<li>目的： 打一个可以运行Flask的Python镜像</li>
+<li>过程：<ul>
+<li>利用CentOS7镜像启动一个容器，在容器中运行</li>
+<li>将运行过程中使用的指令整理到dockerfile中</li>
+<li>在pipeline中加入打镜像步骤，成功后推到harbor上</li>
+<li>启动harbor上的镜像</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-制作过程"><a href="#2-制作过程" class="headerlink" title="2.制作过程"></a>2.制作过程</h3><p>git仓库结构如下<br><img src="./img/devops-101.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="2-1启动基础容器"><a href="#2-1启动基础容器" class="headerlink" title="2.1启动基础容器"></a>2.1启动基础容器</h5><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker <span class="built_in">run</span> -it <span class="number">172.16</span><span class="number">.153</span><span class="number">.70</span>/library/centos7-<span class="built_in">image</span>-base:<span class="number">1.0</span> <span class="string">'/bin/bash'</span></div></pre></td></tr></table></figure>
+<h5 id="2-2-在基础容器中执行所需指令"><a href="#2-2-在基础容器中执行所需指令" class="headerlink" title="2.2 在基础容器中执行所需指令"></a>2.2 在基础容器中执行所需指令</h5><p><img src="./img/devops-100.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="2-3制作Dockerfile"><a href="#2-3制作Dockerfile" class="headerlink" title="2.3制作Dockerfile"></a>2.3制作Dockerfile</h5><p>在上面的指令中选择自己所需要的内容</p>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="string">FROM </span><span class="string">172.</span><span class="string">16.</span><span class="string">153.</span><span class="string">70/</span><span class="string">library/</span><span class="string">centos7-image-base:1.</span>0</div><div class="line"></div><div class="line"><span class="string">WORKDIR </span>/<span class="string">app</span></div><div class="line"><span class="string">COPY </span>. /<span class="string">app</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">RUN </span><span class="string">curl </span><span class="string">https:</span>//<span class="string">bootstrap.</span><span class="string">pypa.</span><span class="string">io/</span><span class="built_in">get-pip.py</span> -o <span class="built_in">get-pip.py</span></div><div class="line"><span class="built_in">RUN</span> <span class="string">python </span><span class="built_in">get-pip.py</span></div><div class="line"><span class="built_in">RUN</span> <span class="string">pip </span><span class="string">install </span><span class="built_in">--trusted-host</span> <span class="string">pypi.</span><span class="string">python.</span><span class="string">org </span>-r <span class="string">requirements.</span><span class="string">txt</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">ENV </span><span class="string">NAME </span><span class="string">World</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">EXPOSE </span><span class="string">80</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">CMD </span>[<span class="string">"python"</span>, <span class="string">"app.py"</span>]</div></pre></td></tr></table></figure>
+<h5 id="app-py"><a href="#app-py" class="headerlink" title="app.py"></a>app.py</h5><figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">from flask <span class="built_in">import</span> Flask</div><div class="line">from redis <span class="built_in">import</span> Redis, RedisError</div><div class="line"><span class="built_in">import</span> os</div><div class="line"><span class="built_in">import</span> socket</div><div class="line"></div><div class="line"><span class="comment"># Connect to Redis</span></div><div class="line"><span class="attr">redis</span> = Redis(<span class="attr">host="redis",</span> <span class="attr">db=0,</span> <span class="attr">socket_connect_timeout=2,</span> <span class="attr">socket_timeout=2)</span></div><div class="line"></div><div class="line"><span class="attr">app</span> = Flask(__name__)</div><div class="line"></div><div class="line">@app.route(<span class="string">"/"</span>)</div><div class="line">def hello():</div><div class="line">    try:</div><div class="line">        <span class="attr">visits</span> = redis.incr(<span class="string">"counter"</span>)</div><div class="line">    except RedisError:</div><div class="line">        <span class="attr">visits</span> = <span class="string">"&lt;i&gt;cannot connect to Redis, counter disabled&lt;/i&gt;"</span></div><div class="line"></div><div class="line">    <span class="attr">html</span> = <span class="string">"&lt;h3&gt;Hello &#123;name&#125;!&lt;/h3&gt;"</span> \</div><div class="line">           <span class="string">"&lt;b&gt;Hostname:&lt;/b&gt; &#123;hostname&#125;&lt;br/&gt;"</span> \</div><div class="line">           <span class="string">"&lt;b&gt;Visits:&lt;/b&gt; &#123;visits&#125;"</span></div><div class="line">    return html.format(<span class="attr">name=os.getenv("NAME",</span> <span class="string">"world"</span>), <span class="attr">hostname=socket.gethostname(),</span> <span class="attr">visits=visits)</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> <span class="attr">__name__</span> == <span class="string">"__main__"</span>:</div><div class="line">    app.run(<span class="attr">host='0.0.0.0',</span> <span class="attr">port=80)</span></div></pre></td></tr></table></figure>
+<h6 id="requirements-txt"><a href="#requirements-txt" class="headerlink" title="requirements.txt"></a>requirements.txt</h6><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">Flask</span></div><div class="line"><span class="attribute">Redis</span></div></pre></td></tr></table></figure>
+<h5 id="jenkins内容添加docker打镜像内容"><a href="#jenkins内容添加docker打镜像内容" class="headerlink" title="jenkins内容添加docker打镜像内容"></a>jenkins内容添加docker打镜像内容</h5><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">pipeline &#123;</div><div class="line">    agent any</div><div class="line"></div><div class="line">    stages &#123;</div><div class="line">        </div><div class="line">        stage('Build Flask') &#123;</div><div class="line">            steps &#123;</div><div class="line">                echo 'Build Flask....'</div><div class="line">                withCredentials([usernamePassword( credentialsId: 'Harbor69', usernameVariable: "DOCKER_USR", passwordVariable: "DOCKER_PWD")]) &#123;</div><div class="line">                     </div><div class="line">                            sh ("/opt/kube/bin/docker build -t flaskhello .")</div><div class="line">                            sh ("/opt/kube/bin/docker login -u $&#123;DOCKER_USR&#125; -p  $&#123;DOCKER_PWD&#125; 172.16.153.70")</div><div class="line">                            sh ("/opt/kube/bin/docker tag flaskhello:latest  172.16.153.70/library/flaskhello:1.0")</div><div class="line">                            sh ("/opt/kube/bin/docker push  172.16.153.70/library/flaskhello:1.0")</div><div class="line">                           </div><div class="line">                 &#125;</div><div class="line">               </div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="在Jenkins中测试集成"><a href="#在Jenkins中测试集成" class="headerlink" title="在Jenkins中测试集成"></a>在Jenkins中测试集成</h3><p><img src="./img/devops-102.jpg" alt="devops-1.png" style="width:800px;"><br>成功后会在harbor中出现<br><img src="./img/devops-103.png" alt="devops-1.png" style="width:800px;"></p>
+<h3 id="测试使用harbor中的镜像"><a href="#测试使用harbor中的镜像" class="headerlink" title="测试使用harbor中的镜像"></a>测试使用harbor中的镜像</h3><p>将容器中的80端口映射到物理机的4000<br><figure class="highlight dns"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -p <span class="number">4000:80 172</span>.<span class="number">16.153.70</span>/library/flaskhello:<span class="number">1</span>.<span class="number">0</span></div></pre></td></tr></table></figure></p>
+<p>运行后在浏览器中输入<a href="http://172.16.153.70:4000" target="_blank" rel="external">http://172.16.153.70:4000</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">jenkins</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/15/2018-10-15-k8s-02/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2018-10-15-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/15/2018-10-15-k8s-01/">Gitlab和Jenkins和Harbor整合使用</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/15/2018-10-15-k8s-01/" class="archive-article-date">
+  	<time datetime="2018-10-15T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="前期环境准备"><a href="#前期环境准备" class="headerlink" title="前期环境准备"></a>前期环境准备</h3><h5 id="1-1设置gitlab"><a href="#1-1设置gitlab" class="headerlink" title="1.1设置gitlab"></a>1.1设置gitlab</h5><p>利用root账号设置gitlab可以跨站请求</p>
+<p>Q:gitlab使用webhook向jenkins发送请求，报错 Requests to the local network are not allowed</p>
+<p><img src="./img/devops-50.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="1-2设置jenkins"><a href="#1-2设置jenkins" class="headerlink" title="1.2设置jenkins"></a>1.2设置jenkins</h5><p>利用root账号设置 jenkins可以接受跨站请求<br><img src="./img/devops-51.png" alt="devops-1.png" style="width:800px;"></p>
+<p>使用gitlab的webhook时，可以用账号密码形式的 也可以用匿名的，如果用匿名形式的设置匿名账号可以做哪些事<br><img src="./img/devops-52.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="1-3设置jenkins账号执行Docker的权限"><a href="#1-3设置jenkins账号执行Docker的权限" class="headerlink" title="1.3设置jenkins账号执行Docker的权限"></a>1.3设置jenkins账号执行Docker的权限</h5><p>在jenkins的脚本中执行docker时，需要设置jenkins有权限使用docker，观察下docker启动的用户和组设置jenkins权限到组中</p>
+<p>Q: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post </p>
+<p><img src="./img/devops-53.png" alt="devops-1.png" style="width:800px;"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span><span class="bash"> sudo groupadd docker</span></div><div class="line"><span class="meta">$</span><span class="bash"> sudo usermod -aG docker jenkins</span></div></pre></td></tr></table></figure>
+<h5 id="1-4设置docker可以登录harbor"><a href="#1-4设置docker可以登录harbor" class="headerlink" title="1.4设置docker可以登录harbor"></a>1.4设置docker可以登录harbor</h5><p>docker login -u admin -p Harbor12345 172.16.153.70 </p>
+<p>Q: WARNING! Using –password via the CLI is insecure. Use –password-stdin.<br>Error response from daemon: Get <a href="https://172.16.153.70/v2/" target="_blank" rel="external">https://172.16.153.70/v2/</a>: x509: certificate signed by unknown authority</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp <span class="regexp">/etc/</span>kubernetes<span class="regexp">/ssl/</span>ca.pem <span class="regexp">/etc/</span>docker<span class="regexp">/certs.d/</span><span class="number">172.16</span>.<span class="number">153.70</span><span class="regexp">/ca.crt</span></div></pre></td></tr></table></figure>
+<h5 id="1-5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）"><a href="#1-5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）" class="headerlink" title="1.5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）"></a>1.5用ROOT在jenkins中设置访问GITLAB的账号密码凭据（可以选别的如SSH）</h5><p><img src="./img/devops-56.png" alt="devops-1.png" style="width:800px;"></p>
+<h3 id="建立GITLAB测试项目"><a href="#建立GITLAB测试项目" class="headerlink" title="建立GITLAB测试项目"></a>建立GITLAB测试项目</h3><p>地址：git@172.16.153.70:root/test.git</p>
+<h5 id="2-1在仓库中加入Jenkinsfile"><a href="#2-1在仓库中加入Jenkinsfile" class="headerlink" title="2.1在仓库中加入Jenkinsfile"></a>2.1在仓库中加入Jenkinsfile</h5><figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">pipeline &#123;</div><div class="line">    agent any</div><div class="line"></div><div class="line">    stages &#123;</div><div class="line">        </div><div class="line">        stage(<span class="string">'Check'</span>) &#123;</div><div class="line">            steps &#123;</div><div class="line">                 echo <span class="string">'docker --version'</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">         </div><div class="line">          </div><div class="line">        stage(<span class="string">'Build'</span>) &#123;</div><div class="line">            steps &#123;</div><div class="line">                sh <span class="string">'sh ./build_centos7_image.sh'</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        stage(<span class="string">'Deploy'</span>) &#123;</div><div class="line">            steps &#123;</div><div class="line">                echo <span class="string">'Deploying....'</span></div><div class="line">                </div><div class="line">                 withCredentials([usernamePassword( credentialsId: <span class="string">'Harbor69'</span>, usernameVariable: <span class="string">"DOCKER_USR"</span>, passwordVariable: <span class="string">"DOCKER_PWD"</span>)]) &#123;</div><div class="line">                     </div><div class="line">                            sh (<span class="string">"/opt/kube/bin/docker login -u $&#123;DOCKER_USR&#125; -p  $&#123;DOCKER_PWD&#125; 172.16.153.70"</span>)</div><div class="line">                            sh (<span class="string">"/opt/kube/bin/docker tag centos7-image-base:latest  172.16.153.70/library/centos7-image-base:1.0"</span>)</div><div class="line">                            sh (<span class="string">"/opt/kube/bin/docker push  172.16.153.70/library/centos7-image-base:1.0"</span>)</div><div class="line">                           </div><div class="line">                 &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="2-2实现pipeline中调用bash脚本build-centos7-image-sh"><a href="#2-2实现pipeline中调用bash脚本build-centos7-image-sh" class="headerlink" title=".2.2实现pipeline中调用bash脚本build_centos7_image.sh"></a>.2.2实现pipeline中调用bash脚本build_centos7_image.sh</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="comment"># 上面这个一定不要忘记，要不pileline会报错</span></div><div class="line"></div><div class="line"><span class="built_in">export</span> PATH=/opt/kube/bin:<span class="variable">$PATH</span></div><div class="line"></div><div class="line"><span class="comment"># 可以打进去 yum vim telnet 等定制化的准备</span></div><div class="line">supermin5 -v --prepare bash coreutils yum  -o supermin.d</div><div class="line"></div><div class="line">supermin5 -v --build --format chroot supermin.d -o appliance.d</div><div class="line"></div><div class="line"><span class="comment"># centos7</span></div><div class="line"><span class="built_in">echo</span> 7 &gt; appliance.d/etc/yum/vars/releasever</div><div class="line"></div><div class="line"><span class="comment"># 打包</span></div><div class="line">tar --numeric-owner -cpf centos7-image-base.tar -C appliance.d .</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock</span></div><div class="line"><span class="comment"># 执行下面解决 不是最优化的解决方案</span></div><div class="line"><span class="comment">#sudo usermod -a -G root jenkins</span></div><div class="line"><span class="comment">#sudo service jenkins restart</span></div><div class="line"></div><div class="line"><span class="comment">#docker login -u admin -p Harbor12345 192.168.111.69</span></div><div class="line"></div><div class="line"><span class="comment"># 导入到docker</span></div><div class="line">cat centos7-image-base.tar | docker import - centos7-image-base</div></pre></td></tr></table></figure>
+<h3 id="建立Jenkins测试项目"><a href="#建立Jenkins测试项目" class="headerlink" title="建立Jenkins测试项目"></a>建立Jenkins测试项目</h3><h5 id="建立测试项目，我们选择流水线pipeline模式的"><a href="#建立测试项目，我们选择流水线pipeline模式的" class="headerlink" title="建立测试项目，我们选择流水线pipeline模式的"></a>建立测试项目，我们选择流水线pipeline模式的</h5><p><img src="./img/devops-54.png" alt="devops-1.png" style="width:800px;"></p>
+<p>Jenkinsfile文件从<a href="http://172.16.153.70/root/test.git读取" target="_blank" rel="external">http://172.16.153.70/root/test.git读取</a><br>做为入口仓库</p>
+<p><img src="./img/devops-55.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样"><a href="#选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样" class="headerlink" title="选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样"></a>选择对应的账号密码凭据，否则会提示红色错误，还有要注意仓库的分支和JENKINS的位置，要和GITLAB中位置一样</h5><p><img src="./img/devops-57.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="在JENKINS中设置GITLAB所需要的WEBHOOK"><a href="#在JENKINS中设置GITLAB所需要的WEBHOOK" class="headerlink" title="在JENKINS中设置GITLAB所需要的WEBHOOK"></a>在JENKINS中设置GITLAB所需要的WEBHOOK</h5><p><img src="./img/devops-58.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="设置GITLAB所需要的WEBHOOK"><a href="#设置GITLAB所需要的WEBHOOK" class="headerlink" title="设置GITLAB所需要的WEBHOOK"></a>设置GITLAB所需要的WEBHOOK</h5><p><img src="./img/devops-59.png" alt="devops-1.png" style="width:800px;"></p>
+<h3 id="测试项目"><a href="#测试项目" class="headerlink" title="测试项目"></a>测试项目</h3><h5 id="5-1-点击左侧的立即执行可以测试是否成功"><a href="#5-1-点击左侧的立即执行可以测试是否成功" class="headerlink" title="5.1 点击左侧的立即执行可以测试是否成功"></a>5.1 点击左侧的立即执行可以测试是否成功</h5><h5 id="5-2-修改GITLAB中的代码看是否触发执行"><a href="#5-2-修改GITLAB中的代码看是否触发执行" class="headerlink" title="5.2 修改GITLAB中的代码看是否触发执行"></a>5.2 修改GITLAB中的代码看是否触发执行</h5>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/15/2018-10-15-k8s-01/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2018-10-11-k8s-04" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -180,47 +451,47 @@
         <h3 id="Jenkins-中的安装和设置"><a href="#Jenkins-中的安装和设置" class="headerlink" title="Jenkins 中的安装和设置"></a>Jenkins 中的安装和设置</h3><ul>
 <li>安装 gitlab pulgin   其它有gitlab web hook 但是是2014年就不维护了</li>
 </ul>
-<p><img src="http://www.zwting.com/img/devops-01.png" alt="devops-1.png" style="width:800px;"></p>
-<h5 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h5><p><img src="http://www.zwting.com/img/devops-02.png" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="./img/devops-01.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h5><p><img src="./img/devops-02.png" alt="devops-1.png" style="width:800px;"></p>
 <h5 id="设置GITLAB地址"><a href="#设置GITLAB地址" class="headerlink" title="设置GITLAB地址"></a>设置GITLAB地址</h5><ul>
 <li>凭证中使用SSH来打通的GITLAB项目</li>
 </ul>
-<p><img src="http://www.zwting.com/img/devops-03.png" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="./img/devops-03.png" alt="devops-1.png" style="width:800px;"></p>
 <h5 id="构建触发器"><a href="#构建触发器" class="headerlink" title="构建触发器"></a>构建触发器</h5><ul>
 <li>注意红色的部分 一会儿gitlab hook中要用，前面格式改成 <a href="http://用户:密码@IP:PORT/" target="_blank" rel="external">http://用户:密码@IP:PORT/</a></li>
-<li>否则会报403<br><img src="http://www.zwting.com/img/devops-05.png" alt="devops-1.png" style="width:800px;"></li>
+<li>否则会报403<br><img src="./img/devops-05.png" alt="devops-1.png" style="width:800px;"></li>
 </ul>
 <h5 id="构建测试"><a href="#构建测试" class="headerlink" title="构建测试"></a>构建测试</h5><ul>
 <li>创建一个文件 打印点东西</li>
 </ul>
-<p><img src="http://www.zwting.com/img/devops-06.png" alt="devops-1.png" style="width:800px;"></p>
-<h3 id="GITLAB-中的安装和设置"><a href="#GITLAB-中的安装和设置" class="headerlink" title="GITLAB 中的安装和设置"></a>GITLAB 中的安装和设置</h3><h5 id="创建项目-1"><a href="#创建项目-1" class="headerlink" title="创建项目"></a>创建项目</h5><p><img src="http://www.zwting.com/img/devops-07.png" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="./img/devops-06.png" alt="devops-1.png" style="width:800px;"></p>
+<h3 id="GITLAB-中的安装和设置"><a href="#GITLAB-中的安装和设置" class="headerlink" title="GITLAB 中的安装和设置"></a>GITLAB 中的安装和设置</h3><h5 id="创建项目-1"><a href="#创建项目-1" class="headerlink" title="创建项目"></a>创建项目</h5><p><img src="./img/devops-07.png" alt="devops-1.png" style="width:800px;"></p>
 <h5 id="创建-hook"><a href="#创建-hook" class="headerlink" title="创建  hook"></a>创建  hook</h5><ul>
-<li>注意红色部分  与  Jenkins 自动生成的有区别<br><img src="http://www.zwting.com/img/devops-08.png" alt="devops-1.png" style="width:800px;"></li>
+<li>注意红色部分  与  Jenkins 自动生成的有区别<br><img src="./img/devops-08.png" alt="devops-1.png" style="width:800px;"></li>
 </ul>
-<h5 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h5><p><img src="http://www.zwting.com/img/devops-09.png" alt="devops-1.png" style="width:800px;"></p>
+<h5 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h5><p><img src="./img/devops-09.png" alt="devops-1.png" style="width:800px;"></p>
 <p>FAQ:</p>
 <ul>
 <li>gitlab使用webhook向jenkins发送请求，报错 Requests to the local network are not allowed</li>
 </ul>
-<p><img src="http://www.zwting.com/img/devops-10.png" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="./img/devops-10.png" alt="devops-1.png" style="width:800px;"></p>
 <ul>
 <li>在webhook触发时发生如下错误：Error 403 anonymous is missing the Job/Build permission  </li>
 <li>这个直接用账号密码 也没有这个问题 ，这个答案网上可能是错误的 ，有几个403，报错误不一样</li>
 </ul>
-<p><img src="http://www.zwting.com/img/devops-11.png" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="./img/devops-11.png" alt="devops-1.png" style="width:800px;"></p>
 <ul>
-<li>jenkins.BadHTTPException: Error communicating with server<br><img src="http://www.zwting.com/img/devops-12.png" alt="devops-1.png" style="width:800px;"></li>
+<li>jenkins.BadHTTPException: Error communicating with server<br><img src="./img/devops-12.png" alt="devops-1.png" style="width:800px;"></li>
 </ul>
 <ul>
 <li>Error 403 anonymous is missing<br>默认安装的情况下，匿名用户是没有任何权限的，这里修改配置，让匿名用户只拥有 查看Job、Job Configure 权限</li>
 </ul>
 <p>点击 Manage Jenkins - Configure Global Security</p>
-<p><img src="http://www.zwting.com/img/devops-13.jpg" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="./img/devops-13.jpg" alt="devops-1.png" style="width:800px;"></p>
 <p>修改 Access Control - Authorization 部分的配置，选择 Project-based Matrix Authorization Strategy</p>
 <p>这里需要添加一个 root 用户，步骤为在 User/group to add: 填入 root，然后点击 Add，移到最右侧，点击 ✔️，让 root 用户拥有所有权限，此步非常重要，不然保存后会导致 admin is missing the Overall/Read permission 错误</p>
 <p>匿名用户勾选 Overall 的 Read 权限，Job 的 Configure 和 Read 权限，如下图：</p>
-<p><img src="http://www.zwting.com/img/devops-14.jpg" alt="devops-1.png" style="width:800px;"></p>
+<p><img src="./img/devops-14.jpg" alt="devops-1.png" style="width:800px;"></p>
 
       
 
@@ -302,7 +573,10 @@
 <h1 id="重启服务"><a href="#重启服务" class="headerlink" title="重启服务"></a>重启服务</h1><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">gitlab-ctl reconfigure</span></div><div class="line"></div><div class="line"><span class="attribute">gitlab-ctl restart</span></div></pre></td></tr></table></figure>
 <h3 id="查看下版本"><a href="#查看下版本" class="headerlink" title="查看下版本"></a>查看下版本</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat <span class="regexp">/opt/gi</span>tlab<span class="regexp">/embedded/</span>service<span class="regexp">/gitlab-rails/</span>VERSION</div></pre></td></tr></table></figure>
 <h3 id="设置root密码"><a href="#设置root密码" class="headerlink" title="设置root密码"></a>设置root密码</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">gitlab-rails console production</div><div class="line"><span class="function"><span class="title">irb</span><span class="params">(main)</span></span>:<span class="number">001</span>:<span class="number">0</span>&gt; user = User.where(id: <span class="number">1</span>)<span class="selector-class">.first</span> <span class="comment">// id为1的是超级管理员</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">irb</span><span class="params">(main)</span></span>:<span class="number">002</span>:<span class="number">0</span>&gt;user<span class="selector-class">.password</span> = <span class="string">'Youle@123game'</span> <span class="comment">// 密码必须至少8个字符</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">irb</span><span class="params">(main)</span></span>:<span class="number">003</span>:<span class="number">0</span>&gt;user.save! <span class="comment">// 如没有问题 返回true</span></div><div class="line"></div><div class="line">exit</div></pre></td></tr></table></figure>
-<h3 id="QA"><a href="#QA" class="headerlink" title="QA:"></a>QA:</h3><h3 id="gitlab报502-Whoops-GitLab-is-taking-too-much-time-to-respond"><a href="#gitlab报502-Whoops-GitLab-is-taking-too-much-time-to-respond" class="headerlink" title="gitlab报502 Whoops, GitLab is taking too much time to respond"></a>gitlab报502 Whoops, GitLab is taking too much time to respond</h3><figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># gitlab-ctl stop</span></div><div class="line">	</div><div class="line"><span class="meta"># vi /etc/gitlab/gitlab.rb   (取消注释并修改端口)</span></div><div class="line">unicorn[<span class="string">'port'</span>] = <span class="number">8801</span></div><div class="line">	</div><div class="line">	</div><div class="line"><span class="meta"># gitlab-ctl reconfigure  (重新生成配置)</span></div><div class="line"><span class="meta"># gitlab-ctl restart</span></div><div class="line"><span class="meta"># lsof -i:8081        (check whether unicorn has started properly)</span></div></pre></td></tr></table></figure>
+<h3 id="QA"><a href="#QA" class="headerlink" title="QA:"></a>QA:</h3><ol>
+<li>gitlab报502 Whoops, GitLab is taking too much time to respond<figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># gitlab-ctl stop</span></div><div class="line"></div><div class="line"><span class="meta"># vi /etc/gitlab/gitlab.rb   (取消注释并修改端口)</span></div><div class="line">unicorn[<span class="string">'port'</span>] = <span class="number">8801</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="meta"># gitlab-ctl reconfigure  (重新生成配置)</span></div><div class="line"><span class="meta"># gitlab-ctl restart</span></div><div class="line"><span class="meta"># lsof -i:8081        (check whether unicorn has started properly)</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
 
       
 
@@ -355,6 +629,110 @@
 
 
   
+    <article id="post-2018-10-11-k8s-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/11/2018-10-11-k8s-03/">CentOS7安装Harbor</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/11/2018-10-11-k8s-03/" class="archive-article-date">
+  	<time datetime="2018-10-11T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="harbor"><a href="#harbor" class="headerlink" title="harbor"></a>harbor</h2><p>Habor是由VMWare中国团队开源的容器镜像仓库。事实上，Habor是在Docker Registry上进行了相应的企业级扩展，从而获得了更加广泛的应用，这些新的企业级特性包括：管理用户界面，基于角色的访问控制 ，水平扩展，同步，AD/LDAP集成以及审计日志等。本文档仅说明部署单个基础harbor服务的步骤。</p>
+<h3 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h3><ol>
+<li><p>在deploy节点下载最新的 <a href="https://github.com/docker/compose/releases" target="_blank" rel="external">docker-compose</a> 二进制文件，改名后把它放到项目 <code>/etc/ansible/bin</code>目录下</p>
+ <figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">wget https:<span class="regexp">//gi</span>thub.com<span class="regexp">/docker/</span>compose<span class="regexp">/releases/</span>download<span class="regexp">/1.18.0/</span>docker-compose-Linux-x86_64</div><div class="line">mv docker-compose-Linux-x86_64 <span class="regexp">/etc/</span>ansible<span class="regexp">/bin/</span>	docker-compose</div></pre></td></tr></table></figure>
+</li>
+<li><p>在deploy节点下载最新的 <a href="https://github.com/vmware/harbor/releases" target="_blank" rel="external">harbor</a> 离线安装包，把它放到项目 <code>/etc/ansible/down</code> 目录下</p>
+</li>
+<li><p>由于ansible解压的一些问题，需要将官方的tgz包，重新打包为zip包</p>
+</li>
+<li><p>在deploy节点编辑/etc/ansible/hosts文件</p>
+ <figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># 参数 NEW_INSTALL=(<span class="keyword">yes</span>/<span class="keyword">no</span>)：<span class="keyword">yes</span>表示新建 harbor，并配置k8s节点的docker可以使用harbor仓库</div><div class="line"># <span class="keyword">no</span> 表示仅配置k8s节点的docker使用已有的harbor仓库</div><div class="line">[harbor]</div><div class="line"><span class="number">172.16</span><span class="number">.153</span><span class="number">.70</span> HARBOR_DOMAIN=<span class="string">"172.16.153.70"</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>在deploy节点执行 </p>
+</li>
+</ol>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">ansible-playbook /etc/ansible/<span class="number">11.</span>harbor.yml</div><div class="line"></div><div class="line"><span class="number">1.</span> 下载docker-compose可执行文件到$PATH目录</div><div class="line"><span class="number">2.</span> 自注册变量result判断是否已经安装harbor，避免重复安装问题</div><div class="line"><span class="number">3.</span> 解压harbor离线安装包到指定目录</div><div class="line"><span class="number">4.</span> 导入harbor所需 docker images</div><div class="line"><span class="number">5.</span> 创建harbor证书和私钥(复用集群的CA证书)</div><div class="line"><span class="number">6.</span> 修改harbor.cfg配置文件</div><div class="line"><span class="number">7.</span> 启动harbor安装脚本</div></pre></td></tr></table></figure>
+<h3 id="验证harbor"><a href="#验证harbor" class="headerlink" title="验证harbor"></a>验证harbor</h3><ol>
+<li>在harbor节点使用<code>docker ps -a</code> 查看harbor容器组件运行情况</li>
+<li>浏览器访问harbor节点的IP地址 <code>https://$NodeIP</code>，使用账号 admin 和 密码 Harbor12345 (harbor.cfg 配置文件中的默认)登陆系统</li>
+</ol>
+<h3 id="管理harbor"><a href="#管理harbor" class="headerlink" title="管理harbor"></a>管理harbor</h3><ul>
+<li>日志目录 <code>/var/log/harbor</code></li>
+<li>数据目录 <code>/data</code> ，其中最主要是 <code>/data/database</code> 和 <code>/data/registry</code> 目录，如果你要彻底重新安装harbor，删除这两个目录即可</li>
+</ul>
+<p>先进入harbor安装目录 <code>cd /data/harbor</code>，常规操作如下：</p>
+<ol>
+<li>暂停harbor <code>docker-compose stop</code> : docker容器stop，并不删除容器</li>
+<li>恢复harbor <code>docker-compose start</code> : 恢复docker容器运行</li>
+<li>停止harbor <code>docker-compose down -v</code> : 停止并删除docker容器</li>
+<li>启动harbor <code>docker-compose up -d</code> : 启动所有docker容器</li>
+</ol>
+<p>修改harbor的运行配置，需要如下步骤：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 停止 harbor</span></div><div class="line"> docker-compose down -v</div><div class="line"><span class="comment"># 修改配置</span></div><div class="line"> vim harbor.cfg</div><div class="line"><span class="comment"># 执行./prepare已更新配置到docker-compose.yml文件</span></div><div class="line"> ./prepare</div><div class="line"><span class="comment"># 启动 harbor</span></div><div class="line"> docker-compose up -d</div></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">harbor</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-03/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2018-10-11-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -379,7 +757,7 @@
 <h5 id="安装-Jenkins"><a href="#安装-Jenkins" class="headerlink" title="安装 Jenkins"></a>安装 Jenkins</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">cd ~</div><div class="line">sudo wget -O /etc/yum<span class="selector-class">.repos</span><span class="selector-class">.d</span>/jenkins<span class="selector-class">.repo</span> https:<span class="comment">//pkg.jenkins.io/redhat-stable/jenkins.repo </span></div><div class="line">sudo rpm --import https:<span class="comment">//pkg.jenkins.io/redhat-stable/jenkins.io.key </span></div><div class="line">yum install jenkins</div><div class="line"></div><div class="line">国外网速太慢 请用清华源的RPM包安装</div><div class="line">https:<span class="comment">//mirrors.tuna.tsinghua.edu.cn/jenkins/redhat-stable/jenkins-2.138.2-1.1.noarch.rpm</span></div><div class="line">rpm -ivh jenkins-<span class="number">2.138</span>.<span class="number">2</span>-<span class="number">1.1</span><span class="selector-class">.noarch</span><span class="selector-class">.rpm</span></div></pre></td></tr></table></figure>
 <h5 id="启动指令"><a href="#启动指令" class="headerlink" title="启动指令"></a>启动指令</h5><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl start jenkins</div><div class="line">systemctl <span class="builtin-name">enable</span>  jenkins</div></pre></td></tr></table></figure>
 <h5 id="web查看"><a href="#web查看" class="headerlink" title="web查看"></a>web查看</h5><ul>
-<li><p>打开界面<br><img src="http://www.zwting.com/img/jenkins-01.png" alt="devops-1.png" style="width:800px;"></p>
+<li><p>打开界面<br><img src="./img/jenkins-01.png" alt="devops-1.png" style="width:800px;"></p>
 </li>
 <li><p>查看管理员密码 并输入</p>
 </li>
@@ -387,9 +765,9 @@
 <p>[root@docker-8 ~]# cat /var/lib/jenkins/secrets/initialAdminPassword</p>
 <p>902314cc55244fd39709257cde691fe6</p>
 <ul>
-<li>选择推荐安装插件<br><img src="http://www.zwting.com/img/jenkins-02.png" alt="devops-1.png" style="width:800px;"></li>
-<li>创建用户账号<br><img src="http://www.zwting.com/img/jenkins-03.png" alt="devops-1.png" style="width:800px;"></li>
-<li>最后一步设置访问端口<br><img src="http://www.zwting.com/img/jenkins-04.png" alt="devops-1.png" style="width:800px;"></li>
+<li>选择推荐安装插件<br><img src="./img/jenkins-02.png" alt="devops-1.png" style="width:800px;"></li>
+<li>创建用户账号<br><img src="./img/jenkins-03.png" alt="devops-1.png" style="width:800px;"></li>
+<li>最后一步设置访问端口<br><img src="./img/jenkins-04.png" alt="devops-1.png" style="width:800px;"></li>
 </ul>
 <h5 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h5><ul>
 <li>手工安装插件<pre><code>*  http://updates.jenkins-ci.org/download/plugins/
@@ -434,263 +812,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-01/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2018-10-10-k8s-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/10/2018-10-10-k8s-03/">利用ansible安装k8s集群</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/10/2018-10-10-k8s-03/" class="archive-article-date">
-  	<time datetime="2018-10-10T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="服务器列表"><a href="#服务器列表" class="headerlink" title="服务器列表"></a>服务器列表</h3><table>
-<thead>
-<tr>
-<th>主机名</th>
-<th>内网IP</th>
-<th>外网IP</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>deploy</td>
-<td>192.168.111.69</td>
-<td>172.16.153.70</td>
-</tr>
-<tr>
-<td>kmaster</td>
-<td>192.168.111.74</td>
-<td>172.16.153.71</td>
-</tr>
-<tr>
-<td>knode01</td>
-<td>192.168.111.71</td>
-<td>172.16.153.72</td>
-</tr>
-<tr>
-<td>knode02</td>
-<td>192.168.111.68</td>
-<td>172.16.153.73</td>
-</tr>
-<tr>
-<td>knode03</td>
-<td>192.168.111.70</td>
-<td>172.16.153.74</td>
-</tr>
-<tr>
-<td>knode04</td>
-<td>192.168.111.72</td>
-<td>172.16.153.75</td>
-</tr>
-<tr>
-<td>knode05</td>
-<td>192.168.111.73</td>
-<td>172.16.153.76</td>
-</tr>
-</tbody>
-</table>
-<h3 id="etc-hosts追加内容"><a href="#etc-hosts追加内容" class="headerlink" title="/etc/hosts追加内容"></a>/etc/hosts追加内容</h3><table>
-<thead>
-<tr>
-<th>内网IP</th>
-<th>别名</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>192.168.111.69</td>
-<td>deploy</td>
-</tr>
-<tr>
-<td>192.168.111.74</td>
-<td>kmaster </td>
-</tr>
-<tr>
-<td>192.168.111.71</td>
-<td>knode01</td>
-</tr>
-<tr>
-<td>192.168.111.68</td>
-<td>knode02</td>
-</tr>
-<tr>
-<td>192.168.111.70</td>
-<td>knode03</td>
-</tr>
-<tr>
-<td>192.168.111.72</td>
-<td>knode04</td>
-</tr>
-<tr>
-<td>192.168.111.73</td>
-<td>knode05</td>
-</tr>
-<tr>
-<td>192.168.111.70</td>
-<td>etcd01</td>
-</tr>
-<tr>
-<td>192.168.111.72</td>
-<td>etcd02</td>
-</tr>
-<tr>
-<td>192.168.111.72</td>
-<td>etcd03</td>
-</tr>
-</tbody>
-</table>
-<p>##获取 kubeasz<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">git clone <span class="string">https:</span><span class="comment">//github.com/gjmzj/kubeasz.git</span></div><div class="line"></div><div class="line">cd kubeasz/</div><div class="line"></div><div class="line">git checkout v1102-r1</div><div class="line"></div><div class="line">mkdir -p <span class="regexp">/etc/</span>ansible</div><div class="line">mv * <span class="regexp">/etc/</span>ansible</div></pre></td></tr></table></figure></p>
-<p>##获取安装依赖的二进制包</p>
-<p>国内请从分享的百度云链接下载 <a href="https://pan.baidu.com/s/1c4RFaA" target="_blank" rel="external">https://pan.baidu.com/s/1c4RFaA</a></p>
-<p>下载已打包好的binaries，解压到/etc/ansible/bin目录</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">tar zxvf k8s.<span class="number">1102</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span></div><div class="line">mkdir -<span class="selector-tag">p</span> /etc/ansible</div><div class="line">mv -f bin<span class="comment">/* /etc/ansible/bin</span></div></pre></td></tr></table></figure>
-<h2 id="配置ansible的hosts文件"><a href="#配置ansible的hosts文件" class="headerlink" title="配置ansible的hosts文件"></a>配置ansible的hosts文件</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/ansible</div><div class="line"></div><div class="line">cp example/hosts<span class="selector-class">.s-master</span><span class="selector-class">.example</span> hosts</div></pre></td></tr></table></figure>
-<h2 id="hosts文件具体内容-all是测试时用的"><a href="#hosts文件具体内容-all是测试时用的" class="headerlink" title="hosts文件具体内容  all是测试时用的"></a>hosts文件具体内容  all是测试时用的</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div></pre></td><td class="code"><pre><div class="line">[all]</div><div class="line"></div><div class="line">kmaster </div><div class="line"></div><div class="line">knode01</div><div class="line"></div><div class="line">knode02</div><div class="line"></div><div class="line">knode03</div><div class="line"></div><div class="line">knode04</div><div class="line"></div><div class="line">knode05</div><div class="line"></div><div class="line">[deploy]</div><div class="line"></div><div class="line">deploy</div><div class="line"></div><div class="line"><span class="comment"># etcd集群请提供如下NODE_NAME、NODE_IP变量,请注意etcd集群必须是1,3,5,7...奇数个节点</span></div><div class="line"></div><div class="line">[etcd]</div><div class="line"></div><div class="line">192.168.111.70 <span class="attribute">NODE_NAME</span>=etcd1 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.70"</span></div><div class="line"></div><div class="line">192.168.111.72 <span class="attribute">NODE_NAME</span>=etcd2 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.72"</span></div><div class="line"></div><div class="line">192.168.111.73 <span class="attribute">NODE_NAME</span>=etcd3 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.73"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[kube-master]</div><div class="line"></div><div class="line">192.168.111.74 <span class="attribute">NODE_NAME</span>=kmaster <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.74"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[kube-node]</div><div class="line"></div><div class="line">192.168.111.71  <span class="attribute">NODE_NAME</span>=knode01  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.71"</span></div><div class="line"></div><div class="line">192.168.111.68  <span class="attribute">NODE_NAME</span>=knode02  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.68"</span></div><div class="line"></div><div class="line">192.168.111.70  <span class="attribute">NODE_NAME</span>=knode03  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.70"</span></div><div class="line"></div><div class="line">192.168.111.72  <span class="attribute">NODE_NAME</span>=knode04  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.72"</span></div><div class="line"></div><div class="line">192.168.111.73  <span class="attribute">NODE_NAME</span>=knode05  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.73"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 如果启用harbor，请配置后面harbor相关参数</span></div><div class="line"></div><div class="line">[harbor]</div><div class="line"></div><div class="line"><span class="comment">#192.168.111.8 NODE_IP="192.168.111.8"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 预留组，后续添加node节点使用</span></div><div class="line"></div><div class="line">[new-node]</div><div class="line"></div><div class="line"><span class="comment">#192.168.111.xx NODE_IP="192.168.111.xx"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[all:vars]</div><div class="line"></div><div class="line"><span class="comment"># ---------集群主要参数---------------</span></div><div class="line"></div><div class="line"><span class="comment">#集群部署模式：allinone, single-master, multi-master</span></div><div class="line"></div><div class="line"><span class="attribute">DEPLOY_MODE</span>=single-master</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#集群 MASTER IP</span></div><div class="line"></div><div class="line"><span class="attribute">MASTER_IP</span>=<span class="string">"kmaster"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#集群 APISERVER</span></div><div class="line"></div><div class="line"><span class="attribute">KUBE_APISERVER</span>=<span class="string">"https://kmaster:6443"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#TLS Bootstrapping 使用的 Token，使用 head -c 16 /dev/urandom | od -An -t x | tr -d ' ' 生成</span></div><div class="line"></div><div class="line"><span class="attribute">BOOTSTRAP_TOKEN</span>=<span class="string">"d18f94b5fa585c7123f56803d925d2e7"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群网络插件，目前支持calico和flannel</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_NETWORK</span>=<span class="string">"calico"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 部分calico相关配置，更全配置可以去roles/calico/templates/calico.yaml.j2自定义</span></div><div class="line"></div><div class="line"><span class="comment"># 设置 CALICO_IPV4POOL_IPIP=“off”,可以提高网络性能，条件限制详见 05.安装calico网络组件.md</span></div><div class="line"></div><div class="line"><span class="attribute">CALICO_IPV4POOL_IPIP</span>=<span class="string">"always"</span></div><div class="line"></div><div class="line"><span class="comment"># 设置 calico-node使用的host IP，bgp邻居通过该地址建立，可手动指定端口"interface=eth0"或使用如下自动发现</span></div><div class="line"></div><div class="line"><span class="comment"># IP_AUTODETECTION_METHOD="can-reach=223.5.5.5"</span></div><div class="line"></div><div class="line"><span class="attribute">IP_AUTODETECTION_METHOD</span>=<span class="string">"interface=eth0"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 部分flannel配置，详见roles/flannel/templates/kube-flannel.yaml.j2</span></div><div class="line"></div><div class="line"><span class="attribute">FLANNEL_BACKEND</span>=<span class="string">"vxlan"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 服务网段 (Service CIDR），部署前路由不可达，部署后集群内使用 IP:Port 可达</span></div><div class="line"></div><div class="line"><span class="attribute">SERVICE_CIDR</span>=<span class="string">"10.68.0.0/16"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># POD 网段 (Cluster CIDR），部署前路由不可达，**部署后**路由可达</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_CIDR</span>=<span class="string">"172.20.0.0/16"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 服务端口范围 (NodePort Range)</span></div><div class="line"></div><div class="line"><span class="attribute">NODE_PORT_RANGE</span>=<span class="string">"20000-40000"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># kubernetes 服务 IP (预分配，一般是 SERVICE_CIDR 中第一个IP)</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_KUBERNETES_SVC_IP</span>=<span class="string">"10.68.0.1"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群 DNS 服务 IP (从 SERVICE_CIDR 中预分配)</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_DNS_SVC_IP</span>=<span class="string">"10.68.0.2"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群 DNS 域名</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_DNS_DOMAIN</span>=<span class="string">"cluster.local."</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># etcd 集群间通信的IP和端口, **根据实际 etcd 集群成员设置**</span></div><div class="line"></div><div class="line"><span class="attribute">ETCD_NODES</span>=<span class="string">"etcd1=https://192.168.111.70:2380,etcd2=https://192.168.111.72:2380,etcd3=https://192.168.111.73:2380"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># etcd 集群服务地址列表, **根据实际 etcd 集群成员设置**</span></div><div class="line"></div><div class="line"><span class="attribute">ETCD_ENDPOINTS</span>=<span class="string">"https://192.168.111.70:2379,https://192.168.111.72:2379,https://192.168.111.73:2379"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群basic auth 使用的用户名和密码</span></div><div class="line"></div><div class="line"><span class="attribute">BASIC_AUTH_USER</span>=<span class="string">"admin"</span></div><div class="line"></div><div class="line"><span class="attribute">BASIC_AUTH_PASS</span>=<span class="string">"test1234"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># ---------附加参数--------------------</span></div><div class="line"></div><div class="line"><span class="comment">#默认二进制文件目录</span></div><div class="line"></div><div class="line"><span class="attribute">bin_dir</span>=<span class="string">"/opt/kube/bin"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#证书目录</span></div><div class="line"></div><div class="line"><span class="attribute">ca_dir</span>=<span class="string">"/etc/kubernetes/ssl"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#部署目录，即 ansible 工作目录</span></div><div class="line"></div><div class="line"><span class="attribute">base_dir</span>=<span class="string">"/etc/ansible"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#私有仓库 harbor服务器 (域名或者IP)</span></div><div class="line"></div><div class="line"><span class="comment">#HARBOR_IP="192.168.111.8"</span></div><div class="line"></div><div class="line"><span class="comment">#HARBOR_DOMAIN="harbor.yourdomain.com"</span></div></pre></td></tr></table></figure>
-<h3 id="分步安装"><a href="#分步安装" class="headerlink" title="分步安装"></a>分步安装</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ansible-playbook <span class="number">01</span><span class="selector-class">.prepare</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">02</span><span class="selector-class">.etcd</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">03</span><span class="selector-class">.docker</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">04</span><span class="selector-class">.kube-master</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">05</span><span class="selector-class">.kube-node</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">06</span><span class="selector-class">.network</span><span class="selector-class">.yml</span></div></pre></td></tr></table></figure>
-<h3 id="检查安装结果"><a href="#检查安装结果" class="headerlink" title="检查安装结果"></a>检查安装结果</h3><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">[root@host<span class="number">-192</span><span class="number">-168</span><span class="number">-111</span><span class="number">-74</span> ~]# kubectl get nodes</div><div class="line">NAME             STATUS                     ROLES     AGE       VERSION</div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.68</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.70</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.71</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.72</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.73</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.74</span>   Ready,SchedulingDisabled   &lt;none&gt;    <span class="number">4</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"></div><div class="line"></div><div class="line">[root@host<span class="number">-192</span><span class="number">-168</span><span class="number">-111</span><span class="number">-74</span> ~]# kubectl get ns</div><div class="line">NAME          STATUS    AGE</div><div class="line"><span class="section">default</span>       Active    <span class="number">6</span>m</div><div class="line">kube-public   Active    <span class="number">6</span>m</div><div class="line">kube-system   Active    <span class="number">6</span>m</div><div class="line"></div><div class="line">[root@host<span class="number">-192</span><span class="number">-168</span><span class="number">-111</span><span class="number">-74</span> ~]# kubectl get pods -n kube-system         </div><div class="line">NAME                    READY     STATUS    RESTARTS   AGE</div><div class="line">kube-flannel-ds<span class="number">-5</span>bg7k   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds<span class="number">-5</span>zvb6   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds-dwpnc   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds-jnhj4   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds-rs7cp   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds-xrjnd   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">ansible</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-03/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2018-10-10-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/10/2018-10-10-k8s-01/">jenkins和k8s结合的自动化目标模型</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/10/2018-10-10-k8s-01/" class="archive-article-date">
-  	<time datetime="2018-10-10T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="目标描述"><a href="#目标描述" class="headerlink" title="目标描述"></a>目标描述</h3><ul>
-<li>在将代码上传至 gitlab 时，触发 push 的钩子，在 jenkins 中进行项目的编译；</li>
-<li>自动将编译后的文件打包成 docker 镜像，并上传至（私有）docker hub；</li>
-<li>修改 Kubernetes 的服务配置文件（Service.yaml 和 Deployment.yaml）中的镜像变量；（因为在我将每一个 jenkins 构建的版本号作为了 docker 镜像的版本号，所以每次都要自动改变）</li>
-<li>将 Kubernetes 的服务配置文件上传至 Kubernetes 的 master 服务器；</li>
-<li>在 Jenkins 中执行 kubectl apply -f file.yaml，在 Kubernetes 部署服务；</li>
-</ul>
-<h5 id="目标模型图"><a href="#目标模型图" class="headerlink" title="目标模型图"></a>目标模型图</h5><p><img src="http://www.zwting.com/img/devops-1.png" alt="devops-1.png" style="width:800px;"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-01/">展开全文 >></a>
         </p>
       
 
@@ -846,288 +967,6 @@
 
 
   
-    <article id="post-2018-03-08-android-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/08/2018-03-08-android-02/">Appium测试【第二章】</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/08/2018-03-08-android-02/" class="archive-article-date">
-  	<time datetime="2018-03-08T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="懒人手记"><a href="#懒人手记" class="headerlink" title="懒人手记"></a>懒人手记</h3><p>手机做测试时需要监听数据，要么开热点转发，要么ADB，每次都是很麻烦，突然发奇想，在HACK工具中有ARP欺骗导入数据的 ettercap， 所以我们可以利用这个工具，不再用热点、数据线、ADB一堆的东西，直接欺骗手机的网关位置，来骗取数据到本地。</p>
-<h5 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h5><pre><code>brew install ettercap
-</code></pre><h5 id="启动转发"><a href="#启动转发" class="headerlink" title="启动转发"></a>启动转发</h5><pre><code>sudo sysctl -w net.inet.ip.forwarding=1
-sudo sysctl -w net.inet6.ip6.forwarding=1
-</code></pre><h5 id="macosx开启转发"><a href="#macosx开启转发" class="headerlink" title="macosx开启转发"></a>macosx开启转发</h5><p>新加一个文件：/etc/pf.anchors/http</p>
-<pre><code>rdr pass on lo0 inet proto tcp from any to any port 80 -&gt; 127.0.0.1 port 8080
-rdr pass on lo0 inet proto tcp from any to any port 443 -&gt; 127.0.0.1 port 4443
-rdr pass on en0 inet proto tcp from any to any port 80 -&gt; 127.0.0.1 port 8080
-rdr pass on en0 inet proto tcp from any to any port 443 -&gt; 127.0.0.1 port 4443
-</code></pre><p>检查其正确性：</p>
-<pre><code>pfctl -vnf /etc/pf.anchors/http
-</code></pre><p>在 rdr-anchor “com.apple/*” 下添加</p>
-<pre><code>rdr-anchor &quot;http-forwarding&quot;
-</code></pre><p>在 load anchor “com.apple” from “/etc/pf.anchors/com.apple” 下添加</p>
-<pre><code>load anchor &quot;http-forwarding&quot; from &quot;/etc/pf.anchors/http&quot;
-</code></pre><p>最后导入并允许运行：</p>
-<pre><code>pfctl -ef /etc/pf.conf
-</code></pre><p>使用 -e 命令启用</p>
-<pre><code>sudo pfctl -E
-</code></pre><p>使用 -d 命令关闭 pf：</p>
-<pre><code>sudo pfctl -d
-</code></pre><h5 id="启动arp"><a href="#启动arp" class="headerlink" title="启动arp"></a>启动arp</h5><pre><code>sudo ettercap -i en0 -Tq -M arp:remote /192.168.3.23///
-192.168.3.23 这个IP是手机IP
-</code></pre><h5 id="用nginx测试"><a href="#用nginx测试" class="headerlink" title="用nginx测试"></a>用nginx测试</h5><p>监听8080 在web上访问80看看 可不可以正常</p>
-<pre><code>brew services start nginx
-brew services stop nginx
-</code></pre><h5 id="开启wireshark-开始监听吧。。。。"><a href="#开启wireshark-开始监听吧。。。。" class="headerlink" title="开启wireshark 开始监听吧。。。。"></a>开启wireshark 开始监听吧。。。。</h5><hr>
-<h3 id="ettercap参数说明"><a href="#ettercap参数说明" class="headerlink" title="ettercap参数说明"></a>ettercap参数说明</h3><pre><code>参数介绍：
-攻击和嗅探类
-
-    -M, --mitm
-
-        ARP欺骗，参数 -M arp
-
-            remote  #双向模式，同时arp欺骗通信的双方，参数 -M arp:remote
-            oneway       #单向模式，只arp欺骗第一个目标到第二个目标的通信，参数 -M arp:oneway
-
-        icmp欺骗，参数 -M icmp:(MAC/IP)
-        DHCP欺骗，参数 -M dhcp:(ip_pool/netmask/dns)，如 -M dhcp:192.168.0.30,35,50-60/255.255.255.0/192.168.0.1是给新接入的主机提供ip地址，子网掩码和网关，-M dhcp:/255.255.255.0/192.168.0.1则不提供ip地址，只欺骗子网掩码和网关
-        Port Stealing，这个没搞懂～
-
-    -o, --only-mitm   #只进行中间人攻击，不进行嗅探
-    -f , --pcapfilter     #加载过滤器
-    -B, --bridge    #Bridged sniffing
-
-离线类参数
-
-    -r, --read       #读取本地文件
-    -w, --write      #将嗅探数据保存到本地
-
-界面显示类
-
-    -T, --text       #文本模式显示  
-    -q, --quiet        #安静模式，不显示嗅探数据
-    -s, --script        #加载脚本
-    -C, --curses       #curses-UI模式
-    -G, --gtk       #GTK-UI模式
-    -D, --daemonize       #daemonize后台模式
-
-普通选项：
-
-    -b, --broadcast        #嗅探广播地址
-    -i, --iface         #选择网卡
-    -I, --iflist            #列出可用网卡
-    -Y, --secondary         #后备网卡
-    -A, --address          #ip地址，针对一网卡多ip的情况
-    -n, --netmask             
-    -R, --reversed
-    -z, --silent              #不进行arp毒化和主机扫描
-    -p, --nopromisc
-    -S, --nosslmitm                 #不使用ssl中间人攻击
-    -t, --proto         #协议，tcp/udp/all，默认为all
-    -u, --unoffensive
-    -j, --load-hosts                #加载保存的主机地址
-    -k, --save-hosts                #保存扫描到的主机地址
-    -P, --plugin                 #载入插件
-    -F, --filter                     #载入过滤器文件
-    -W, --wifi-key            #载入wifi密码：
-
-              --wifi-key wep:128:p:secret
-              --wifi-key wep:128:s:ettercapwep0
-              --wifi-key &apos;wep:64:s:\x01\x02\x03\x04\x05&apos;
-              --wifi-key wpa:pwd:ettercapwpa:ssid
-              --wifi-key wpa:psk:663eb260e87cf389c6bd7331b28d82f5203b0cae4e315f9cbb7602f3236708a6
-
-    -a, --config                #载入并使用一个非默认配置文件
-    --certificate              #ssl攻击使用指定的 证书文件
-    --private-key            #ssl攻击使用指定的私钥文件
-
-可视化参数
-
-    -e, --regex         #使用一个正则表达式
-    -V, --visual           #显示方式
-        hex            #16进制
-        ascii           #ASCII码
-        text            
-        ebcdic
-        html
-        utf8
-    -d, --dns           #把ip地址转化为主机名
-    -E, --ext-headers
-    -Q, --superquiet          #超级安静模式，啥信息都不显示，只保存
-
-日志记录选项
-
-    -L, --log             #把所有数据包保存log文件
-    -l, --log-info           #读取离线log文件信息
-    -m, --log-msg              #显示存储在log文件里所有用户用ettercap抓取的信息
-    -c, --compress            #通过gzip算法压缩log文件
-    -o, --only-local           #只存储本地局域网主机配置信息
-    -O, --only-remote           #只存储远程主机配置信息
-
-
-常见的参数组合：
-
-ettercap -Tqi eth0 -M ARP // //           #arp毒化eth0所在的网段，安静模式文本显示
-
-ettercap -Tzq /10.0.0.1/21,22,23  -w hack.pcap          #监听10.0.0.1的ftp，ssh，telnet信息,并保存到本地
-
-ettercap -Tq -P dns_spoof -M arp /192.168.1.120/ //        #对192.168.1.120进行dns欺骗，使用默认网卡eth0,文本模式安静显示
-
-ettercap -Tqi eth0 -L sniffed_data -F filter.ef -M arp:remote /10.0.0.2/80 //     #使用过滤并监听10.0.0.2在80端口的所有通信，安静模式文本显示，保存数据到本地
-</code></pre>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Appium测试</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Appium测试/" class="article-tag-list-link color4">Appium测试</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/08/2018-03-08-android-02/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2018-02-08-android-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/08/2018-02-08-android-01/">Appium测试【第一章】</a>
-    </h1>
-  
-
-        
-        <a href="/2018/02/08/2018-02-08-android-01/" class="archive-article-date">
-  	<time datetime="2018-02-08T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h3><p>Mac下必须手工安装，下载包吧。。。</p>
-<pre><code>https://developer.android.com/studio/releases/platform-tools.html#download
-
-cd ~/Downloads(你的下载目录)/
-unzip android-sdk*.zip
-mv android-sdk-macosx/ ~/.android-sdk-macosx
-echo &apos;export PATH=$PATH:~/.android-sdk-macosx/platform-tools/&apos; &gt;&gt; ~/.bash_profile
-source ~/.bash_profile
-</code></pre><p>测试是否正常安装</p>
-<pre><code>adb devices
-</code></pre><p>参考：</p>
-<blockquote>
-<blockquote>
-<p><a href="https://jiasule.v2ex.com/t/351264" target="_blank" rel="external">https://jiasule.v2ex.com/t/351264</a><br><a href="https://www.cnblogs.com/fnng/p/7683427.html" target="_blank" rel="external">https://www.cnblogs.com/fnng/p/7683427.html</a><br><a href="http://blog.csdn.net/weixin_38208401/article/details/78627597" target="_blank" rel="external">http://blog.csdn.net/weixin_38208401/article/details/78627597</a><br><a href="http://blog.csdn.net/weixin_38208401/article/details/78629920" target="_blank" rel="external">http://blog.csdn.net/weixin_38208401/article/details/78629920</a></p>
-</blockquote>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Appium测试</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Appium测试/" class="article-tag-list-link color4">Appium测试</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/02/08/2018-02-08-android-01/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1223,6 +1062,10 @@ source ~/.bash_profile
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">python技术分享</a>
               </li>
              
@@ -1259,11 +1102,11 @@ source ~/.bash_profile
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
+                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1272,10 +1115,6 @@ source ~/.bash_profile
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">ceph</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
               </li>
              
               <li class="article-tag-list-item">

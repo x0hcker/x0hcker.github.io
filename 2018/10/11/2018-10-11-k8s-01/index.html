@@ -15,15 +15,15 @@
 <meta property="og:url" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-01/index.html">
 <meta property="og:site_name" content="醉翁亭">
 <meta property="og:description" content="在CentOS7上安装Jenkins">
-<meta property="og:image" content="http://www.zwting.com/img/jenkins-01.png">
-<meta property="og:image" content="http://www.zwting.com/img/jenkins-02.png">
-<meta property="og:image" content="http://www.zwting.com/img/jenkins-03.png">
-<meta property="og:image" content="http://www.zwting.com/img/jenkins-04.png">
-<meta property="og:updated_time" content="2018-10-24T11:31:40.350Z">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-01/img/jenkins-01.png">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-01/img/jenkins-02.png">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-01/img/jenkins-03.png">
+<meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-01/img/jenkins-04.png">
+<meta property="og:updated_time" content="2018-10-24T11:16:09.590Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在CentOS7上安装Jenkins">
 <meta name="twitter:description" content="在CentOS7上安装Jenkins">
-<meta name="twitter:image" content="http://www.zwting.com/img/jenkins-01.png">
+<meta name="twitter:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-01/img/jenkins-01.png">
   
     <link rel="alternative" href="/atom.xml" title="醉翁亭" type="application/atom+xml">
   
@@ -185,7 +185,7 @@
 <h5 id="安装-Jenkins"><a href="#安装-Jenkins" class="headerlink" title="安装 Jenkins"></a>安装 Jenkins</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">cd ~</div><div class="line">sudo wget -O /etc/yum<span class="selector-class">.repos</span><span class="selector-class">.d</span>/jenkins<span class="selector-class">.repo</span> https:<span class="comment">//pkg.jenkins.io/redhat-stable/jenkins.repo </span></div><div class="line">sudo rpm --import https:<span class="comment">//pkg.jenkins.io/redhat-stable/jenkins.io.key </span></div><div class="line">yum install jenkins</div><div class="line"></div><div class="line">国外网速太慢 请用清华源的RPM包安装</div><div class="line">https:<span class="comment">//mirrors.tuna.tsinghua.edu.cn/jenkins/redhat-stable/jenkins-2.138.2-1.1.noarch.rpm</span></div><div class="line">rpm -ivh jenkins-<span class="number">2.138</span>.<span class="number">2</span>-<span class="number">1.1</span><span class="selector-class">.noarch</span><span class="selector-class">.rpm</span></div></pre></td></tr></table></figure>
 <h5 id="启动指令"><a href="#启动指令" class="headerlink" title="启动指令"></a>启动指令</h5><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl start jenkins</div><div class="line">systemctl <span class="builtin-name">enable</span>  jenkins</div></pre></td></tr></table></figure>
 <h5 id="web查看"><a href="#web查看" class="headerlink" title="web查看"></a>web查看</h5><ul>
-<li><p>打开界面<br><img src="http://www.zwting.com/img/jenkins-01.png" alt="devops-1.png" style="width:800px;"></p>
+<li><p>打开界面<br><img src="./img/jenkins-01.png" alt="devops-1.png" style="width:800px;"></p>
 </li>
 <li><p>查看管理员密码 并输入</p>
 </li>
@@ -193,9 +193,9 @@
 <p>[root@docker-8 ~]# cat /var/lib/jenkins/secrets/initialAdminPassword</p>
 <p>902314cc55244fd39709257cde691fe6</p>
 <ul>
-<li>选择推荐安装插件<br><img src="http://www.zwting.com/img/jenkins-02.png" alt="devops-1.png" style="width:800px;"></li>
-<li>创建用户账号<br><img src="http://www.zwting.com/img/jenkins-03.png" alt="devops-1.png" style="width:800px;"></li>
-<li>最后一步设置访问端口<br><img src="http://www.zwting.com/img/jenkins-04.png" alt="devops-1.png" style="width:800px;"></li>
+<li>选择推荐安装插件<br><img src="./img/jenkins-02.png" alt="devops-1.png" style="width:800px;"></li>
+<li>创建用户账号<br><img src="./img/jenkins-03.png" alt="devops-1.png" style="width:800px;"></li>
+<li>最后一步设置访问端口<br><img src="./img/jenkins-04.png" alt="devops-1.png" style="width:800px;"></li>
 </ul>
 <h5 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h5><ul>
 <li>手工安装插件<pre><code>*  http://updates.jenkins-ci.org/download/plugins/
@@ -325,18 +325,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/10/11/2018-10-11-k8s-02/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/10/11/2018-10-11-k8s-03/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          CentOS7安装Gitlab
+          CentOS7安装Harbor
         
       </div>
     </a>
   
   
-    <a href="/2018/10/10/2018-10-10-k8s-03/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">利用ansible安装k8s集群</div>
+    <a href="/2018/10/10/2018-10-10-k8s-02/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">安装中控机的ansible环境</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -449,6 +449,10 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">python技术分享</a>
               </li>
              
@@ -485,11 +489,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
+                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -498,10 +502,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">ceph</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
               </li>
              
               <li class="article-tag-list-item">

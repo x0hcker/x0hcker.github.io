@@ -157,6 +157,545 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2018-10-10-k8s-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/10/2018-10-10-k8s-03/">利用ansible安装k8s集群</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/10/2018-10-10-k8s-03/" class="archive-article-date">
+  	<time datetime="2018-10-10T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="服务器列表"><a href="#服务器列表" class="headerlink" title="服务器列表"></a>服务器列表</h3><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>内网IP</th>
+<th>外网IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deploy</td>
+<td>192.168.111.69</td>
+<td>172.16.153.70</td>
+</tr>
+<tr>
+<td>kmaster</td>
+<td>192.168.111.74</td>
+<td>172.16.153.71</td>
+</tr>
+<tr>
+<td>knode01</td>
+<td>192.168.111.71</td>
+<td>172.16.153.72</td>
+</tr>
+<tr>
+<td>knode02</td>
+<td>192.168.111.68</td>
+<td>172.16.153.73</td>
+</tr>
+<tr>
+<td>knode03</td>
+<td>192.168.111.70</td>
+<td>172.16.153.74</td>
+</tr>
+<tr>
+<td>knode04</td>
+<td>192.168.111.72</td>
+<td>172.16.153.75</td>
+</tr>
+<tr>
+<td>knode05</td>
+<td>192.168.111.73</td>
+<td>172.16.153.76</td>
+</tr>
+</tbody>
+</table>
+<h3 id="etc-hosts追加内容"><a href="#etc-hosts追加内容" class="headerlink" title="/etc/hosts追加内容"></a>/etc/hosts追加内容</h3><table>
+<thead>
+<tr>
+<th>内网IP</th>
+<th>别名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.111.69</td>
+<td>deploy</td>
+</tr>
+<tr>
+<td>192.168.111.74</td>
+<td>kmaster </td>
+</tr>
+<tr>
+<td>192.168.111.71</td>
+<td>knode01</td>
+</tr>
+<tr>
+<td>192.168.111.68</td>
+<td>knode02</td>
+</tr>
+<tr>
+<td>192.168.111.70</td>
+<td>knode03</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>knode04</td>
+</tr>
+<tr>
+<td>192.168.111.73</td>
+<td>knode05</td>
+</tr>
+<tr>
+<td>192.168.111.70</td>
+<td>etcd01</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>etcd02</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>etcd03</td>
+</tr>
+</tbody>
+</table>
+<p>##获取 kubeasz<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">git clone <span class="string">https:</span><span class="comment">//github.com/gjmzj/kubeasz.git</span></div><div class="line"></div><div class="line">cd kubeasz/</div><div class="line"></div><div class="line">git checkout v1102-r1</div><div class="line"></div><div class="line">mkdir -p <span class="regexp">/etc/</span>ansible</div><div class="line">mv * <span class="regexp">/etc/</span>ansible</div></pre></td></tr></table></figure></p>
+<p>##获取安装依赖的二进制包</p>
+<p>国内请从分享的百度云链接下载 <a href="https://pan.baidu.com/s/1c4RFaA" target="_blank" rel="external">https://pan.baidu.com/s/1c4RFaA</a></p>
+<p>下载已打包好的binaries，解压到/etc/ansible/bin目录</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">tar zxvf k8s.<span class="number">1102</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span></div><div class="line">mkdir -<span class="selector-tag">p</span> /etc/ansible</div><div class="line">mv -f bin<span class="comment">/* /etc/ansible/bin</span></div></pre></td></tr></table></figure>
+<h2 id="配置ansible的hosts文件"><a href="#配置ansible的hosts文件" class="headerlink" title="配置ansible的hosts文件"></a>配置ansible的hosts文件</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/ansible</div><div class="line"></div><div class="line">cp example/hosts<span class="selector-class">.s-master</span><span class="selector-class">.example</span> hosts</div></pre></td></tr></table></figure>
+<h2 id="hosts文件具体内容-all是测试时用的"><a href="#hosts文件具体内容-all是测试时用的" class="headerlink" title="hosts文件具体内容  all是测试时用的"></a>hosts文件具体内容  all是测试时用的</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div></pre></td><td class="code"><pre><div class="line">[all]</div><div class="line"></div><div class="line">kmaster </div><div class="line"></div><div class="line">knode01</div><div class="line"></div><div class="line">knode02</div><div class="line"></div><div class="line">knode03</div><div class="line"></div><div class="line">knode04</div><div class="line"></div><div class="line">knode05</div><div class="line"></div><div class="line">[deploy]</div><div class="line"></div><div class="line">deploy</div><div class="line"></div><div class="line"><span class="comment"># etcd集群请提供如下NODE_NAME、NODE_IP变量,请注意etcd集群必须是1,3,5,7...奇数个节点</span></div><div class="line"></div><div class="line">[etcd]</div><div class="line"></div><div class="line">192.168.111.70 <span class="attribute">NODE_NAME</span>=etcd1 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.70"</span></div><div class="line"></div><div class="line">192.168.111.72 <span class="attribute">NODE_NAME</span>=etcd2 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.72"</span></div><div class="line"></div><div class="line">192.168.111.73 <span class="attribute">NODE_NAME</span>=etcd3 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.73"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[kube-master]</div><div class="line"></div><div class="line">192.168.111.74 <span class="attribute">NODE_NAME</span>=kmaster <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.74"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[kube-node]</div><div class="line"></div><div class="line">192.168.111.71  <span class="attribute">NODE_NAME</span>=knode01  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.71"</span></div><div class="line"></div><div class="line">192.168.111.68  <span class="attribute">NODE_NAME</span>=knode02  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.68"</span></div><div class="line"></div><div class="line">192.168.111.70  <span class="attribute">NODE_NAME</span>=knode03  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.70"</span></div><div class="line"></div><div class="line">192.168.111.72  <span class="attribute">NODE_NAME</span>=knode04  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.72"</span></div><div class="line"></div><div class="line">192.168.111.73  <span class="attribute">NODE_NAME</span>=knode05  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.73"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 如果启用harbor，请配置后面harbor相关参数</span></div><div class="line"></div><div class="line">[harbor]</div><div class="line"></div><div class="line"><span class="comment">#192.168.111.8 NODE_IP="192.168.111.8"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 预留组，后续添加node节点使用</span></div><div class="line"></div><div class="line">[new-node]</div><div class="line"></div><div class="line"><span class="comment">#192.168.111.xx NODE_IP="192.168.111.xx"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[all:vars]</div><div class="line"></div><div class="line"><span class="comment"># ---------集群主要参数---------------</span></div><div class="line"></div><div class="line"><span class="comment">#集群部署模式：allinone, single-master, multi-master</span></div><div class="line"></div><div class="line"><span class="attribute">DEPLOY_MODE</span>=single-master</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#集群 MASTER IP</span></div><div class="line"></div><div class="line"><span class="attribute">MASTER_IP</span>=<span class="string">"kmaster"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#集群 APISERVER</span></div><div class="line"></div><div class="line"><span class="attribute">KUBE_APISERVER</span>=<span class="string">"https://kmaster:6443"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#TLS Bootstrapping 使用的 Token，使用 head -c 16 /dev/urandom | od -An -t x | tr -d ' ' 生成</span></div><div class="line"></div><div class="line"><span class="attribute">BOOTSTRAP_TOKEN</span>=<span class="string">"d18f94b5fa585c7123f56803d925d2e7"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群网络插件，目前支持calico和flannel</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_NETWORK</span>=<span class="string">"calico"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 部分calico相关配置，更全配置可以去roles/calico/templates/calico.yaml.j2自定义</span></div><div class="line"></div><div class="line"><span class="comment"># 设置 CALICO_IPV4POOL_IPIP=“off”,可以提高网络性能，条件限制详见 05.安装calico网络组件.md</span></div><div class="line"></div><div class="line"><span class="attribute">CALICO_IPV4POOL_IPIP</span>=<span class="string">"always"</span></div><div class="line"></div><div class="line"><span class="comment"># 设置 calico-node使用的host IP，bgp邻居通过该地址建立，可手动指定端口"interface=eth0"或使用如下自动发现</span></div><div class="line"></div><div class="line"><span class="comment"># IP_AUTODETECTION_METHOD="can-reach=223.5.5.5"</span></div><div class="line"></div><div class="line"><span class="attribute">IP_AUTODETECTION_METHOD</span>=<span class="string">"interface=eth0"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 部分flannel配置，详见roles/flannel/templates/kube-flannel.yaml.j2</span></div><div class="line"></div><div class="line"><span class="attribute">FLANNEL_BACKEND</span>=<span class="string">"vxlan"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 服务网段 (Service CIDR），部署前路由不可达，部署后集群内使用 IP:Port 可达</span></div><div class="line"></div><div class="line"><span class="attribute">SERVICE_CIDR</span>=<span class="string">"10.68.0.0/16"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># POD 网段 (Cluster CIDR），部署前路由不可达，**部署后**路由可达</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_CIDR</span>=<span class="string">"172.20.0.0/16"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 服务端口范围 (NodePort Range)</span></div><div class="line"></div><div class="line"><span class="attribute">NODE_PORT_RANGE</span>=<span class="string">"20000-40000"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># kubernetes 服务 IP (预分配，一般是 SERVICE_CIDR 中第一个IP)</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_KUBERNETES_SVC_IP</span>=<span class="string">"10.68.0.1"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群 DNS 服务 IP (从 SERVICE_CIDR 中预分配)</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_DNS_SVC_IP</span>=<span class="string">"10.68.0.2"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群 DNS 域名</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_DNS_DOMAIN</span>=<span class="string">"cluster.local."</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># etcd 集群间通信的IP和端口, **根据实际 etcd 集群成员设置**</span></div><div class="line"></div><div class="line"><span class="attribute">ETCD_NODES</span>=<span class="string">"etcd1=https://192.168.111.70:2380,etcd2=https://192.168.111.72:2380,etcd3=https://192.168.111.73:2380"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># etcd 集群服务地址列表, **根据实际 etcd 集群成员设置**</span></div><div class="line"></div><div class="line"><span class="attribute">ETCD_ENDPOINTS</span>=<span class="string">"https://192.168.111.70:2379,https://192.168.111.72:2379,https://192.168.111.73:2379"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群basic auth 使用的用户名和密码</span></div><div class="line"></div><div class="line"><span class="attribute">BASIC_AUTH_USER</span>=<span class="string">"admin"</span></div><div class="line"></div><div class="line"><span class="attribute">BASIC_AUTH_PASS</span>=<span class="string">"test1234"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># ---------附加参数--------------------</span></div><div class="line"></div><div class="line"><span class="comment">#默认二进制文件目录</span></div><div class="line"></div><div class="line"><span class="attribute">bin_dir</span>=<span class="string">"/opt/kube/bin"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#证书目录</span></div><div class="line"></div><div class="line"><span class="attribute">ca_dir</span>=<span class="string">"/etc/kubernetes/ssl"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#部署目录，即 ansible 工作目录</span></div><div class="line"></div><div class="line"><span class="attribute">base_dir</span>=<span class="string">"/etc/ansible"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#私有仓库 harbor服务器 (域名或者IP)</span></div><div class="line"></div><div class="line"><span class="comment">#HARBOR_IP="192.168.111.8"</span></div><div class="line"></div><div class="line"><span class="comment">#HARBOR_DOMAIN="harbor.yourdomain.com"</span></div></pre></td></tr></table></figure>
+<h3 id="分步安装"><a href="#分步安装" class="headerlink" title="分步安装"></a>分步安装</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ansible-playbook <span class="number">01</span><span class="selector-class">.prepare</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">02</span><span class="selector-class">.etcd</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">03</span><span class="selector-class">.docker</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">04</span><span class="selector-class">.kube-master</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">05</span><span class="selector-class">.kube-node</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">06</span><span class="selector-class">.network</span><span class="selector-class">.yml</span></div></pre></td></tr></table></figure>
+<h3 id="检查安装结果"><a href="#检查安装结果" class="headerlink" title="检查安装结果"></a>检查安装结果</h3><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">[root@host<span class="number">-192</span><span class="number">-168</span><span class="number">-111</span><span class="number">-74</span> ~]# kubectl get nodes</div><div class="line">NAME             STATUS                     ROLES     AGE       VERSION</div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.68</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.70</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.71</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.72</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.73</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.74</span>   Ready,SchedulingDisabled   &lt;none&gt;    <span class="number">4</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"></div><div class="line"></div><div class="line">[root@host<span class="number">-192</span><span class="number">-168</span><span class="number">-111</span><span class="number">-74</span> ~]# kubectl get ns</div><div class="line">NAME          STATUS    AGE</div><div class="line"><span class="section">default</span>       Active    <span class="number">6</span>m</div><div class="line">kube-public   Active    <span class="number">6</span>m</div><div class="line">kube-system   Active    <span class="number">6</span>m</div><div class="line"></div><div class="line">[root@host<span class="number">-192</span><span class="number">-168</span><span class="number">-111</span><span class="number">-74</span> ~]# kubectl get pods -n kube-system         </div><div class="line">NAME                    READY     STATUS    RESTARTS   AGE</div><div class="line">kube-flannel-ds<span class="number">-5</span>bg7k   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds<span class="number">-5</span>zvb6   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds-dwpnc   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds-jnhj4   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds-rs7cp   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds-xrjnd   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">ansible</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-03/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2018-10-10-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/10/2018-10-10-k8s-01/">jenkins和k8s结合的自动化目标模型</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/10/2018-10-10-k8s-01/" class="archive-article-date">
+  	<time datetime="2018-10-10T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="目标描述"><a href="#目标描述" class="headerlink" title="目标描述"></a>目标描述</h3><ul>
+<li>在将代码上传至 gitlab 时，触发 push 的钩子，在 jenkins 中进行项目的编译；</li>
+<li>自动将编译后的文件打包成 docker 镜像，并上传至（私有）docker hub；</li>
+<li>修改 Kubernetes 的服务配置文件（Service.yaml 和 Deployment.yaml）中的镜像变量；（因为在我将每一个 jenkins 构建的版本号作为了 docker 镜像的版本号，所以每次都要自动改变）</li>
+<li>将 Kubernetes 的服务配置文件上传至 Kubernetes 的 master 服务器；</li>
+<li>在 Jenkins 中执行 kubectl apply -f file.yaml，在 Kubernetes 部署服务；</li>
+</ul>
+<h5 id="目标模型图"><a href="#目标模型图" class="headerlink" title="目标模型图"></a>目标模型图</h5><p><img src="./img/devops-1.png" alt="devops-1.png" style="width:800px;"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-01/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2018-03-08-android-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/08/2018-03-08-android-02/">Appium测试【第二章】</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/08/2018-03-08-android-02/" class="archive-article-date">
+  	<time datetime="2018-03-08T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="懒人手记"><a href="#懒人手记" class="headerlink" title="懒人手记"></a>懒人手记</h3><p>手机做测试时需要监听数据，要么开热点转发，要么ADB，每次都是很麻烦，突然发奇想，在HACK工具中有ARP欺骗导入数据的 ettercap， 所以我们可以利用这个工具，不再用热点、数据线、ADB一堆的东西，直接欺骗手机的网关位置，来骗取数据到本地。</p>
+<h5 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h5><pre><code>brew install ettercap
+</code></pre><h5 id="启动转发"><a href="#启动转发" class="headerlink" title="启动转发"></a>启动转发</h5><pre><code>sudo sysctl -w net.inet.ip.forwarding=1
+sudo sysctl -w net.inet6.ip6.forwarding=1
+</code></pre><h5 id="macosx开启转发"><a href="#macosx开启转发" class="headerlink" title="macosx开启转发"></a>macosx开启转发</h5><p>新加一个文件：/etc/pf.anchors/http</p>
+<pre><code>rdr pass on lo0 inet proto tcp from any to any port 80 -&gt; 127.0.0.1 port 8080
+rdr pass on lo0 inet proto tcp from any to any port 443 -&gt; 127.0.0.1 port 4443
+rdr pass on en0 inet proto tcp from any to any port 80 -&gt; 127.0.0.1 port 8080
+rdr pass on en0 inet proto tcp from any to any port 443 -&gt; 127.0.0.1 port 4443
+</code></pre><p>检查其正确性：</p>
+<pre><code>pfctl -vnf /etc/pf.anchors/http
+</code></pre><p>在 rdr-anchor “com.apple/*” 下添加</p>
+<pre><code>rdr-anchor &quot;http-forwarding&quot;
+</code></pre><p>在 load anchor “com.apple” from “/etc/pf.anchors/com.apple” 下添加</p>
+<pre><code>load anchor &quot;http-forwarding&quot; from &quot;/etc/pf.anchors/http&quot;
+</code></pre><p>最后导入并允许运行：</p>
+<pre><code>pfctl -ef /etc/pf.conf
+</code></pre><p>使用 -e 命令启用</p>
+<pre><code>sudo pfctl -E
+</code></pre><p>使用 -d 命令关闭 pf：</p>
+<pre><code>sudo pfctl -d
+</code></pre><h5 id="启动arp"><a href="#启动arp" class="headerlink" title="启动arp"></a>启动arp</h5><pre><code>sudo ettercap -i en0 -Tq -M arp:remote /192.168.3.23///
+192.168.3.23 这个IP是手机IP
+</code></pre><h5 id="用nginx测试"><a href="#用nginx测试" class="headerlink" title="用nginx测试"></a>用nginx测试</h5><p>监听8080 在web上访问80看看 可不可以正常</p>
+<pre><code>brew services start nginx
+brew services stop nginx
+</code></pre><h5 id="开启wireshark-开始监听吧。。。。"><a href="#开启wireshark-开始监听吧。。。。" class="headerlink" title="开启wireshark 开始监听吧。。。。"></a>开启wireshark 开始监听吧。。。。</h5><hr>
+<h3 id="ettercap参数说明"><a href="#ettercap参数说明" class="headerlink" title="ettercap参数说明"></a>ettercap参数说明</h3><pre><code>参数介绍：
+攻击和嗅探类
+
+    -M, --mitm
+
+        ARP欺骗，参数 -M arp
+
+            remote  #双向模式，同时arp欺骗通信的双方，参数 -M arp:remote
+            oneway       #单向模式，只arp欺骗第一个目标到第二个目标的通信，参数 -M arp:oneway
+
+        icmp欺骗，参数 -M icmp:(MAC/IP)
+        DHCP欺骗，参数 -M dhcp:(ip_pool/netmask/dns)，如 -M dhcp:192.168.0.30,35,50-60/255.255.255.0/192.168.0.1是给新接入的主机提供ip地址，子网掩码和网关，-M dhcp:/255.255.255.0/192.168.0.1则不提供ip地址，只欺骗子网掩码和网关
+        Port Stealing，这个没搞懂～
+
+    -o, --only-mitm   #只进行中间人攻击，不进行嗅探
+    -f , --pcapfilter     #加载过滤器
+    -B, --bridge    #Bridged sniffing
+
+离线类参数
+
+    -r, --read       #读取本地文件
+    -w, --write      #将嗅探数据保存到本地
+
+界面显示类
+
+    -T, --text       #文本模式显示  
+    -q, --quiet        #安静模式，不显示嗅探数据
+    -s, --script        #加载脚本
+    -C, --curses       #curses-UI模式
+    -G, --gtk       #GTK-UI模式
+    -D, --daemonize       #daemonize后台模式
+
+普通选项：
+
+    -b, --broadcast        #嗅探广播地址
+    -i, --iface         #选择网卡
+    -I, --iflist            #列出可用网卡
+    -Y, --secondary         #后备网卡
+    -A, --address          #ip地址，针对一网卡多ip的情况
+    -n, --netmask             
+    -R, --reversed
+    -z, --silent              #不进行arp毒化和主机扫描
+    -p, --nopromisc
+    -S, --nosslmitm                 #不使用ssl中间人攻击
+    -t, --proto         #协议，tcp/udp/all，默认为all
+    -u, --unoffensive
+    -j, --load-hosts                #加载保存的主机地址
+    -k, --save-hosts                #保存扫描到的主机地址
+    -P, --plugin                 #载入插件
+    -F, --filter                     #载入过滤器文件
+    -W, --wifi-key            #载入wifi密码：
+
+              --wifi-key wep:128:p:secret
+              --wifi-key wep:128:s:ettercapwep0
+              --wifi-key &apos;wep:64:s:\x01\x02\x03\x04\x05&apos;
+              --wifi-key wpa:pwd:ettercapwpa:ssid
+              --wifi-key wpa:psk:663eb260e87cf389c6bd7331b28d82f5203b0cae4e315f9cbb7602f3236708a6
+
+    -a, --config                #载入并使用一个非默认配置文件
+    --certificate              #ssl攻击使用指定的 证书文件
+    --private-key            #ssl攻击使用指定的私钥文件
+
+可视化参数
+
+    -e, --regex         #使用一个正则表达式
+    -V, --visual           #显示方式
+        hex            #16进制
+        ascii           #ASCII码
+        text            
+        ebcdic
+        html
+        utf8
+    -d, --dns           #把ip地址转化为主机名
+    -E, --ext-headers
+    -Q, --superquiet          #超级安静模式，啥信息都不显示，只保存
+
+日志记录选项
+
+    -L, --log             #把所有数据包保存log文件
+    -l, --log-info           #读取离线log文件信息
+    -m, --log-msg              #显示存储在log文件里所有用户用ettercap抓取的信息
+    -c, --compress            #通过gzip算法压缩log文件
+    -o, --only-local           #只存储本地局域网主机配置信息
+    -O, --only-remote           #只存储远程主机配置信息
+
+
+常见的参数组合：
+
+ettercap -Tqi eth0 -M ARP // //           #arp毒化eth0所在的网段，安静模式文本显示
+
+ettercap -Tzq /10.0.0.1/21,22,23  -w hack.pcap          #监听10.0.0.1的ftp，ssh，telnet信息,并保存到本地
+
+ettercap -Tq -P dns_spoof -M arp /192.168.1.120/ //        #对192.168.1.120进行dns欺骗，使用默认网卡eth0,文本模式安静显示
+
+ettercap -Tqi eth0 -L sniffed_data -F filter.ef -M arp:remote /10.0.0.2/80 //     #使用过滤并监听10.0.0.2在80端口的所有通信，安静模式文本显示，保存数据到本地
+</code></pre>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Appium测试</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Appium测试/" class="article-tag-list-link color4">Appium测试</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/08/2018-03-08-android-02/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2018-02-08-android-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/08/2018-02-08-android-01/">Appium测试【第一章】</a>
+    </h1>
+  
+
+        
+        <a href="/2018/02/08/2018-02-08-android-01/" class="archive-article-date">
+  	<time datetime="2018-02-08T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h3><p>Mac下必须手工安装，下载包吧。。。</p>
+<pre><code>https://developer.android.com/studio/releases/platform-tools.html#download
+
+cd ~/Downloads(你的下载目录)/
+unzip android-sdk*.zip
+mv android-sdk-macosx/ ~/.android-sdk-macosx
+echo &apos;export PATH=$PATH:~/.android-sdk-macosx/platform-tools/&apos; &gt;&gt; ~/.bash_profile
+source ~/.bash_profile
+</code></pre><p>测试是否正常安装</p>
+<pre><code>adb devices
+</code></pre><p>参考：</p>
+<blockquote>
+<blockquote>
+<p><a href="https://jiasule.v2ex.com/t/351264" target="_blank" rel="external">https://jiasule.v2ex.com/t/351264</a><br><a href="https://www.cnblogs.com/fnng/p/7683427.html" target="_blank" rel="external">https://www.cnblogs.com/fnng/p/7683427.html</a><br><a href="http://blog.csdn.net/weixin_38208401/article/details/78627597" target="_blank" rel="external">http://blog.csdn.net/weixin_38208401/article/details/78627597</a><br><a href="http://blog.csdn.net/weixin_38208401/article/details/78629920" target="_blank" rel="external">http://blog.csdn.net/weixin_38208401/article/details/78629920</a></p>
+</blockquote>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Appium测试</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Appium测试/" class="article-tag-list-link color4">Appium测试</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/02/08/2018-02-08-android-01/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2017-11-24-system-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -225,110 +764,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/11/24/2017-11-24-system-01/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2017-11-24-erlang-11" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/21/2017-11-24-erlang-11/">Erlang程序设计(第2版) 读书笔记【第十一章】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/11/21/2017-11-24-erlang-11/" class="archive-article-date">
-  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h3><p>只需要三个新的基本函数：spawn、send和 receive。spawn创建一个并行进程，send向某个进程发送消息，receive则是接收消息</p>
-<p>在Erlang里：</p>
-<ul>
-<li>创建和销毁进程是非常快速的；</li>
-<li>在进程间发送消息是非常快速的；</li>
-<li>进程在所有操作系统上都具有相同的行为方式；</li>
-<li>可以拥有大量进程；</li>
-<li>进程不共享任何内存，是完全独立的；</li>
-<li>进程唯一的交互方式就是消息传递。</li>
-</ul>
-<p>出于这些原因，Erlang有时会被称为是一种纯消息传递式语言</p>
-<h5 id="12-1-基本并发函数"><a href="#12-1-基本并发函数" class="headerlink" title="12.1 基本并发函数"></a>12.1 基本并发函数</h5><ul>
-<li><p>Pid =  spawn(Mod, Func, Args).</p>
-<p>创建一个新的并发进程来执行apply(Mod, Func, Args)。这个新进程和调用进程并列运行。spawn返回一个Pid（process identifier的简称，即进程标识符）。可以用Pid来给此进程发送消息。请注意，元数为length(Args)的Func函数必须从Mod模块导出。当一个新进程被创建后，会使用最新版的代码定义模块。</p>
-</li>
-<li><p>Pid = spawn(Fun).</p>
-<p>创建一个新的并发进程来执行Fun()。这种形式的spawn总是使用被执行fun的当前值，而且这个fun无需从模块里导出。</p>
-</li>
-<li><p>Pid!Message</p>
-<p> 向标识符为Pid的进程发送消息Message。消息发送是异步的。发送方并不等待，而是会继续之前的工作。!被称为发送操作符。</p>
-<p> Pid ! M被定义为M。因此，Pid1 ! Pid2 !…! Msg的意思是把消息Msg发送给Pid1、Pid2等所有进程。</p>
-</li>
-<li><p>receive … end</p>
-<p>接收发送给某个进程的消息。它的语法如下：</p>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">receive</span></div><div class="line">		Pattern1 [<span class="keyword">when</span> Guard1] -&gt;</div><div class="line">			Expressions1;</div><div class="line">		Pattern2 [<span class="keyword">when</span> Guard2] -&gt;</div><div class="line">			Expressions2;</div><div class="line">		......</div><div class="line"><span class="keyword">end</span>.</div></pre></td></tr></table></figure>
-<p> 当某个消息到达进程后，系统会尝试将它与Pattern1（以及可选的关卡Guard1）匹配， 如果成功就执行Expressions1。如果第一个模式不匹配，就会尝试Pattern2，以此类推。如果没有匹配的模式，消息就会被保存起来供以后处理，进程则会开始等待下一条消息。</p>
-</li>
-</ul>
-<h5 id="一个并发程序模板"><a href="#一个并发程序模板" class="headerlink" title="一个并发程序模板"></a>一个并发程序模板</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(ctemplate)</span>.<span class="keyword">-compile</span><span class="params">(export_all)</span>.<span class="function"><span class="title">start</span><span class="params">()</span> -&gt;</span>spawn(?MODULE, loop, []).<span class="function"><span class="title">rpc</span><span class="params">(Pid, Request)</span> -&gt;</span>Pid ! &#123;self(), Request&#125;,<span class="keyword">receive</span>&#123;Pid, Response&#125; -&gt; Response<span class="keyword">end</span>.<span class="function"><span class="title">loop</span><span class="params">(X)</span> -&gt;</span><span class="keyword">receive</span>Any -&gt;io:format(<span class="string">"Received:~p~n"</span>,[Any]), loop(X)<span class="keyword">end</span>.</div></pre></td></tr></table></figure>
-<blockquote>
-<p>这样吧</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/21/2017-11-24-erlang-11/">展开全文 >></a>
         </p>
       
 
@@ -546,194 +981,55 @@ maps:safe_from_json(Bin) -&gt;Map
 
 
   
-    <article id="post-2017-11-20-erlang-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2017-11-24-erlang-11" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/20/2017-11-20-erlang-03/">Erlang程序设计(第2版) 读书笔记【第三章】</a>
+      <a class="article-title" href="/2017/11/21/2017-11-24-erlang-11/">Erlang程序设计(第2版) 读书笔记【第十一章】</a>
     </h1>
   
 
         
-        <a href="/2017/11/20/2017-11-20-erlang-03/" class="archive-article-date">
-  	<time datetime="2017-11-20T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-20</time>
+        <a href="/2017/11/21/2017-11-24-erlang-11/" class="archive-article-date">
+  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="第3章-基本概念"><a href="#第3章-基本概念" class="headerlink" title="第3章 基本概念"></a>第3章 基本概念</h3><h5 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h5><blockquote>
-<p>记得上学的时候，数学老师曾说过：“如果一个等式中有好几处X，那么所有X都是一样的。”我们就是这么解方程的：如果知道X+Y=10且XY=2，那么这两个等式里的X就都等于6，Y都等于4.</p>
-</blockquote>
+        <h3 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h3><p>只需要三个新的基本函数：spawn、send和 receive。spawn创建一个并行进程，send向某个进程发送消息，receive则是接收消息</p>
+<p>在Erlang里：</p>
 <ul>
-<li>Erlang的变量是一次性赋值变量（single-assignment variable）,在Erlang里，变量只不过是对某个值的引用：Erlang的实现方式用指针代表绑定变量，指向一个包含值的存储区。这个值不能被修改。</li>
-<li><span style="color:red">注意 f()命令让shell忘记现有的任何绑定。在这个命令之后，所有变量都会变成未绑定状态</span></li>
-<li>在大多数语言里，=表示一个赋值语句。而在Erlang里，=是一次模式匹配操作。Lhs = Rhs的真正意思是：计算右侧（Rhs）的值，然后将结果与左侧（Lhs）的模式相匹配。</li>
+<li>创建和销毁进程是非常快速的；</li>
+<li>在进程间发送消息是非常快速的；</li>
+<li>进程在所有操作系统上都具有相同的行为方式；</li>
+<li>可以拥有大量进程；</li>
+<li>进程不共享任何内存，是完全独立的；</li>
+<li>进程唯一的交互方式就是消息传递。</li>
 </ul>
-<h5 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h5><ul>
-<li>N div M是让N除以M然后舍去余数。N rem M是N除以M后剩下的余数。</li>
+<p>出于这些原因，Erlang有时会被称为是一种纯消息传递式语言</p>
+<h5 id="12-1-基本并发函数"><a href="#12-1-基本并发函数" class="headerlink" title="12.1 基本并发函数"></a>12.1 基本并发函数</h5><ul>
+<li><p>Pid =  spawn(Mod, Func, Args).</p>
+<p>创建一个新的并发进程来执行apply(Mod, Func, Args)。这个新进程和调用进程并列运行。spawn返回一个Pid（process identifier的简称，即进程标识符）。可以用Pid来给此进程发送消息。请注意，元数为length(Args)的Func函数必须从Mod模块导出。当一个新进程被创建后，会使用最新版的代码定义模块。</p>
+</li>
+<li><p>Pid = spawn(Fun).</p>
+<p>创建一个新的并发进程来执行Fun()。这种形式的spawn总是使用被执行fun的当前值，而且这个fun无需从模块里导出。</p>
+</li>
+<li><p>Pid!Message</p>
+<p> 向标识符为Pid的进程发送消息Message。消息发送是异步的。发送方并不等待，而是会继续之前的工作。!被称为发送操作符。</p>
+<p> Pid ! M被定义为M。因此，Pid1 ! Pid2 !…! Msg的意思是把消息Msg发送给Pid1、Pid2等所有进程。</p>
+</li>
+<li><p>receive … end</p>
+<p>接收发送给某个进程的消息。它的语法如下：</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">receive</span></div><div class="line">		Pattern1 [<span class="keyword">when</span> Guard1] -&gt;</div><div class="line">			Expressions1;</div><div class="line">		Pattern2 [<span class="keyword">when</span> Guard2] -&gt;</div><div class="line">			Expressions2;</div><div class="line">		......</div><div class="line"><span class="keyword">end</span>.</div></pre></td></tr></table></figure>
+<p> 当某个消息到达进程后，系统会尝试将它与Pattern1（以及可选的关卡Guard1）匹配， 如果成功就执行Expressions1。如果第一个模式不匹配，就会尝试Pattern2，以此类推。如果没有匹配的模式，消息就会被保存起来供以后处理，进程则会开始等待下一条消息。</p>
+</li>
 </ul>
-<h5 id="原子"><a href="#原子" class="headerlink" title="原子"></a>原子</h5><ul>
-<li>在Erlang里，原子是全局性的，而且不需要宏定义或包含文件就能实现</li>
-<li>原子以小写字母开头，后接一串字母、数字、下划线（）或a（t<br>cat、meters、yards、joe@somehost和a_long_name</li>
-<li>原子还可以放在单引号（’）内。可以用这种引号形式创建以大写字母开头（否则会被解释成变量）或包含字母数字以外字符的原子，例如’Monday’、’Tuesday’、’+’、’*’和’an atom with spaces’。甚至可以给无需引号的原子加上引号，因此’a’和a的意思完全一致。在某些语言里，单引号和双引号可以互换使用。Erlang里不是这样。单引号的用法如前面所示，双引号用于给字符串字面量（string literal）定界。<br>一个原子的值就是它本身。所以，如果输入一个原子作为命令，Erlang shell就会打印出这个原子的值。</li>
-</ul>
-<h5 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h5><ul>
-<li>如果想把一些数量固定的项目归组成单一的实体，就会使用元组（tuple）。创建元组的方法是用大括号把想要表示的值括起来，并用逗号分隔它们。</li>
-<li>匹配时，等号两侧的元组必须有相同数量的元素，而且两侧的对应元素必须绑定为相同的值。</li>
-</ul>
-<figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby"> <span class="number">1</span>&gt; P = &#123;person,&#123;name, joe,armstrong&#125;,&#123;footsize,<span class="number">42</span>&#125;&#125;.</span></div><div class="line"><span class="ruby">- <span class="number">2</span>&gt; &#123;\<span class="number">_</span>,&#123;\<span class="number">_</span>,Who,\<span class="number">_</span>&#125;,\<span class="number">_</span>&#125; = P.</span></div><div class="line"><span class="ruby">- <span class="number">3</span>&gt; Who.</span></div><div class="line"><span class="ruby">- joe</span></div></pre></td></tr></table></figure>
-<h5 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h5><ul>
-<li>列表（list）被用来存放任意数量的事物。创建列表的方法是用中括号把列表元素括起来， 并用逗号分隔它们。</li>
-<li>表的第一个元素被称为列表头（head）。假设把列表头去掉，剩下的就被称为列表尾（tail）。举个例子，如果有一个列表[1,2,3,4,5] ， 那么列表头就是整数1 ，列表尾则是列表<br>[2,3,4,5]。请注意列表头可以是任何事物，但列表尾通常仍然是个列表。<br>访问列表头是一种非常高效的操作，因此基本上所有的列表处理函数都从提取列表头开始， 然后对它做一些操作，接着处理列表尾。</li>
-<li>如果T是一个列表，那么[H|T]也是一个列表，它的头是H，尾是T。竖线（|）把列表的头与尾分隔开。[]是一个空列表。<br>LISP程序员请注意：[H|T]是一个CAR为H、CDR为T的CONS单元。此语法用在模式里会解析出CAR和CDR，用在表达式里则会构建一个CONS单元。<br>无论何时，只要用[…|T]语法构建一个列表，就应该确保T是列表。如果它是，那么新列表就是“格式正确的”。如果T不是列表，那么新列表就被称为“不正确的列表”。大多数库函数假定列表有正确的形式，无法用于不正确的列表。<br>可以给T的开头添加不止一个元素，写法是[E1,E2,..,En|T]。</li>
-</ul>
-<h5 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h5><ul>
-<li>严格来说，Erlang里没有字符串。要在Erlang里表示字符串，可以选择一个由整数组成的列表或者一个二进制型。<h5 id="模式匹配"><a href="#模式匹配" class="headerlink" title="模式匹配"></a>模式匹配</h5></li>
-</ul>
-<pre><code>{X,abc} = {123,abc}    | 成功：X = 123
-{X,Y,Z} = {222,def,&quot;cat&quot;}    | 成功：X = 222，Y = def，Z = &quot;cat&quot;
-{X,Y} = {333,ghi,&quot;cat&quot;}    | 失败：元组的形状不同
-X = true    | 成功：X = true
-{X,Y,X} = {{abc,12},42,{abc,12}}    | 成功：X = {abc,12}，Y = 42
-{X,Y,X} = {{abc,12},42,true}    | 失败：X不能既是{abc,12}又是true
-[H \ T] = [1,2,3,4,5]    | 成功：H = 1，T = [2,3,4,5]
-[H \ T] = &quot;cat&quot; | 成功：H = 99，T = &quot;at&quot;
-[A,B,C \ T] = [a,b,c,d,e,f]    | 成功：A = a，B = b，C = c，T = [d,e,f]
-</code></pre><blockquote>
-<p>这样吧</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/20/2017-11-20-erlang-03/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2017-11-20-erlang-04" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/20/2017-11-20-erlang-04/">Erlang程序设计(第2版) 读书笔记【第四章】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/11/20/2017-11-20-erlang-04/" class="archive-article-date">
-  	<time datetime="2017-11-20T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="第4章-模块与内置函数"><a href="#第4章-模块与内置函数" class="headerlink" title="第4章 模块与内置函数"></a>第4章 模块与<a href="http://erlang.org/doc/man/erlang.html" target="_blank" rel="external">内置函数</a></h3><h5 id="查看和修改当前的工作目录。"><a href="#查看和修改当前的工作目录。" class="headerlink" title="查看和修改当前的工作目录。"></a>查看和修改当前的工作目录。</h5><ul>
-<li>pwd()打印当前工作目录。</li>
-<li>ls()列出当前工作目录里所有的文件名。</li>
-<li>cd(Dir)修改当前工作目录至Dir。<h5 id="模块例子"><a href="#模块例子" class="headerlink" title="模块例子"></a>模块例子</h5></li>
-<li>模块是Erlang的基本代码单元。模块保存在扩展名为.erl的文件里，而且必须先编译才能运行模块里的代码。编译后的模块以.beam作为扩展名。</li>
-</ul>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(geometry)</span>.</div><div class="line"><span class="keyword">-export</span><span class="params">([area/<span class="number">1</span>])</span>.</div><div class="line"></div><div class="line"><span class="function"><span class="title">area</span><span class="params">(&#123;rectangle, Width, Height&#125;)</span> -&gt;</span></div><div class="line">  Width * Height;</div><div class="line"></div><div class="line"><span class="function"><span class="title">area</span><span class="params">(&#123;square, Side&#125;)</span> -&gt;</span></div><div class="line">  Side * Side.</div></pre></td></tr></table></figure>
-<ul>
-<li>运行演示：</li>
-</ul>
-<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">8&gt; </span>c(geometry).</div><div class="line">&#123;ok,geometry&#125;</div><div class="line"><span class="meta">9&gt; </span>geometry:area(&#123;rectangle,<span class="number">2</span>,<span class="number">3</span>&#125;).</div><div class="line"><span class="number">6</span></div><div class="line"><span class="meta">10&gt; </span>geometry:area(&#123;square,<span class="number">3</span>&#125;).</div></pre></td></tr></table></figure>
-<h5 id="分隔符说明"><a href="#分隔符说明" class="headerlink" title="分隔符说明"></a>分隔符说明</h5><ul>
-<li>逗号（,）分隔函数调用、数据构造和模式中的参数。</li>
-<li>分号（;）分隔子句。我们能在很多地方看到子句，例如函数定义，以及case、if、<br>try..catch和receive表达式。</li>
-<li>句号（.）（后接空白）分隔函数整体，以及shell里的表达式。<br>有一种简单的方法可以记住这些：想想英语。句号分隔句子，分号分隔子句，逗号则分隔下级子句。逗号象征短程，分号象征中程，句号则象征长程。</li>
-</ul>
-<h5 id="4-2-购物车"><a href="#4-2-购物车" class="headerlink" title="4.2 购物车."></a>4.2 购物车.</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(shop)</span>.</div><div class="line"><span class="keyword">-export</span><span class="params">([cost/<span class="number">1</span>, total/<span class="number">1</span>, test/<span class="number">0</span>])</span>.</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="title">cost</span><span class="params">(oranges)</span> -&gt;</span> <span class="number">2</span>;</div><div class="line"><span class="function"><span class="title">cost</span><span class="params">(milk)</span> -&gt;</span> <span class="number">8</span>;</div><div class="line"><span class="function"><span class="title">cost</span><span class="params">(pears)</span> -&gt;</span> <span class="number">1</span>.</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="title">total</span><span class="params">([&#123;What, N&#125; | T])</span> -&gt;</span></div><div class="line"></div><div class="line">  shop:cost(What) * N + total(T);</div><div class="line"></div><div class="line"><span class="function"><span class="title">total</span><span class="params">([])</span> -&gt;</span> <span class="number">0</span>.</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="title">test</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  <span class="comment">%%  shop:total([]).</span></div><div class="line">  shop:total([&#123;milk, <span class="number">8</span>&#125;,&#123;pears,<span class="number">8</span>&#125;]).</div></pre></td></tr></table></figure>
-<ul>
-<li>总结运算模型</li>
-</ul>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">total</span><span class="params">([Head|Tail])</span>-&gt;</span></div><div class="line">	to_do_funtion(Head) + total(Tail);</div><div class="line"><span class="function"><span class="title">total</span><span class="params">([])</span>-&gt;</span></div><div class="line">	<span class="number">0</span>.</div></pre></td></tr></table></figure>
-<h3 id="4-3-fun：基本的抽象单元"><a href="#4-3-fun：基本的抽象单元" class="headerlink" title="4.3    fun：基本的抽象单元"></a>4.3    fun：基本的抽象单元</h3><h5 id="4-3-0-匿名函数"><a href="#4-3-0-匿名函数" class="headerlink" title="4.3.0  匿名函数"></a>4.3.0  匿名函数</h5><ul>
-<li>fun可以有任意数量的参数。</li>
-</ul>
-<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">43&gt; </span>Double = fun(X) -&gt; <span class="number">2</span>*X end.</div><div class="line">#Fun&lt;erl_eval.<span class="number">6.52032458</span>&gt;</div><div class="line"><span class="meta">44&gt; </span>Double(<span class="number">4</span>).</div><div class="line"><span class="number">8</span></div><div class="line"></div><div class="line"><span class="meta">49&gt; </span>Hypot = fun(X,Y) -&gt; math:sqrt(X*X + Y*Y) end.</div><div class="line">#Fun&lt;erl_eval.<span class="number">12.52032458</span>&gt;</div><div class="line"><span class="meta">50&gt; </span>Hypot(<span class="number">3</span>,<span class="number">4</span>).</div><div class="line"><span class="number">5.0</span></div></pre></td></tr></table></figure>
-<h5 id="4-3-1-以fun作为参数的函数"><a href="#4-3-1-以fun作为参数的函数" class="headerlink" title="4.3.1 以fun作为参数的函数"></a>4.3.1 以fun作为参数的函数</h5><figure class="highlight elm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-<span class="keyword">module</span>(btest).</div><div class="line">-export([test/0]).</div><div class="line"></div><div class="line">test() -&gt;</div><div class="line">  </div><div class="line">  Even =   fun(<span class="type">X</span>) -&gt; (<span class="type">X</span> rem 2) =:= 0 end,</div><div class="line">  </div><div class="line">  %% lists:map(<span class="type">Even</span>,[1,2,3,4,5,6]).</div><div class="line">  lists:filter(<span class="type">Even</span>,[1,2,3,4,5,6]).</div></pre></td></tr></table></figure>
-<ul>
-<li>map和filter等函数能在一次调用里对整个列表执行某种操作，我们把它们称为一次一列表<br>（list-at-a-time）式操作。使用一次一列表式操作让程序变得更小，而且易于理解。</li>
-</ul>
-<h5 id="4-3-1-返回fun的函数"><a href="#4-3-1-返回fun的函数" class="headerlink" title="4.3.1    返回fun的函数"></a>4.3.1    返回fun的函数</h5><figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-<span class="class"><span class="keyword">module</span>(<span class="title">btest</span>).</span></div><div class="line">-export([test2/<span class="number">0</span>]).</div><div class="line"></div><div class="line">test2() -&gt;</div><div class="line"></div><div class="line">  Mult =  <span class="function"><span class="keyword">fun</span>(<span class="title">Times</span></span>) -&gt; (<span class="function"><span class="keyword">fun</span>(<span class="title">X</span></span>) -&gt; X * Times <span class="keyword">end</span> ) <span class="keyword">end</span>,</div><div class="line"></div><div class="line">  T = Mult(<span class="number">3</span>),</div><div class="line">  T(<span class="number">5</span>).</div></pre></td></tr></table></figure>
-<p>运行：</p>
-<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">73&gt; </span>c(btest).</div><div class="line">&#123;ok,btest&#125;</div><div class="line"><span class="meta">74&gt; </span>btest:test2().</div><div class="line"><span class="number">15</span></div></pre></td></tr></table></figure>
-<ul>
-<li>括号里的fun是fun(X) -&gt; X * Times end，它只是一个关于X的函数。Times是“外部”fun<br>的参数。</li>
-<li>Mult(3)执行后返回fun(X) -&gt; X * 3 end，即内部fun的主体（Times被替换为3）。现在我们可以测试它了。</li>
-</ul>
-<h6 id="列表推导"><a href="#列表推导" class="headerlink" title="列表推导"></a>列表推导</h6><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="number">75</span>&gt; L = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>].</div><div class="line">[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</div><div class="line"><span class="number">76</span>&gt; [<span class="number">2</span>*X || X &lt;- L].</div><div class="line">[<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>,<span class="number">12</span>]</div></pre></td></tr></table></figure>
-<p>-[ F(X) || X &lt;- L]标记的意思是“由F(X)组成的列表（X从列表L中提取）”。因此，[2 *X|| X &lt;- L ]的意思就是“由2*X组成的列表（X从列表L中提取）”。</p>
-<h6 id="毕达哥拉斯三元数组"><a href="#毕达哥拉斯三元数组" class="headerlink" title="毕达哥拉斯三元数组"></a>毕达哥拉斯三元数组</h6><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">-module(btest).</div><div class="line">-export([test/<span class="number">1</span>]).</div><div class="line"></div><div class="line">test(<span class="keyword">N</span>) -&gt;</div><div class="line"></div><div class="line">  [ &#123;A,B,C&#125;|| A &lt;-lists:seq(<span class="number">1</span>,<span class="keyword">N</span>),</div><div class="line">              B &lt;-lists:seq(<span class="number">1</span>,<span class="keyword">N</span>),</div><div class="line">              <span class="keyword">C</span> &lt;-lists:seq(<span class="number">1</span>,<span class="keyword">N</span>),</div><div class="line">              A+B+<span class="keyword">C</span> =&lt; <span class="keyword">N</span>,</div><div class="line">              A*A + B*B =:= <span class="keyword">C</span>*<span class="keyword">C</span></div><div class="line">  ].</div><div class="line"> </div><div class="line"><span class="number">77</span>&gt; c(btest).</div><div class="line">&#123;ok,btest&#125;</div><div class="line"><span class="number">78</span>&gt; btest:test3(<span class="number">15</span>).</div><div class="line">[&#123;3,4,5&#125;,&#123;4,3,5&#125;]</div><div class="line">    </div><div class="line">```	</div><div class="line">- lists:seq(<span class="number">1</span>, <span class="keyword">N</span>)返回一个包含从<span class="number">1</span>到<span class="keyword">N</span>所有整数的列表。因此，A &lt;- lists:seq(<span class="number">1</span>, <span class="keyword">N</span>)的意思是A提取从<span class="number">1</span>到<span class="keyword">N</span>的所有可能值。所以这个程序可以这样念：“提取<span class="number">1</span>到<span class="keyword">N</span>的所有A值，<span class="number">1</span>到<span class="keyword">N</span>的所有B值，<span class="number">1</span>到<span class="keyword">N</span>的所有<span class="keyword">C</span>值，条件是A + B + <span class="keyword">C</span>小于等于<span class="keyword">N</span>并且A*A + B*B = <span class="keyword">C</span>*<span class="keyword">C</span>。</div><div class="line"></div><div class="line"></div><div class="line">##### 关卡</div></pre></td></tr></table></figure>
-<pre><code>is_tuple(T), tuple_size(T) =:=6, abs(element(3,T)) &gt;5
-</code></pre><figure class="highlight excel"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- 第一行的意思是<span class="built_in">T</span>是一个包含六个元素的元组，并且<span class="built_in">T</span>中第三个元素的绝对值大于<span class="number">5</span>。关卡里分隔各个测试的逗号的意思是“并且”。</div></pre></td></tr></table></figure>
-<p>X =:=dog; X=:= cat<br>is_integer(X), X&gt;Y; abs(Y) &lt; 23<br><figure class="highlight tp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- 第一个关卡的意思是<span class="keyword">X</span>是一个cat或者dog，关卡里分号（;）的意思是“或者”。第二个关卡的意思是<span class="keyword">X</span>是一个整数，并且<span class="keyword">X</span>大于<span class="keyword">Y</span>或者<span class="keyword">Y</span>的绝对值小于<span class="number">23</span>。##### 所有的关卡判断函数（即返回布尔值的关卡）和所有的关卡内置函数|关卡判断函数	|意	思||---------|-----|is_atom(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个原子is_binary(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个二进制型is_constant(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个常量is_float(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个浮点数is_function(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个funis_function(<span class="keyword">X</span>, N)	|<span class="keyword">X</span>是一个带有N个参数的funis_integer(<span class="keyword">X</span>)|	<span class="keyword">X</span>是一个整数is_list(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个列表is_map(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个映射组is_number(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个整数或浮点数is_pid(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个进程标识符is_pmod(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个参数化模块的实例is_port(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个端is_reference(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个引用is_tuple(<span class="keyword">X</span>)	|<span class="keyword">X</span>是一个元组is_record(<span class="keyword">X</span>,Tag)	|<span class="keyword">X</span>是一个类型为Tag的记录is_record(<span class="keyword">X</span>,Tag,N)	|<span class="keyword">X</span>是一个类型为Tag、大小为N的记录</div><div class="line"></div><div class="line">##### 归集器</div><div class="line"></div><div class="line">- 把某个整数列表一分为二，分别包含原始列表里的奇数和偶数。</div></pre></td></tr></table></figure></p>
-<p>-module(mmisc).</p>
-<p>-export([odds_wqc_evens/1, adds_add_evens_acc/3]).</p>
-<p>odds_wqc_evens(L) -&gt;</p>
-<p>  adds_add_evens_acc(L, [], []).</p>
-<p>adds_add_evens_acc([H|T], Odds, Evens) -&gt;</p>
-<p>  case (H rem 2) of</p>
-<pre><code>1 -&gt; adds_add_evens_acc(T,[H|Odds], Evens);
-0 -&gt; adds_add_evens_acc(T,Odds, [H|Evens])
-</code></pre><p>  end;</p>
-<p>adds_add_evens_acc([], Odds, Evens) -&gt;</p>
-<p>  {Odds, Evens}.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">运行：</div></pre></td></tr></table></figure>
-<p>18&gt; c(mmisc).<br>{ok,mmisc}<br>19&gt; mmisc:odds_wqc_evens([1,2,3,4,5,6,7,8]).<br>{[7,5,3,1],[8,6,4,2]}<br>```</p>
+<h5 id="一个并发程序模板"><a href="#一个并发程序模板" class="headerlink" title="一个并发程序模板"></a>一个并发程序模板</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(ctemplate)</span>.<span class="keyword">-compile</span><span class="params">(export_all)</span>.<span class="function"><span class="title">start</span><span class="params">()</span> -&gt;</span>spawn(?MODULE, loop, []).<span class="function"><span class="title">rpc</span><span class="params">(Pid, Request)</span> -&gt;</span>Pid ! &#123;self(), Request&#125;,<span class="keyword">receive</span>&#123;Pid, Response&#125; -&gt; Response<span class="keyword">end</span>.<span class="function"><span class="title">loop</span><span class="params">(X)</span> -&gt;</span><span class="keyword">receive</span>Any -&gt;io:format(<span class="string">"Received:~p~n"</span>,[Any]), loop(X)<span class="keyword">end</span>.</div></pre></td></tr></table></figure>
 <blockquote>
 <p>这样吧</p>
 </blockquote>
@@ -771,230 +1067,7 @@ X = true    | 成功：X = true
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/20/2017-11-20-erlang-04/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2017-11-14-erlang-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/12/2017-11-14-erlang-02/">Erlang程序设计(第2版) 读书笔记【第二章】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/11/12/2017-11-14-erlang-02/" class="archive-article-date">
-  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="第2章-Erlang速览"><a href="#第2章-Erlang速览" class="headerlink" title="第2章 Erlang速览"></a>第2章 Erlang速览</h3><h5 id="变量和原子的语法"><a href="#变量和原子的语法" class="headerlink" title="变量和原子的语法"></a>变量和原子的语法</h5><ul>
-<li>Erlang的变量只能绑定一次。</li>
-<li>Erlang的变量以大写字母开头。</li>
-</ul>
-<h5 id="在-shell-里编译并运行-Hello-World"><a href="#在-shell-里编译并运行-Hello-World" class="headerlink" title="在 shell 里编译并运行 Hello World"></a>在 shell 里编译并运行 Hello World</h5><p>erl文件命令成 hello.erl 输入以下内容</p>
-<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- <span class="keyword">module</span>(hello).</div><div class="line">- <span class="keyword">export</span>([start/<span class="number">0</span>]).</div><div class="line"></div><div class="line">start()-&gt;</div><div class="line">	io:format(<span class="string">"hello world ~n"</span>).</div><div class="line">```	</div><div class="line">编译并运行它，我们从保存hello.erl的目录里启动Erlang shell</div></pre></td></tr></table></figure>
-<p>erl<br>Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]</p>
-<p>Eshell V8.2  (abort with ^G)</p>
-<p>1&gt; c(hello,debug_info).<br>{ok,hello}<br>9&gt; hello:start().<br>hello world<br>ok<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##### 并发</div><div class="line">- Erlang的基本并发单元是进程（process）。</div><div class="line">- 只能通过发送和接收消息来与其他进程通信。</div><div class="line">- loop函数永远不会返回，利用尾部的优化，意思是此函数的运行空间是固定的，不会耗尽栈空间</div><div class="line">- Erlang编译器和运行时系统会正确推断出如何在收到消息时运行适当的代码。不需要编写任何的<span class="keyword">if</span>-then-else或switch语句来设定该做什么。这是模式匹配带来的乐趣之一，会为你节省大量工作</div><div class="line"></div><div class="line"></div><div class="line">##### server</div></pre></td></tr></table></figure></p>
-<p>cat afile_server.erl</p>
-<p>-module(afile_server).<br>-export([start/1,loop/1]).</p>
-<p>start(Dir) -&gt;</p>
-<p>  spawn(afile_server,loop, [Dir]).</p>
-<p>loop(Dir) -&gt;</p>
-<p>  receive</p>
-<pre><code>{Client, list_dir} -&gt;
-
-  Client ! { self(), file:list_dir(Dir)};
-
-{Client, {get_file, File}} -&gt;
-
-  Full = filename:join(Dir, File),
-  Client ! {self(), file:read(Full)}
-</code></pre><p>  end,<br>  loop(Dir).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
-<p>➜  src erl<br>Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]</p>
-<p>Eshell V8.2  (abort with ^G)<br>1&gt; c(afile_server).<br>{ok,afile_server}<br>2&gt; FS =  afile_server:start(“.”).</p>
-<p><0.64.0><br>3&gt; FS ! {self(),list_dir}<br>3&gt; .<br>{<0.57.0>,list_dir}<br>4&gt; receive X-&gt;X end.<br>{<0.64.0>,<br> {ok,[“afile_server.beam”,”afile_server.erl”,<br>      “file_server.beam”,”hello.beam”,”hello.erl”,”test.beam”,<br>      “test.erl”]}}<br>5&gt;<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##### client</div></pre></td></tr></table></figure></0.64.0></0.57.0></0.64.0></p>
-<p>-module(afile_client).<br>-export([ls/1, get_file/2]).</p>
-<p>ls(Server) -&gt;</p>
-<p>  Server ! {self(), list_dir},</p>
-<p>  receive</p>
-<pre><code>{Server, FileList} -&gt;
-
-  FileList
-</code></pre><p>  end.</p>
-<p>get_file(Server, File) -&gt;</p>
-<p>  Server ! {self(), {get_file, File}},</p>
-<p>  receive</p>
-<pre><code>{Server, Content} -&gt;
-
-  Content
-</code></pre><p>  end.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
-<p>1&gt; c(afile_server).<br>{ok,afile_server}<br>2&gt; c(afile_client).<br>{ok,afile_client}<br>3&gt; FS =  afile_server:start(“.”).</p>
-<p><0.69.0><br>4&gt; afile_client:ls(“./“).<br>** exception error: bad argument<br>     in function  afile_client:ls/1 (afile_client.erl, line 15)<br>5&gt; afile_client:ls(FS).<br>{ok,[“afile_client.beam”,”afile_client.erl”,<br>     “afile_server.beam”,”afile_server.erl”,”file_server.beam”,<br>     “hello.beam”,”hello.erl”,”test.beam”,”test.erl”]}<br>```</0.69.0></p>
-<blockquote>
-<p>这样吧</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/12/2017-11-14-erlang-02/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2017-11-13-git-hacker" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/12/2017-11-13-git-hacker/">在台机器上登录两个GITHUB账号</a>
-    </h1>
-  
-
-        
-        <a href="/2017/11/12/2017-11-13-git-hacker/" class="archive-article-date">
-  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>###<br>    git config –global –unset user.name<br>    git config –global –unset user.email</p>
-<pre><code>ssh-keygen -t rsa -C &quot;TEST2@gmail.com&quot; -f ~/.ssh/TEST2
-ssh-keygen -t rsa -C &quot;TEST1@gmail.com&quot; -f ~/.ssh/TEST1
-</code></pre><h3 id="TEST1-and-TEST2两个账号在GITHUB上"><a href="#TEST1-and-TEST2两个账号在GITHUB上" class="headerlink" title="TEST1 and TEST2两个账号在GITHUB上"></a>TEST1 and TEST2两个账号在GITHUB上</h3><pre><code>cat ~/.ssh/config
-
-Host gitlab.test.com
-  HostName gitlab.test.com
-  PreferredAuthentications publickey
-  IdentityFile ~/.ssh/innergit
-
-Host TEST1.github.com
-  HostName github.com
-  PreferredAuthentications publickey
-  IdentityFile ~/.ssh/TEST1
-
-
-Host TEST2.github.com
-  HostName github.com
-  User TEST2
-  PreferredAuthentications publickey
-  IdentityFile ~/.ssh/TEST2
-</code></pre><h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><pre><code>git clone git@TEST2.github.com:TEST2/Alcman.git
-cd project_name1
-git config  user.name &quot;TEST2&quot;
-git config  user.email &quot;TEST2@gmail.com&quot;
-
-
-cd project_name2
-git clone git@TEST1.github.com:TEST1/rake-flow.git
-git config  user.name &quot;TEST1&quot;
-git config  user.email &quot;TEST1@gmail.com&quot;
-</code></pre>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/12/2017-11-13-git-hacker/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/11/21/2017-11-24-erlang-11/">展开全文 >></a>
         </p>
       
 
@@ -1107,6 +1180,10 @@ git config  user.email &quot;TEST1@gmail.com&quot;
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">python技术分享</a>
               </li>
              
@@ -1143,11 +1220,11 @@ git config  user.email &quot;TEST1@gmail.com&quot;
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
+                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1156,10 +1233,6 @@ git config  user.email &quot;TEST1@gmail.com&quot;
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">ceph</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
               </li>
              
               <li class="article-tag-list-item">
