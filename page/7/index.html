@@ -157,6 +157,90 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2015-05-20-training-python-13" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/15/2015-05-20-training-python-13/">python技术分享[13]－ Flask实现restful接口</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/15/2015-05-20-training-python-13/" class="archive-article-date">
+  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-安装扩展"><a href="#1-安装扩展" class="headerlink" title="1.安装扩展"></a>1.安装扩展</h4><ul>
+<li>pip install flask</li>
+<li>pip install flask-restful</li>
+<li>pip install sqlalchemy</li>
+<li>网方文档地址：<br><a href="http://flask-restful.readthedocs.org/en/0.3.3/" target="_blank" rel="external">http://flask-restful.readthedocs.org/en/0.3.3/</a></li>
+</ul>
+<h4 id="2-models代码："><a href="#2-models代码：" class="headerlink" title="2.models代码："></a>2.models代码：</h4><figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/python</span></div><div class="line"><span class="meta">#coding=utf-8</span></div><div class="line"></div><div class="line">‘’‘</div><div class="line">功能：定义数据表结构，生成需要生成数据表时，直接python models.py</div><div class="line">’‘’</div><div class="line"><span class="title">from</span> sqlalchemy <span class="keyword">import</span> Column</div><div class="line"><span class="title">from</span> sqlalchemy <span class="keyword">import</span> Integer</div><div class="line"><span class="title">from</span> sqlalchemy <span class="keyword">import</span> String</div><div class="line"><span class="title">from</span> sqlalchemy.ext.declarative <span class="keyword">import</span> declarative_base</div><div class="line"></div><div class="line"><span class="type">Base</span> = declarative_base()</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="type">Todo</span>(<span class="type">Base</span>):</span></div><div class="line"><span class="class">    __tablename__ = 'todos'</span></div><div class="line"><span class="class"></span></div><div class="line"><span class="class">    id = <span class="type">Column</span>(<span class="type">Integer</span>, <span class="title">primary_key</span>=<span class="type">True</span>)</span></div><div class="line"><span class="class">    task = <span class="type">Column</span>(<span class="type">String(255)</span>)</span></div><div class="line"><span class="class">‘’‘</span></div><div class="line"><span class="class">if __name__ == "__main__":</span></div><div class="line"><span class="class">    from sqlalchemy import create_engine</span></div><div class="line"><span class="class">    from settings import <span class="type">DB_URI</span></span></div><div class="line"><span class="class">    engine = create_engine(<span class="type">DB_URI</span>)</span></div><div class="line"><span class="class">    <span class="type">Base</span>.metadata.drop_all(<span class="title">engine</span>)</span></div><div class="line"><span class="class">    <span class="type">Base</span>.metadata.create_all(<span class="title">engine</span>)</span></div><div class="line"><span class="class"></span></div><div class="line"><span class="class">’‘’</span></div></pre></td></tr></table></figure>
+<h4 id="3-db代码："><a href="#3-db代码：" class="headerlink" title="3.db代码："></a>3.db代码：</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> create_engine</div><div class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> scoped_session</div><div class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> sessionmaker</div><div class="line">#<span class="keyword">from</span> settings <span class="keyword">import</span> DB_URI</div><div class="line"></div><div class="line">DB_URI = <span class="string">'mysql://root:@localhost:3306/test?charset=utf8'</span></div><div class="line"></div><div class="line">Session = sessionmaker(autocommit=<span class="literal">False</span>,</div><div class="line">                       autoflush=<span class="literal">False</span>,</div><div class="line">                       bind=create_engine(DB_URI))</div><div class="line">session = scoped_session(Session)</div></pre></td></tr></table></figure>
+<h4 id="4-resources代码："><a href="#4-resources代码：" class="headerlink" title="4.resources代码："></a>4.resources代码：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="string">功能：引入上面的models文件，将数据表数据进行对象化，定义restful资源，返回前数据利用marshal_with装饰器做序列化</span></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="keyword">from</span> models <span class="keyword">import</span> Todo</div><div class="line"><span class="keyword">from</span> db <span class="keyword">import</span> session</div><div class="line"></div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> reqparse</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> abort</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> Resource</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> fields</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> marshal_with</div><div class="line"></div><div class="line">todo_fields = &#123;</div><div class="line">    <span class="string">'id'</span>: fields.Integer,</div><div class="line">    <span class="string">'task'</span>: fields.String,</div><div class="line">    <span class="string">'uri'</span>: fields.Url(<span class="string">'todo'</span>, absolute=<span class="keyword">True</span>),</div><div class="line">&#125;</div><div class="line"></div><div class="line">parser = reqparse.RequestParser()</div><div class="line">parser.add_argument(<span class="string">'task'</span>, type=str)</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TodoResource</span><span class="params">(Resource)</span>:</span></div><div class="line"><span class="meta">    @marshal_with(todo_fields)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, id)</span>:</span></div><div class="line">        todo = session.query(Todo).filter(Todo.id == id).first()</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> todo:</div><div class="line">            abort(<span class="number">404</span>, message=<span class="string">"Todo &#123;&#125; doesn't exist"</span>.format(id))</div><div class="line">        <span class="keyword">return</span> todo</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self, id)</span>:</span></div><div class="line">        todo = session.query(Todo).filter(Todo.id == id).first()</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> todo:</div><div class="line">            abort(<span class="number">404</span>, message=<span class="string">"Todo &#123;&#125; doesn't exist"</span>.format(id))</div><div class="line">        session.delete(todo)</div><div class="line">        session.commit()</div><div class="line">        <span class="keyword">return</span> &#123;&#125;, <span class="number">204</span></div><div class="line"></div><div class="line"><span class="meta">    @marshal_with(todo_fields)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, id)</span>:</span></div><div class="line">        parsed_args = parser.parse_args()</div><div class="line">        <span class="keyword">print</span> parsed_args</div><div class="line">        todo = session.query(Todo).filter(Todo.id == id).first()</div><div class="line">        todo.task = parsed_args[<span class="string">'task'</span>]</div><div class="line">        session.add(todo)</div><div class="line">        session.commit()</div><div class="line">        <span class="keyword">return</span> todo, <span class="number">201</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TodoListResource</span><span class="params">(Resource)</span>:</span></div><div class="line"><span class="meta">    @marshal_with(todo_fields)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></div><div class="line">        todos = session.query(Todo).all()</div><div class="line">        <span class="keyword">return</span> todos</div><div class="line"></div><div class="line"><span class="meta">    @marshal_with(todo_fields)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self)</span>:</span></div><div class="line">        parsed_args = parser.parse_args()</div><div class="line">        todo = Todo(task=parsed_args[<span class="string">'task'</span>])</div><div class="line">        session.add(todo)</div><div class="line">        session.commit()</div><div class="line">        <span class="keyword">return</span> todo, <span class="number">201</span></div></pre></td></tr></table></figure>
+<h4 id="5-app代码："><a href="#5-app代码：" class="headerlink" title="5.app代码："></a>5.app代码：</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># coding=utf<span class="number">-8</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</div><div class="line"><span class="keyword">from</span> flask.ext.restful <span class="keyword">import</span> Api</div><div class="line"></div><div class="line">app = Flask(__name__)</div><div class="line">api = Api(app)</div><div class="line"></div><div class="line"><span class="keyword">from</span> resources <span class="keyword">import</span> TodoListResource</div><div class="line"><span class="keyword">from</span> resources <span class="keyword">import</span> TodoResource</div><div class="line"></div><div class="line">api.add_resource(TodoListResource, <span class="string">'/todos'</span>, endpoint=<span class="string">'todos'</span>)</div><div class="line">api.add_resource(TodoResource, <span class="string">'/todos/&lt;string:id&gt;'</span>, endpoint=<span class="string">'todo'</span>)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    app.run(debug=<span class="literal">True</span>)</div></pre></td></tr></table></figure>
+<h4 id="5-test代码："><a href="#5-test代码：" class="headerlink" title="5.test代码："></a>5.test代码：</h4><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> requests, json</div><div class="line"><span class="built_in">print</span> requests.<span class="built_in">get</span>(<span class="string">'http://localhost:5000/todos'</span>).json()</div><div class="line"><span class="built_in">print</span> requests.post(<span class="string">'http://localhost:5000/todos'</span>,</div><div class="line">                 headers=&#123;<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>&#125;,</div><div class="line">                 data=json.dumps(&#123;<span class="string">'task'</span>: <span class="string">'go outside!'</span>&#125;)).json()</div><div class="line"><span class="built_in">print</span> requests.<span class="built_in">get</span>(<span class="string">'http://localhost:5000/todos/1'</span>).json()</div><div class="line"><span class="built_in">print</span> requests.<span class="built_in">put</span>(<span class="string">'http://localhost:5000/todos/1'</span>,</div><div class="line">                headers=&#123;<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>&#125;,</div><div class="line">                data=json.dumps(&#123;<span class="string">'task'</span>: <span class="string">'go to the gym'</span>&#125;)).json()</div><div class="line"><span class="built_in">print</span> requests.<span class="keyword">delete</span>(<span class="string">'http://localhost:5000/todos/1'</span>)</div><div class="line"><span class="built_in">print</span> requests.<span class="built_in">get</span>(<span class="string">'http://localhost:5000/todos'</span>).json()</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/15/2015-05-20-training-python-13/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2017-09-11-cluster-kafka-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -993,98 +1077,6 @@ Error while executing topic command : replication factor: 3 larger than availabl
 
 
   
-    <article id="post-2016-02-08-php-ext-8" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/08/2016-02-08-php-ext-8/">php7扩展开发[8]类方法之间的调用</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/08/2016-02-08-php-ext-8/" class="archive-article-date">
-  	<time datetime="2017-08-08T09:09:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight mel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">在一个扩展模块里，类之间方法的调用，上面第<span class="number">7</span>个有例子简介，就不多说了</div><div class="line">首先我们先创建<span class="keyword">play</span>扩展模块，再创建adf扩展模块，最后创建udf扩展模块，</div><div class="line">我们要做到的是php -m中显示加载了<span class="keyword">play</span>,我们可以调用adf类和udf类。</div></pre></td></tr></table></figure>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">第一步：</div><div class="line">	在adf和udf类中各实现<span class="builtin-name">set</span> get方法，然后初始化minit中的内容</div><div class="line">	运行成功后，将adf.c php_adf.h和udf.c php_udf.h拷入play文件中</div><div class="line">	</div><div class="line">第二步</div><div class="line">修改play文件夹中的config.m4：</div><div class="line"><span class="keyword">if</span> test -z <span class="string">"<span class="variable">$PHP_DEBUG</span>"</span> ; then </div><div class="line">  PHP_NEW_EXTENSION(play, play.c udf.c adf.c, <span class="variable">$ext_shared</span>,, <span class="attribute">-DZEND_ENABLE_STATIC_TSRMLS_CACHE</span>=1)</div><div class="line">  </div><div class="line">在play.c的MINIT函数中加上</div><div class="line">	ZEND_MODULE_STARTUP_N(udf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">	ZEND_MODULE_STARTUP_N(adf) (INIT_FUNC_ARGS_PASSTHRU);</div><div class="line">  </div><div class="line">第三步执行</div><div class="line">phpize </div><div class="line">./configure <span class="attribute">--with-php-config</span>=/usr/bin/php-config --enable-debug</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">在adf.c中加一个静态方法</div><div class="line"></div><div class="line"><span class="keyword">const</span> zend_function_entry adf_functions[] = &#123;</div><div class="line"></div><div class="line">	PHP_ME(adf, __construct,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)</div><div class="line">	PHP_ME(adf,<span class="built_in">set</span>,global_setkey_arg,ZEND_ACC_PUBLIC)</div><div class="line">	PHP_ME(adf,get,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC)</div><div class="line">	PHP_ME(adf,calladf,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC|ZEND_ACC_STATIC) </div><div class="line"></div><div class="line">	PHP_FE_END	<span class="comment">/* Must be the last line in adf_functions[] */</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line">加上这个一行 	PHP_ME(adf,calladf,<span class="literal">NULL</span>,ZEND_ACC_PUBLIC|ZEND_ACC_STATIC) </div><div class="line"></div><div class="line">再实现一个空方法</div><div class="line">ZEND_METHOD(adf,calladf)&#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">在udf.c 中定义了一个get方法，它用来调用adf.c中的calladf的静态方法</div><div class="line">ZEND<span class="number">_M</span>ETHOD(udf,get)&#123;</div><div class="line"></div><div class="line">    <span class="comment">//创建类实例</span></div><div class="line">    zval *<span class="keyword">object</span><span class="number">_n</span>ame;</div><div class="line">    </div><div class="line">    <span class="comment">//函数名i</span></div><div class="line">    zval <span class="keyword">function</span><span class="number">_n</span>ame;</div><div class="line">    ZVAL<span class="number">_</span>STRING(&amp;<span class="keyword">function</span><span class="number">_n</span>ame, <span class="string">"calladf"</span>);</div><div class="line"> </div><div class="line">    <span class="comment">//zend_call_method_with_0_params(object_name,adf_ce,NULL,"calladf",return_value);</span></div><div class="line">    zend<span class="number">_</span>call<span class="number">_m</span>ethod(<span class="keyword">object</span><span class="number">_n</span>ame,adf<span class="number">_</span>ce,NULL,<span class="string">"calladf"</span>,sizeof(<span class="string">"calladf"</span>)-<span class="number">1</span>,<span class="keyword">return</span><span class="number">_</span><span class="keyword">value</span>,<span class="number">0</span>,NULL,NULL);</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">在 Zend/zend<span class="number">_</span>interfaces 下函数原型：</div><div class="line"></div><div class="line"><span class="number">#def</span>ine zend<span class="number">_</span>call<span class="number">_m</span>ethod<span class="number">_</span>with<span class="number">_0_p</span>arams(obj, obj<span class="number">_</span>ce, fn<span class="number">_p</span>roxy, <span class="keyword">function</span><span class="number">_n</span>ame, retval) \</div><div class="line">	zend<span class="number">_</span>call<span class="number">_m</span>ethod(obj, obj<span class="number">_</span>ce, fn<span class="number">_p</span>roxy, <span class="keyword">function</span><span class="number">_n</span>ame, sizeof(<span class="keyword">function</span><span class="number">_n</span>ame)-<span class="number">1</span>, retval, <span class="number">0</span>, NULL, NULL)</div><div class="line"></div><div class="line"><span class="number">#def</span>ine zend<span class="number">_</span>call<span class="number">_m</span>ethod<span class="number">_</span>with<span class="number">_1_p</span>arams(obj, obj<span class="number">_</span>ce, fn<span class="number">_p</span>roxy, <span class="keyword">function</span><span class="number">_n</span>ame, retval, arg<span class="number">1</span>) \</div><div class="line">	zend<span class="number">_</span>call<span class="number">_m</span>ethod(obj, obj<span class="number">_</span>ce, fn<span class="number">_p</span>roxy, <span class="keyword">function</span><span class="number">_n</span>ame, sizeof(<span class="keyword">function</span><span class="number">_n</span>ame)-<span class="number">1</span>, retval, <span class="number">1</span>, arg<span class="number">1</span>, NULL)</div><div class="line"></div><div class="line"><span class="number">#def</span>ine zend<span class="number">_</span>call<span class="number">_m</span>ethod<span class="number">_</span>with<span class="number">_2_p</span>arams(obj, obj<span class="number">_</span>ce, fn<span class="number">_p</span>roxy, <span class="keyword">function</span><span class="number">_n</span>ame, retval, arg<span class="number">1</span>, arg<span class="number">2</span>) \</div><div class="line">	zend<span class="number">_</span>call<span class="number">_m</span>ethod(obj, obj<span class="number">_</span>ce, fn<span class="number">_p</span>roxy, <span class="keyword">function</span><span class="number">_n</span>ame, sizeof(<span class="keyword">function</span><span class="number">_n</span>ame)-<span class="number">1</span>, retval, <span class="number">2</span>, arg<span class="number">1</span>, arg<span class="number">2</span>)</div><div class="line"></div><div class="line">上面三个调用下面的：</div><div class="line"></div><div class="line">ZEND<span class="number">_</span>API zval* zend<span class="number">_</span>call<span class="number">_m</span>ethod(zval *<span class="keyword">object</span><span class="number">_p</span>p, zend<span class="number">_</span><span class="keyword">class</span><span class="number">_</span>entry *obj<span class="number">_</span>ce, zend<span class="number">_f</span>unction **fn<span class="number">_p</span>roxy, const char *<span class="keyword">function</span><span class="number">_n</span>ame, size<span class="number">_</span>t <span class="keyword">function</span><span class="number">_n</span>ame<span class="number">_</span>len, zval *retval, int param<span class="number">_</span>count, zval* arg<span class="number">1</span>, zval* arg<span class="number">2</span>);</div></pre></td></tr></table></figure>
-<pre><code>在Zend/zend_API.h下,上面调用zend_call_function：
-ZEND_API int zend_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache);
-
-typedef struct _zend_fcall_info {
-        size_t size;
-        HashTable *function_table;
-        zval function_name;
-        zend_array *symbol_table;
-        zval *retval;
-        zval *params;
-        zend_object *object;
-        zend_bool no_separation;
-        uint32_t param_count;
-} zend_fcall_info;
-</code></pre><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/PHP7扩展开发/" class="article-tag-list-link color4">PHP7扩展开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/08/2016-02-08-php-ext-8/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
@@ -1220,11 +1212,11 @@ typedef struct _zend_fcall_info {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
+                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
               </li>
              
               <li class="article-tag-list-item">

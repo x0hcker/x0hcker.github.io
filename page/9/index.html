@@ -157,6 +157,95 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2017-07-29-training-python-17" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/29/2017-07-29-training-python-17/">python技术分享[18] tornado之TCPServer</a>
+    </h1>
+  
+
+        
+        <a href="/2017/07/29/2017-07-29-training-python-17/" class="archive-article-date">
+  	<time datetime="2017-07-29T10:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h3 id="C10K问题"><a href="#C10K问题" class="headerlink" title="C10K问题"></a>C10K问题</h3><p>C10K问题的一个文章：<a href="http://www.kegel.com/c10k.html" target="_blank" rel="external">http://www.kegel.com/c10k.html</a></p>
+<h3 id="环境准备："><a href="#环境准备：" class="headerlink" title="环境准备："></a>环境准备：</h3><ul>
+<li><p>修改系统打开文件限制</p>
+  <figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">limit -<span class="keyword">n</span> 查看到当前设置 </div><div class="line">grep '<span class="keyword">open</span> files' /proc/$(<span class="keyword">cat</span> /<span class="keyword">var</span>/<span class="keyword">run</span>/xxxx.pid)/limits</div><div class="line">   </div><div class="line">打开 /etc/security/limits.<span class="keyword">conf</span> 并添加（如果已经存在，则修改数值）</div><div class="line"><span class="comment">* soft nofile 1000000</span></div><div class="line"><span class="comment">* hard nofile 1000000</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>网络端口限制修改</p>
+  <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">vi /etc/sysctl.conf</div><div class="line">net.nf_conntrack_max= <span class="number">6553500</span></div><div class="line">net<span class="selector-class">.ipv4</span><span class="selector-class">.ip_local_port_range</span>=<span class="string">"1024 65535"</span></div><div class="line"></div><div class="line">使之生效</div><div class="line">sysctl -p</div><div class="line">vi /proc/sys/net/nf_conntrack_max</div><div class="line">查看修改是否成功</div></pre></td></tr></table></figure>
+</li>
+<li><p>解决大量TCP的TIME_WAIT问题</p>
+</li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">查看服务器中TCP连接的状态。</div><div class="line">netstat -<span class="keyword">n</span> | awk '/^tcp/ &#123;++S[<span class="variable">$NF</span>]&#125; END &#123;<span class="keyword">for</span>(a <span class="keyword">in</span> S) <span class="keyword">print</span> a, S[a]&#125;'</div><div class="line">	</div><div class="line">修改系统参数，缓解TIME_WAIT问题</div><div class="line">vi /etc/sysctl.<span class="keyword">conf</span></div><div class="line"><span class="keyword">net</span>.ipv4.tcp_tw_reuse=1</div><div class="line"><span class="keyword">net</span>.ipv4.tcp_tw_recycle=1</div><div class="line"><span class="keyword">net</span>.ipv4.tcp_max_tw_buckets=5000</div><div class="line"><span class="keyword">net</span>.ipv4.tcp_syncookies=1</div><div class="line"></div><div class="line">使之生效</div><div class="line">sysctl -p</div></pre></td></tr></table></figure>
+<h3 id="TcpServer代码"><a href="#TcpServer代码" class="headerlink" title="TcpServer代码"></a>TcpServer代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># encoding: utf-8</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">from</span> tornado <span class="keyword">import</span> process</div><div class="line"><span class="keyword">from</span> tornado <span class="keyword">import</span> web, netutil</div><div class="line"><span class="keyword">from</span> tornado.tcpserver <span class="keyword">import</span> TCPServer</div><div class="line"><span class="keyword">from</span> tornado <span class="keyword">import</span> ioloop</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">import</span> sys, os ,syslog</div><div class="line"><span class="keyword">import</span> json, base64</div><div class="line"><span class="keyword">import</span> multiprocessing</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sub_mod</span><span class="params">(ip, data)</span>:</span></div><div class="line">    <span class="comment">#解密内容</span></div><div class="line">    data = json.loads(base64.b64decode(data))</div><div class="line">    print(data)</div><div class="line"></div><div class="line">    <span class="comment">#db = custom_mongodb(using='logs')</span></div><div class="line">    <span class="comment">#db.insert('test', **data)</span></div><div class="line">    <span class="comment">#db.conn.disconnect()</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MtaskConnection</span><span class="params">(object)</span>:</span></div><div class="line">    stream_set = set([])</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, pool, stream, address)</span>:</span></div><div class="line">        self.pool = pool</div><div class="line">        self.stream = stream</div><div class="line">        self.address = address</div><div class="line">        self.stream_set.add(self.stream)</div><div class="line"></div><div class="line">        self.stream.set_close_callback(self._on_close)</div><div class="line">        self.stream.read_until(<span class="string">'\n'</span>, self._on_read_line)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_on_read_line</span><span class="params">(self, data)</span>:</span></div><div class="line">        self.pool.apply_async(sub_mod, (self.address[<span class="number">0</span>], data))</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_on_close</span><span class="params">(self)</span>:</span></div><div class="line">        MtaskConnection.stream_set.remove(self.stream)</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MonitorTCPServer</span><span class="params">(TCPServer)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        TCPServer.__init__(self)</div><div class="line">        self.pool = multiprocessing.Pool(processes=<span class="number">8</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_stream</span><span class="params">(self, stream, address)</span>:</span></div><div class="line"></div><div class="line">        MtaskConnection(self.pool, stream, address)</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    sockets = netutil.bind_sockets(<span class="number">8080</span>)</div><div class="line">    process.fork_processes(<span class="number">0</span>)</div><div class="line"></div><div class="line">    server = MonitorTCPServer()</div><div class="line">    server.add_sockets(sockets)</div><div class="line">    ioloop.IOLoop.instance().start()</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    syslog.openlog(<span class="string">"monitor_svr"</span>, <span class="number">0</span>, syslog.LOG_LOCAL6)</div><div class="line">    main()</div><div class="line">    syslog.closelog()</div></pre></td></tr></table></figure>
+<h3 id="TcpClient代码"><a href="#TcpClient代码" class="headerlink" title="TcpClient代码"></a>TcpClient代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span>  socket</div><div class="line"><span class="keyword">import</span>  base64</div><div class="line"><span class="keyword">import</span>  json</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">clint</span><span class="params">()</span>:</span></div><div class="line">    host = <span class="string">'127.0.0.1'</span></div><div class="line">    port = <span class="number">8080</span></div><div class="line">    bufsize = <span class="number">1024</span></div><div class="line">    addr = (host, port)</div><div class="line">    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</div><div class="line">    client.connect(addr)</div><div class="line"></div><div class="line">    data =&#123;<span class="string">"value"</span>:<span class="string">"testtestest"</span>&#125;</div><div class="line"></div><div class="line">    <span class="comment"># json化返回数据</span></div><div class="line">    client.send(base64.b64encode(json.dumps(data)) + <span class="string">'\n'</span>)</div><div class="line">    client.close()</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    clint()</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">phpmongodb</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/07/29/2017-07-29-training-python-17/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2017-07-28-training-python-16" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -803,102 +892,6 @@ echo &quot;3&quot; &gt; /opt/zookeeper/data/myid 在172.16.61.104上
 
 
   
-    <article id="post-team-6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/16/team-6/">怎样搭建自动式发包平台</a>
-    </h1>
-  
-
-        
-        <a href="/2017/05/16/team-6/" class="archive-article-date">
-  	<time datetime="2017-05-16T07:51:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h2 id="业务背景"><a href="#业务背景" class="headerlink" title="业务背景"></a>业务背景</h2><p>在客户端和服务端都准备完备的前提下，需要实现游戏自助切换版本上线，以往都是运维手工切版本上线，且流程冗长，内容繁多，一不小心就会出问题，而且具体发版的内容需要和后端研发和运营反复核对，所以做此系统用来解决在运营期间每次发版本的问题。<br>
-        
-          <a class="article-more-a" href="/2017/05/16/team-6/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">开发</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">QA</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SDK开发</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术管理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/游戏支撑团队如何建立/" class="article-tag-list-link color1">游戏支撑团队如何建立</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/05/16/team-6/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a>
@@ -1034,11 +1027,11 @@ echo &quot;3&quot; &gt; /opt/zookeeper/data/myid 在172.16.61.104上
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
+                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
               </li>
              
               <li class="article-tag-list-item">

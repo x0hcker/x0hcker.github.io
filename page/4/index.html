@@ -157,6 +157,105 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2017-11-21-erlang-05" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/21/2017-11-21-erlang-05/">Erlang程序设计(第2版) 读书笔记【第五章】</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/21/2017-11-21-erlang-05/" class="archive-article-date">
+  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="第5章-记录与映射组"><a href="#第5章-记录与映射组" class="headerlink" title="第5章 记录与映射组"></a>第5章 记录与映射组</h5><ul>
+<li>元组用于保存固定数量的元素，而列表用于保存可变数量的元素。</li>
+<li>记录（record）和映射组（map）。记录其实就是元组的另一种形式。通过使用记录，可以给元组里的各个元素关联一个名称。</li>
+</ul>
+<h6 id="记录适合以下的情形：："><a href="#记录适合以下的情形：：" class="headerlink" title="记录适合以下的情形：："></a>记录适合以下的情形：：</h6><ul>
+<li>当你可以用一些预先确定且数量固定的原子来表示数据时；</li>
+<li>当记录里的元素数量和元素名称不会随时间而改变时；</li>
+<li>当存储空间是个问题时，典型的案例是你有一大堆元组，并且每个元组都有相同的结构。</li>
+</ul>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby"><span class="class"><span class="keyword">module</span>(<span class="title">myconf</span>).</span></span></div><div class="line"><span class="ruby">-record(server_opts, &#123;port, ip = <span class="string">"127.0.0.1"</span>, max_connections = <span class="number">10</span>&#125;).</span></div><div class="line"><span class="ruby"></span></div><div class="line"><span class="ruby"><span class="string">%%#server_opts&#123;port = 8000,ip = "192.168.56.101",</span></span></div><div class="line"><span class="ruby"><span class="string">%%max_connections = 10&#125;</span></span></div><div class="line"><span class="ruby"><span class="string">%%</span></span></div><div class="line"><span class="ruby"><span class="string">%%Opts#server_opts.port.</span></span></div></pre></td></tr></table></figure>
+<h6 id="映射组适合以下的情形："><a href="#映射组适合以下的情形：" class="headerlink" title="映射组适合以下的情形："></a>映射组适合以下的情形：</h6><ul>
+<li>当键不能预先知道时用来表示键值数据结构；</li>
+<li>当存在大量不同的键时用来表示数据；</li>
+<li>当方便使用很重要而效率无关紧要时作为万能的数据结构使用；</li>
+<li>用作“自解释型”的数据结构，也就是说，用户容易从键名猜出值的含义；</li>
+<li>用来表示键值解析树，例如XML或配置文件；</li>
+<li>用JSON来和其他编程语言通信。</li>
+<li>映射组在系统内部是作为有序集合存储的，打印时总是使用各键排序后的顺序，与映射组的创建方式无关。</li>
+<li>使用映射组的最佳方式是在首次定义某个键时总是使用Key =&gt; Val，而在修改具体某个键的值时都使用Key := Val</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Facts = <span class="comment">#&#123;a =&gt;1, b=&gt;2&#125;.</span></div></pre></td></tr></table></figure>
+<h5 id="json"><a href="#json" class="headerlink" title="json"></a>json</h5><pre><code>maps:to_json(Map) -&gt;Bin
+maps:from_json(Bin) -&gt;Map
+maps:safe_from_json(Bin) -&gt;Map
+</code></pre><blockquote>
+<p>这样吧</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/21/2017-11-21-erlang-05/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2017-11-20-erlang-04" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -400,19 +499,19 @@ X = true    | 成功：X = true
 
 
   
-    <article id="post-2017-11-14-erlang-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2017-11-13-erlang-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/12/2017-11-14-erlang-02/">Erlang程序设计(第2版) 读书笔记【第二章】</a>
+      <a class="article-title" href="/2017/11/12/2017-11-13-erlang-01/">Erlang程序设计(第2版) 读书笔记【第一章】</a>
     </h1>
   
 
         
-        <a href="/2017/11/12/2017-11-14-erlang-02/" class="archive-article-date">
+        <a href="/2017/11/12/2017-11-13-erlang-01/" class="archive-article-date">
   	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
 </a>
         
@@ -420,51 +519,37 @@ X = true    | 成功：X = true
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="第2章-Erlang速览"><a href="#第2章-Erlang速览" class="headerlink" title="第2章 Erlang速览"></a>第2章 Erlang速览</h3><h5 id="变量和原子的语法"><a href="#变量和原子的语法" class="headerlink" title="变量和原子的语法"></a>变量和原子的语法</h5><ul>
-<li>Erlang的变量只能绑定一次。</li>
-<li>Erlang的变量以大写字母开头。</li>
+        <h3 id="第1章-什么是并发"><a href="#第1章-什么是并发" class="headerlink" title="第1章 什么是并发"></a>第1章 什么是并发</h3><h5 id="并发和并行含义"><a href="#并发和并行含义" class="headerlink" title="并发和并行含义"></a>并发和并行含义</h5><ul>
+<li><p>区分基于操作系统的并发和基于语言的并发很重要，因为如果使用基于操作系统的并发，那么程序在不同的操作系统上就会有不同的工作方式。Erlang的并发在所有操作系统上都有着相同的工作方式。要用Erlang编写并发程序，只需掌握Erlang，而不必掌握操作系统的并发机制</p>
+</li>
+<li><p>并发程序是一种用并发编程语言编写的程序。编写并发程序是为了提升性能、可扩展性和容错性。（nodejs erlang）</p>
+</li>
+<li><p>并发编程语言拥有专门用于编写并发程序的语言结构。这些结构是编程语言的主要部分， 在所有操作系统上都有着相同的表现。</p>
+</li>
+<li>并行计算机是一种有多个处理单元（CPU或核心）同时运行的计算机。</li>
 </ul>
-<h5 id="在-shell-里编译并运行-Hello-World"><a href="#在-shell-里编译并运行-Hello-World" class="headerlink" title="在 shell 里编译并运行 Hello World"></a>在 shell 里编译并运行 Hello World</h5><p>erl文件命令成 hello.erl 输入以下内容</p>
-<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- <span class="keyword">module</span>(hello).</div><div class="line">- <span class="keyword">export</span>([start/<span class="number">0</span>]).</div><div class="line"></div><div class="line">start()-&gt;</div><div class="line">	io:format(<span class="string">"hello world ~n"</span>).</div><div class="line">```	</div><div class="line">编译并运行它，我们从保存hello.erl的目录里启动Erlang shell</div></pre></td></tr></table></figure>
-<p>erl<br>Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]</p>
-<p>Eshell V8.2  (abort with ^G)</p>
-<p>1&gt; c(hello,debug_info).<br>{ok,hello}<br>9&gt; hello:start().<br>hello world<br>ok<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##### 并发</div><div class="line">- Erlang的基本并发单元是进程（process）。</div><div class="line">- 只能通过发送和接收消息来与其他进程通信。</div><div class="line">- loop函数永远不会返回，利用尾部的优化，意思是此函数的运行空间是固定的，不会耗尽栈空间</div><div class="line">- Erlang编译器和运行时系统会正确推断出如何在收到消息时运行适当的代码。不需要编写任何的<span class="keyword">if</span>-then-else或switch语句来设定该做什么。这是模式匹配带来的乐趣之一，会为你节省大量工作</div><div class="line"></div><div class="line"></div><div class="line">##### server</div></pre></td></tr></table></figure></p>
-<p>cat afile_server.erl</p>
-<p>-module(afile_server).<br>-export([start/1,loop/1]).</p>
-<p>start(Dir) -&gt;</p>
-<p>  spawn(afile_server,loop, [Dir]).</p>
-<p>loop(Dir) -&gt;</p>
-<p>  receive</p>
-<pre><code>{Client, list_dir} -&gt;
-
-  Client ! { self(), file:list_dir(Dir)};
-
-{Client, {get_file, File}} -&gt;
-
-  Full = filename:join(Dir, File),
-  Client ! {self(), file:read(Full)}
-</code></pre><p>  end,<br>  loop(Dir).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
-<p>➜  src erl<br>Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]</p>
-<p>Eshell V8.2  (abort with ^G)<br>1&gt; c(afile_server).<br>{ok,afile_server}<br>2&gt; FS =  afile_server:start(“.”).</p>
-<p><0.64.0><br>3&gt; FS ! {self(),list_dir}<br>3&gt; .<br>{<0.57.0>,list_dir}<br>4&gt; receive X-&gt;X end.<br>{<0.64.0>,<br> {ok,[“afile_server.beam”,”afile_server.erl”,<br>      “file_server.beam”,”hello.beam”,”hello.erl”,”test.beam”,<br>      “test.erl”]}}<br>5&gt;<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##### client</div></pre></td></tr></table></figure></0.64.0></0.57.0></0.64.0></p>
-<p>-module(afile_client).<br>-export([ls/1, get_file/2]).</p>
-<p>ls(Server) -&gt;</p>
-<p>  Server ! {self(), list_dir},</p>
-<p>  receive</p>
-<pre><code>{Server, FileList} -&gt;
-
-  FileList
-</code></pre><p>  end.</p>
-<p>get_file(Server, File) -&gt;</p>
-<p>  Server ! {self(), {get_file, File}},</p>
-<p>  receive</p>
-<pre><code>{Server, Content} -&gt;
-
-  Content
-</code></pre><p>  end.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
-<p>1&gt; c(afile_server).<br>{ok,afile_server}<br>2&gt; c(afile_client).<br>{ok,afile_client}<br>3&gt; FS =  afile_server:start(“.”).</p>
-<p><0.69.0><br>4&gt; afile_client:ls(“./“).<br>** exception error: bad argument<br>     in function  afile_client:ls/1 (afile_client.erl, line 15)<br>5&gt; afile_client:ls(FS).<br>{ok,[“afile_client.beam”,”afile_client.erl”,<br>     “afile_server.beam”,”afile_server.erl”,”file_server.beam”,<br>     “hello.beam”,”hello.erl”,”test.beam”,”test.erl”]}<br>```</0.69.0></p>
+<h5 id="模块和函数"><a href="#模块和函数" class="headerlink" title="模块和函数"></a>模块和函数</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(test)</span>. <span class="comment">%%模块声明</span></div><div class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></div><div class="line">	io:format(<span class="string">"~w~n"</span>,[Name]).</div></pre></td></tr></table></figure>
+<ul>
+<li>模块名必须以一个小写字母开头。</li>
+<li>导出声明指明了模块里哪些函数可以从模块外部进行调用。</li>
+<li>-export([init/1]).语法的意思是带有一个参数。</li>
+<li>-export([funcname1/1，funcname2/1，funcname3/1，]). 导出多个函数列表的写法。</li>
+</ul>
+<h5 id="erlang起进程"><a href="#erlang起进程" class="headerlink" title="erlang起进程"></a>erlang起进程</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(test)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"><span class="keyword">-export</span><span class="params">([start/<span class="number">0</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">start</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  debugger:start(),</div><div class="line"></div><div class="line">  spawn(test,init,[<span class="string">"hello"</span>]).</div><div class="line"></div><div class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></div><div class="line"></div><div class="line">  io:format(<span class="string">"~w~n"</span>,[Name]).</div></pre></td></tr></table></figure>
+<ul>
+<li><p>spawn(ModName,FunName,[Arg1,Arg2,….])</p>
+</li>
+<li><p>当Erlang运行时系统执行spawn时，它会创建一个新进程（不是操作系统的进程，而是一个由Erlang系统管理的轻量级进程）。当进程创建完毕后，它便开始执行参数所指定的代码。ModName 是包含想要执行代码的模块名。FuncName是模块里的函数名，而[Arg1, Arg2, …]是一个列表，包含了想要执行的函数参数。因此，下面这个调用的意思是启动一个执行函数person:init(“hello”)的进程</p>
+</li>
+</ul>
+<h5 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h5><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Susannah!&#123;<span class="keyword">self</span>(),<span class="string">"send message"</span>&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>Pid ! Msg语法的意思是发送消息Msg到进程Pid。大括号里的self()参数标明了发送消息的进程（在此处是Joe）。</li>
+</ul>
+<h5 id="接收消息"><a href="#接收消息" class="headerlink" title="接收消息"></a>接收消息</h5><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">receive</div><div class="line">	&#123;From, Message&#125; -&gt;</div><div class="line">		......</div><div class="line">end</div></pre></td></tr></table></figure>
+<ul>
+<li>当Susannah的进程接收到一条消息时，变量From会绑定为Joe，这样Susannah就知道消息来自何处，变量Message则会包含此消息</li>
+</ul>
 <blockquote>
 <p>这样吧</p>
 </blockquote>
@@ -502,7 +587,7 @@ X = true    | 成功：X = true
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/12/2017-11-14-erlang-02/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/11/12/2017-11-13-erlang-01/">展开全文 >></a>
         </p>
       
 
@@ -623,19 +708,19 @@ git config  user.email &quot;TEST1@gmail.com&quot;
 
 
   
-    <article id="post-2017-11-13-erlang-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2017-11-14-erlang-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/12/2017-11-13-erlang-01/">Erlang程序设计(第2版) 读书笔记【第一章】</a>
+      <a class="article-title" href="/2017/11/12/2017-11-14-erlang-02/">Erlang程序设计(第2版) 读书笔记【第二章】</a>
     </h1>
   
 
         
-        <a href="/2017/11/12/2017-11-13-erlang-01/" class="archive-article-date">
+        <a href="/2017/11/12/2017-11-14-erlang-02/" class="archive-article-date">
   	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
 </a>
         
@@ -643,37 +728,51 @@ git config  user.email &quot;TEST1@gmail.com&quot;
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="第1章-什么是并发"><a href="#第1章-什么是并发" class="headerlink" title="第1章 什么是并发"></a>第1章 什么是并发</h3><h5 id="并发和并行含义"><a href="#并发和并行含义" class="headerlink" title="并发和并行含义"></a>并发和并行含义</h5><ul>
-<li><p>区分基于操作系统的并发和基于语言的并发很重要，因为如果使用基于操作系统的并发，那么程序在不同的操作系统上就会有不同的工作方式。Erlang的并发在所有操作系统上都有着相同的工作方式。要用Erlang编写并发程序，只需掌握Erlang，而不必掌握操作系统的并发机制</p>
-</li>
-<li><p>并发程序是一种用并发编程语言编写的程序。编写并发程序是为了提升性能、可扩展性和容错性。（nodejs erlang）</p>
-</li>
-<li><p>并发编程语言拥有专门用于编写并发程序的语言结构。这些结构是编程语言的主要部分， 在所有操作系统上都有着相同的表现。</p>
-</li>
-<li>并行计算机是一种有多个处理单元（CPU或核心）同时运行的计算机。</li>
+        <h3 id="第2章-Erlang速览"><a href="#第2章-Erlang速览" class="headerlink" title="第2章 Erlang速览"></a>第2章 Erlang速览</h3><h5 id="变量和原子的语法"><a href="#变量和原子的语法" class="headerlink" title="变量和原子的语法"></a>变量和原子的语法</h5><ul>
+<li>Erlang的变量只能绑定一次。</li>
+<li>Erlang的变量以大写字母开头。</li>
 </ul>
-<h5 id="模块和函数"><a href="#模块和函数" class="headerlink" title="模块和函数"></a>模块和函数</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(test)</span>. <span class="comment">%%模块声明</span></div><div class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></div><div class="line">	io:format(<span class="string">"~w~n"</span>,[Name]).</div></pre></td></tr></table></figure>
-<ul>
-<li>模块名必须以一个小写字母开头。</li>
-<li>导出声明指明了模块里哪些函数可以从模块外部进行调用。</li>
-<li>-export([init/1]).语法的意思是带有一个参数。</li>
-<li>-export([funcname1/1，funcname2/1，funcname3/1，]). 导出多个函数列表的写法。</li>
-</ul>
-<h5 id="erlang起进程"><a href="#erlang起进程" class="headerlink" title="erlang起进程"></a>erlang起进程</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(test)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"><span class="keyword">-export</span><span class="params">([start/<span class="number">0</span>])</span>. <span class="comment">%%导出声明</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">start</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  debugger:start(),</div><div class="line"></div><div class="line">  spawn(test,init,[<span class="string">"hello"</span>]).</div><div class="line"></div><div class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></div><div class="line"></div><div class="line">  io:format(<span class="string">"~w~n"</span>,[Name]).</div></pre></td></tr></table></figure>
-<ul>
-<li><p>spawn(ModName,FunName,[Arg1,Arg2,….])</p>
-</li>
-<li><p>当Erlang运行时系统执行spawn时，它会创建一个新进程（不是操作系统的进程，而是一个由Erlang系统管理的轻量级进程）。当进程创建完毕后，它便开始执行参数所指定的代码。ModName 是包含想要执行代码的模块名。FuncName是模块里的函数名，而[Arg1, Arg2, …]是一个列表，包含了想要执行的函数参数。因此，下面这个调用的意思是启动一个执行函数person:init(“hello”)的进程</p>
-</li>
-</ul>
-<h5 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h5><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Susannah!&#123;<span class="keyword">self</span>(),<span class="string">"send message"</span>&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>Pid ! Msg语法的意思是发送消息Msg到进程Pid。大括号里的self()参数标明了发送消息的进程（在此处是Joe）。</li>
-</ul>
-<h5 id="接收消息"><a href="#接收消息" class="headerlink" title="接收消息"></a>接收消息</h5><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">receive</div><div class="line">	&#123;From, Message&#125; -&gt;</div><div class="line">		......</div><div class="line">end</div></pre></td></tr></table></figure>
-<ul>
-<li>当Susannah的进程接收到一条消息时，变量From会绑定为Joe，这样Susannah就知道消息来自何处，变量Message则会包含此消息</li>
-</ul>
+<h5 id="在-shell-里编译并运行-Hello-World"><a href="#在-shell-里编译并运行-Hello-World" class="headerlink" title="在 shell 里编译并运行 Hello World"></a>在 shell 里编译并运行 Hello World</h5><p>erl文件命令成 hello.erl 输入以下内容</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- <span class="keyword">module</span>(hello).</div><div class="line">- <span class="keyword">export</span>([start/<span class="number">0</span>]).</div><div class="line"></div><div class="line">start()-&gt;</div><div class="line">	io:format(<span class="string">"hello world ~n"</span>).</div><div class="line">```	</div><div class="line">编译并运行它，我们从保存hello.erl的目录里启动Erlang shell</div></pre></td></tr></table></figure>
+<p>erl<br>Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]</p>
+<p>Eshell V8.2  (abort with ^G)</p>
+<p>1&gt; c(hello,debug_info).<br>{ok,hello}<br>9&gt; hello:start().<br>hello world<br>ok<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##### 并发</div><div class="line">- Erlang的基本并发单元是进程（process）。</div><div class="line">- 只能通过发送和接收消息来与其他进程通信。</div><div class="line">- loop函数永远不会返回，利用尾部的优化，意思是此函数的运行空间是固定的，不会耗尽栈空间</div><div class="line">- Erlang编译器和运行时系统会正确推断出如何在收到消息时运行适当的代码。不需要编写任何的<span class="keyword">if</span>-then-else或switch语句来设定该做什么。这是模式匹配带来的乐趣之一，会为你节省大量工作</div><div class="line"></div><div class="line"></div><div class="line">##### server</div></pre></td></tr></table></figure></p>
+<p>cat afile_server.erl</p>
+<p>-module(afile_server).<br>-export([start/1,loop/1]).</p>
+<p>start(Dir) -&gt;</p>
+<p>  spawn(afile_server,loop, [Dir]).</p>
+<p>loop(Dir) -&gt;</p>
+<p>  receive</p>
+<pre><code>{Client, list_dir} -&gt;
+
+  Client ! { self(), file:list_dir(Dir)};
+
+{Client, {get_file, File}} -&gt;
+
+  Full = filename:join(Dir, File),
+  Client ! {self(), file:read(Full)}
+</code></pre><p>  end,<br>  loop(Dir).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
+<p>➜  src erl<br>Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]</p>
+<p>Eshell V8.2  (abort with ^G)<br>1&gt; c(afile_server).<br>{ok,afile_server}<br>2&gt; FS =  afile_server:start(“.”).</p>
+<p><0.64.0><br>3&gt; FS ! {self(),list_dir}<br>3&gt; .<br>{<0.57.0>,list_dir}<br>4&gt; receive X-&gt;X end.<br>{<0.64.0>,<br> {ok,[“afile_server.beam”,”afile_server.erl”,<br>      “file_server.beam”,”hello.beam”,”hello.erl”,”test.beam”,<br>      “test.erl”]}}<br>5&gt;<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##### client</div></pre></td></tr></table></figure></0.64.0></0.57.0></0.64.0></p>
+<p>-module(afile_client).<br>-export([ls/1, get_file/2]).</p>
+<p>ls(Server) -&gt;</p>
+<p>  Server ! {self(), list_dir},</p>
+<p>  receive</p>
+<pre><code>{Server, FileList} -&gt;
+
+  FileList
+</code></pre><p>  end.</p>
+<p>get_file(Server, File) -&gt;</p>
+<p>  Server ! {self(), {get_file, File}},</p>
+<p>  receive</p>
+<pre><code>{Server, Content} -&gt;
+
+  Content
+</code></pre><p>  end.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+<p>1&gt; c(afile_server).<br>{ok,afile_server}<br>2&gt; c(afile_client).<br>{ok,afile_client}<br>3&gt; FS =  afile_server:start(“.”).</p>
+<p><0.69.0><br>4&gt; afile_client:ls(“./“).<br>** exception error: bad argument<br>     in function  afile_client:ls/1 (afile_client.erl, line 15)<br>5&gt; afile_client:ls(FS).<br>{ok,[“afile_client.beam”,”afile_client.erl”,<br>     “afile_server.beam”,”afile_server.erl”,”file_server.beam”,<br>     “hello.beam”,”hello.erl”,”test.beam”,”test.erl”]}<br>```</0.69.0></p>
 <blockquote>
 <p>这样吧</p>
 </blockquote>
@@ -711,7 +810,7 @@ git config  user.email &quot;TEST1@gmail.com&quot;
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/12/2017-11-13-erlang-01/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/11/12/2017-11-14-erlang-02/">展开全文 >></a>
         </p>
       
 
@@ -1935,341 +2034,6 @@ git config  user.email &quot;TEST1@gmail.com&quot;
 
 
   
-    <article id="post-2017-09-18-cluster-flume-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/20/2017-09-18-cluster-flume-1/">kafka-flume集群环境搭建【2】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/20/2017-09-18-cluster-flume-1/" class="archive-article-date">
-  	<time datetime="2017-09-20T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h3 id="1-前期准备"><a href="#1-前期准备" class="headerlink" title="1. 前期准备"></a>1. 前期准备</h3><h4 id="1-1-操作系统"><a href="#1-1-操作系统" class="headerlink" title="1.1 操作系统"></a>1.1 操作系统</h4><pre><code>172.16.61.102,centos6.9
-172.16.61.103,centos6.9
-172.16.61.104,centos6.9
-</code></pre><h3 id="三个机器的角色"><a href="#三个机器的角色" class="headerlink" title="三个机器的角色"></a>三个机器的角色</h3><pre><code>172.16.61.102  agent 
-172.16.61.103  collector
-172.16.61.104  collector
-</code></pre><h3 id="1-3-安装Java-（3主机均需要）"><a href="#1-3-安装Java-（3主机均需要）" class="headerlink" title="1.3 安装Java （3主机均需要）"></a>1.3 安装Java （3主机均需要）</h3><pre><code>yum install java-1.8.0-openjdk -y
-</code></pre><h3 id="1-4-下载安装flume-（3主机均需要）"><a href="#1-4-下载安装flume-（3主机均需要）" class="headerlink" title="1.4 下载安装flume （3主机均需要）"></a>1.4 下载安装flume （3主机均需要）</h3><pre><code>wget http://mirrors.hust.edu.cn/apache/flume/1.7.0/apache-flume-1.7.0-bin.tar.gz
-tar -xf apache-flume-1.7.0-bin.tar.gz -C /usr/local/
-ln -sv /usr/local/apache-flume-1.7.0-bin /usr/local/flume
-ll  /usr/local/flume
-</code></pre><p>、</p>
-<h3 id="1-5-Flume-组件介绍"><a href="#1-5-Flume-组件介绍" class="headerlink" title="1.5 Flume 组件介绍"></a>1.5 Flume 组件介绍</h3><pre><code>flume 代理，是一个进程承载从外部源事件流到下一个目的地的过程。包含source channel 和 sink。
-</code></pre><h5 id="1-5-1-Source"><a href="#1-5-1-Source" class="headerlink" title="1.5.1.Source"></a>1.5.1.Source</h5><pre><code>数据源，消耗外部传递给他的事件，外部源将数据按照flume Source 能识别的格式将Flume 事件发送给flume Source。
-</code></pre><table>
-<thead>
-<tr>
-<th>Source类型</th>
-<th style="text-align:center">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Avro Source</td>
-<td style="text-align:center">支持Avro协议（实际上是Avro RPC），内置支持</td>
-</tr>
-<tr>
-<td>Thrift Source</td>
-<td style="text-align:center">支持Thrift协议，内置支持</td>
-</tr>
-<tr>
-<td>Exec Source</td>
-<td style="text-align:center">基于Unix的command在标准输出上生产数据</td>
-</tr>
-<tr>
-<td>JMS Source</td>
-<td style="text-align:center">从JMS系统（消息、主题）中读取数据，ActiveMQ已经测试过</td>
-</tr>
-<tr>
-<td>Spooling Directory Source</td>
-<td style="text-align:center">监控指定目录内数据变更</td>
-</tr>
-<tr>
-<td>Netcat Source</td>
-<td style="text-align:center">监控某个端口，将流经端口的每一个文本行数据作为Event输入</td>
-</tr>
-<tr>
-<td>Sequence Generator Source</td>
-<td style="text-align:center">序列生成器数据源，生产序列数据</td>
-</tr>
-<tr>
-<td>Syslog Sources</td>
-<td style="text-align:center">读取syslog数据，产生Event，支持UDP和TCP两种协议</td>
-</tr>
-<tr>
-<td>HTTP Source</td>
-<td style="text-align:center">基于HTTP POST或GET方式的数据源，支持JSON、BLOB表示形式</td>
-</tr>
-<tr>
-<td>Legacy Sources</td>
-<td style="text-align:center">兼容老的Flume OG中Source（0.9.x版本）</td>
-</tr>
-<tr>
-<td>Avro Legacy Source</td>
-</tr>
-<tr>
-<td>Thrift Legacy Source</td>
-</tr>
-<tr>
-<td>Scribe Source</td>
-</tr>
-<tr>
-<td>Kafka Source</td>
-<td style="text-align:center">是一个从Kafka主题读取消息的Apache Kafka消费者</td>
-</tr>
-<tr>
-<td>Custom Source</td>
-<td style="text-align:center">自定义Source</td>
-</tr>
-</tbody>
-</table>
-<h5 id="1-5-2-Channel"><a href="#1-5-2-Channel" class="headerlink" title="1.5.2.Channel"></a>1.5.2.Channel</h5><pre><code>数据通道，是一个被动的存储，用来保持事件，直到由一个flume Sink消耗。
-</code></pre><table>
-<thead>
-<tr>
-<th>Channel类型</th>
-<th style="text-align:center">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Memory Channel</td>
-<td style="text-align:center">Event数据存储在内存中</td>
-</tr>
-<tr>
-<td>JDBC Channel</td>
-<td style="text-align:center">Event数据存储在持久化存储中，当前Flume Channel内置支持Derby</td>
-</tr>
-<tr>
-<td>File Channel</td>
-<td style="text-align:center">Event数据存储在磁盘文件中</td>
-</tr>
-<tr>
-<td>Spillable Memory</td>
-<td style="text-align:center">Channel    Event数据存储在内存中和磁盘上，当内存队列满了，会持久化到磁盘文件（当前试验性的，不建议生产环境使用）</td>
-</tr>
-<tr>
-<td>Pseudo Transaction Channel</td>
-<td style="text-align:center">测试用途</td>
-</tr>
-<tr>
-<td>Custom Channel</td>
-<td style="text-align:center">自定义Channel实现</td>
-</tr>
-</tbody>
-</table>
-<h5 id="1-5-3-Sink"><a href="#1-5-3-Sink" class="headerlink" title="1.5.3 Sink"></a>1.5.3 Sink</h5><pre><code>数据汇聚点，代表外部数据存放位置。发送flume event到指定的外部目标。
-</code></pre><table>
-<thead>
-<tr>
-<th>Sink类型</th>
-<th style="text-align:center">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>HDFS Sink</td>
-<td style="text-align:center">数据写入HDFS</td>
-</tr>
-<tr>
-<td>Logger Sink</td>
-<td style="text-align:center">数据写入日志文件</td>
-</tr>
-<tr>
-<td>Avro Sink</td>
-<td style="text-align:center">数据被转换成Avro Event，然后发送到配置的RPC端口上</td>
-</tr>
-<tr>
-<td>Thrift Sink</td>
-<td style="text-align:center">数据被转换成Thrift Event，然后发送到配置的RPC端口上</td>
-</tr>
-<tr>
-<td>IRC Sink</td>
-<td style="text-align:center">数据在IRC上进行回放</td>
-</tr>
-<tr>
-<td>File Roll Sink</td>
-<td style="text-align:center">存储数据到本地文件系统</td>
-</tr>
-<tr>
-<td>Null Sink</td>
-<td style="text-align:center">丢弃到所有数据</td>
-</tr>
-<tr>
-<td>HBase Sink</td>
-<td style="text-align:center">数据写入HBase数据库</td>
-</tr>
-<tr>
-<td>Morphline Solr Sink</td>
-<td style="text-align:center">数据发送到Solr搜索服务器（集群）</td>
-</tr>
-<tr>
-<td>ElasticSearch Sink</td>
-<td style="text-align:center">数据发送到Elastic Search搜索服务器（集群）</td>
-</tr>
-<tr>
-<td>Kite Dataset Sink</td>
-<td style="text-align:center">写数据到Kite Dataset，试验性质的</td>
-</tr>
-<tr>
-<td>Custom Sink</td>
-<td style="text-align:center">自定义Sink实现</td>
-</tr>
-</tbody>
-</table>
-<h3 id="2-配置flume"><a href="#2-配置flume" class="headerlink" title="2. 配置flume"></a>2. 配置flume</h3><h5 id="flume-client-conf"><a href="#flume-client-conf" class="headerlink" title="flume-client.conf"></a>flume-client.conf</h5><pre><code>[root@yaliceshi-1-2 ~]# cat /usr/local/flume/conf/flume-client.conf 
-#Agent
-flumeAgent.channels = c1
-flumeAgent.sources  = s1
-flumeAgent.sinks    = k1 
-#flumeAgent Spooling Directory Source
-#注(1)
-flumeAgent.sources.s1.type = spooldir
-flumeAgent.sources.s1.spoolDir  =/data/logs/
-flumeAgent.sources.s1.fileHeader = true
-flumeAgent.sources.s1.deletePolicy =immediate
-flumeAgent.sources.s1.batchSize =1000
-flumeAgent.sources.s1.channels =c1
-flumeAgent.sources.s1.deserializer.maxLineLength =1048576
-#flumeAgent FileChannel
-#注(2)
-flumeAgent.channels.c1.type = file
-flumeAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
-flumeAgent.channels.c1.dataDirs = /data/flume/spool/data
-flumeAgent.channels.c1.capacity = 200000000
-flumeAgent.channels.c1.keep-alive = 30
-flumeAgent.channels.c1.write-timeout = 30
-flumeAgent.channels.c1.checkpoint-timeout=600
-# flumeAgent Sinks
-#注(3)
-flumeAgent.sinks.k1.channel = c1
-flumeAgent.sinks.k1.type = avro
-# connect to CollectorMainAgent
-flumeAgent.sinks.k1.hostname = kafka103
-flumeAgent.sinks.k1.port = 44444
-</code></pre><font style="color:red">  sources 采用 spooldir 类型，监控/data/logs/目录中文件的变化 </font>
-
-<h5 id="flume-server-conf"><a href="#flume-server-conf" class="headerlink" title="flume-server.conf"></a>flume-server.conf</h5><pre><code>[root@yaliceshi-1-3 ~]# cat  /usr/local/flume/conf/flume-server.conf
-#flumeConsolidationAgent
-flumeConsolidationAgent.channels = c1
-flumeConsolidationAgent.sources  = s1
-flumeConsolidationAgent.sinks    = k1 
-
-#flumeConsolidationAgent Avro Source
-#注(4)
-flumeConsolidationAgent.sources.s1.type = avro
-flumeConsolidationAgent.sources.s1.channels = c1
-flumeConsolidationAgent.sources.s1.bind = kafka103
-flumeConsolidationAgent.sources.s1.port = 44444
-
-#flumeConsolidationAgent FileChannel
-flumeConsolidationAgent.channels.c1.type = file
-flumeConsolidationAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
-flumeConsolidationAgent.channels.c1.dataDirs = /data/flume/spool/data
-flumeConsolidationAgent.channels.c1.capacity = 200000000
-flumeConsolidationAgent.channels.c1.keep-alive = 30
-flumeConsolidationAgent.channels.c1.write-timeout = 30
-flumeConsolidationAgent.channels.c1.checkpoint-timeout=600
-
-##flumeConsolidationAgent Memory Channel
-#flumeConsolidationAgent.channels.c1.type = memory
-#flumeConsolidationAgent.channels.c1.capacity = 10000
-#flumeConsolidationAgent.channels.c1.transactionCapacity = 10000
-#flumeConsolidationAgent.channels.c1.byteCapacityBufferPercentage = 20
-#flumeConsolidationAgent.channels.c1.byteCapacity = 800000
-
-#flumeConsolidationAgent Sinks
-#注(5)
-flumeConsolidationAgent.sinks.k1.channel= c1
-flumeConsolidationAgent.sinks.k1.type = file_roll
-flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
-flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
-flumeConsolidationAgent.sinks.k1.batchSize = 10000
-</code></pre><font style="color:red">  sinks 采用 file_roll 类型，数据保存到 /data/tmp目录中 </font>
-
-<h3 id="3-启动服务"><a href="#3-启动服务" class="headerlink" title="3. 启动服务"></a>3. 启动服务</h3><h5 id="3-1-启动服务端"><a href="#3-1-启动服务端" class="headerlink" title="3.1 启动服务端"></a>3.1 启动服务端</h5><pre><code>[kafka103 ]# /usr/local/flume/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-server.conf --name flumeConsolidationAgent -Dflume.root.logger=INFO,console
-</code></pre><h5 id="3-2-启动客户端"><a href="#3-2-启动客户端" class="headerlink" title="3.2 启动客户端"></a>3.2 启动客户端</h5><pre><code>[kafka102 ]# /usr/local/apache-flume-1.7.0-bin/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-client.conf --name flumeAgent -Dflume.root.logger=INFO,console
-</code></pre><h5 id="3-3-注意"><a href="#3-3-注意" class="headerlink" title="3.3 注意"></a>3.3 注意</h5><ul>
-<li><font style="color:red"> –name 需要跟配置中的名称保持一致</font>
-
-</li>
-</ul>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在客户端拷贝一件文件到/data/logs<br>在服务端查看/data/tmp下会有新文件生成</p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>&gt;</p>
-<ul>
-<li><a href="http://blog.csdn.net/strongyoung88/article/details/52937835" target="_blank" rel="external">http://blog.csdn.net/strongyoung88/article/details/52937835</a></li>
-<li><a href="http://blog.csdn.net/minicto/article/details/53643496" target="_blank" rel="external">http://blog.csdn.net/minicto/article/details/53643496</a></li>
-<li><a href="http://blog.csdn.net/shouhuzhezhishen/article/details/64904848" target="_blank" rel="external">http://blog.csdn.net/shouhuzhezhishen/article/details/64904848</a></li>
-<li><a href="http://blog.csdn.net/candysleep/article/details/53241268" target="_blank" rel="external">http://blog.csdn.net/candysleep/article/details/53241268</a></li>
-<li><a href="https://my.oschina.net/u/1780960/blog/793783" target="_blank" rel="external">https://my.oschina.net/u/1780960/blog/793783</a></li>
-<li><a href="https://github.com/Leaderman/flume-extension" target="_blank" rel="external">https://github.com/Leaderman/flume-extension</a></li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/20/2017-09-18-cluster-flume-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -2405,11 +2169,11 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
+                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
               </li>
              
               <li class="article-tag-list-item">

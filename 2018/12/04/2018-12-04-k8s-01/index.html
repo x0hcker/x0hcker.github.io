@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//www.zwting.com">
-  <title>python技术分享[15]－ 视频教程 | 醉翁亭</title>
+  <title>k8s版本不同导致的clusterip不可用的解决方法 | 醉翁亭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="python技术分享[15]－ 视频教程">
-<meta name="keywords" content="python技术分享">
+  <meta name="description" content="k8s 版本不同导致的clusterip不可用的解决方法">
+<meta name="keywords" content="k8s容器化">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python技术分享[15]－ 视频教程">
-<meta property="og:url" content="//www.zwting.com/2017/09/15/2017-04-20-training-python-15/index.html">
+<meta property="og:title" content="k8s版本不同导致的clusterip不可用的解决方法">
+<meta property="og:url" content="//www.zwting.com/2018/12/04/2018-12-04-k8s-01/index.html">
 <meta property="og:site_name" content="醉翁亭">
-<meta property="og:description" content="python技术分享[15]－ 视频教程">
-<meta property="og:updated_time" content="2017-09-18T07:26:21.000Z">
+<meta property="og:description" content="k8s 版本不同导致的clusterip不可用的解决方法">
+<meta property="og:updated_time" content="2018-12-04T02:37:26.240Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python技术分享[15]－ 视频教程">
-<meta name="twitter:description" content="python技术分享[15]－ 视频教程">
+<meta name="twitter:title" content="k8s版本不同导致的clusterip不可用的解决方法">
+<meta name="twitter:description" content="k8s 版本不同导致的clusterip不可用的解决方法">
   
     <link rel="alternative" href="/atom.xml" title="醉翁亭" type="application/atom+xml">
   
@@ -156,33 +156,51 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-2017-04-20-training-python-15" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-2018-12-04-k8s-01" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      python技术分享[15]－ 视频教程
+      k8s版本不同导致的clusterip不可用的解决方法
     </h1>
   
 
         
-        <a href="/2017/09/15/2017-04-20-training-python-15/" class="archive-article-date">
-  	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
+        <a href="/2018/12/04/2018-12-04-k8s-01/" class="archive-article-date">
+  	<time datetime="2018-12-04T02:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-04</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>###为了培训python录的视频，每周更新，欢迎拍砖！</p>
-<h3 id="请用无线观看，每个约200M大小"><a href="#请用无线观看，每个约200M大小" class="headerlink" title="请用无线观看，每个约200M大小"></a>请用无线观看，每个约200M大小</h3><embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=z0395naxllw&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
-
-<embed src="https://imgcache.qq.com/tencentvideo_v1/playerv3/TPout.swf?max_age=86400&v=20161117&vid=n0395xrwzdg&auto=0" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
-
-<p>&gt;</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+        <h2 id="develop-和-online-k8s做分层业务时的区别总结"><a href="#develop-和-online-k8s做分层业务时的区别总结" class="headerlink" title="develop 和 online k8s做分层业务时的区别总结"></a>develop 和 online k8s做分层业务时的区别总结</h2><ul>
+<li><p>online和develop环境在使用Service时出现，dev可用， online不可用的情况,过程如下</p>
+<ul>
+<li>namespace(wqctest) -&gt; service(inner-servicelog) -&gt; deployment（replicas 2）</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>现在创建过程分别如下</p>
+<ul>
+<li><p>dev创建过程  namespace(wqctest) -&gt; service(inner-servicelog) -&gt; deployment1   ;  deployment1内的pod可访问inner-servicelog</p>
+</li>
+<li><p>online创建过程  namespace(wqctest) -&gt; service(inner-servicelog) -&gt; deployment1   ;  再别创建一个独立于service的deployment2。 deployment2内的pod可访问inner-servicelog</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="yaml文件如下"><a href="#yaml文件如下" class="headerlink" title="yaml文件如下"></a>yaml文件如下</h2><ul>
+<li>online 环境 k8s 1.9 </li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></div><div class="line"><span class="attr">kind:</span> <span class="string">Namespace</span></div><div class="line"><span class="attr">metadata:</span></div><div class="line"><span class="attr">  name:</span> <span class="string">wqctest</span></div><div class="line"><span class="meta">---</span></div><div class="line"><span class="comment"># ClusterIP</span></div><div class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></div><div class="line"><span class="attr">kind:</span> <span class="string">Service</span></div><div class="line"><span class="attr">metadata:</span></div><div class="line"><span class="attr">  namespace:</span> <span class="string">wqctest</span></div><div class="line"><span class="attr">  name:</span> <span class="string">inner-servicelog</span></div><div class="line"><span class="attr">spec:</span></div><div class="line"><span class="attr">  selector:</span></div><div class="line"><span class="attr">    app:</span>  <span class="string">myservice</span></div><div class="line"><span class="attr">  type:</span> <span class="string">ClusterIP</span></div><div class="line"><span class="attr">  ports:</span></div><div class="line"><span class="attr">  - name:</span> <span class="string">app</span></div><div class="line"><span class="attr">    protocol:</span> <span class="string">TCP</span></div><div class="line"><span class="attr">    port:</span> <span class="number">80</span></div><div class="line"><span class="attr">    targetPort:</span> <span class="number">80</span></div><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></div><div class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1beta2</span></div><div class="line"><span class="attr">metadata:</span></div><div class="line"><span class="attr">  labels:</span></div><div class="line"><span class="attr">    app:</span> <span class="string">myservice</span></div><div class="line"><span class="attr">  name:</span> <span class="string">myservice</span></div><div class="line"><span class="attr">  namespace:</span> <span class="string">wqctest</span></div><div class="line"><span class="attr">spec:</span></div><div class="line"><span class="attr">  replicas:</span> <span class="number">1</span></div><div class="line"><span class="attr">  selector:</span></div><div class="line"><span class="attr">    matchLabels:</span></div><div class="line"><span class="attr">      app:</span> <span class="string">myservice</span></div><div class="line"><span class="attr">  template:</span></div><div class="line"><span class="attr">    metadata:</span></div><div class="line"><span class="attr">      labels:</span></div><div class="line"><span class="attr">        app:</span> <span class="string">myservice</span></div><div class="line"><span class="attr">    spec:</span></div><div class="line"><span class="attr">      containers:</span></div><div class="line"><span class="attr">      - name:</span> <span class="string">myservice</span></div><div class="line"><span class="attr">        image:</span> <span class="attr">nginx:1.9</span> </div><div class="line"><span class="attr">        imagePullPolicy:</span> <span class="string">Always</span></div><div class="line"><span class="attr">        resources:</span></div><div class="line"><span class="attr">          requests:</span></div><div class="line"><span class="attr">            memory:</span> <span class="string">"2Gi"</span></div><div class="line"><span class="attr">            cpu:</span> <span class="string">"250m"</span></div><div class="line"><span class="attr">          limits:</span></div><div class="line"><span class="attr">            memory:</span> <span class="string">"2Gi"</span></div><div class="line"><span class="attr">            cpu:</span> <span class="string">"500m"</span></div><div class="line"><span class="attr">        ports:</span></div><div class="line"><span class="attr">        - containerPort:</span> <span class="number">80</span></div><div class="line"><span class="attr">          protocol:</span> <span class="string">TCP</span></div><div class="line"></div><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></div><div class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1beta2</span></div><div class="line"><span class="attr">metadata:</span></div><div class="line"><span class="attr">  labels:</span></div><div class="line"><span class="attr">    app:</span> <span class="string">myservice2</span></div><div class="line"><span class="attr">  name:</span> <span class="string">myservice2</span></div><div class="line"><span class="attr">  namespace:</span> <span class="string">wqctest</span></div><div class="line"><span class="attr">spec:</span></div><div class="line"><span class="attr">  replicas:</span> <span class="number">1</span></div><div class="line"><span class="attr">  selector:</span></div><div class="line"><span class="attr">    matchLabels:</span></div><div class="line"><span class="attr">      app:</span> <span class="string">myservice2</span></div><div class="line"><span class="attr">  template:</span></div><div class="line"><span class="attr">    metadata:</span></div><div class="line"><span class="attr">      labels:</span></div><div class="line"><span class="attr">        app:</span> <span class="string">myservice2</span></div><div class="line"><span class="attr">    spec:</span></div><div class="line"><span class="attr">      containers:</span></div><div class="line"><span class="attr">      - name:</span> <span class="string">myservice2</span></div><div class="line"><span class="attr">        image:</span> <span class="attr">nginx:1.9</span> </div><div class="line"><span class="attr">        imagePullPolicy:</span> <span class="string">Always</span></div><div class="line"><span class="attr">        resources:</span></div><div class="line"><span class="attr">          requests:</span></div><div class="line"><span class="attr">            memory:</span> <span class="string">"2Gi"</span></div><div class="line"><span class="attr">            cpu:</span> <span class="string">"250m"</span></div><div class="line"><span class="attr">          limits:</span></div><div class="line"><span class="attr">            memory:</span> <span class="string">"2Gi"</span></div><div class="line"><span class="attr">            cpu:</span> <span class="string">"500m"</span></div><div class="line"><span class="attr">        ports:</span></div><div class="line"><span class="attr">        - containerPort:</span> <span class="number">80</span></div><div class="line"><span class="attr">          protocol:</span> <span class="string">TCP</span></div></pre></td></tr></table></figure>
+<ul>
+<li>develop  环境 k8s 1.11</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></div><div class="line"><span class="attr">kind:</span> <span class="string">Namespace</span></div><div class="line"><span class="attr">metadata:</span></div><div class="line"><span class="attr">  name:</span> <span class="string">wqctest</span></div><div class="line"><span class="meta">---</span></div><div class="line"><span class="comment"># ClusterIP</span></div><div class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></div><div class="line"><span class="attr">kind:</span> <span class="string">Service</span></div><div class="line"><span class="attr">metadata:</span></div><div class="line"><span class="attr">  namespace:</span> <span class="string">wqctest</span></div><div class="line"><span class="attr">  name:</span> <span class="string">inner-servicelog</span></div><div class="line"><span class="attr">spec:</span></div><div class="line"><span class="attr">  selector:</span></div><div class="line"><span class="attr">    app:</span>  <span class="string">myservice</span></div><div class="line"><span class="attr">  type:</span> <span class="string">ClusterIP</span></div><div class="line"><span class="attr">  ports:</span></div><div class="line"><span class="attr">  - name:</span> <span class="string">app</span></div><div class="line"><span class="attr">    protocol:</span> <span class="string">TCP</span></div><div class="line"><span class="attr">    port:</span> <span class="number">80</span></div><div class="line"><span class="attr">    targetPort:</span> <span class="number">80</span></div><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></div><div class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1beta2</span></div><div class="line"><span class="attr">metadata:</span></div><div class="line"><span class="attr">  labels:</span></div><div class="line"><span class="attr">    app:</span> <span class="string">myservice</span></div><div class="line"><span class="attr">  name:</span> <span class="string">myservice</span></div><div class="line"><span class="attr">  namespace:</span> <span class="string">wqctest</span></div><div class="line"><span class="attr">spec:</span></div><div class="line"><span class="attr">  replicas:</span> <span class="number">1</span></div><div class="line"><span class="attr">  selector:</span></div><div class="line"><span class="attr">    matchLabels:</span></div><div class="line"><span class="attr">      app:</span> <span class="string">myservice</span></div><div class="line"><span class="attr">  template:</span></div><div class="line"><span class="attr">    metadata:</span></div><div class="line"><span class="attr">      labels:</span></div><div class="line"><span class="attr">        app:</span> <span class="string">myservice</span></div><div class="line"><span class="attr">    spec:</span></div><div class="line"><span class="attr">      containers:</span></div><div class="line"><span class="attr">      - name:</span> <span class="string">myservice</span></div><div class="line"><span class="attr">        image:</span> <span class="attr">nginx:1.9</span> </div><div class="line"><span class="attr">        imagePullPolicy:</span> <span class="string">Always</span></div><div class="line"><span class="attr">        resources:</span></div><div class="line"><span class="attr">          requests:</span></div><div class="line"><span class="attr">            memory:</span> <span class="string">"2Gi"</span></div><div class="line"><span class="attr">            cpu:</span> <span class="string">"250m"</span></div><div class="line"><span class="attr">          limits:</span></div><div class="line"><span class="attr">            memory:</span> <span class="string">"2Gi"</span></div><div class="line"><span class="attr">            cpu:</span> <span class="string">"500m"</span></div><div class="line"><span class="attr">        ports:</span></div><div class="line"><span class="attr">        - containerPort:</span> <span class="number">80</span></div><div class="line"><span class="attr">          protocol:</span> <span class="string">TCP</span></div><div class="line"></div><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></div><div class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1beta2</span></div><div class="line"><span class="attr">metadata:</span></div><div class="line"><span class="attr">  labels:</span></div><div class="line"><span class="attr">    app:</span> <span class="string">myservice2</span></div><div class="line"><span class="attr">  name:</span> <span class="string">myservice2</span></div><div class="line"><span class="attr">  namespace:</span> <span class="string">wqctest</span></div><div class="line"><span class="attr">spec:</span></div><div class="line"><span class="attr">  replicas:</span> <span class="number">1</span></div><div class="line"><span class="attr">  selector:</span></div><div class="line"><span class="attr">    matchLabels:</span></div><div class="line"><span class="attr">      app:</span> <span class="string">myservice2</span></div><div class="line"><span class="attr">  template:</span></div><div class="line"><span class="attr">    metadata:</span></div><div class="line"><span class="attr">      labels:</span></div><div class="line"><span class="attr">        app:</span> <span class="string">myservice2</span></div><div class="line"><span class="attr">    spec:</span></div><div class="line"><span class="attr">      containers:</span></div><div class="line"><span class="attr">      - name:</span> <span class="string">myservice2</span></div><div class="line"><span class="attr">        image:</span> <span class="attr">nginx:1.9</span> </div><div class="line"><span class="attr">        imagePullPolicy:</span> <span class="string">Always</span></div><div class="line"><span class="attr">        resources:</span></div><div class="line"><span class="attr">          requests:</span></div><div class="line"><span class="attr">            memory:</span> <span class="string">"2Gi"</span></div><div class="line"><span class="attr">            cpu:</span> <span class="string">"250m"</span></div><div class="line"><span class="attr">          limits:</span></div><div class="line"><span class="attr">            memory:</span> <span class="string">"2Gi"</span></div><div class="line"><span class="attr">            cpu:</span> <span class="string">"500m"</span></div><div class="line"><span class="attr">        ports:</span></div><div class="line"><span class="attr">        - containerPort:</span> <span class="number">80</span></div><div class="line"><span class="attr">          protocol:</span> <span class="string">TCP</span></div></pre></td></tr></table></figure>
 
       
 
@@ -222,7 +240,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">python技术分享</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">k8s容器化</a>
         		</li>
       		
 		</ul>
@@ -234,7 +252,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/python技术分享/" class="article-tag-list-link color1">python技术分享</a>
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
         		</li>
       		
 		</ul>
@@ -289,7 +307,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://www.zwting.com/2017/09/15/2017-04-20-training-python-15/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.zwting.com/2018/12/04/2018-12-04-k8s-01/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -303,18 +321,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/09/20/2017-09-18-cluster-flume-1/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          kafka-flume集群环境搭建【2】
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/09/15/2015-04-19-training-python-5/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">python技术分享[5]－ splinter自动登录微博和qq空间</div>
+    <a href="/2018/10/30/2010-10-30-k8s-02/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">脚本安装harbor1.6.0</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -327,7 +336,7 @@
 
   
   <div class="duoshuo">
-	<div class="ds-thread" data-thread-key="2017-04-20-training-python-15" data-title="python技术分享[15]－ 视频教程" data-url="//www.zwting.com/2017/09/15/2017-04-20-training-python-15/"></div>
+	<div class="ds-thread" data-thread-key="2018-12-04-k8s-01" data-title="k8s版本不同导致的clusterip不可用的解决方法" data-url="//www.zwting.com/2018/12/04/2018-12-04-k8s-01/"></div>
 
 	<div id="uyan_frame"></div>
 	<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2023055"></script>
