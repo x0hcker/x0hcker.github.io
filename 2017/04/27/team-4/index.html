@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="//www.zwting.com">
   <title>怎样搭建自助式运维平台 | 醉翁亭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -15,6 +15,7 @@
 <meta property="og:url" content="//www.zwting.com/2017/04/27/team-4/index.html">
 <meta property="og:site_name" content="醉翁亭">
 <meta property="og:description" content="由于运维的琐碎、故障出现的不确定性以及解决问题的不可控性的存在，所以让运维人痛并快乐着。好的架构不是设计出来的，而是一步步的演进出来的description里面">
+<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2017-05-12T08:03:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="怎样搭建自助式运维平台">
@@ -37,7 +38,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -58,7 +59,7 @@
 
 	<nav class="header-menu">
 	
-		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s容器化/">k8s容器化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/elk/">elk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s容器化/">k8s容器化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
 	
 	</nav>
 		<nav class="header-smart-menu">
@@ -184,7 +185,7 @@
 <h4 id="第一：定制工作流"><a href="#第一：定制工作流" class="headerlink" title="第一：定制工作流"></a>第一：定制工作流</h4><p>基于运维人员对各个工作流统一命名、统一部署、统一使用，使得基础环境一致性得以落地使用，并将日常工作内容固化。<br>工作流元素：工作流(多个)任务节点(具有优先级)(多个)进程节点(具有优先级)<br>工作流参数：在执行过程中可替换<br>在定制过程中尽量保证工作流的原子性，一个工作流只做一件事。不要出现歧义</p>
 <h4 id="第二：执行工作流"><a href="#第二：执行工作流" class="headerlink" title="第二：执行工作流"></a>第二：执行工作流</h4><p>定制的工作流可在任意集群上执行，执行工作流，工作流上可填写所需变量内容。每个任务节点单独展示，使运维方便定位问题，方便定位发生在哪个服务器。</p>
 <h4 id="第三：工作流程执行引擎"><a href="#第三：工作流程执行引擎" class="headerlink" title="第三：工作流程执行引擎"></a>第三：工作流程执行引擎</h4><p>工作流之间没有优先级、任务节点之间有优先级、进程节点之间有优先级，所以    工作流之间是并行关系，任务节点之间是串行关系，进程节点之间是串行关系。在描述这一切时忽略了服务器之间并行的关系，而所有的任务节点其实是作用到服务器上，同一个任务节点的不同进程节点是在同一台服务器上执行的。在工作流数增大或者单个工作流延时比较长的情况下，需要考虑分布执行的情况，用生产者和消费者加锁的方案解决。</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">仅属个人观点, 可以随意转载但保留以下信息</div><div class="line">作者：极品黑公子</div><div class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">仅属个人观点, 可以随意转载但保留以下信息</span><br><span class="line">作者：极品黑公子</span><br><span class="line">邮箱：<span class="selector-tag">x0hcker</span>@<span class="keyword">gmail</span>.<span class="keyword">com</span></span><br></pre></td></tr></table></figure>
       
 
       
@@ -367,7 +368,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2018 醉翁亭
+    		&copy; 2019 醉翁亭
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -476,14 +477,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">devops</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">jenkins</a>
               </li>
              
@@ -492,7 +485,15 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -534,13 +535,17 @@
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">技术管理</a>
               </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             2、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

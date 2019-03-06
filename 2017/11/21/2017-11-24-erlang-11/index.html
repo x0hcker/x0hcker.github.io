@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="//www.zwting.com">
   <title>Erlang程序设计(第2版) 读书笔记【第十一章】 | 醉翁亭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -15,6 +15,7 @@
 <meta property="og:url" content="//www.zwting.com/2017/11/21/2017-11-24-erlang-11/index.html">
 <meta property="og:site_name" content="醉翁亭">
 <meta property="og:description" content="Erlang程序设计的读书笔记">
+<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2017-11-24T07:09:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Erlang程序设计(第2版) 读书笔记【第十一章】">
@@ -37,7 +38,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -58,7 +59,7 @@
 
 	<nav class="header-menu">
 	
-		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s容器化/">k8s容器化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/elk/">elk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s容器化/">k8s容器化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
 	
 	</nav>
 		<nav class="header-smart-menu">
@@ -200,11 +201,11 @@
 </li>
 <li><p>receive … end</p>
 <p>接收发送给某个进程的消息。它的语法如下：</p>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">receive</span></div><div class="line">		Pattern1 [<span class="keyword">when</span> Guard1] -&gt;</div><div class="line">			Expressions1;</div><div class="line">		Pattern2 [<span class="keyword">when</span> Guard2] -&gt;</div><div class="line">			Expressions2;</div><div class="line">		......</div><div class="line"><span class="keyword">end</span>.</div></pre></td></tr></table></figure>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">receive</span></span><br><span class="line">		Pattern1 [<span class="keyword">when</span> Guard1] -&gt;</span><br><span class="line">			Expressions1;</span><br><span class="line">		Pattern2 [<span class="keyword">when</span> Guard2] -&gt;</span><br><span class="line">			Expressions2;</span><br><span class="line">		......</span><br><span class="line"><span class="keyword">end</span>.</span><br></pre></td></tr></table></figure>
 <p> 当某个消息到达进程后，系统会尝试将它与Pattern1（以及可选的关卡Guard1）匹配， 如果成功就执行Expressions1。如果第一个模式不匹配，就会尝试Pattern2，以此类推。如果没有匹配的模式，消息就会被保存起来供以后处理，进程则会开始等待下一条消息。</p>
 </li>
 </ul>
-<h5 id="一个并发程序模板"><a href="#一个并发程序模板" class="headerlink" title="一个并发程序模板"></a>一个并发程序模板</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(ctemplate)</span>.<span class="keyword">-compile</span><span class="params">(export_all)</span>.<span class="function"><span class="title">start</span><span class="params">()</span> -&gt;</span>spawn(?MODULE, loop, []).<span class="function"><span class="title">rpc</span><span class="params">(Pid, Request)</span> -&gt;</span>Pid ! &#123;self(), Request&#125;,<span class="keyword">receive</span>&#123;Pid, Response&#125; -&gt; Response<span class="keyword">end</span>.<span class="function"><span class="title">loop</span><span class="params">(X)</span> -&gt;</span><span class="keyword">receive</span>Any -&gt;io:format(<span class="string">"Received:~p~n"</span>,[Any]), loop(X)<span class="keyword">end</span>.</div></pre></td></tr></table></figure>
+<h5 id="一个并发程序模板"><a href="#一个并发程序模板" class="headerlink" title="一个并发程序模板"></a>一个并发程序模板</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(ctemplate)</span>.<span class="keyword">-compile</span><span class="params">(export_all)</span>.<span class="function"><span class="title">start</span><span class="params">()</span> -&gt;</span>spawn(?MODULE, loop, []).<span class="function"><span class="title">rpc</span><span class="params">(Pid, Request)</span> -&gt;</span>Pid ! &#123;self(), Request&#125;,<span class="keyword">receive</span>&#123;Pid, Response&#125; -&gt; Response<span class="keyword">end</span>.<span class="function"><span class="title">loop</span><span class="params">(X)</span> -&gt;</span><span class="keyword">receive</span>Any -&gt;io:format(<span class="string">"Received:~p~n"</span>,[Any]), loop(X)<span class="keyword">end</span>.</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>这样吧</p>
 </blockquote>
@@ -328,18 +329,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/11/24/2017-11-24-system-01/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/11/21/2017-11-21-erlang-05/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          在MacMini上安装CentOS7
+          Erlang程序设计(第2版) 读书笔记【第五章】
         
       </div>
     </a>
   
   
-    <a href="/2017/11/21/2017-11-21-erlang-07/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Erlang程序设计(第2版) 读书笔记【第八章】</div>
+    <a href="/2017/11/20/2017-11-20-erlang-03/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Erlang程序设计(第2版) 读书笔记【第三章】</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -371,7 +372,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2018 醉翁亭
+    		&copy; 2019 醉翁亭
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -480,14 +481,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">devops</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">jenkins</a>
               </li>
              
@@ -496,7 +489,15 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -538,13 +539,17 @@
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">技术管理</a>
               </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             2、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

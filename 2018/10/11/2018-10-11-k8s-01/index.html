@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="//www.zwting.com">
   <title>在CentOS7上安装Jenkins | 醉翁亭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -15,6 +15,7 @@
 <meta property="og:url" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-01/index.html">
 <meta property="og:site_name" content="醉翁亭">
 <meta property="og:description" content="在CentOS7上安装Jenkins">
+<meta property="og:locale" content="default">
 <meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-01/img/jenkins-01.png">
 <meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-01/img/jenkins-02.png">
 <meta property="og:image" content="//www.zwting.com/2018/10/11/2018-10-11-k8s-01/img/jenkins-03.png">
@@ -42,7 +43,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -63,7 +64,7 @@
 
 	<nav class="header-menu">
 	
-		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s容器化/">k8s容器化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/elk/">elk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s容器化/">k8s容器化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
 	
 	</nav>
 		<nav class="header-smart-menu">
@@ -181,9 +182,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h5 id="安装-java-1-8-0-openjdk"><a href="#安装-java-1-8-0-openjdk" class="headerlink" title="安装 java-1.8.0-openjdk"></a>安装 java-1.8.0-openjdk</h5><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">yum install epel-release yum <span class="keyword">update</span></div><div class="line">yum install java-<span class="number">1.8</span>.<span class="number">0</span>-openjdk.x86_64</div><div class="line"></div><div class="line">java -<span class="keyword">version</span></div><div class="line"></div><div class="line">sudo <span class="keyword">cp</span> /etc/<span class="keyword">profile</span> /etc/<span class="keyword">profile</span>.bac </div><div class="line"><span class="keyword">echo</span> <span class="string">'export JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk'</span> | sudo tee -<span class="keyword">a</span> /etc/<span class="keyword">profile</span> </div><div class="line"><span class="keyword">echo</span> <span class="string">'export JRE_HOME=/usr/lib/jvm/jre'</span> | sudo tee -<span class="keyword">a</span> /etc/<span class="keyword">profile</span> </div><div class="line"><span class="keyword">source</span> /etc/<span class="keyword">profile</span></div><div class="line"></div><div class="line"><span class="keyword">echo</span> $JAVA_HOME </div><div class="line"><span class="keyword">echo</span> $JRE_HOME</div></pre></td></tr></table></figure>
-<h5 id="安装-Jenkins"><a href="#安装-Jenkins" class="headerlink" title="安装 Jenkins"></a>安装 Jenkins</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">cd ~</div><div class="line">sudo wget -O /etc/yum<span class="selector-class">.repos</span><span class="selector-class">.d</span>/jenkins<span class="selector-class">.repo</span> https:<span class="comment">//pkg.jenkins.io/redhat-stable/jenkins.repo </span></div><div class="line">sudo rpm --import https:<span class="comment">//pkg.jenkins.io/redhat-stable/jenkins.io.key </span></div><div class="line">yum install jenkins</div><div class="line"></div><div class="line">国外网速太慢 请用清华源的RPM包安装</div><div class="line">https:<span class="comment">//mirrors.tuna.tsinghua.edu.cn/jenkins/redhat-stable/jenkins-2.138.2-1.1.noarch.rpm</span></div><div class="line">rpm -ivh jenkins-<span class="number">2.138</span>.<span class="number">2</span>-<span class="number">1.1</span><span class="selector-class">.noarch</span><span class="selector-class">.rpm</span></div></pre></td></tr></table></figure>
-<h5 id="启动指令"><a href="#启动指令" class="headerlink" title="启动指令"></a>启动指令</h5><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl start jenkins</div><div class="line">systemctl <span class="builtin-name">enable</span>  jenkins</div></pre></td></tr></table></figure>
+        <h5 id="安装-java-1-8-0-openjdk"><a href="#安装-java-1-8-0-openjdk" class="headerlink" title="安装 java-1.8.0-openjdk"></a>安装 java-1.8.0-openjdk</h5><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">yum install epel-release yum <span class="keyword">update</span></span><br><span class="line">yum install java-<span class="number">1.8</span>.<span class="number">0</span>-openjdk.x86_64</span><br><span class="line"></span><br><span class="line">java -<span class="keyword">version</span></span><br><span class="line"></span><br><span class="line">sudo <span class="keyword">cp</span> /etc/<span class="keyword">profile</span> /etc/<span class="keyword">profile</span>.bac </span><br><span class="line"><span class="keyword">echo</span> <span class="string">'export JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk'</span> | sudo tee -<span class="keyword">a</span> /etc/<span class="keyword">profile</span> </span><br><span class="line"><span class="keyword">echo</span> <span class="string">'export JRE_HOME=/usr/lib/jvm/jre'</span> | sudo tee -<span class="keyword">a</span> /etc/<span class="keyword">profile</span> </span><br><span class="line"><span class="keyword">source</span> /etc/<span class="keyword">profile</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> $JAVA_HOME </span><br><span class="line"><span class="keyword">echo</span> $JRE_HOME</span><br></pre></td></tr></table></figure>
+<h5 id="安装-Jenkins"><a href="#安装-Jenkins" class="headerlink" title="安装 Jenkins"></a>安装 Jenkins</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">sudo wget -O /etc/yum<span class="selector-class">.repos</span><span class="selector-class">.d</span>/jenkins<span class="selector-class">.repo</span> https:<span class="comment">//pkg.jenkins.io/redhat-stable/jenkins.repo </span></span><br><span class="line">sudo rpm --import https:<span class="comment">//pkg.jenkins.io/redhat-stable/jenkins.io.key </span></span><br><span class="line">yum install jenkins</span><br><span class="line"></span><br><span class="line">国外网速太慢 请用清华源的RPM包安装</span><br><span class="line">https:<span class="comment">//mirrors.tuna.tsinghua.edu.cn/jenkins/redhat-stable/jenkins-2.138.2-1.1.noarch.rpm</span></span><br><span class="line">rpm -ivh jenkins-<span class="number">2.138</span>.<span class="number">2</span>-<span class="number">1.1</span><span class="selector-class">.noarch</span><span class="selector-class">.rpm</span></span><br></pre></td></tr></table></figure>
+<h5 id="启动指令"><a href="#启动指令" class="headerlink" title="启动指令"></a>启动指令</h5><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start jenkins</span><br><span class="line">systemctl <span class="builtin-name">enable</span>  jenkins</span><br></pre></td></tr></table></figure>
 <h5 id="web查看"><a href="#web查看" class="headerlink" title="web查看"></a>web查看</h5><ul>
 <li><p>打开界面<br><img src="./img/jenkins-01.png" alt="devops-1.png" style="width:800px;"></p>
 </li>
@@ -335,8 +336,8 @@
     </a>
   
   
-    <a href="/2018/10/10/2018-10-10-k8s-03/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">利用ansible安装k8s集群</div>
+    <a href="/2018/10/10/2018-10-10-k8s-02/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">安装中控机的ansible环境</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -368,7 +369,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2018 醉翁亭
+    		&copy; 2019 醉翁亭
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -477,14 +478,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">devops</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">jenkins</a>
               </li>
              
@@ -493,7 +486,15 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -535,13 +536,17 @@
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">技术管理</a>
               </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             2、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

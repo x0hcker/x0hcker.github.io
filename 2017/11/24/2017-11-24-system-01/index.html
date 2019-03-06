@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="//www.zwting.com">
   <title>在MacMini上安装CentOS7 | 醉翁亭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -15,6 +15,7 @@
 <meta property="og:url" content="//www.zwting.com/2017/11/24/2017-11-24-system-01/index.html">
 <meta property="og:site_name" content="醉翁亭">
 <meta property="og:description" content="在MacMini上安装CentOS7">
+<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2017-11-28T10:35:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在MacMini上安装CentOS7">
@@ -37,7 +38,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -58,7 +59,7 @@
 
 	<nav class="header-menu">
 	
-		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s容器化/">k8s容器化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/elk/">elk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s容器化/">k8s容器化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
 	
 	</nav>
 		<nav class="header-smart-menu">
@@ -176,17 +177,17 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="1"><a href="#1" class="headerlink" title="1."></a>1.</h3><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  iso hdiutil convert -format UDRW -o CentOS<span class="number">-7</span>-x86_64-Minimal.iso CentOS<span class="number">-7</span>-x86_64-Minimal<span class="number">-1503.</span>iso</div><div class="line"></div><div class="line">正在读取Master Boot Record（MBR：<span class="number">0</span>）…</div><div class="line">正在读取CentOS <span class="number">7</span> x86_64                 （Apple_ISO：<span class="number">1</span>）…</div><div class="line">正在读取（Type EF：<span class="number">2</span>）…</div><div class="line">.</div><div class="line">正在读取CentOS <span class="number">7</span> x86_64                 （Apple_ISO：<span class="number">3</span>）…</div><div class="line">...................................................................................................................................</div><div class="line">已耗时： <span class="number">3.237</span>s</div><div class="line">速度：<span class="number">174.2</span>M 字节/秒</div><div class="line">节省：<span class="number">0.0</span>%</div><div class="line">created: /data/tool/iso/CentOS<span class="number">-7</span>-x86_64-Minimal.iso.dmg</div></pre></td></tr></table></figure>
-<h3 id="2"><a href="#2" class="headerlink" title="2."></a>2.</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">➜  iso diskutil list</div><div class="line">/dev/disk0 (internal, physical):</div><div class="line">   #:                      <span class="built_in"> TYPE </span>NAME                    SIZE       IDENTIFIER</div><div class="line">   0:      GUID_partition_scheme                        <span class="number">*121</span>.3 GB   disk0</div><div class="line">   1:                        EFI EFI                     209.7 MB   disk0s1</div><div class="line">   2:          Apple_CoreStorage Macintosh HD            120.5 GB   disk0s2</div><div class="line">   3:                 Apple_Boot Recovery HD             650.0 MB   disk0s3</div><div class="line">/dev/disk1 (internal, virtual):</div><div class="line">   #:                      <span class="built_in"> TYPE </span>NAME                    SIZE       IDENTIFIER</div><div class="line">   0:                  Apple_HFS Macintosh HD           +120.1 GB   disk1</div><div class="line">                                 Logical Volume on disk0s2</div><div class="line">                                 CD6B5894-7339-4A3F-B2BA-46C8784AB504</div><div class="line">                                 Unencrypted</div><div class="line">/dev/disk2 (external, physical):</div><div class="line">   #:                      <span class="built_in"> TYPE </span>NAME                    SIZE       IDENTIFIER</div><div class="line">   0:     FDisk_partition_scheme                        <span class="number">*8</span>.2 GB     disk2</div><div class="line">   1:                 DOS_FAT_32 DREAM                   8.2 GB     disk2s1</div></pre></td></tr></table></figure>
-<h3 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜  iso sudo dd <span class="attribute">if</span>=CentOS-7-x86_64-Minimal.iso.dmg <span class="attribute">of</span>=/dev/disk2 <span class="attribute">bs</span>=1m</div><div class="line">Password:</div><div class="line">dd: /dev/disk2:<span class="built_in"> Resource </span>busy</div><div class="line">➜  iso diskutil unmountDisk /dev/disk2</div><div class="line">Unmount of all volumes on disk2 was successful</div></pre></td></tr></table></figure>
-<h3 id="4"><a href="#4" class="headerlink" title="4."></a>4.</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  iso sudo dd <span class="attribute">if</span>=CentOS-7-x86_64-Minimal.iso.dmg <span class="attribute">of</span>=/dev/disk2 <span class="attribute">bs</span>=1m</div></pre></td></tr></table></figure>
+        <h3 id="1"><a href="#1" class="headerlink" title="1."></a>1.</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">➜  iso hdiutil convert -format UDRW -o CentOS-7-x86_64-Minimal.iso CentOS-7-x86_64-Minimal-1503.iso</span><br><span class="line"></span><br><span class="line">正在读取Master Boot Record（MBR：0）…</span><br><span class="line">正在读取CentOS 7 x86_64                 （Apple_ISO：1）…</span><br><span class="line">正在读取（Type EF：2）…</span><br><span class="line">.</span><br><span class="line">正在读取CentOS 7 x86_64                 （Apple_ISO：3）…</span><br><span class="line"><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span>.</span><br><span class="line">已耗时： 3.237s</span><br><span class="line">速度：174.2M 字节/秒</span><br><span class="line">节省：0.0%</span><br><span class="line">created: /data/tool/iso/CentOS-7-x86_64-Minimal.iso.dmg</span><br></pre></td></tr></table></figure>
+<h3 id="2"><a href="#2" class="headerlink" title="2."></a>2.</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">➜  iso diskutil list</span><br><span class="line">/dev/disk0 (internal, physical):</span><br><span class="line">   #:                      <span class="built_in"> TYPE </span>NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:      GUID_partition_scheme                        <span class="number">*121</span>.3 GB   disk0</span><br><span class="line">   1:                        EFI EFI                     209.7 MB   disk0s1</span><br><span class="line">   2:          Apple_CoreStorage Macintosh HD            120.5 GB   disk0s2</span><br><span class="line">   3:                 Apple_Boot Recovery HD             650.0 MB   disk0s3</span><br><span class="line">/dev/disk1 (internal, virtual):</span><br><span class="line">   #:                      <span class="built_in"> TYPE </span>NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:                  Apple_HFS Macintosh HD           +120.1 GB   disk1</span><br><span class="line">                                 Logical Volume on disk0s2</span><br><span class="line">                                 CD6B5894-7339-4A3F-B2BA-46C8784AB504</span><br><span class="line">                                 Unencrypted</span><br><span class="line">/dev/disk2 (external, physical):</span><br><span class="line">   #:                      <span class="built_in"> TYPE </span>NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:     FDisk_partition_scheme                        <span class="number">*8</span>.2 GB     disk2</span><br><span class="line">   1:                 DOS_FAT_32 DREAM                   8.2 GB     disk2s1</span><br></pre></td></tr></table></figure>
+<h3 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜  iso sudo dd <span class="attribute">if</span>=CentOS-7-x86_64-Minimal.iso.dmg <span class="attribute">of</span>=/dev/disk2 <span class="attribute">bs</span>=1m</span><br><span class="line">Password:</span><br><span class="line">dd: /dev/disk2:<span class="built_in"> Resource </span>busy</span><br><span class="line">➜  iso diskutil unmountDisk /dev/disk2</span><br><span class="line">Unmount of all volumes on disk2 was successful</span><br></pre></td></tr></table></figure>
+<h3 id="4"><a href="#4" class="headerlink" title="4."></a>4.</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  iso sudo dd <span class="attribute">if</span>=CentOS-7-x86_64-Minimal.iso.dmg <span class="attribute">of</span>=/dev/disk2 <span class="attribute">bs</span>=1m</span><br></pre></td></tr></table></figure>
 <p>U盘会自动退出来，然后不可识别</p>
 <h3 id="5"><a href="#5" class="headerlink" title="5."></a>5.</h3><p>开始时按住option（alt)键，进入UEFI，选择U盘启动。</p>
 <h5 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h5><ul>
 <li>1.设置基础软件仓库错误 </li>
 <li><p>进入安装界面以后，设置安装介质位置提示错误，中文提示是：设置基础软件仓库错误，英文是：error  setting up base repository</p>
 <p>  这个错误找了好久， 才在一个英文网站上面找到了解决办法，根本问题还是安装文件的问题，点进去它有两个选项，大致是安装源来自1. iso文件，2.来自网络，点击iso文件旁边那个验证，马上出错只能重启。</p>
-<p>  解决办法是使用网络安装源， 首先退出，在 第四个网络设置上面设置你的网络连接，使网络连接可用，然后在回到第一个安装源设置里面，在<a href="http://后面输入" target="_blank" rel="external">http://后面输入</a> buildlogs.centos.org/centos/7/os/x86_64-20140614，在后面的proxy（代理设置）里面填入 buildlogs.centos.org:80，点击完成，这个错误就解决了。再设置硬盘分区</p>
+<p>  解决办法是使用网络安装源， 首先退出，在 第四个网络设置上面设置你的网络连接，使网络连接可用，然后在回到第一个安装源设置里面，在http://后面输入 buildlogs.centos.org/centos/7/os/x86_64-20140614，在后面的proxy（代理设置）里面填入 buildlogs.centos.org:80，点击完成，这个错误就解决了。再设置硬盘分区</p>
 </li>
 </ul>
 
@@ -319,8 +320,8 @@
     </a>
   
   
-    <a href="/2017/11/21/2017-11-24-erlang-11/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Erlang程序设计(第2版) 读书笔记【第十一章】</div>
+    <a href="/2017/11/21/2017-11-21-erlang-07/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Erlang程序设计(第2版) 读书笔记【第八章】</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -352,7 +353,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2018 醉翁亭
+    		&copy; 2019 醉翁亭
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -461,14 +462,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">devops</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">jenkins</a>
               </li>
              
@@ -477,7 +470,15 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -519,13 +520,17 @@
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">技术管理</a>
               </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             2、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

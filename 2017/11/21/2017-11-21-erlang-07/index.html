@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="//www.zwting.com">
   <title>Erlang程序设计(第2版) 读书笔记【第八章】 | 醉翁亭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -15,6 +15,7 @@
 <meta property="og:url" content="//www.zwting.com/2017/11/21/2017-11-21-erlang-07/index.html">
 <meta property="og:site_name" content="醉翁亭">
 <meta property="og:description" content="Erlang程序设计的读书笔记">
+<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2017-11-23T11:06:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Erlang程序设计(第2版) 读书笔记【第八章】">
@@ -37,7 +38,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -58,7 +59,7 @@
 
 	<nav class="header-menu">
 	
-		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s容器化/">k8s容器化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/elk/">elk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s容器化/">k8s容器化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
 	
 	</nav>
 		<nav class="header-smart-menu">
@@ -179,11 +180,11 @@
         <h5 id="8-10-动态代码载入"><a href="#8-10-动态代码载入" class="headerlink" title="8.10    动态代码载入"></a>8.10    动态代码载入</h5><ul>
 <li>b.erl</li>
 </ul>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(b)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([x/<span class="number">0</span>])</span>.</div><div class="line"></div><div class="line"><span class="function"><span class="title">x</span><span class="params">()</span> -&gt;</span> <span class="number">2</span>.</div></pre></td></tr></table></figure>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(b)</span>.</span><br><span class="line"></span><br><span class="line"><span class="keyword">-export</span><span class="params">([x/<span class="number">0</span>])</span>.</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">x</span><span class="params">()</span> -&gt;</span> <span class="number">2</span>.</span><br></pre></td></tr></table></figure>
 <ul>
 <li>a.erl</li>
 </ul>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(a)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-compile</span><span class="params">(export_all)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([])</span>.</div><div class="line"></div><div class="line"><span class="function"><span class="title">start</span><span class="params">(Tag)</span> -&gt;</span></div><div class="line"></div><div class="line">  spawn(<span class="keyword">fun</span>() -&gt; loop(Tag) <span class="keyword">end</span>).</div><div class="line"></div><div class="line"><span class="function"><span class="title">loop</span><span class="params">(Tag)</span> -&gt;</span></div><div class="line"></div><div class="line">  sleep(),</div><div class="line">  Val = b:x(),</div><div class="line">  io:format(<span class="string">"Vsn2 (~p) b:x() = ~p~n"</span>,[Tag, Val]),</div><div class="line">  loop(Tag).</div><div class="line"></div><div class="line"><span class="function"><span class="title">sleep</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  <span class="keyword">receive</span></div><div class="line"></div><div class="line">    <span class="keyword">after</span> <span class="number">3000</span> -&gt; <span class="literal">true</span></div><div class="line">  <span class="keyword">end</span>.</div></pre></td></tr></table></figure>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(a)</span>.</span><br><span class="line"></span><br><span class="line"><span class="keyword">-compile</span><span class="params">(export_all)</span>.</span><br><span class="line"></span><br><span class="line"><span class="keyword">-export</span><span class="params">([])</span>.</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">start</span><span class="params">(Tag)</span> -&gt;</span></span><br><span class="line"></span><br><span class="line">  spawn(<span class="keyword">fun</span>() -&gt; loop(Tag) <span class="keyword">end</span>).</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">loop</span><span class="params">(Tag)</span> -&gt;</span></span><br><span class="line"></span><br><span class="line">  sleep(),</span><br><span class="line">  Val = b:x(),</span><br><span class="line">  io:format(<span class="string">"Vsn2 (~p) b:x() = ~p~n"</span>,[Tag, Val]),</span><br><span class="line">  loop(Tag).</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">sleep</span><span class="params">()</span> -&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">receive</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">after</span> <span class="number">3000</span> -&gt; <span class="literal">true</span></span><br><span class="line">  <span class="keyword">end</span>.</span><br></pre></td></tr></table></figure>
 <ul>
 <li>在任一时刻，Erlang允许一个模块的两个版本同时运行：当前版和旧版。重新编译某个模块时，任何运行旧版代码的进程都会被终止，当前版成为旧版，新编译的版本则成为当前版。可以把这想象成一个带有两个版本代码的移位寄存器。当添加新代码时，最老的版本就被清除了。一些进程可以运行旧版代码，与此同时，另一些则可以运行新版代码</li>
 </ul>
@@ -325,11 +326,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/11/21/2017-11-24-erlang-11/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/11/24/2017-11-24-system-01/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Erlang程序设计(第2版) 读书笔记【第十一章】
+          在MacMini上安装CentOS7
         
       </div>
     </a>
@@ -368,7 +369,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2018 醉翁亭
+    		&copy; 2019 醉翁亭
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -477,14 +478,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">devops</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">jenkins</a>
               </li>
              
@@ -493,7 +486,15 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -535,13 +536,17 @@
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">技术管理</a>
               </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             2、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

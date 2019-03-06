@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="//www.zwting.com">
   <title>醉翁亭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -15,6 +15,7 @@
 <meta property="og:url" content="//www.zwting.com/page/3/index.html">
 <meta property="og:site_name" content="醉翁亭">
 <meta property="og:description" content="活在当下，求的不过是顺心意。工作十年了，记录一些生活、工作的经历聊以慰藉。">
+<meta property="og:locale" content="default">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="醉翁亭">
 <meta name="twitter:description" content="活在当下，求的不过是顺心意。工作十年了，记录一些生活、工作的经历聊以慰藉。">
@@ -36,7 +37,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -57,7 +58,7 @@
 
 	<nav class="header-menu">
 	
-		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s容器化/">k8s容器化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/elk/">elk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s容器化/">k8s容器化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
 	
 	</nav>
 		<nav class="header-smart-menu">
@@ -157,131 +158,50 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-2018-10-10-k8s-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2018-10-11-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/10/2018-10-10-k8s-03/">利用ansible安装k8s集群</a>
+      <a class="article-title" href="/2018/10/11/2018-10-11-k8s-01/">在CentOS7上安装Jenkins</a>
     </h1>
   
 
         
-        <a href="/2018/10/10/2018-10-10-k8s-03/" class="archive-article-date">
-  	<time datetime="2018-10-10T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-10</time>
+        <a href="/2018/10/11/2018-10-11-k8s-01/" class="archive-article-date">
+  	<time datetime="2018-10-11T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-11</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="服务器列表"><a href="#服务器列表" class="headerlink" title="服务器列表"></a>服务器列表</h3><table>
-<thead>
-<tr>
-<th>主机名</th>
-<th>内网IP</th>
-<th>外网IP</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>deploy</td>
-<td>192.168.111.69</td>
-<td>172.16.153.70</td>
-</tr>
-<tr>
-<td>kmaster</td>
-<td>192.168.111.74</td>
-<td>172.16.153.71</td>
-</tr>
-<tr>
-<td>knode01</td>
-<td>192.168.111.71</td>
-<td>172.16.153.72</td>
-</tr>
-<tr>
-<td>knode02</td>
-<td>192.168.111.68</td>
-<td>172.16.153.73</td>
-</tr>
-<tr>
-<td>knode03</td>
-<td>192.168.111.70</td>
-<td>172.16.153.74</td>
-</tr>
-<tr>
-<td>knode04</td>
-<td>192.168.111.72</td>
-<td>172.16.153.75</td>
-</tr>
-<tr>
-<td>knode05</td>
-<td>192.168.111.73</td>
-<td>172.16.153.76</td>
-</tr>
-</tbody>
-</table>
-<h3 id="etc-hosts追加内容"><a href="#etc-hosts追加内容" class="headerlink" title="/etc/hosts追加内容"></a>/etc/hosts追加内容</h3><table>
-<thead>
-<tr>
-<th>内网IP</th>
-<th>别名</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>192.168.111.69</td>
-<td>deploy</td>
-</tr>
-<tr>
-<td>192.168.111.74</td>
-<td>kmaster </td>
-</tr>
-<tr>
-<td>192.168.111.71</td>
-<td>knode01</td>
-</tr>
-<tr>
-<td>192.168.111.68</td>
-<td>knode02</td>
-</tr>
-<tr>
-<td>192.168.111.70</td>
-<td>knode03</td>
-</tr>
-<tr>
-<td>192.168.111.72</td>
-<td>knode04</td>
-</tr>
-<tr>
-<td>192.168.111.73</td>
-<td>knode05</td>
-</tr>
-<tr>
-<td>192.168.111.70</td>
-<td>etcd01</td>
-</tr>
-<tr>
-<td>192.168.111.72</td>
-<td>etcd02</td>
-</tr>
-<tr>
-<td>192.168.111.72</td>
-<td>etcd03</td>
-</tr>
-</tbody>
-</table>
-<p>##获取 kubeasz<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">git clone <span class="string">https:</span><span class="comment">//github.com/gjmzj/kubeasz.git</span></div><div class="line"></div><div class="line">cd kubeasz/</div><div class="line"></div><div class="line">git checkout v1102-r1</div><div class="line"></div><div class="line">mkdir -p <span class="regexp">/etc/</span>ansible</div><div class="line">mv * <span class="regexp">/etc/</span>ansible</div></pre></td></tr></table></figure></p>
-<p>##获取安装依赖的二进制包</p>
-<p>国内请从分享的百度云链接下载 <a href="https://pan.baidu.com/s/1c4RFaA" target="_blank" rel="external">https://pan.baidu.com/s/1c4RFaA</a></p>
-<p>下载已打包好的binaries，解压到/etc/ansible/bin目录</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">tar zxvf k8s.<span class="number">1102</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span></div><div class="line">mkdir -<span class="selector-tag">p</span> /etc/ansible</div><div class="line">mv -f bin<span class="comment">/* /etc/ansible/bin</span></div></pre></td></tr></table></figure>
-<h2 id="配置ansible的hosts文件"><a href="#配置ansible的hosts文件" class="headerlink" title="配置ansible的hosts文件"></a>配置ansible的hosts文件</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/ansible</div><div class="line"></div><div class="line">cp example/hosts<span class="selector-class">.s-master</span><span class="selector-class">.example</span> hosts</div></pre></td></tr></table></figure>
-<h2 id="hosts文件具体内容-all是测试时用的"><a href="#hosts文件具体内容-all是测试时用的" class="headerlink" title="hosts文件具体内容  all是测试时用的"></a>hosts文件具体内容  all是测试时用的</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div></pre></td><td class="code"><pre><div class="line">[all]</div><div class="line"></div><div class="line">kmaster </div><div class="line"></div><div class="line">knode01</div><div class="line"></div><div class="line">knode02</div><div class="line"></div><div class="line">knode03</div><div class="line"></div><div class="line">knode04</div><div class="line"></div><div class="line">knode05</div><div class="line"></div><div class="line">[deploy]</div><div class="line"></div><div class="line">deploy</div><div class="line"></div><div class="line"><span class="comment"># etcd集群请提供如下NODE_NAME、NODE_IP变量,请注意etcd集群必须是1,3,5,7...奇数个节点</span></div><div class="line"></div><div class="line">[etcd]</div><div class="line"></div><div class="line">192.168.111.70 <span class="attribute">NODE_NAME</span>=etcd1 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.70"</span></div><div class="line"></div><div class="line">192.168.111.72 <span class="attribute">NODE_NAME</span>=etcd2 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.72"</span></div><div class="line"></div><div class="line">192.168.111.73 <span class="attribute">NODE_NAME</span>=etcd3 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.73"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[kube-master]</div><div class="line"></div><div class="line">192.168.111.74 <span class="attribute">NODE_NAME</span>=kmaster <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.74"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[kube-node]</div><div class="line"></div><div class="line">192.168.111.71  <span class="attribute">NODE_NAME</span>=knode01  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.71"</span></div><div class="line"></div><div class="line">192.168.111.68  <span class="attribute">NODE_NAME</span>=knode02  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.68"</span></div><div class="line"></div><div class="line">192.168.111.70  <span class="attribute">NODE_NAME</span>=knode03  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.70"</span></div><div class="line"></div><div class="line">192.168.111.72  <span class="attribute">NODE_NAME</span>=knode04  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.72"</span></div><div class="line"></div><div class="line">192.168.111.73  <span class="attribute">NODE_NAME</span>=knode05  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.73"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 如果启用harbor，请配置后面harbor相关参数</span></div><div class="line"></div><div class="line">[harbor]</div><div class="line"></div><div class="line"><span class="comment">#192.168.111.8 NODE_IP="192.168.111.8"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 预留组，后续添加node节点使用</span></div><div class="line"></div><div class="line">[new-node]</div><div class="line"></div><div class="line"><span class="comment">#192.168.111.xx NODE_IP="192.168.111.xx"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[all:vars]</div><div class="line"></div><div class="line"><span class="comment"># ---------集群主要参数---------------</span></div><div class="line"></div><div class="line"><span class="comment">#集群部署模式：allinone, single-master, multi-master</span></div><div class="line"></div><div class="line"><span class="attribute">DEPLOY_MODE</span>=single-master</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#集群 MASTER IP</span></div><div class="line"></div><div class="line"><span class="attribute">MASTER_IP</span>=<span class="string">"kmaster"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#集群 APISERVER</span></div><div class="line"></div><div class="line"><span class="attribute">KUBE_APISERVER</span>=<span class="string">"https://kmaster:6443"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#TLS Bootstrapping 使用的 Token，使用 head -c 16 /dev/urandom | od -An -t x | tr -d ' ' 生成</span></div><div class="line"></div><div class="line"><span class="attribute">BOOTSTRAP_TOKEN</span>=<span class="string">"d18f94b5fa585c7123f56803d925d2e7"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群网络插件，目前支持calico和flannel</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_NETWORK</span>=<span class="string">"calico"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 部分calico相关配置，更全配置可以去roles/calico/templates/calico.yaml.j2自定义</span></div><div class="line"></div><div class="line"><span class="comment"># 设置 CALICO_IPV4POOL_IPIP=“off”,可以提高网络性能，条件限制详见 05.安装calico网络组件.md</span></div><div class="line"></div><div class="line"><span class="attribute">CALICO_IPV4POOL_IPIP</span>=<span class="string">"always"</span></div><div class="line"></div><div class="line"><span class="comment"># 设置 calico-node使用的host IP，bgp邻居通过该地址建立，可手动指定端口"interface=eth0"或使用如下自动发现</span></div><div class="line"></div><div class="line"><span class="comment"># IP_AUTODETECTION_METHOD="can-reach=223.5.5.5"</span></div><div class="line"></div><div class="line"><span class="attribute">IP_AUTODETECTION_METHOD</span>=<span class="string">"interface=eth0"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 部分flannel配置，详见roles/flannel/templates/kube-flannel.yaml.j2</span></div><div class="line"></div><div class="line"><span class="attribute">FLANNEL_BACKEND</span>=<span class="string">"vxlan"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 服务网段 (Service CIDR），部署前路由不可达，部署后集群内使用 IP:Port 可达</span></div><div class="line"></div><div class="line"><span class="attribute">SERVICE_CIDR</span>=<span class="string">"10.68.0.0/16"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># POD 网段 (Cluster CIDR），部署前路由不可达，**部署后**路由可达</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_CIDR</span>=<span class="string">"172.20.0.0/16"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 服务端口范围 (NodePort Range)</span></div><div class="line"></div><div class="line"><span class="attribute">NODE_PORT_RANGE</span>=<span class="string">"20000-40000"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># kubernetes 服务 IP (预分配，一般是 SERVICE_CIDR 中第一个IP)</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_KUBERNETES_SVC_IP</span>=<span class="string">"10.68.0.1"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群 DNS 服务 IP (从 SERVICE_CIDR 中预分配)</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_DNS_SVC_IP</span>=<span class="string">"10.68.0.2"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群 DNS 域名</span></div><div class="line"></div><div class="line"><span class="attribute">CLUSTER_DNS_DOMAIN</span>=<span class="string">"cluster.local."</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># etcd 集群间通信的IP和端口, **根据实际 etcd 集群成员设置**</span></div><div class="line"></div><div class="line"><span class="attribute">ETCD_NODES</span>=<span class="string">"etcd1=https://192.168.111.70:2380,etcd2=https://192.168.111.72:2380,etcd3=https://192.168.111.73:2380"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># etcd 集群服务地址列表, **根据实际 etcd 集群成员设置**</span></div><div class="line"></div><div class="line"><span class="attribute">ETCD_ENDPOINTS</span>=<span class="string">"https://192.168.111.70:2379,https://192.168.111.72:2379,https://192.168.111.73:2379"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 集群basic auth 使用的用户名和密码</span></div><div class="line"></div><div class="line"><span class="attribute">BASIC_AUTH_USER</span>=<span class="string">"admin"</span></div><div class="line"></div><div class="line"><span class="attribute">BASIC_AUTH_PASS</span>=<span class="string">"test1234"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># ---------附加参数--------------------</span></div><div class="line"></div><div class="line"><span class="comment">#默认二进制文件目录</span></div><div class="line"></div><div class="line"><span class="attribute">bin_dir</span>=<span class="string">"/opt/kube/bin"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#证书目录</span></div><div class="line"></div><div class="line"><span class="attribute">ca_dir</span>=<span class="string">"/etc/kubernetes/ssl"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#部署目录，即 ansible 工作目录</span></div><div class="line"></div><div class="line"><span class="attribute">base_dir</span>=<span class="string">"/etc/ansible"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#私有仓库 harbor服务器 (域名或者IP)</span></div><div class="line"></div><div class="line"><span class="comment">#HARBOR_IP="192.168.111.8"</span></div><div class="line"></div><div class="line"><span class="comment">#HARBOR_DOMAIN="harbor.yourdomain.com"</span></div></pre></td></tr></table></figure>
-<h3 id="分步安装"><a href="#分步安装" class="headerlink" title="分步安装"></a>分步安装</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ansible-playbook <span class="number">01</span><span class="selector-class">.prepare</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">02</span><span class="selector-class">.etcd</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">03</span><span class="selector-class">.docker</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">04</span><span class="selector-class">.kube-master</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">05</span><span class="selector-class">.kube-node</span><span class="selector-class">.yml</span></div><div class="line">ansible-playbook <span class="number">06</span><span class="selector-class">.network</span><span class="selector-class">.yml</span></div></pre></td></tr></table></figure>
-<h3 id="检查安装结果"><a href="#检查安装结果" class="headerlink" title="检查安装结果"></a>检查安装结果</h3><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">[root@host<span class="number">-192</span><span class="number">-168</span><span class="number">-111</span><span class="number">-74</span> ~]# kubectl get nodes</div><div class="line">NAME             STATUS                     ROLES     AGE       VERSION</div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.68</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.70</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.71</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.72</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.73</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.74</span>   Ready,SchedulingDisabled   &lt;none&gt;    <span class="number">4</span>m        v1<span class="number">.10</span><span class="number">.2</span></div><div class="line"></div><div class="line"></div><div class="line">[root@host<span class="number">-192</span><span class="number">-168</span><span class="number">-111</span><span class="number">-74</span> ~]# kubectl get ns</div><div class="line">NAME          STATUS    AGE</div><div class="line"><span class="section">default</span>       Active    <span class="number">6</span>m</div><div class="line">kube-public   Active    <span class="number">6</span>m</div><div class="line">kube-system   Active    <span class="number">6</span>m</div><div class="line"></div><div class="line">[root@host<span class="number">-192</span><span class="number">-168</span><span class="number">-111</span><span class="number">-74</span> ~]# kubectl get pods -n kube-system         </div><div class="line">NAME                    READY     STATUS    RESTARTS   AGE</div><div class="line">kube-flannel-ds<span class="number">-5</span>bg7k   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds<span class="number">-5</span>zvb6   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds-dwpnc   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds-jnhj4   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds-rs7cp   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div><div class="line">kube-flannel-ds-xrjnd   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</div></pre></td></tr></table></figure>
+        <h5 id="安装-java-1-8-0-openjdk"><a href="#安装-java-1-8-0-openjdk" class="headerlink" title="安装 java-1.8.0-openjdk"></a>安装 java-1.8.0-openjdk</h5><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">yum install epel-release yum <span class="keyword">update</span></span><br><span class="line">yum install java-<span class="number">1.8</span>.<span class="number">0</span>-openjdk.x86_64</span><br><span class="line"></span><br><span class="line">java -<span class="keyword">version</span></span><br><span class="line"></span><br><span class="line">sudo <span class="keyword">cp</span> /etc/<span class="keyword">profile</span> /etc/<span class="keyword">profile</span>.bac </span><br><span class="line"><span class="keyword">echo</span> <span class="string">'export JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk'</span> | sudo tee -<span class="keyword">a</span> /etc/<span class="keyword">profile</span> </span><br><span class="line"><span class="keyword">echo</span> <span class="string">'export JRE_HOME=/usr/lib/jvm/jre'</span> | sudo tee -<span class="keyword">a</span> /etc/<span class="keyword">profile</span> </span><br><span class="line"><span class="keyword">source</span> /etc/<span class="keyword">profile</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> $JAVA_HOME </span><br><span class="line"><span class="keyword">echo</span> $JRE_HOME</span><br></pre></td></tr></table></figure>
+<h5 id="安装-Jenkins"><a href="#安装-Jenkins" class="headerlink" title="安装 Jenkins"></a>安装 Jenkins</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">sudo wget -O /etc/yum<span class="selector-class">.repos</span><span class="selector-class">.d</span>/jenkins<span class="selector-class">.repo</span> https:<span class="comment">//pkg.jenkins.io/redhat-stable/jenkins.repo </span></span><br><span class="line">sudo rpm --import https:<span class="comment">//pkg.jenkins.io/redhat-stable/jenkins.io.key </span></span><br><span class="line">yum install jenkins</span><br><span class="line"></span><br><span class="line">国外网速太慢 请用清华源的RPM包安装</span><br><span class="line">https:<span class="comment">//mirrors.tuna.tsinghua.edu.cn/jenkins/redhat-stable/jenkins-2.138.2-1.1.noarch.rpm</span></span><br><span class="line">rpm -ivh jenkins-<span class="number">2.138</span>.<span class="number">2</span>-<span class="number">1.1</span><span class="selector-class">.noarch</span><span class="selector-class">.rpm</span></span><br></pre></td></tr></table></figure>
+<h5 id="启动指令"><a href="#启动指令" class="headerlink" title="启动指令"></a>启动指令</h5><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start jenkins</span><br><span class="line">systemctl <span class="builtin-name">enable</span>  jenkins</span><br></pre></td></tr></table></figure>
+<h5 id="web查看"><a href="#web查看" class="headerlink" title="web查看"></a>web查看</h5><ul>
+<li><p>打开界面<br><img src="./img/jenkins-01.png" alt="devops-1.png" style="width:800px;"></p>
+</li>
+<li><p>查看管理员密码 并输入</p>
+</li>
+</ul>
+<p>[root@docker-8 ~]# cat /var/lib/jenkins/secrets/initialAdminPassword</p>
+<p>902314cc55244fd39709257cde691fe6</p>
+<ul>
+<li>选择推荐安装插件<br><img src="./img/jenkins-02.png" alt="devops-1.png" style="width:800px;"></li>
+<li>创建用户账号<br><img src="./img/jenkins-03.png" alt="devops-1.png" style="width:800px;"></li>
+<li>最后一步设置访问端口<br><img src="./img/jenkins-04.png" alt="devops-1.png" style="width:800px;"></li>
+</ul>
+<h5 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h5><ul>
+<li>手工安装插件<pre><code>*  http://updates.jenkins-ci.org/download/plugins/
+*  进入：系统管理 / 管理插件 / 高级，然后上传插件进行安装。
+</code></pre></li>
+<li>界面自动安装<pre><code>*  进入：系统管理 / 管理插件 / 可选插件 
+*  查找并勾选所需插件，点击“直接安装”；
+</code></pre></li>
+</ul>
 
       
 
@@ -295,7 +215,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">ansible</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">jenkins</a>
         		</li>
       		
 		</ul>
@@ -316,7 +236,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-03/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-01/">展开全文 >></a>
         </p>
       
 
@@ -400,12 +320,12 @@
 </tr>
 </tbody>
 </table>
-<h3 id="etc-hosts追加内容"><a href="#etc-hosts追加内容" class="headerlink" title="/etc/hosts追加内容"></a>/etc/hosts追加内容</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.69</span> <span class="selector-tag">deploy</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.74</span> <span class="selector-tag">kmaster</span> </div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.71</span> <span class="selector-tag">knode01</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.68</span> <span class="selector-tag">knode02</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.70</span> <span class="selector-tag">knode03</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">knode04</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.73</span> <span class="selector-tag">knode05</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.70</span> <span class="selector-tag">etcd01</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">etcd02</span></div><div class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">etcd03</span></div></pre></td></tr></table></figure>
-<h3 id="配置ssh密钥登陆"><a href="#配置ssh密钥登陆" class="headerlink" title="配置ssh密钥登陆"></a>配置ssh密钥登陆</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -q -t rsa -b <span class="number">2048</span> -f ~/.ssh/id_rsa -C <span class="string">''</span> -N <span class="string">''</span></div><div class="line"></div><div class="line"><span class="comment">#$IP为本虚机地址，按照提示输入yes 和root密码</span></div><div class="line"></div><div class="line">ssh-<span class="keyword">copy</span><span class="bash">-id 172.16.153.70</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.71</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.72</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.73</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.74</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.75</span></div><div class="line"><span class="bash"></span></div><div class="line"><span class="bash">ssh-copy-id 172.16.153.76</span></div></pre></td></tr></table></figure>
-<h3 id="安装Ansible"><a href="#安装Ansible" class="headerlink" title="安装Ansible"></a>安装Ansible</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum -y <span class="keyword">install</span> epel-<span class="keyword">release</span></div><div class="line">yum <span class="keyword">install</span> ansible</div></pre></td></tr></table></figure>
-<h5 id="打开host-key-checking-vim-etc-ansible-ansible-cfg"><a href="#打开host-key-checking-vim-etc-ansible-ansible-cfg" class="headerlink" title="打开host_key_checking vim /etc/ansible/ansible.cfg"></a>打开host_key_checking vim /etc/ansible/ansible.cfg</h5><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">host_key_checking</span> = <span class="literal">False</span></div></pre></td></tr></table></figure>
-<h5 id="配置ansible的hosts文件-vim-etc-ansible-hosts"><a href="#配置ansible的hosts文件-vim-etc-ansible-hosts" class="headerlink" title="配置ansible的hosts文件 vim /etc/ansible/hosts"></a>配置ansible的hosts文件 vim /etc/ansible/hosts</h5><figure class="highlight gcode"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[all]</div><div class="line">kmaster </div><div class="line">k<span class="symbol">node01</span></div><div class="line">k<span class="symbol">node02</span></div><div class="line">k<span class="symbol">node03</span></div><div class="line">k<span class="symbol">node04</span></div><div class="line">k<span class="symbol">node05</span></div></pre></td></tr></table></figure>
-<h5 id="执行-ansible-m-ping-all"><a href="#执行-ansible-m-ping-all" class="headerlink" title="执行 ansible -m ping all"></a>执行 ansible -m ping all</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">knode05 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode04 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode01 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode02 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> kmaster | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> knode03 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </div><div class="line"></div><div class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></div><div class="line"></div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<h3 id="etc-hosts追加内容"><a href="#etc-hosts追加内容" class="headerlink" title="/etc/hosts追加内容"></a>/etc/hosts追加内容</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.69</span> <span class="selector-tag">deploy</span></span><br><span class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.74</span> <span class="selector-tag">kmaster</span> </span><br><span class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.71</span> <span class="selector-tag">knode01</span></span><br><span class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.68</span> <span class="selector-tag">knode02</span></span><br><span class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.70</span> <span class="selector-tag">knode03</span></span><br><span class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">knode04</span></span><br><span class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.73</span> <span class="selector-tag">knode05</span></span><br><span class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.70</span> <span class="selector-tag">etcd01</span></span><br><span class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">etcd02</span></span><br><span class="line">192<span class="selector-class">.168</span><span class="selector-class">.111</span><span class="selector-class">.72</span> <span class="selector-tag">etcd03</span></span><br></pre></td></tr></table></figure>
+<h3 id="配置ssh密钥登陆"><a href="#配置ssh密钥登陆" class="headerlink" title="配置ssh密钥登陆"></a>配置ssh密钥登陆</h3><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -q -t rsa -b <span class="number">2048</span> -f ~/.ssh/id_rsa -C '' -N ''</span><br><span class="line"></span><br><span class="line">#$IP为本虚机地址，按照提示输入yes 和root密码</span><br><span class="line"></span><br><span class="line">ssh-copy-id <span class="number">172.16</span><span class="number">.153</span><span class="number">.70</span></span><br><span class="line"></span><br><span class="line">ssh-copy-id <span class="number">172.16</span><span class="number">.153</span><span class="number">.71</span></span><br><span class="line"></span><br><span class="line">ssh-copy-id <span class="number">172.16</span><span class="number">.153</span><span class="number">.72</span></span><br><span class="line"></span><br><span class="line">ssh-copy-id <span class="number">172.16</span><span class="number">.153</span><span class="number">.73</span></span><br><span class="line"></span><br><span class="line">ssh-copy-id <span class="number">172.16</span><span class="number">.153</span><span class="number">.74</span></span><br><span class="line"></span><br><span class="line">ssh-copy-id <span class="number">172.16</span><span class="number">.153</span><span class="number">.75</span></span><br><span class="line"></span><br><span class="line">ssh-copy-id <span class="number">172.16</span><span class="number">.153</span><span class="number">.76</span></span><br></pre></td></tr></table></figure>
+<h3 id="安装Ansible"><a href="#安装Ansible" class="headerlink" title="安装Ansible"></a>安装Ansible</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum -y <span class="keyword">install</span> epel-<span class="keyword">release</span></span><br><span class="line">yum <span class="keyword">install</span> ansible</span><br></pre></td></tr></table></figure>
+<h5 id="打开host-key-checking-vim-etc-ansible-ansible-cfg"><a href="#打开host-key-checking-vim-etc-ansible-ansible-cfg" class="headerlink" title="打开host_key_checking vim /etc/ansible/ansible.cfg"></a>打开host_key_checking vim /etc/ansible/ansible.cfg</h5><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">host_key_checking</span> = <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<h5 id="配置ansible的hosts文件-vim-etc-ansible-hosts"><a href="#配置ansible的hosts文件-vim-etc-ansible-hosts" class="headerlink" title="配置ansible的hosts文件 vim /etc/ansible/hosts"></a>配置ansible的hosts文件 vim /etc/ansible/hosts</h5><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[all]</span><br><span class="line">kmaster </span><br><span class="line">k<span class="symbol">node01</span></span><br><span class="line">k<span class="symbol">node02</span></span><br><span class="line">k<span class="symbol">node03</span></span><br><span class="line">k<span class="symbol">node04</span></span><br><span class="line">k<span class="symbol">node05</span></span><br></pre></td></tr></table></figure>
+<h5 id="执行-ansible-m-ping-all"><a href="#执行-ansible-m-ping-all" class="headerlink" title="执行 ansible -m ping all"></a>执行 ansible -m ping all</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">knode05 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>, </span><br><span class="line"></span><br><span class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></span><br><span class="line"></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> knode04 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </span><br><span class="line"></span><br><span class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></span><br><span class="line"></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> knode01 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </span><br><span class="line"></span><br><span class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></span><br><span class="line"></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> knode02 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </span><br><span class="line"></span><br><span class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></span><br><span class="line"></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> kmaster | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </span><br><span class="line"></span><br><span class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></span><br><span class="line"></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> knode03 | <span class="function"><span class="params">SUCCESS</span> =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">     <span class="string">"changed"</span>: <span class="literal">false</span>, </span><br><span class="line"></span><br><span class="line">     <span class="string">"ping"</span>: <span class="string">"pong"</span></span><br><span class="line"></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <h5 id="利用ansible初始化各个K8S的节点服务器环境"><a href="#利用ansible初始化各个K8S的节点服务器环境" class="headerlink" title="利用ansible初始化各个K8S的节点服务器环境"></a>利用ansible初始化各个K8S的节点服务器环境</h5><pre><code> # 安装yum源
  ansible -m shell -a &apos;yum -y install epel-release&apos; all 
 
@@ -535,6 +455,183 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-01/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2018-10-10-k8s-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/10/2018-10-10-k8s-03/">利用ansible安装k8s集群</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/10/2018-10-10-k8s-03/" class="archive-article-date">
+  	<time datetime="2018-10-10T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="服务器列表"><a href="#服务器列表" class="headerlink" title="服务器列表"></a>服务器列表</h3><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>内网IP</th>
+<th>外网IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deploy</td>
+<td>192.168.111.69</td>
+<td>172.16.153.70</td>
+</tr>
+<tr>
+<td>kmaster</td>
+<td>192.168.111.74</td>
+<td>172.16.153.71</td>
+</tr>
+<tr>
+<td>knode01</td>
+<td>192.168.111.71</td>
+<td>172.16.153.72</td>
+</tr>
+<tr>
+<td>knode02</td>
+<td>192.168.111.68</td>
+<td>172.16.153.73</td>
+</tr>
+<tr>
+<td>knode03</td>
+<td>192.168.111.70</td>
+<td>172.16.153.74</td>
+</tr>
+<tr>
+<td>knode04</td>
+<td>192.168.111.72</td>
+<td>172.16.153.75</td>
+</tr>
+<tr>
+<td>knode05</td>
+<td>192.168.111.73</td>
+<td>172.16.153.76</td>
+</tr>
+</tbody>
+</table>
+<h3 id="etc-hosts追加内容"><a href="#etc-hosts追加内容" class="headerlink" title="/etc/hosts追加内容"></a>/etc/hosts追加内容</h3><table>
+<thead>
+<tr>
+<th>内网IP</th>
+<th>别名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.111.69</td>
+<td>deploy</td>
+</tr>
+<tr>
+<td>192.168.111.74</td>
+<td>kmaster </td>
+</tr>
+<tr>
+<td>192.168.111.71</td>
+<td>knode01</td>
+</tr>
+<tr>
+<td>192.168.111.68</td>
+<td>knode02</td>
+</tr>
+<tr>
+<td>192.168.111.70</td>
+<td>knode03</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>knode04</td>
+</tr>
+<tr>
+<td>192.168.111.73</td>
+<td>knode05</td>
+</tr>
+<tr>
+<td>192.168.111.70</td>
+<td>etcd01</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>etcd02</td>
+</tr>
+<tr>
+<td>192.168.111.72</td>
+<td>etcd03</td>
+</tr>
+</tbody>
+</table>
+<p>##获取 kubeasz<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git clone <span class="string">https:</span><span class="comment">//github.com/gjmzj/kubeasz.git</span></span><br><span class="line"></span><br><span class="line">cd kubeasz/</span><br><span class="line"></span><br><span class="line">git checkout v1102-r1</span><br><span class="line"></span><br><span class="line">mkdir -p <span class="regexp">/etc/</span>ansible</span><br><span class="line">mv * <span class="regexp">/etc/</span>ansible</span><br></pre></td></tr></table></figure></p>
+<p>##获取安装依赖的二进制包</p>
+<p>国内请从分享的百度云链接下载 <a href="https://pan.baidu.com/s/1c4RFaA" target="_blank" rel="noopener">https://pan.baidu.com/s/1c4RFaA</a></p>
+<p>下载已打包好的binaries，解压到/etc/ansible/bin目录</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar zxvf k8s.<span class="number">1102</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span></span><br><span class="line">mkdir -<span class="selector-tag">p</span> /etc/ansible</span><br><span class="line">mv -f bin<span class="comment">/* /etc/ansible/bin</span></span><br></pre></td></tr></table></figure>
+<h2 id="配置ansible的hosts文件"><a href="#配置ansible的hosts文件" class="headerlink" title="配置ansible的hosts文件"></a>配置ansible的hosts文件</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/ansible</span><br><span class="line"></span><br><span class="line">cp example/hosts<span class="selector-class">.s-master</span><span class="selector-class">.example</span> hosts</span><br></pre></td></tr></table></figure>
+<h2 id="hosts文件具体内容-all是测试时用的"><a href="#hosts文件具体内容-all是测试时用的" class="headerlink" title="hosts文件具体内容  all是测试时用的"></a>hosts文件具体内容  all是测试时用的</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br></pre></td><td class="code"><pre><span class="line">[all]</span><br><span class="line"></span><br><span class="line">kmaster </span><br><span class="line"></span><br><span class="line">knode01</span><br><span class="line"></span><br><span class="line">knode02</span><br><span class="line"></span><br><span class="line">knode03</span><br><span class="line"></span><br><span class="line">knode04</span><br><span class="line"></span><br><span class="line">knode05</span><br><span class="line"></span><br><span class="line">[deploy]</span><br><span class="line"></span><br><span class="line">deploy</span><br><span class="line"></span><br><span class="line"><span class="comment"># etcd集群请提供如下NODE_NAME、NODE_IP变量,请注意etcd集群必须是1,3,5,7...奇数个节点</span></span><br><span class="line"></span><br><span class="line">[etcd]</span><br><span class="line"></span><br><span class="line">192.168.111.70 <span class="attribute">NODE_NAME</span>=etcd1 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.70"</span></span><br><span class="line"></span><br><span class="line">192.168.111.72 <span class="attribute">NODE_NAME</span>=etcd2 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.72"</span></span><br><span class="line"></span><br><span class="line">192.168.111.73 <span class="attribute">NODE_NAME</span>=etcd3 <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.73"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[kube-master]</span><br><span class="line"></span><br><span class="line">192.168.111.74 <span class="attribute">NODE_NAME</span>=kmaster <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.74"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[kube-node]</span><br><span class="line"></span><br><span class="line">192.168.111.71  <span class="attribute">NODE_NAME</span>=knode01  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.71"</span></span><br><span class="line"></span><br><span class="line">192.168.111.68  <span class="attribute">NODE_NAME</span>=knode02  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.68"</span></span><br><span class="line"></span><br><span class="line">192.168.111.70  <span class="attribute">NODE_NAME</span>=knode03  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.70"</span></span><br><span class="line"></span><br><span class="line">192.168.111.72  <span class="attribute">NODE_NAME</span>=knode04  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.72"</span></span><br><span class="line"></span><br><span class="line">192.168.111.73  <span class="attribute">NODE_NAME</span>=knode05  <span class="attribute">NODE_IP</span>=<span class="string">"192.168.111.73"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果启用harbor，请配置后面harbor相关参数</span></span><br><span class="line"></span><br><span class="line">[harbor]</span><br><span class="line"></span><br><span class="line"><span class="comment">#192.168.111.8 NODE_IP="192.168.111.8"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 预留组，后续添加node节点使用</span></span><br><span class="line"></span><br><span class="line">[new-node]</span><br><span class="line"></span><br><span class="line"><span class="comment">#192.168.111.xx NODE_IP="192.168.111.xx"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[all:vars]</span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------集群主要参数---------------</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#集群部署模式：allinone, single-master, multi-master</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">DEPLOY_MODE</span>=single-master</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#集群 MASTER IP</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">MASTER_IP</span>=<span class="string">"kmaster"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#集群 APISERVER</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">KUBE_APISERVER</span>=<span class="string">"https://kmaster:6443"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#TLS Bootstrapping 使用的 Token，使用 head -c 16 /dev/urandom | od -An -t x | tr -d ' ' 生成</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">BOOTSTRAP_TOKEN</span>=<span class="string">"d18f94b5fa585c7123f56803d925d2e7"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群网络插件，目前支持calico和flannel</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">CLUSTER_NETWORK</span>=<span class="string">"calico"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 部分calico相关配置，更全配置可以去roles/calico/templates/calico.yaml.j2自定义</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置 CALICO_IPV4POOL_IPIP=“off”,可以提高网络性能，条件限制详见 05.安装calico网络组件.md</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">CALICO_IPV4POOL_IPIP</span>=<span class="string">"always"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置 calico-node使用的host IP，bgp邻居通过该地址建立，可手动指定端口"interface=eth0"或使用如下自动发现</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># IP_AUTODETECTION_METHOD="can-reach=223.5.5.5"</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">IP_AUTODETECTION_METHOD</span>=<span class="string">"interface=eth0"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 部分flannel配置，详见roles/flannel/templates/kube-flannel.yaml.j2</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">FLANNEL_BACKEND</span>=<span class="string">"vxlan"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务网段 (Service CIDR），部署前路由不可达，部署后集群内使用 IP:Port 可达</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">SERVICE_CIDR</span>=<span class="string">"10.68.0.0/16"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># POD 网段 (Cluster CIDR），部署前路由不可达，**部署后**路由可达</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">CLUSTER_CIDR</span>=<span class="string">"172.20.0.0/16"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务端口范围 (NodePort Range)</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">NODE_PORT_RANGE</span>=<span class="string">"20000-40000"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># kubernetes 服务 IP (预分配，一般是 SERVICE_CIDR 中第一个IP)</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">CLUSTER_KUBERNETES_SVC_IP</span>=<span class="string">"10.68.0.1"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群 DNS 服务 IP (从 SERVICE_CIDR 中预分配)</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">CLUSTER_DNS_SVC_IP</span>=<span class="string">"10.68.0.2"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群 DNS 域名</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">CLUSTER_DNS_DOMAIN</span>=<span class="string">"cluster.local."</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># etcd 集群间通信的IP和端口, **根据实际 etcd 集群成员设置**</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">ETCD_NODES</span>=<span class="string">"etcd1=https://192.168.111.70:2380,etcd2=https://192.168.111.72:2380,etcd3=https://192.168.111.73:2380"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># etcd 集群服务地址列表, **根据实际 etcd 集群成员设置**</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">ETCD_ENDPOINTS</span>=<span class="string">"https://192.168.111.70:2379,https://192.168.111.72:2379,https://192.168.111.73:2379"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群basic auth 使用的用户名和密码</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">BASIC_AUTH_USER</span>=<span class="string">"admin"</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">BASIC_AUTH_PASS</span>=<span class="string">"test1234"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------附加参数--------------------</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#默认二进制文件目录</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">bin_dir</span>=<span class="string">"/opt/kube/bin"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#证书目录</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">ca_dir</span>=<span class="string">"/etc/kubernetes/ssl"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#部署目录，即 ansible 工作目录</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">base_dir</span>=<span class="string">"/etc/ansible"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#私有仓库 harbor服务器 (域名或者IP)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#HARBOR_IP="192.168.111.8"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#HARBOR_DOMAIN="harbor.yourdomain.com"</span></span><br></pre></td></tr></table></figure>
+<h3 id="分步安装"><a href="#分步安装" class="headerlink" title="分步安装"></a>分步安装</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook <span class="number">01</span><span class="selector-class">.prepare</span><span class="selector-class">.yml</span></span><br><span class="line">ansible-playbook <span class="number">02</span><span class="selector-class">.etcd</span><span class="selector-class">.yml</span></span><br><span class="line">ansible-playbook <span class="number">03</span><span class="selector-class">.docker</span><span class="selector-class">.yml</span></span><br><span class="line">ansible-playbook <span class="number">04</span><span class="selector-class">.kube-master</span><span class="selector-class">.yml</span></span><br><span class="line">ansible-playbook <span class="number">05</span><span class="selector-class">.kube-node</span><span class="selector-class">.yml</span></span><br><span class="line">ansible-playbook <span class="number">06</span><span class="selector-class">.network</span><span class="selector-class">.yml</span></span><br></pre></td></tr></table></figure>
+<h3 id="检查安装结果"><a href="#检查安装结果" class="headerlink" title="检查安装结果"></a>检查安装结果</h3><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[root@host<span class="number">-192</span><span class="number">-168</span><span class="number">-111</span><span class="number">-74</span> ~]# kubectl get nodes</span><br><span class="line">NAME             STATUS                     ROLES     AGE       VERSION</span><br><span class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.68</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.70</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.71</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.72</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.73</span>   Ready                      &lt;none&gt;    <span class="number">2</span>m        v1<span class="number">.10</span><span class="number">.2</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.111</span><span class="number">.74</span>   Ready,SchedulingDisabled   &lt;none&gt;    <span class="number">4</span>m        v1<span class="number">.10</span><span class="number">.2</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@host<span class="number">-192</span><span class="number">-168</span><span class="number">-111</span><span class="number">-74</span> ~]# kubectl get ns</span><br><span class="line">NAME          STATUS    AGE</span><br><span class="line"><span class="section">default</span>       Active    <span class="number">6</span>m</span><br><span class="line">kube-public   Active    <span class="number">6</span>m</span><br><span class="line">kube-system   Active    <span class="number">6</span>m</span><br><span class="line"></span><br><span class="line">[root@host<span class="number">-192</span><span class="number">-168</span><span class="number">-111</span><span class="number">-74</span> ~]# kubectl get pods -n kube-system         </span><br><span class="line">NAME                    READY     STATUS    RESTARTS   AGE</span><br><span class="line">kube-flannel-ds<span class="number">-5</span>bg7k   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</span><br><span class="line">kube-flannel-ds<span class="number">-5</span>zvb6   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</span><br><span class="line">kube-flannel-ds-dwpnc   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</span><br><span class="line">kube-flannel-ds-jnhj4   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</span><br><span class="line">kube-flannel-ds-rs7cp   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</span><br><span class="line">kube-flannel-ds-xrjnd   <span class="number">1</span>/<span class="number">1</span>       Running   <span class="number">0</span>          <span class="number">2</span>m</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">ansible</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-03/">展开全文 >></a>
         </p>
       
 
@@ -779,7 +876,7 @@ source ~/.bash_profile
 </code></pre><p>参考：</p>
 <blockquote>
 <blockquote>
-<p><a href="https://jiasule.v2ex.com/t/351264" target="_blank" rel="external">https://jiasule.v2ex.com/t/351264</a><br><a href="https://www.cnblogs.com/fnng/p/7683427.html" target="_blank" rel="external">https://www.cnblogs.com/fnng/p/7683427.html</a><br><a href="http://blog.csdn.net/weixin_38208401/article/details/78627597" target="_blank" rel="external">http://blog.csdn.net/weixin_38208401/article/details/78627597</a><br><a href="http://blog.csdn.net/weixin_38208401/article/details/78629920" target="_blank" rel="external">http://blog.csdn.net/weixin_38208401/article/details/78629920</a></p>
+<p><a href="https://jiasule.v2ex.com/t/351264" target="_blank" rel="noopener">https://jiasule.v2ex.com/t/351264</a><br><a href="https://www.cnblogs.com/fnng/p/7683427.html" target="_blank" rel="noopener">https://www.cnblogs.com/fnng/p/7683427.html</a><br><a href="http://blog.csdn.net/weixin_38208401/article/details/78627597" target="_blank" rel="noopener">http://blog.csdn.net/weixin_38208401/article/details/78627597</a><br><a href="http://blog.csdn.net/weixin_38208401/article/details/78629920" target="_blank" rel="noopener">http://blog.csdn.net/weixin_38208401/article/details/78629920</a></p>
 </blockquote>
 </blockquote>
 
@@ -854,17 +951,17 @@ source ~/.bash_profile
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="1"><a href="#1" class="headerlink" title="1."></a>1.</h3><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  iso hdiutil convert -format UDRW -o CentOS<span class="number">-7</span>-x86_64-Minimal.iso CentOS<span class="number">-7</span>-x86_64-Minimal<span class="number">-1503.</span>iso</div><div class="line"></div><div class="line">正在读取Master Boot Record（MBR：<span class="number">0</span>）…</div><div class="line">正在读取CentOS <span class="number">7</span> x86_64                 （Apple_ISO：<span class="number">1</span>）…</div><div class="line">正在读取（Type EF：<span class="number">2</span>）…</div><div class="line">.</div><div class="line">正在读取CentOS <span class="number">7</span> x86_64                 （Apple_ISO：<span class="number">3</span>）…</div><div class="line">...................................................................................................................................</div><div class="line">已耗时： <span class="number">3.237</span>s</div><div class="line">速度：<span class="number">174.2</span>M 字节/秒</div><div class="line">节省：<span class="number">0.0</span>%</div><div class="line">created: /data/tool/iso/CentOS<span class="number">-7</span>-x86_64-Minimal.iso.dmg</div></pre></td></tr></table></figure>
-<h3 id="2"><a href="#2" class="headerlink" title="2."></a>2.</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">➜  iso diskutil list</div><div class="line">/dev/disk0 (internal, physical):</div><div class="line">   #:                      <span class="built_in"> TYPE </span>NAME                    SIZE       IDENTIFIER</div><div class="line">   0:      GUID_partition_scheme                        <span class="number">*121</span>.3 GB   disk0</div><div class="line">   1:                        EFI EFI                     209.7 MB   disk0s1</div><div class="line">   2:          Apple_CoreStorage Macintosh HD            120.5 GB   disk0s2</div><div class="line">   3:                 Apple_Boot Recovery HD             650.0 MB   disk0s3</div><div class="line">/dev/disk1 (internal, virtual):</div><div class="line">   #:                      <span class="built_in"> TYPE </span>NAME                    SIZE       IDENTIFIER</div><div class="line">   0:                  Apple_HFS Macintosh HD           +120.1 GB   disk1</div><div class="line">                                 Logical Volume on disk0s2</div><div class="line">                                 CD6B5894-7339-4A3F-B2BA-46C8784AB504</div><div class="line">                                 Unencrypted</div><div class="line">/dev/disk2 (external, physical):</div><div class="line">   #:                      <span class="built_in"> TYPE </span>NAME                    SIZE       IDENTIFIER</div><div class="line">   0:     FDisk_partition_scheme                        <span class="number">*8</span>.2 GB     disk2</div><div class="line">   1:                 DOS_FAT_32 DREAM                   8.2 GB     disk2s1</div></pre></td></tr></table></figure>
-<h3 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜  iso sudo dd <span class="attribute">if</span>=CentOS-7-x86_64-Minimal.iso.dmg <span class="attribute">of</span>=/dev/disk2 <span class="attribute">bs</span>=1m</div><div class="line">Password:</div><div class="line">dd: /dev/disk2:<span class="built_in"> Resource </span>busy</div><div class="line">➜  iso diskutil unmountDisk /dev/disk2</div><div class="line">Unmount of all volumes on disk2 was successful</div></pre></td></tr></table></figure>
-<h3 id="4"><a href="#4" class="headerlink" title="4."></a>4.</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  iso sudo dd <span class="attribute">if</span>=CentOS-7-x86_64-Minimal.iso.dmg <span class="attribute">of</span>=/dev/disk2 <span class="attribute">bs</span>=1m</div></pre></td></tr></table></figure>
+        <h3 id="1"><a href="#1" class="headerlink" title="1."></a>1.</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">➜  iso hdiutil convert -format UDRW -o CentOS-7-x86_64-Minimal.iso CentOS-7-x86_64-Minimal-1503.iso</span><br><span class="line"></span><br><span class="line">正在读取Master Boot Record（MBR：0）…</span><br><span class="line">正在读取CentOS 7 x86_64                 （Apple_ISO：1）…</span><br><span class="line">正在读取（Type EF：2）…</span><br><span class="line">.</span><br><span class="line">正在读取CentOS 7 x86_64                 （Apple_ISO：3）…</span><br><span class="line"><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span>.</span><br><span class="line">已耗时： 3.237s</span><br><span class="line">速度：174.2M 字节/秒</span><br><span class="line">节省：0.0%</span><br><span class="line">created: /data/tool/iso/CentOS-7-x86_64-Minimal.iso.dmg</span><br></pre></td></tr></table></figure>
+<h3 id="2"><a href="#2" class="headerlink" title="2."></a>2.</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">➜  iso diskutil list</span><br><span class="line">/dev/disk0 (internal, physical):</span><br><span class="line">   #:                      <span class="built_in"> TYPE </span>NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:      GUID_partition_scheme                        <span class="number">*121</span>.3 GB   disk0</span><br><span class="line">   1:                        EFI EFI                     209.7 MB   disk0s1</span><br><span class="line">   2:          Apple_CoreStorage Macintosh HD            120.5 GB   disk0s2</span><br><span class="line">   3:                 Apple_Boot Recovery HD             650.0 MB   disk0s3</span><br><span class="line">/dev/disk1 (internal, virtual):</span><br><span class="line">   #:                      <span class="built_in"> TYPE </span>NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:                  Apple_HFS Macintosh HD           +120.1 GB   disk1</span><br><span class="line">                                 Logical Volume on disk0s2</span><br><span class="line">                                 CD6B5894-7339-4A3F-B2BA-46C8784AB504</span><br><span class="line">                                 Unencrypted</span><br><span class="line">/dev/disk2 (external, physical):</span><br><span class="line">   #:                      <span class="built_in"> TYPE </span>NAME                    SIZE       IDENTIFIER</span><br><span class="line">   0:     FDisk_partition_scheme                        <span class="number">*8</span>.2 GB     disk2</span><br><span class="line">   1:                 DOS_FAT_32 DREAM                   8.2 GB     disk2s1</span><br></pre></td></tr></table></figure>
+<h3 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜  iso sudo dd <span class="attribute">if</span>=CentOS-7-x86_64-Minimal.iso.dmg <span class="attribute">of</span>=/dev/disk2 <span class="attribute">bs</span>=1m</span><br><span class="line">Password:</span><br><span class="line">dd: /dev/disk2:<span class="built_in"> Resource </span>busy</span><br><span class="line">➜  iso diskutil unmountDisk /dev/disk2</span><br><span class="line">Unmount of all volumes on disk2 was successful</span><br></pre></td></tr></table></figure>
+<h3 id="4"><a href="#4" class="headerlink" title="4."></a>4.</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  iso sudo dd <span class="attribute">if</span>=CentOS-7-x86_64-Minimal.iso.dmg <span class="attribute">of</span>=/dev/disk2 <span class="attribute">bs</span>=1m</span><br></pre></td></tr></table></figure>
 <p>U盘会自动退出来，然后不可识别</p>
 <h3 id="5"><a href="#5" class="headerlink" title="5."></a>5.</h3><p>开始时按住option（alt)键，进入UEFI，选择U盘启动。</p>
 <h5 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h5><ul>
 <li>1.设置基础软件仓库错误 </li>
 <li><p>进入安装界面以后，设置安装介质位置提示错误，中文提示是：设置基础软件仓库错误，英文是：error  setting up base repository</p>
 <p>  这个错误找了好久， 才在一个英文网站上面找到了解决办法，根本问题还是安装文件的问题，点进去它有两个选项，大致是安装源来自1. iso文件，2.来自网络，点击iso文件旁边那个验证，马上出错只能重启。</p>
-<p>  解决办法是使用网络安装源， 首先退出，在 第四个网络设置上面设置你的网络连接，使网络连接可用，然后在回到第一个安装源设置里面，在<a href="http://后面输入" target="_blank" rel="external">http://后面输入</a> buildlogs.centos.org/centos/7/os/x86_64-20140614，在后面的proxy（代理设置）里面填入 buildlogs.centos.org:80，点击完成，这个错误就解决了。再设置硬盘分区</p>
+<p>  解决办法是使用网络安装源， 首先退出，在 第四个网络设置上面设置你的网络连接，使网络连接可用，然后在回到第一个安装源设置里面，在http://后面输入 buildlogs.centos.org/centos/7/os/x86_64-20140614，在后面的proxy（代理设置）里面填入 buildlogs.centos.org:80，点击完成，这个错误就解决了。再设置硬盘分区</p>
 </li>
 </ul>
 
@@ -919,110 +1016,6 @@ source ~/.bash_profile
 
 
   
-    <article id="post-2017-11-24-erlang-11" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/21/2017-11-24-erlang-11/">Erlang程序设计(第2版) 读书笔记【第十一章】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/11/21/2017-11-24-erlang-11/" class="archive-article-date">
-  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h3><p>只需要三个新的基本函数：spawn、send和 receive。spawn创建一个并行进程，send向某个进程发送消息，receive则是接收消息</p>
-<p>在Erlang里：</p>
-<ul>
-<li>创建和销毁进程是非常快速的；</li>
-<li>在进程间发送消息是非常快速的；</li>
-<li>进程在所有操作系统上都具有相同的行为方式；</li>
-<li>可以拥有大量进程；</li>
-<li>进程不共享任何内存，是完全独立的；</li>
-<li>进程唯一的交互方式就是消息传递。</li>
-</ul>
-<p>出于这些原因，Erlang有时会被称为是一种纯消息传递式语言</p>
-<h5 id="12-1-基本并发函数"><a href="#12-1-基本并发函数" class="headerlink" title="12.1 基本并发函数"></a>12.1 基本并发函数</h5><ul>
-<li><p>Pid =  spawn(Mod, Func, Args).</p>
-<p>创建一个新的并发进程来执行apply(Mod, Func, Args)。这个新进程和调用进程并列运行。spawn返回一个Pid（process identifier的简称，即进程标识符）。可以用Pid来给此进程发送消息。请注意，元数为length(Args)的Func函数必须从Mod模块导出。当一个新进程被创建后，会使用最新版的代码定义模块。</p>
-</li>
-<li><p>Pid = spawn(Fun).</p>
-<p>创建一个新的并发进程来执行Fun()。这种形式的spawn总是使用被执行fun的当前值，而且这个fun无需从模块里导出。</p>
-</li>
-<li><p>Pid!Message</p>
-<p> 向标识符为Pid的进程发送消息Message。消息发送是异步的。发送方并不等待，而是会继续之前的工作。!被称为发送操作符。</p>
-<p> Pid ! M被定义为M。因此，Pid1 ! Pid2 !…! Msg的意思是把消息Msg发送给Pid1、Pid2等所有进程。</p>
-</li>
-<li><p>receive … end</p>
-<p>接收发送给某个进程的消息。它的语法如下：</p>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">receive</span></div><div class="line">		Pattern1 [<span class="keyword">when</span> Guard1] -&gt;</div><div class="line">			Expressions1;</div><div class="line">		Pattern2 [<span class="keyword">when</span> Guard2] -&gt;</div><div class="line">			Expressions2;</div><div class="line">		......</div><div class="line"><span class="keyword">end</span>.</div></pre></td></tr></table></figure>
-<p> 当某个消息到达进程后，系统会尝试将它与Pattern1（以及可选的关卡Guard1）匹配， 如果成功就执行Expressions1。如果第一个模式不匹配，就会尝试Pattern2，以此类推。如果没有匹配的模式，消息就会被保存起来供以后处理，进程则会开始等待下一条消息。</p>
-</li>
-</ul>
-<h5 id="一个并发程序模板"><a href="#一个并发程序模板" class="headerlink" title="一个并发程序模板"></a>一个并发程序模板</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(ctemplate)</span>.<span class="keyword">-compile</span><span class="params">(export_all)</span>.<span class="function"><span class="title">start</span><span class="params">()</span> -&gt;</span>spawn(?MODULE, loop, []).<span class="function"><span class="title">rpc</span><span class="params">(Pid, Request)</span> -&gt;</span>Pid ! &#123;self(), Request&#125;,<span class="keyword">receive</span>&#123;Pid, Response&#125; -&gt; Response<span class="keyword">end</span>.<span class="function"><span class="title">loop</span><span class="params">(X)</span> -&gt;</span><span class="keyword">receive</span>Any -&gt;io:format(<span class="string">"Received:~p~n"</span>,[Any]), loop(X)<span class="keyword">end</span>.</div></pre></td></tr></table></figure>
-<blockquote>
-<p>这样吧</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/21/2017-11-24-erlang-11/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2017-11-21-erlang-07" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1046,11 +1039,11 @@ source ~/.bash_profile
         <h5 id="8-10-动态代码载入"><a href="#8-10-动态代码载入" class="headerlink" title="8.10    动态代码载入"></a>8.10    动态代码载入</h5><ul>
 <li>b.erl</li>
 </ul>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(b)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([x/<span class="number">0</span>])</span>.</div><div class="line"></div><div class="line"><span class="function"><span class="title">x</span><span class="params">()</span> -&gt;</span> <span class="number">2</span>.</div></pre></td></tr></table></figure>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(b)</span>.</span><br><span class="line"></span><br><span class="line"><span class="keyword">-export</span><span class="params">([x/<span class="number">0</span>])</span>.</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">x</span><span class="params">()</span> -&gt;</span> <span class="number">2</span>.</span><br></pre></td></tr></table></figure>
 <ul>
 <li>a.erl</li>
 </ul>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">-module</span><span class="params">(a)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-compile</span><span class="params">(export_all)</span>.</div><div class="line"></div><div class="line"><span class="keyword">-export</span><span class="params">([])</span>.</div><div class="line"></div><div class="line"><span class="function"><span class="title">start</span><span class="params">(Tag)</span> -&gt;</span></div><div class="line"></div><div class="line">  spawn(<span class="keyword">fun</span>() -&gt; loop(Tag) <span class="keyword">end</span>).</div><div class="line"></div><div class="line"><span class="function"><span class="title">loop</span><span class="params">(Tag)</span> -&gt;</span></div><div class="line"></div><div class="line">  sleep(),</div><div class="line">  Val = b:x(),</div><div class="line">  io:format(<span class="string">"Vsn2 (~p) b:x() = ~p~n"</span>,[Tag, Val]),</div><div class="line">  loop(Tag).</div><div class="line"></div><div class="line"><span class="function"><span class="title">sleep</span><span class="params">()</span> -&gt;</span></div><div class="line"></div><div class="line">  <span class="keyword">receive</span></div><div class="line"></div><div class="line">    <span class="keyword">after</span> <span class="number">3000</span> -&gt; <span class="literal">true</span></div><div class="line">  <span class="keyword">end</span>.</div></pre></td></tr></table></figure>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(a)</span>.</span><br><span class="line"></span><br><span class="line"><span class="keyword">-compile</span><span class="params">(export_all)</span>.</span><br><span class="line"></span><br><span class="line"><span class="keyword">-export</span><span class="params">([])</span>.</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">start</span><span class="params">(Tag)</span> -&gt;</span></span><br><span class="line"></span><br><span class="line">  spawn(<span class="keyword">fun</span>() -&gt; loop(Tag) <span class="keyword">end</span>).</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">loop</span><span class="params">(Tag)</span> -&gt;</span></span><br><span class="line"></span><br><span class="line">  sleep(),</span><br><span class="line">  Val = b:x(),</span><br><span class="line">  io:format(<span class="string">"Vsn2 (~p) b:x() = ~p~n"</span>,[Tag, Val]),</span><br><span class="line">  loop(Tag).</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">sleep</span><span class="params">()</span> -&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">receive</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">after</span> <span class="number">3000</span> -&gt; <span class="literal">true</span></span><br><span class="line">  <span class="keyword">end</span>.</span><br></pre></td></tr></table></figure>
 <ul>
 <li>在任一时刻，Erlang允许一个模块的两个版本同时运行：当前版和旧版。重新编译某个模块时，任何运行旧版代码的进程都会被终止，当前版成为旧版，新编译的版本则成为当前版。可以把这想象成一个带有两个版本代码的移位寄存器。当添加新代码时，最老的版本就被清除了。一些进程可以运行旧版代码，与此同时，另一些则可以运行新版代码</li>
 </ul>
@@ -1126,7 +1119,7 @@ source ~/.bash_profile
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
     </nav>
   
 
@@ -1138,7 +1131,7 @@ source ~/.bash_profile
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2018 醉翁亭
+    		&copy; 2019 醉翁亭
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1247,14 +1240,6 @@ source ~/.bash_profile
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">devops</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">jenkins</a>
               </li>
              
@@ -1263,7 +1248,15 @@ source ~/.bash_profile
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1305,13 +1298,17 @@ source ~/.bash_profile
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">技术管理</a>
               </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             2、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

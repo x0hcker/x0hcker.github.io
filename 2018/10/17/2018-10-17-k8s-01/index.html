@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="//www.zwting.com">
   <title>打一个可以运行Flask的Python镜像2 | 醉翁亭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -15,6 +15,7 @@
 <meta property="og:url" content="//www.zwting.com/2018/10/17/2018-10-17-k8s-01/index.html">
 <meta property="og:site_name" content="醉翁亭">
 <meta property="og:description" content="打一个可以运行Flask的Python镜像2">
+<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2018-10-24T11:15:21.280Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="打一个可以运行Flask的Python镜像2">
@@ -37,7 +38,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -58,7 +59,7 @@
 
 	<nav class="header-menu">
 	
-		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s容器化/">k8s容器化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Appium测试/">Appium测试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP7扩展开发/">PHP7扩展开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/elk/">elk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s容器化/">k8s容器化</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python技术分享/">python技术分享</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/怎么样做团队建设/">怎么样做团队建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/游戏支撑团队如何建立/">游戏支撑团队如何建立</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/集群搭建/">集群搭建</a></li></ul>
 	
 	</nav>
 		<nav class="header-smart-menu">
@@ -177,17 +178,17 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>接上一话题，上次flask已经运行成功，但是连redis没有成功。因为我们根本就没有启动redis相关的内容。</p>
-<h3 id="1-制作redis过程"><a href="#1-制作redis过程" class="headerlink" title="1.制作redis过程"></a>1.制作redis过程</h3><h5 id="1-1-启动一个centos的容器"><a href="#1-1-启动一个centos的容器" class="headerlink" title="1.1 启动一个centos的容器"></a>1.1 启动一个centos的容器</h5><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker <span class="built_in">run</span> -it <span class="number">172.16</span><span class="number">.153</span><span class="number">.70</span>/library/centos7-<span class="built_in">image</span>-base:<span class="number">1.0</span> <span class="string">'/bin/bash'</span></div></pre></td></tr></table></figure>
-<h5 id="1-2-在容器内执行安装指令"><a href="#1-2-在容器内执行安装指令" class="headerlink" title="1.2 在容器内执行安装指令"></a>1.2 在容器内执行安装指令</h5><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span>  yum install -y curl tar make gcc wget gzip</div><div class="line"><span class="number">2</span>   wget  http:<span class="comment">//download.redis.io/releases/redis-2.8.13.tar.gz </span></div><div class="line"><span class="number">3</span>  tar zxvf redis<span class="number">-2.8</span><span class="number">.13</span>.tar.gz </div><div class="line"><span class="number">4</span>  cd redis<span class="number">-2.8</span><span class="number">.13</span></div><div class="line"><span class="number">5</span>  make  &amp;&amp; make install</div><div class="line"><span class="number">6</span>  /usr/local/bin/redis-cli </div><div class="line"><span class="number">7</span>  /usr/local/bin/redis-server</div><div class="line"><span class="number">8</span>  history </div><div class="line">```   </div><div class="line">  </div><div class="line"></div><div class="line">##### <span class="number">1.3</span> 制作Dockerfile</div><div class="line">在上面的指令中选择自己所需要的内容</div></pre></td></tr></table></figure>
+<h3 id="1-制作redis过程"><a href="#1-制作redis过程" class="headerlink" title="1.制作redis过程"></a>1.制作redis过程</h3><h5 id="1-1-启动一个centos的容器"><a href="#1-1-启动一个centos的容器" class="headerlink" title="1.1 启动一个centos的容器"></a>1.1 启动一个centos的容器</h5><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">run</span> -it <span class="number">172.16</span><span class="number">.153</span><span class="number">.70</span>/library/centos7-<span class="built_in">image</span>-base:<span class="number">1.0</span> <span class="string">'/bin/bash'</span></span><br></pre></td></tr></table></figure>
+<h5 id="1-2-在容器内执行安装指令"><a href="#1-2-在容器内执行安装指令" class="headerlink" title="1.2 在容器内执行安装指令"></a>1.2 在容器内执行安装指令</h5><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">1  yum <span class="keyword">install</span> -y curl tar make gcc wget gzip</span><br><span class="line"><span class="number">2</span>   wget  <span class="keyword">http</span>://download.redis.io/releases/redis<span class="number">-2.8</span><span class="number">.13</span>.tar.gz </span><br><span class="line"><span class="number">3</span>  tar zxvf redis<span class="number">-2.8</span><span class="number">.13</span>.tar.gz </span><br><span class="line"><span class="number">4</span>  cd redis<span class="number">-2.8</span><span class="number">.13</span></span><br><span class="line"><span class="number">5</span>  make  &amp;&amp; make <span class="keyword">install</span></span><br><span class="line"><span class="number">6</span>  /usr/<span class="keyword">local</span>/<span class="keyword">bin</span>/redis-cli </span><br><span class="line"><span class="number">7</span>  /usr/<span class="keyword">local</span>/<span class="keyword">bin</span>/redis-<span class="keyword">server</span></span><br><span class="line"><span class="number">8</span>  history </span><br><span class="line"><span class="string">``</span><span class="string">`   </span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">##### 1.3 制作Dockerfile</span></span><br><span class="line"><span class="string">在上面的指令中选择自己所需要的内容</span></span><br></pre></td></tr></table></figure>
 <p>FROM  172.16.153.70/library/centos7-image-base:1.0    </p>
 <p>WORKDIR /redis_work</p>
-<p>RUN yum install -y curl tar make gcc wget gzip &amp;&amp; \<br>    wget  <a href="http://download.redis.io/releases/redis-2.8.13.tar.gz" target="_blank" rel="external">http://download.redis.io/releases/redis-2.8.13.tar.gz</a> &amp;&amp; \<br>    tar zxvf redis-2.8.13.tar.gz &amp;&amp; \<br>    cd redis-2.8.13 &amp;&amp;  make &amp;&amp; make install</p>
+<p>RUN yum install -y curl tar make gcc wget gzip &amp;&amp; \<br>    wget  <a href="http://download.redis.io/releases/redis-2.8.13.tar.gz" target="_blank" rel="noopener">http://download.redis.io/releases/redis-2.8.13.tar.gz</a> &amp;&amp; \<br>    tar zxvf redis-2.8.13.tar.gz &amp;&amp; \<br>    cd redis-2.8.13 &amp;&amp;  make &amp;&amp; make install</p>
 <p>RUN rm -rf redis-2.8.13.tar.gz &amp;&amp; \<br>    rm -rf redis-2.8.13</p>
 <p>EXPOSE 6379</p>
-<p>#这里有坑见 <a href="https://docs.docker.com/engine/reference/builder/#cmd" target="_blank" rel="external">https://docs.docker.com/engine/reference/builder/#cmd</a> 必须是双引号 。。<br>CMD [“/usr/local/bin/redis-server”]</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">### 打镜像</div></pre></td></tr></table></figure>
-<p> /opt/kube/bin/docker build -t redis<br> /opt/kube/bin/docker login -u admin -p  Harbor12345 172.16.153.70<br> /opt/kube/bin/docker tag redis:latest  172.16.153.70/library/redis:1.0<br> /opt/kube/bin/docker push  172.16.153.70/library/redis:1.0<br>```</p>
-<h3 id="这个文章主要是演示快速制作Dockerfile的-录了一个视频。"><a href="#这个文章主要是演示快速制作Dockerfile的-录了一个视频。" class="headerlink" title="这个文章主要是演示快速制作Dockerfile的,录了一个视频。"></a>这个文章主要是演示快速制作Dockerfile的,录了一个视频。</h3><p><a href="http://ftp.youle.game/mac/技术/运维/moive/怎么快速的写dockerfile.mov" target="_blank" rel="external">怎么快速的写dockerfile</a></p>
+<p>#这里有坑见 <a href="https://docs.docker.com/engine/reference/builder/#cmd" target="_blank" rel="noopener">https://docs.docker.com/engine/reference/builder/#cmd</a> 必须是双引号 。。<br>CMD [“/usr/local/bin/redis-server”]</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">### 打镜像</span><br></pre></td></tr></table></figure>
+<p> /opt/kube/bin/docker build -t redis<br> /opt/kube/bin/docker login -u admin -p  Harbor12345 172.16.153.70<br> /opt/kube/bin/docker tag redis:latest  172.16.153.70/library/redis:1.0<br> /opt/kube/bin/docker push  172.16.153.70/library/redis:1.0<br><code>`</code></p>
+<h3 id="这个文章主要是演示快速制作Dockerfile的-录了一个视频。"><a href="#这个文章主要是演示快速制作Dockerfile的-录了一个视频。" class="headerlink" title="这个文章主要是演示快速制作Dockerfile的,录了一个视频。"></a>这个文章主要是演示快速制作Dockerfile的,录了一个视频。</h3><p><a href="http://ftp.youle.game/mac/技术/运维/moive/怎么快速的写dockerfile.mov" target="_blank" rel="noopener">怎么快速的写dockerfile</a></p>
 
       
 
@@ -308,11 +309,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/10/24/2018-10-24-k8s-01/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/10/24/2018-10-24-k8s-03/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          CEPH(mimic版本)安装文档
+          客户端挂载 ceph 文件系统
         
       </div>
     </a>
@@ -351,7 +352,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2018 醉翁亭
+    		&copy; 2019 醉翁亭
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -460,14 +461,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">devops</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">jenkins</a>
               </li>
              
@@ -476,7 +469,15 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -518,13 +519,17 @@
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">技术管理</a>
               </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             2、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:
