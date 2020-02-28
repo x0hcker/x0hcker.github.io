@@ -337,110 +337,6 @@
 
 
   
-    <article id="post-2018-10-11-k8s-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/11/2018-10-11-k8s-03/">CentOS7安装Harbor</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/11/2018-10-11-k8s-03/" class="archive-article-date">
-  	<time datetime="2018-10-11T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="harbor"><a href="#harbor" class="headerlink" title="harbor"></a>harbor</h2><p>Habor是由VMWare中国团队开源的容器镜像仓库。事实上，Habor是在Docker Registry上进行了相应的企业级扩展，从而获得了更加广泛的应用，这些新的企业级特性包括：管理用户界面，基于角色的访问控制 ，水平扩展，同步，AD/LDAP集成以及审计日志等。本文档仅说明部署单个基础harbor服务的步骤。</p>
-<h3 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h3><ol>
-<li><p>在deploy节点下载最新的 <a href="https://github.com/docker/compose/releases" target="_blank" rel="noopener">docker-compose</a> 二进制文件，改名后把它放到项目 <code>/etc/ansible/bin</code>目录下</p>
- <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https:<span class="regexp">//gi</span>thub.com<span class="regexp">/docker/</span>compose<span class="regexp">/releases/</span>download<span class="regexp">/1.18.0/</span>docker-compose-Linux-x86_64</span><br><span class="line">mv docker-compose-Linux-x86_64 <span class="regexp">/etc/</span>ansible<span class="regexp">/bin/</span>	docker-compose</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在deploy节点下载最新的 <a href="https://github.com/vmware/harbor/releases" target="_blank" rel="noopener">harbor</a> 离线安装包，把它放到项目 <code>/etc/ansible/down</code> 目录下</p>
-</li>
-<li><p>由于ansible解压的一些问题，需要将官方的tgz包，重新打包为zip包</p>
-</li>
-<li><p>在deploy节点编辑/etc/ansible/hosts文件</p>
- <figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 参数 NEW_INSTALL=(<span class="keyword">yes</span>/<span class="keyword">no</span>)：<span class="keyword">yes</span>表示新建 harbor，并配置k8s节点的docker可以使用harbor仓库</span><br><span class="line"># <span class="keyword">no</span> 表示仅配置k8s节点的docker使用已有的harbor仓库</span><br><span class="line">[harbor]</span><br><span class="line"><span class="number">172.16</span><span class="number">.153</span><span class="number">.70</span> HARBOR_DOMAIN=<span class="string">"172.16.153.70"</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在deploy节点执行 </p>
-</li>
-</ol>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook /etc/ansible/<span class="number">11.</span>harbor.yml</span><br><span class="line"></span><br><span class="line"><span class="number">1.</span> 下载docker-compose可执行文件到$PATH目录</span><br><span class="line"><span class="number">2.</span> 自注册变量result判断是否已经安装harbor，避免重复安装问题</span><br><span class="line"><span class="number">3.</span> 解压harbor离线安装包到指定目录</span><br><span class="line"><span class="number">4.</span> 导入harbor所需 docker images</span><br><span class="line"><span class="number">5.</span> 创建harbor证书和私钥(复用集群的CA证书)</span><br><span class="line"><span class="number">6.</span> 修改harbor.cfg配置文件</span><br><span class="line"><span class="number">7.</span> 启动harbor安装脚本</span><br></pre></td></tr></table></figure>
-<h3 id="验证harbor"><a href="#验证harbor" class="headerlink" title="验证harbor"></a>验证harbor</h3><ol>
-<li>在harbor节点使用<code>docker ps -a</code> 查看harbor容器组件运行情况</li>
-<li>浏览器访问harbor节点的IP地址 <code>https://$NodeIP</code>，使用账号 admin 和 密码 Harbor12345 (harbor.cfg 配置文件中的默认)登陆系统</li>
-</ol>
-<h3 id="管理harbor"><a href="#管理harbor" class="headerlink" title="管理harbor"></a>管理harbor</h3><ul>
-<li>日志目录 <code>/var/log/harbor</code></li>
-<li>数据目录 <code>/data</code> ，其中最主要是 <code>/data/database</code> 和 <code>/data/registry</code> 目录，如果你要彻底重新安装harbor，删除这两个目录即可</li>
-</ul>
-<p>先进入harbor安装目录 <code>cd /data/harbor</code>，常规操作如下：</p>
-<ol>
-<li>暂停harbor <code>docker-compose stop</code> : docker容器stop，并不删除容器</li>
-<li>恢复harbor <code>docker-compose start</code> : 恢复docker容器运行</li>
-<li>停止harbor <code>docker-compose down -v</code> : 停止并删除docker容器</li>
-<li>启动harbor <code>docker-compose up -d</code> : 启动所有docker容器</li>
-</ol>
-<p>修改harbor的运行配置，需要如下步骤：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 停止 harbor</span></span><br><span class="line"> docker-compose down -v</span><br><span class="line"><span class="comment"># 修改配置</span></span><br><span class="line"> vim harbor.cfg</span><br><span class="line"><span class="comment"># 执行./prepare已更新配置到docker-compose.yml文件</span></span><br><span class="line"> ./prepare</span><br><span class="line"><span class="comment"># 启动 harbor</span></span><br><span class="line"> docker-compose up -d</span><br></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">harbor</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-03/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2018-10-11-k8s-04" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -557,6 +453,110 @@
 
 
   
+    <article id="post-2018-10-11-k8s-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/11/2018-10-11-k8s-03/">CentOS7安装Harbor</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/11/2018-10-11-k8s-03/" class="archive-article-date">
+  	<time datetime="2018-10-11T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="harbor"><a href="#harbor" class="headerlink" title="harbor"></a>harbor</h2><p>Habor是由VMWare中国团队开源的容器镜像仓库。事实上，Habor是在Docker Registry上进行了相应的企业级扩展，从而获得了更加广泛的应用，这些新的企业级特性包括：管理用户界面，基于角色的访问控制 ，水平扩展，同步，AD/LDAP集成以及审计日志等。本文档仅说明部署单个基础harbor服务的步骤。</p>
+<h3 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h3><ol>
+<li><p>在deploy节点下载最新的 <a href="https://github.com/docker/compose/releases" target="_blank" rel="noopener">docker-compose</a> 二进制文件，改名后把它放到项目 <code>/etc/ansible/bin</code>目录下</p>
+ <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https:<span class="regexp">//gi</span>thub.com<span class="regexp">/docker/</span>compose<span class="regexp">/releases/</span>download<span class="regexp">/1.18.0/</span>docker-compose-Linux-x86_64</span><br><span class="line">mv docker-compose-Linux-x86_64 <span class="regexp">/etc/</span>ansible<span class="regexp">/bin/</span>	docker-compose</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在deploy节点下载最新的 <a href="https://github.com/vmware/harbor/releases" target="_blank" rel="noopener">harbor</a> 离线安装包，把它放到项目 <code>/etc/ansible/down</code> 目录下</p>
+</li>
+<li><p>由于ansible解压的一些问题，需要将官方的tgz包，重新打包为zip包</p>
+</li>
+<li><p>在deploy节点编辑/etc/ansible/hosts文件</p>
+ <figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 参数 NEW_INSTALL=(<span class="keyword">yes</span>/<span class="keyword">no</span>)：<span class="keyword">yes</span>表示新建 harbor，并配置k8s节点的docker可以使用harbor仓库</span><br><span class="line"># <span class="keyword">no</span> 表示仅配置k8s节点的docker使用已有的harbor仓库</span><br><span class="line">[harbor]</span><br><span class="line"><span class="number">172.16</span><span class="number">.153</span><span class="number">.70</span> HARBOR_DOMAIN=<span class="string">"172.16.153.70"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在deploy节点执行 </p>
+</li>
+</ol>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook /etc/ansible/<span class="number">11.</span>harbor.yml</span><br><span class="line"></span><br><span class="line"><span class="number">1.</span> 下载docker-compose可执行文件到$PATH目录</span><br><span class="line"><span class="number">2.</span> 自注册变量result判断是否已经安装harbor，避免重复安装问题</span><br><span class="line"><span class="number">3.</span> 解压harbor离线安装包到指定目录</span><br><span class="line"><span class="number">4.</span> 导入harbor所需 docker images</span><br><span class="line"><span class="number">5.</span> 创建harbor证书和私钥(复用集群的CA证书)</span><br><span class="line"><span class="number">6.</span> 修改harbor.cfg配置文件</span><br><span class="line"><span class="number">7.</span> 启动harbor安装脚本</span><br></pre></td></tr></table></figure>
+<h3 id="验证harbor"><a href="#验证harbor" class="headerlink" title="验证harbor"></a>验证harbor</h3><ol>
+<li>在harbor节点使用<code>docker ps -a</code> 查看harbor容器组件运行情况</li>
+<li>浏览器访问harbor节点的IP地址 <code>https://$NodeIP</code>，使用账号 admin 和 密码 Harbor12345 (harbor.cfg 配置文件中的默认)登陆系统</li>
+</ol>
+<h3 id="管理harbor"><a href="#管理harbor" class="headerlink" title="管理harbor"></a>管理harbor</h3><ul>
+<li>日志目录 <code>/var/log/harbor</code></li>
+<li>数据目录 <code>/data</code> ，其中最主要是 <code>/data/database</code> 和 <code>/data/registry</code> 目录，如果你要彻底重新安装harbor，删除这两个目录即可</li>
+</ul>
+<p>先进入harbor安装目录 <code>cd /data/harbor</code>，常规操作如下：</p>
+<ol>
+<li>暂停harbor <code>docker-compose stop</code> : docker容器stop，并不删除容器</li>
+<li>恢复harbor <code>docker-compose start</code> : 恢复docker容器运行</li>
+<li>停止harbor <code>docker-compose down -v</code> : 停止并删除docker容器</li>
+<li>启动harbor <code>docker-compose up -d</code> : 启动所有docker容器</li>
+</ol>
+<p>修改harbor的运行配置，需要如下步骤：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 停止 harbor</span></span><br><span class="line"> docker-compose down -v</span><br><span class="line"><span class="comment"># 修改配置</span></span><br><span class="line"> vim harbor.cfg</span><br><span class="line"><span class="comment"># 执行./prepare已更新配置到docker-compose.yml文件</span></span><br><span class="line"> ./prepare</span><br><span class="line"><span class="comment"># 启动 harbor</span></span><br><span class="line"> docker-compose up -d</span><br></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">harbor</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-03/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2018-10-11-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -636,86 +636,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/10/11/2018-10-11-k8s-01/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2018-10-10-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/10/2018-10-10-k8s-01/">jenkins和k8s结合的自动化目标模型</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/10/2018-10-10-k8s-01/" class="archive-article-date">
-  	<time datetime="2018-10-10T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="目标描述"><a href="#目标描述" class="headerlink" title="目标描述"></a>目标描述</h3><ul>
-<li>在将代码上传至 gitlab 时，触发 push 的钩子，在 jenkins 中进行项目的编译；</li>
-<li>自动将编译后的文件打包成 docker 镜像，并上传至（私有）docker hub；</li>
-<li>修改 Kubernetes 的服务配置文件（Service.yaml 和 Deployment.yaml）中的镜像变量；（因为在我将每一个 jenkins 构建的版本号作为了 docker 镜像的版本号，所以每次都要自动改变）</li>
-<li>将 Kubernetes 的服务配置文件上传至 Kubernetes 的 master 服务器；</li>
-<li>在 Jenkins 中执行 kubectl apply -f file.yaml，在 Kubernetes 部署服务；</li>
-</ul>
-<h5 id="目标模型图"><a href="#目标模型图" class="headerlink" title="目标模型图"></a>目标模型图</h5><p><img src="./img/devops-1.png" alt="devops-1.png" style="width:800px;"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-01/">展开全文 >></a>
         </p>
       
 
@@ -893,6 +813,86 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-03/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2018-10-10-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/10/2018-10-10-k8s-01/">jenkins和k8s结合的自动化目标模型</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/10/2018-10-10-k8s-01/" class="archive-article-date">
+  	<time datetime="2018-10-10T03:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="目标描述"><a href="#目标描述" class="headerlink" title="目标描述"></a>目标描述</h3><ul>
+<li>在将代码上传至 gitlab 时，触发 push 的钩子，在 jenkins 中进行项目的编译；</li>
+<li>自动将编译后的文件打包成 docker 镜像，并上传至（私有）docker hub；</li>
+<li>修改 Kubernetes 的服务配置文件（Service.yaml 和 Deployment.yaml）中的镜像变量；（因为在我将每一个 jenkins 构建的版本号作为了 docker 镜像的版本号，所以每次都要自动改变）</li>
+<li>将 Kubernetes 的服务配置文件上传至 Kubernetes 的 master 服务器；</li>
+<li>在 Jenkins 中执行 kubectl apply -f file.yaml，在 Kubernetes 部署服务；</li>
+</ul>
+<h5 id="目标模型图"><a href="#目标模型图" class="headerlink" title="目标模型图"></a>目标模型图</h5><p><img src="./img/devops-1.png" alt="devops-1.png" style="width:800px;"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">devops</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/10/2018-10-10-k8s-01/">展开全文 >></a>
         </p>
       
 
@@ -1167,11 +1167,15 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1179,7 +1183,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
+                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1195,7 +1199,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1203,11 +1207,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elk</a>
+                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1235,11 +1239,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
               </li>
             
             <div class="clearfix"></div>

@@ -261,112 +261,6 @@ git config  user.email &quot;TEST1@gmail.com&quot;
 
 
   
-    <article id="post-2017-11-13-erlang-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/12/2017-11-13-erlang-01/">Erlang程序设计(第2版) 读书笔记【第一章】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/11/12/2017-11-13-erlang-01/" class="archive-article-date">
-  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="第1章-什么是并发"><a href="#第1章-什么是并发" class="headerlink" title="第1章 什么是并发"></a>第1章 什么是并发</h3><h5 id="并发和并行含义"><a href="#并发和并行含义" class="headerlink" title="并发和并行含义"></a>并发和并行含义</h5><ul>
-<li><p>区分基于操作系统的并发和基于语言的并发很重要，因为如果使用基于操作系统的并发，那么程序在不同的操作系统上就会有不同的工作方式。Erlang的并发在所有操作系统上都有着相同的工作方式。要用Erlang编写并发程序，只需掌握Erlang，而不必掌握操作系统的并发机制</p>
-</li>
-<li><p>并发程序是一种用并发编程语言编写的程序。编写并发程序是为了提升性能、可扩展性和容错性。（nodejs erlang）</p>
-</li>
-<li><p>并发编程语言拥有专门用于编写并发程序的语言结构。这些结构是编程语言的主要部分， 在所有操作系统上都有着相同的表现。</p>
-</li>
-<li>并行计算机是一种有多个处理单元（CPU或核心）同时运行的计算机。</li>
-</ul>
-<h5 id="模块和函数"><a href="#模块和函数" class="headerlink" title="模块和函数"></a>模块和函数</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(test)</span>. <span class="comment">%%模块声明</span></span><br><span class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></span><br><span class="line">	io:format(<span class="string">"~w~n"</span>,[Name]).</span><br></pre></td></tr></table></figure>
-<ul>
-<li>模块名必须以一个小写字母开头。</li>
-<li>导出声明指明了模块里哪些函数可以从模块外部进行调用。</li>
-<li>-export([init/1]).语法的意思是带有一个参数。</li>
-<li>-export([funcname1/1，funcname2/1，funcname3/1，]). 导出多个函数列表的写法。</li>
-</ul>
-<h5 id="erlang起进程"><a href="#erlang起进程" class="headerlink" title="erlang起进程"></a>erlang起进程</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(test)</span>.</span><br><span class="line"></span><br><span class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></span><br><span class="line"><span class="keyword">-export</span><span class="params">([start/<span class="number">0</span>])</span>. <span class="comment">%%导出声明</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">start</span><span class="params">()</span> -&gt;</span></span><br><span class="line"></span><br><span class="line">  debugger:start(),</span><br><span class="line"></span><br><span class="line">  spawn(test,init,[<span class="string">"hello"</span>]).</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></span><br><span class="line"></span><br><span class="line">  io:format(<span class="string">"~w~n"</span>,[Name]).</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>spawn(ModName,FunName,[Arg1,Arg2,….])</p>
-</li>
-<li><p>当Erlang运行时系统执行spawn时，它会创建一个新进程（不是操作系统的进程，而是一个由Erlang系统管理的轻量级进程）。当进程创建完毕后，它便开始执行参数所指定的代码。ModName 是包含想要执行代码的模块名。FuncName是模块里的函数名，而[Arg1, Arg2, …]是一个列表，包含了想要执行的函数参数。因此，下面这个调用的意思是启动一个执行函数person:init(“hello”)的进程</p>
-</li>
-</ul>
-<h5 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h5><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Susannah!</span>&#123;<span class="keyword">self</span>(),<span class="string">"send message"</span>&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Pid ! Msg语法的意思是发送消息Msg到进程Pid。大括号里的self()参数标明了发送消息的进程（在此处是Joe）。</li>
-</ul>
-<h5 id="接收消息"><a href="#接收消息" class="headerlink" title="接收消息"></a>接收消息</h5><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">receive</span><br><span class="line">	&#123;<span class="keyword">From</span>, Message&#125; -&gt;</span><br><span class="line">		<span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-<ul>
-<li>当Susannah的进程接收到一条消息时，变量From会绑定为Joe，这样Susannah就知道消息来自何处，变量Message则会包含此消息</li>
-</ul>
-<blockquote>
-<p>这样吧</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/12/2017-11-13-erlang-01/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2017-11-14-erlang-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -470,6 +364,112 @@ git config  user.email &quot;TEST1@gmail.com&quot;
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/11/12/2017-11-14-erlang-02/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2017-11-13-erlang-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/12/2017-11-13-erlang-01/">Erlang程序设计(第2版) 读书笔记【第一章】</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/12/2017-11-13-erlang-01/" class="archive-article-date">
+  	<time datetime="2017-11-12T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="第1章-什么是并发"><a href="#第1章-什么是并发" class="headerlink" title="第1章 什么是并发"></a>第1章 什么是并发</h3><h5 id="并发和并行含义"><a href="#并发和并行含义" class="headerlink" title="并发和并行含义"></a>并发和并行含义</h5><ul>
+<li><p>区分基于操作系统的并发和基于语言的并发很重要，因为如果使用基于操作系统的并发，那么程序在不同的操作系统上就会有不同的工作方式。Erlang的并发在所有操作系统上都有着相同的工作方式。要用Erlang编写并发程序，只需掌握Erlang，而不必掌握操作系统的并发机制</p>
+</li>
+<li><p>并发程序是一种用并发编程语言编写的程序。编写并发程序是为了提升性能、可扩展性和容错性。（nodejs erlang）</p>
+</li>
+<li><p>并发编程语言拥有专门用于编写并发程序的语言结构。这些结构是编程语言的主要部分， 在所有操作系统上都有着相同的表现。</p>
+</li>
+<li>并行计算机是一种有多个处理单元（CPU或核心）同时运行的计算机。</li>
+</ul>
+<h5 id="模块和函数"><a href="#模块和函数" class="headerlink" title="模块和函数"></a>模块和函数</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(test)</span>. <span class="comment">%%模块声明</span></span><br><span class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></span><br><span class="line">	io:format(<span class="string">"~w~n"</span>,[Name]).</span><br></pre></td></tr></table></figure>
+<ul>
+<li>模块名必须以一个小写字母开头。</li>
+<li>导出声明指明了模块里哪些函数可以从模块外部进行调用。</li>
+<li>-export([init/1]).语法的意思是带有一个参数。</li>
+<li>-export([funcname1/1，funcname2/1，funcname3/1，]). 导出多个函数列表的写法。</li>
+</ul>
+<h5 id="erlang起进程"><a href="#erlang起进程" class="headerlink" title="erlang起进程"></a>erlang起进程</h5><figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(test)</span>.</span><br><span class="line"></span><br><span class="line"><span class="keyword">-export</span><span class="params">([init/<span class="number">1</span>])</span>. <span class="comment">%%导出声明</span></span><br><span class="line"><span class="keyword">-export</span><span class="params">([start/<span class="number">0</span>])</span>. <span class="comment">%%导出声明</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">start</span><span class="params">()</span> -&gt;</span></span><br><span class="line"></span><br><span class="line">  debugger:start(),</span><br><span class="line"></span><br><span class="line">  spawn(test,init,[<span class="string">"hello"</span>]).</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">init</span><span class="params">(Name)</span> -&gt;</span></span><br><span class="line"></span><br><span class="line">  io:format(<span class="string">"~w~n"</span>,[Name]).</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>spawn(ModName,FunName,[Arg1,Arg2,….])</p>
+</li>
+<li><p>当Erlang运行时系统执行spawn时，它会创建一个新进程（不是操作系统的进程，而是一个由Erlang系统管理的轻量级进程）。当进程创建完毕后，它便开始执行参数所指定的代码。ModName 是包含想要执行代码的模块名。FuncName是模块里的函数名，而[Arg1, Arg2, …]是一个列表，包含了想要执行的函数参数。因此，下面这个调用的意思是启动一个执行函数person:init(“hello”)的进程</p>
+</li>
+</ul>
+<h5 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h5><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Susannah!</span>&#123;<span class="keyword">self</span>(),<span class="string">"send message"</span>&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Pid ! Msg语法的意思是发送消息Msg到进程Pid。大括号里的self()参数标明了发送消息的进程（在此处是Joe）。</li>
+</ul>
+<h5 id="接收消息"><a href="#接收消息" class="headerlink" title="接收消息"></a>接收消息</h5><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">receive</span><br><span class="line">	&#123;<span class="keyword">From</span>, Message&#125; -&gt;</span><br><span class="line">		<span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当Susannah的进程接收到一条消息时，变量From会绑定为Joe，这样Susannah就知道消息来自何处，变量Message则会包含此消息</li>
+</ul>
+<blockquote>
+<p>这样吧</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/12/2017-11-13-erlang-01/">展开全文 >></a>
         </p>
       
 
@@ -1693,192 +1693,6 @@ git config  user.email &quot;TEST1@gmail.com&quot;
 
 
   
-    <article id="post-2017-09-21-flume-kafka-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/20/2017-09-21-flume-kafka-1/">kafka-flume集群环境搭建【3】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/20/2017-09-21-flume-kafka-1/" class="archive-article-date">
-  	<time datetime="2017-09-20T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h3 id="1-Flume与Kafka整合-把flume中的数据sink到Kafka"><a href="#1-Flume与Kafka整合-把flume中的数据sink到Kafka" class="headerlink" title="1.  Flume与Kafka整合 把flume中的数据sink到Kafka"></a>1.  Flume与Kafka整合 把flume中的数据sink到Kafka</h3><ol>
-<li>kafka 集群已经完成</li>
-<li>flume 集群已经完成</li>
-<li>flume 的数据存入kafka</li>
-</ol>
-<p>flume client -&gt; flume server -&gt; kafka 这样也是说只要改flume server中sink配置即可</p>
-<h3 id="2-配置flume"><a href="#2-配置flume" class="headerlink" title="2. 配置flume"></a>2. 配置flume</h3><h5 id="flume-client-conf"><a href="#flume-client-conf" class="headerlink" title="flume-client.conf"></a>flume-client.conf</h5><pre><code>[root@yaliceshi-1-2 ~]# cat /usr/local/flume/conf/flume-client.conf 
-#Agent
-flumeAgent.channels = c1
-flumeAgent.sources  = s1
-flumeAgent.sinks    = k1 
-#flumeAgent Spooling Directory Source
-#注(1)
-flumeAgent.sources.s1.type = spooldir
-flumeAgent.sources.s1.spoolDir  =/data/logs/
-flumeAgent.sources.s1.fileHeader = true
-flumeAgent.sources.s1.deletePolicy =immediate
-flumeAgent.sources.s1.batchSize =1000
-flumeAgent.sources.s1.channels =c1
-flumeAgent.sources.s1.deserializer.maxLineLength =1048576
-#flumeAgent FileChannel
-#注(2)
-flumeAgent.channels.c1.type = file
-flumeAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
-flumeAgent.channels.c1.dataDirs = /data/flume/spool/data
-flumeAgent.channels.c1.capacity = 200000000
-flumeAgent.channels.c1.keep-alive = 30
-flumeAgent.channels.c1.write-timeout = 30
-flumeAgent.channels.c1.checkpoint-timeout=600
-# flumeAgent Sinks
-#注(3)
-flumeAgent.sinks.k1.channel = c1
-flumeAgent.sinks.k1.type = avro
-# connect to CollectorMainAgent
-flumeAgent.sinks.k1.hostname = kafka103
-flumeAgent.sinks.k1.port = 44444
-</code></pre><font style="color:red">  sources 采用 spooldir 类型，监控/data/logs/目录中文件的变化 </font>
-
-<h5 id="flume-server-conf"><a href="#flume-server-conf" class="headerlink" title="flume-server.conf"></a>flume-server.conf</h5><pre><code>[root@yaliceshi-1-3 ~]# cat  /usr/local/flume/conf/flume-server.conf
-#flumeConsolidationAgent
-flumeConsolidationAgent.channels = c1
-flumeConsolidationAgent.sources  = s1
-flumeConsolidationAgent.sinks    = k1 
-
-#flumeConsolidationAgent Avro Source
-#注(4)
-flumeConsolidationAgent.sources.s1.type = avro
-flumeConsolidationAgent.sources.s1.channels = c1
-flumeConsolidationAgent.sources.s1.bind = kafka103
-flumeConsolidationAgent.sources.s1.port = 44444
-
-#flumeConsolidationAgent FileChannel
-flumeConsolidationAgent.channels.c1.type = file
-flumeConsolidationAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
-flumeConsolidationAgent.channels.c1.dataDirs = /data/flume/spool/data
-flumeConsolidationAgent.channels.c1.capacity = 200000000
-flumeConsolidationAgent.channels.c1.keep-alive = 30
-flumeConsolidationAgent.channels.c1.write-timeout = 30
-flumeConsolidationAgent.channels.c1.checkpoint-timeout=600
-
-##flumeConsolidationAgent Memory Channel
-#flumeConsolidationAgent.channels.c1.type = memory
-#flumeConsolidationAgent.channels.c1.capacity = 10000
-#flumeConsolidationAgent.channels.c1.transactionCapacity = 10000
-#flumeConsolidationAgent.channels.c1.byteCapacityBufferPercentage = 20
-#flumeConsolidationAgent.channels.c1.byteCapacity = 800000
-
-#flumeConsolidationAgent Sinks
-#注(5)
-flumeConsolidationAgent.sinks.k1.channel= c1
-flumeConsolidationAgent.sinks.k1.type = file_roll
-flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
-flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
-flumeConsolidationAgent.sinks.k1.batchSize = 10000
-</code></pre><font style="color:red">  sinks 采用 file_roll 类型，数据保存到 /data/tmp目录中 </font>
-
-
-
-<h5 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h5><pre><code>#flumeConsolidationAgent Sinks
-#注(5)
-#flumeConsolidationAgent.sinks.k1.channel= c1
-#flumeConsolidationAgent.sinks.k1.type = file_roll
-#flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
-#flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
-#flumeConsolidationAgent.sinks.k1.batchSize = 10000
-</code></pre><p>上面的注释掉加上下面的内容</p>
-<pre><code>#set sink to hdfs
-flumeConsolidationAgent.sinks.k1.type=org.apache.flume.sink.kafka.KafkaSink
-flumeConsolidationAgent.sinks.k1.topic = ScalaTopic
-flumeConsolidationAgent.sinks.k1.brokerList = kafka102:9092, kafka103:9092, kafka104:9092
-flumeConsolidationAgent.sinks.k1.requiredAcks = 1
-flumeConsolidationAgent.sinks.k1.batchSize = 20
-flumeConsolidationAgent.sinks.k1.channel=c1
-</code></pre><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>启动flume server</p>
-<pre><code>[root@yaliceshi-1-3 ~]#/usr/local/flume/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-server.conf --name flumeConsolidationAgent -Dflume.root.logger=INFO,console
-</code></pre><p>启动flume client</p>
-<pre><code>[root@yaliceshi-1-2 ~]#/usr/local/apache-flume-1.7.0-bin/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-client.conf --name flumeAgent -Dflume.root.logger=INFO,console
-</code></pre><p>启动 kafka 的消费者</p>
-<pre><code>[root@yaliceshi-1-1 ~]/usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
-</code></pre><p>拷个文件到flume客户端监听目录</p>
-<pre><code>[root@yaliceshi-1-2 ~]# echo &quot;test wqc&quot; &gt; test.log;cp test.log  /data/logs
-</code></pre><p>拷个文件到flume客户端监听目录</p>
-<pre><code>[root@yaliceshi-1-1 ~]#  /usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
-
-test wqc
-</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><blockquote>
-</blockquote>
-<ul>
-<li><a href="http://blog.csdn.net/strongyoung88/article/details/52937835" target="_blank" rel="noopener">http://blog.csdn.net/strongyoung88/article/details/52937835</a></li>
-<li><a href="http://blog.csdn.net/minicto/article/details/53643496" target="_blank" rel="noopener">http://blog.csdn.net/minicto/article/details/53643496</a></li>
-<li><a href="http://blog.csdn.net/shouhuzhezhishen/article/details/64904848" target="_blank" rel="noopener">http://blog.csdn.net/shouhuzhezhishen/article/details/64904848</a></li>
-<li><a href="http://blog.csdn.net/candysleep/article/details/53241268" target="_blank" rel="noopener">http://blog.csdn.net/candysleep/article/details/53241268</a></li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/20/2017-09-21-flume-kafka-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2017-09-18-cluster-flume-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2215,19 +2029,205 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 
 
   
-    <article id="post-2015-04-10-training-python-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2017-09-21-flume-kafka-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/15/2015-04-10-training-python-1/">python技术分享[1]－python初步感观</a>
+      <a class="article-title" href="/2017/09/20/2017-09-21-flume-kafka-1/">kafka-flume集群环境搭建【3】</a>
     </h1>
   
 
         
-        <a href="/2017/09/15/2015-04-10-training-python-1/" class="archive-article-date">
+        <a href="/2017/09/20/2017-09-21-flume-kafka-1/" class="archive-article-date">
+  	<time datetime="2017-09-20T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h3 id="1-Flume与Kafka整合-把flume中的数据sink到Kafka"><a href="#1-Flume与Kafka整合-把flume中的数据sink到Kafka" class="headerlink" title="1.  Flume与Kafka整合 把flume中的数据sink到Kafka"></a>1.  Flume与Kafka整合 把flume中的数据sink到Kafka</h3><ol>
+<li>kafka 集群已经完成</li>
+<li>flume 集群已经完成</li>
+<li>flume 的数据存入kafka</li>
+</ol>
+<p>flume client -&gt; flume server -&gt; kafka 这样也是说只要改flume server中sink配置即可</p>
+<h3 id="2-配置flume"><a href="#2-配置flume" class="headerlink" title="2. 配置flume"></a>2. 配置flume</h3><h5 id="flume-client-conf"><a href="#flume-client-conf" class="headerlink" title="flume-client.conf"></a>flume-client.conf</h5><pre><code>[root@yaliceshi-1-2 ~]# cat /usr/local/flume/conf/flume-client.conf 
+#Agent
+flumeAgent.channels = c1
+flumeAgent.sources  = s1
+flumeAgent.sinks    = k1 
+#flumeAgent Spooling Directory Source
+#注(1)
+flumeAgent.sources.s1.type = spooldir
+flumeAgent.sources.s1.spoolDir  =/data/logs/
+flumeAgent.sources.s1.fileHeader = true
+flumeAgent.sources.s1.deletePolicy =immediate
+flumeAgent.sources.s1.batchSize =1000
+flumeAgent.sources.s1.channels =c1
+flumeAgent.sources.s1.deserializer.maxLineLength =1048576
+#flumeAgent FileChannel
+#注(2)
+flumeAgent.channels.c1.type = file
+flumeAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
+flumeAgent.channels.c1.dataDirs = /data/flume/spool/data
+flumeAgent.channels.c1.capacity = 200000000
+flumeAgent.channels.c1.keep-alive = 30
+flumeAgent.channels.c1.write-timeout = 30
+flumeAgent.channels.c1.checkpoint-timeout=600
+# flumeAgent Sinks
+#注(3)
+flumeAgent.sinks.k1.channel = c1
+flumeAgent.sinks.k1.type = avro
+# connect to CollectorMainAgent
+flumeAgent.sinks.k1.hostname = kafka103
+flumeAgent.sinks.k1.port = 44444
+</code></pre><font style="color:red">  sources 采用 spooldir 类型，监控/data/logs/目录中文件的变化 </font>
+
+<h5 id="flume-server-conf"><a href="#flume-server-conf" class="headerlink" title="flume-server.conf"></a>flume-server.conf</h5><pre><code>[root@yaliceshi-1-3 ~]# cat  /usr/local/flume/conf/flume-server.conf
+#flumeConsolidationAgent
+flumeConsolidationAgent.channels = c1
+flumeConsolidationAgent.sources  = s1
+flumeConsolidationAgent.sinks    = k1 
+
+#flumeConsolidationAgent Avro Source
+#注(4)
+flumeConsolidationAgent.sources.s1.type = avro
+flumeConsolidationAgent.sources.s1.channels = c1
+flumeConsolidationAgent.sources.s1.bind = kafka103
+flumeConsolidationAgent.sources.s1.port = 44444
+
+#flumeConsolidationAgent FileChannel
+flumeConsolidationAgent.channels.c1.type = file
+flumeConsolidationAgent.channels.c1.checkpointDir = /data/flume/spool/checkpoint
+flumeConsolidationAgent.channels.c1.dataDirs = /data/flume/spool/data
+flumeConsolidationAgent.channels.c1.capacity = 200000000
+flumeConsolidationAgent.channels.c1.keep-alive = 30
+flumeConsolidationAgent.channels.c1.write-timeout = 30
+flumeConsolidationAgent.channels.c1.checkpoint-timeout=600
+
+##flumeConsolidationAgent Memory Channel
+#flumeConsolidationAgent.channels.c1.type = memory
+#flumeConsolidationAgent.channels.c1.capacity = 10000
+#flumeConsolidationAgent.channels.c1.transactionCapacity = 10000
+#flumeConsolidationAgent.channels.c1.byteCapacityBufferPercentage = 20
+#flumeConsolidationAgent.channels.c1.byteCapacity = 800000
+
+#flumeConsolidationAgent Sinks
+#注(5)
+flumeConsolidationAgent.sinks.k1.channel= c1
+flumeConsolidationAgent.sinks.k1.type = file_roll
+flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
+flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
+flumeConsolidationAgent.sinks.k1.batchSize = 10000
+</code></pre><font style="color:red">  sinks 采用 file_roll 类型，数据保存到 /data/tmp目录中 </font>
+
+
+
+<h5 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h5><pre><code>#flumeConsolidationAgent Sinks
+#注(5)
+#flumeConsolidationAgent.sinks.k1.channel= c1
+#flumeConsolidationAgent.sinks.k1.type = file_roll
+#flumeConsolidationAgent.sinks.k1.sink.directory = /data/tmp
+#flumeConsolidationAgent.sinks.k1.sink.rollInterval = 3600
+#flumeConsolidationAgent.sinks.k1.batchSize = 10000
+</code></pre><p>上面的注释掉加上下面的内容</p>
+<pre><code>#set sink to hdfs
+flumeConsolidationAgent.sinks.k1.type=org.apache.flume.sink.kafka.KafkaSink
+flumeConsolidationAgent.sinks.k1.topic = ScalaTopic
+flumeConsolidationAgent.sinks.k1.brokerList = kafka102:9092, kafka103:9092, kafka104:9092
+flumeConsolidationAgent.sinks.k1.requiredAcks = 1
+flumeConsolidationAgent.sinks.k1.batchSize = 20
+flumeConsolidationAgent.sinks.k1.channel=c1
+</code></pre><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>启动flume server</p>
+<pre><code>[root@yaliceshi-1-3 ~]#/usr/local/flume/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-server.conf --name flumeConsolidationAgent -Dflume.root.logger=INFO,console
+</code></pre><p>启动flume client</p>
+<pre><code>[root@yaliceshi-1-2 ~]#/usr/local/apache-flume-1.7.0-bin/bin/flume-ng agent --conf conf --conf-file /usr/local/flume/conf/flume-client.conf --name flumeAgent -Dflume.root.logger=INFO,console
+</code></pre><p>启动 kafka 的消费者</p>
+<pre><code>[root@yaliceshi-1-1 ~]/usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
+</code></pre><p>拷个文件到flume客户端监听目录</p>
+<pre><code>[root@yaliceshi-1-2 ~]# echo &quot;test wqc&quot; &gt; test.log;cp test.log  /data/logs
+</code></pre><p>拷个文件到flume客户端监听目录</p>
+<pre><code>[root@yaliceshi-1-1 ~]#  /usr/local/kafka/bin/kafka-console-consumer.sh --zookeeper  172.16.61.102:2181 --topic ScalaTopic --from-beginning
+
+test wqc
+</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><blockquote>
+</blockquote>
+<ul>
+<li><a href="http://blog.csdn.net/strongyoung88/article/details/52937835" target="_blank" rel="noopener">http://blog.csdn.net/strongyoung88/article/details/52937835</a></li>
+<li><a href="http://blog.csdn.net/minicto/article/details/53643496" target="_blank" rel="noopener">http://blog.csdn.net/minicto/article/details/53643496</a></li>
+<li><a href="http://blog.csdn.net/shouhuzhezhishen/article/details/64904848" target="_blank" rel="noopener">http://blog.csdn.net/shouhuzhezhishen/article/details/64904848</a></li>
+<li><a href="http://blog.csdn.net/candysleep/article/details/53241268" target="_blank" rel="noopener">http://blog.csdn.net/candysleep/article/details/53241268</a></li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群搭建</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/集群搭建/" class="article-tag-list-link color5">集群搭建</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/20/2017-09-21-flume-kafka-1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2015-04-14-training-python-3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/15/2015-04-14-training-python-3/">python技术分享[3]－list dict在实际中的应用</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/15/2015-04-14-training-python-3/" class="archive-article-date">
   	<time datetime="2017-09-15T11:30:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-15</time>
 </a>
         
@@ -2235,85 +2235,38 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>###1、环境简介</p>
+        <ul>
+<li>在python中, list, tuple, dict, set有什么区别, 主要应用在什么样的场景?</li>
+<li>定义:</li>
+</ul>
 <ul>
-<li>os系统：centos6.5</li>
-<li>python:2.7.7 或者 2.7.8</li>
-<li>扩展要求:<pre><code>setuptools ,pip     ,MySQL-python    
-</code></pre></li>
-<li>如果你的python版本过低，可以用下面的脚本升级为2.7.7</li>
-<li><p>脚本下载：<a href="http://pan.baidu.com/s/1jGDvFzo" target="_blank" rel="noopener">http://pan.baidu.com/s/1jGDvFzo</a>      </p>
-</li>
-<li><p>###1.1 python使用方式</p>
-<ul>
-<li>进入python shell环境</li>
-<li>执行脚本模式 python demo.py</li>
+<li><ul>
+<li>list:链表,有序的项目, 通过索引进行查找,使用方括号”[]”;<br>tuple:元组,元组将多样的对象集合到一起,不能修改,通过索引进行查找, 使用括号”()”;<br>dict:字典,字典是一组键(key)和值(value)的组合,通过键(key)进行查找,没有顺序, 使用大括号”{}”;<br>set:集合,无序,元素只出现一次, 自动去重,使用”set([])”</li>
 </ul>
 </li>
 </ul>
-<p>###2、初步感观<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#coding=utf-8</span></span><br><span class="line"><span class="comment">#!/usr/bin/python2.7</span></span><br><span class="line"></span><br><span class="line"><span class="comment">###################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#      python 第一个显示程序，用于初步感观</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">###################################################</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">()</span>:</span></span><br><span class="line">  <span class="string">'''</span></span><br><span class="line"><span class="string">  a generator that produces the fibonacci series's elements</span></span><br><span class="line"><span class="string">  '''</span></span><br><span class="line"> </span><br><span class="line">  a = <span class="number">1</span></span><br><span class="line">  b = <span class="number">1</span></span><br><span class="line">  <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    a, b = a + b, a</span><br><span class="line">    <span class="keyword">yield</span> a</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nth</span><span class="params">(series, n)</span>:</span></span><br><span class="line">  <span class="string">'''</span></span><br><span class="line"><span class="string">  returns the nth element of a series,</span></span><br><span class="line"><span class="string">  consuming the series' earlier elements.</span></span><br><span class="line"><span class="string">  '''</span></span><br><span class="line"> </span><br><span class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> series:</span><br><span class="line">    n -= <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> n &lt;= <span class="number">0</span>: <span class="keyword">return</span> x</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	print(<span class="string">'Executed from the command line'</span>)</span><br><span class="line">	<span class="keyword">print</span> nth(fib(), <span class="number">10</span>)</span><br></pre></td></tr></table></figure></p>
 <ul>
-<li>执行 </li>
-<li>python demo.py </li>
-<li>输出</li>
-<li>Executed from the command line</li>
-<li>144</li>
+<li>应用场景:</li>
 </ul>
-<p>###3、Python格言</p>
 <ul>
-<li>输入python 进入python shell环境</li>
-<li>import this </li>
-<li><p>显示python之禅</p>
-</li>
-<li><h5 id="3-1-Python之禅"><a href="#3-1-Python之禅" class="headerlink" title="3.1 Python之禅"></a>3.1 Python之禅</h5><ul>
-<li>Beautiful is better than ugly.  </li>
-<li>漂亮的代码要比丑陋的代码要好得多。  </li>
-<li>Explicit is better than implicit.  </li>
-<li>明确的定义比 隐式定义更好。  </li>
-<li>Simple is better than complex.  </li>
-<li>简单比负责要好。  </li>
-<li>Complex is better than complicated.  </li>
-<li>负责要比搞复杂要好。  </li>
-<li>Flat is better than nested.  </li>
-<li>扁平结构要比嵌套结构好。  </li>
-<li>Sparse is better than dense.  </li>
-<li>简洁明了的代码要比稠密的代码要好。  </li>
-<li>Readability counts.  </li>
-<li>可读写的计数。  </li>
-<li>Special cases aren’t special enough to break the rules.  </li>
-<li>专门的用例不是特殊到足以违反规则。  </li>
-<li>Although practicality beats purity.  </li>
-<li>是的，实用性练就纯度。  </li>
-<li>Errors should never pass silently.  </li>
-<li>错误永远都不会沉默。  </li>
-<li>Unless explicitly silenced.  </li>
-<li>除非明确啥也不干。  </li>
-<li>In the face of ambiguity, refuse the temptation to guess.  </li>
-<li>面对模糊定义、拒绝视图拍脑袋猜。  </li>
-<li>There should be one– and preferably only one –obvious way to do it.  </li>
-<li>Although that way may not be obvious at first unless you’re Dutch.  </li>
-<li>虽然一开始不那面明确,我们会选择更清晰一条到走。  </li>
-<li>Now is better than never.  </li>
-<li>现在开始总比不开始的要好。  </li>
-<li>Although never is often better than <em>right</em> now.  </li>
-<li>虽然从不尝试总比现在开始尝试好。  </li>
-<li>If the implementation is hard to explain, it’s a bad idea.  </li>
-<li>如果实现难以说明，那它是个坏主意。  </li>
-<li>If the implementation is easy to explain, it may be a good idea.  </li>
-<li>如果实现容易说明，那它是个好主意。  </li>
-<li>Namespaces are one honking great idea – let’s do more of those!  </li>
-<li>名称空间是一个好东西——让我们做更多那样的东西!  </li>
+<li><ul>
+<li>list, 简单的数据集合,可以使用索引;<br>tuple, 把一些数据当做一个整体去使用,不能修改;<br>dict,使用键值和值进行关联的数据;<br>set,数据只出现一次,只关心数据是否出现, 不关心其位置;</li>
 </ul>
 </li>
-<li><h5 id="3-2-Python“八荣八耻”"><a href="#3-2-Python“八荣八耻”" class="headerlink" title="3.2 Python“八荣八耻”"></a>3.2 Python“八荣八耻”</h5><ul>
-<li>以动手实践为荣 , 以只看不练为耻;</li>
-<li>以打印日志为荣 , 以单步跟踪为耻;</li>
-<li>以空格缩进为荣 , 以制表缩进为耻;</li>
-<li>以单元测试为荣 , 以人工测试为耻;</li>
-<li>以模块复用为荣 , 以复制粘贴为耻;</li>
-<li>以多态应用为荣 , 以分支判断为耻;</li>
-<li>以Pythonic为荣 , 以冗余拖沓为耻;</li>
-<li>以总结分享为荣 , 以跪求其解为耻;</li>
+</ul>
+<h4 id="实践样例"><a href="#实践样例" class="headerlink" title="实践样例"></a>实践样例</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line"># coding=utf<span class="number">-8</span></span><br><span class="line">###################################################</span><br><span class="line">#  </span><br><span class="line">#  功能：统计游戏中玩家及玩家登陆次数</span><br><span class="line">#        </span><br><span class="line">####################################################</span><br><span class="line"></span><br><span class="line">#统计游戏中玩家及玩家登陆次数</span><br><span class="line">games = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'a'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>,<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'b'</span>]  </span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter  </span><br><span class="line">d = Counter(games) </span><br><span class="line">print d</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#排位赛规则，如果积分相同，则按胜利场次，再相同按失败场次</span><br><span class="line">games =[&#123;<span class="string">'f'</span>:<span class="number">3</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">3</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">20</span>,<span class="string">'b'</span>:<span class="number">16</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">12</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,&#123;<span class="string">'f'</span>:<span class="number">13</span>,<span class="string">'s'</span>:<span class="number">10</span>,<span class="string">'b'</span>:<span class="number">12</span>&#125;,]</span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter  </span><br><span class="line">print sorted(games ,key = itemgetter(<span class="string">'f'</span>,<span class="string">'s'</span>,<span class="string">'b'</span>),reverse=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#选择某一天，然后以这天为准，次日留存，<span class="number">3</span>日留存，<span class="number">7</span>日留存，<span class="number">14</span>日留存，<span class="number">30</span>日留存</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime,timedelta  </span><br><span class="line">def GetNextDay(baseday,n):  </span><br><span class="line">    return str((datetime.strptime(str(baseday),<span class="string">'%Y-%m-%d'</span>)+timedelta(days=n)).date())  </span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> functools  </span><br><span class="line">selected_day = <span class="string">'2015-02-01'</span></span><br><span class="line">nday = functools.partial(GetNextDay,selected_day)</span><br><span class="line">print nday(<span class="number">1</span>)</span><br><span class="line">print nday(<span class="number">2</span>)</span><br><span class="line">print nday(<span class="number">6</span>)</span><br><span class="line">print nday(<span class="number">13</span>)</span><br><span class="line">print nday(<span class="number">29</span>)</span><br><span class="line"></span><br><span class="line">#用来计算游戏包裹里面的变化情况</span><br><span class="line">def symmetric_difference(_oldobj,_newobj):  </span><br><span class="line">    _oldkeys = _oldobj.keys()  </span><br><span class="line">    _newkeys = _newobj.keys()  </span><br><span class="line">    _diff = &#123;&#125;  </span><br><span class="line">    for _key <span class="keyword">in</span> set(_oldkeys + _newkeys):  </span><br><span class="line">        _val = _newobj.get(_key,<span class="number">0</span>) - _oldobj.get(_key,<span class="number">0</span>)  </span><br><span class="line">        <span class="keyword">if</span> _val:  </span><br><span class="line">            _diff[_key] = _val   </span><br><span class="line">    return _diff   </span><br><span class="line">      </span><br><span class="line">oldobj = &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">2</span>,<span class="string">'c'</span>:<span class="number">3</span>&#125;  </span><br><span class="line">newobj = &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">3</span>,<span class="string">'d'</span>:<span class="number">4</span>&#125;  </span><br><span class="line">print symmetric_difference(oldobj,newobj)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>输入：python 3.py</li>
+<li>输出：<ul>
+<li>Counter({‘a’: 3, ‘b’: 3, ‘c’: 2, ‘d’: 1})</li>
+<li>[{‘s’: 20, ‘b’: 16, ‘f’: 13}, {‘s’: 12, ‘b’: 12, ‘f’: 13}, {‘s’: 10, ‘b’: 12, ‘f’: 13},  </li>
+<li>{‘s’: - 10, ‘b’: 12, ‘f’: 3}, {‘s’: 10, ‘b’: 12, ‘f’: 3}]- </li>
+<li>2015-02-02- </li>
+<li>2015-02-03- </li>
+<li>2015-02-07- </li>
+<li>2015-02-14- </li>
+<li>2015-03-02- </li>
+<li>{‘c’: -3, ‘b’: 1, ‘d’: 4}- </li>
 </ul>
 </li>
 </ul>
@@ -2352,7 +2305,7 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/15/2015-04-10-training-python-1/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/09/15/2015-04-14-training-python-3/">展开全文 >></a>
         </p>
       
 
@@ -2489,11 +2442,15 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2501,7 +2458,7 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
+                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2517,7 +2474,7 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2525,11 +2482,11 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elk</a>
+                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2557,11 +2514,7 @@ flumeConsolidationAgent.sinks.k1.batchSize = 10000
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
               </li>
             
             <div class="clearfix"></div>

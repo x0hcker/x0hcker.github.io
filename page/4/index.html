@@ -525,105 +525,6 @@ source ~/.bash_profile
 
 
   
-    <article id="post-2017-11-21-erlang-05" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/21/2017-11-21-erlang-05/">Erlang程序设计(第2版) 读书笔记【第五章】</a>
-    </h1>
-  
-
-        
-        <a href="/2017/11/21/2017-11-21-erlang-05/" class="archive-article-date">
-  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="第5章-记录与映射组"><a href="#第5章-记录与映射组" class="headerlink" title="第5章 记录与映射组"></a>第5章 记录与映射组</h5><ul>
-<li>元组用于保存固定数量的元素，而列表用于保存可变数量的元素。</li>
-<li>记录（record）和映射组（map）。记录其实就是元组的另一种形式。通过使用记录，可以给元组里的各个元素关联一个名称。</li>
-</ul>
-<h6 id="记录适合以下的情形：："><a href="#记录适合以下的情形：：" class="headerlink" title="记录适合以下的情形：："></a>记录适合以下的情形：：</h6><ul>
-<li>当你可以用一些预先确定且数量固定的原子来表示数据时；</li>
-<li>当记录里的元素数量和元素名称不会随时间而改变时；</li>
-<li>当存储空间是个问题时，典型的案例是你有一大堆元组，并且每个元组都有相同的结构。</li>
-</ul>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(myconf)</span>.</span><br><span class="line"><span class="keyword">-record</span><span class="params">(server_opts, &#123;port, ip = <span class="string">"127.0.0.1"</span>, max_connections = <span class="number">10</span>&#125;)</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment">%%#server_opts&#123;port = 8000,ip = "192.168.56.101",</span></span><br><span class="line"><span class="comment">%%max_connections = 10&#125;</span></span><br><span class="line"><span class="comment">%%</span></span><br><span class="line"><span class="comment">%%Opts#server_opts.port.</span></span><br></pre></td></tr></table></figure>
-<h6 id="映射组适合以下的情形："><a href="#映射组适合以下的情形：" class="headerlink" title="映射组适合以下的情形："></a>映射组适合以下的情形：</h6><ul>
-<li>当键不能预先知道时用来表示键值数据结构；</li>
-<li>当存在大量不同的键时用来表示数据；</li>
-<li>当方便使用很重要而效率无关紧要时作为万能的数据结构使用；</li>
-<li>用作“自解释型”的数据结构，也就是说，用户容易从键名猜出值的含义；</li>
-<li>用来表示键值解析树，例如XML或配置文件；</li>
-<li>用JSON来和其他编程语言通信。</li>
-<li>映射组在系统内部是作为有序集合存储的，打印时总是使用各键排序后的顺序，与映射组的创建方式无关。</li>
-<li>使用映射组的最佳方式是在首次定义某个键时总是使用Key =&gt; Val，而在修改具体某个键的值时都使用Key := Val</li>
-</ul>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Facts = <span class="comment">#&#123;a =&gt;1, b=&gt;2&#125;.</span></span><br></pre></td></tr></table></figure>
-<h5 id="json"><a href="#json" class="headerlink" title="json"></a>json</h5><pre><code>maps:to_json(Map) -&gt;Bin
-maps:from_json(Bin) -&gt;Map
-maps:safe_from_json(Bin) -&gt;Map
-</code></pre><blockquote>
-<p>这样吧</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/11/21/2017-11-21-erlang-05/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2017-11-21-erlang-07" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -708,6 +609,105 @@ maps:safe_from_json(Bin) -&gt;Map
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/11/21/2017-11-21-erlang-07/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2017-11-21-erlang-05" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/21/2017-11-21-erlang-05/">Erlang程序设计(第2版) 读书笔记【第五章】</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/21/2017-11-21-erlang-05/" class="archive-article-date">
+  	<time datetime="2017-11-21T11:03:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="第5章-记录与映射组"><a href="#第5章-记录与映射组" class="headerlink" title="第5章 记录与映射组"></a>第5章 记录与映射组</h5><ul>
+<li>元组用于保存固定数量的元素，而列表用于保存可变数量的元素。</li>
+<li>记录（record）和映射组（map）。记录其实就是元组的另一种形式。通过使用记录，可以给元组里的各个元素关联一个名称。</li>
+</ul>
+<h6 id="记录适合以下的情形：："><a href="#记录适合以下的情形：：" class="headerlink" title="记录适合以下的情形：："></a>记录适合以下的情形：：</h6><ul>
+<li>当你可以用一些预先确定且数量固定的原子来表示数据时；</li>
+<li>当记录里的元素数量和元素名称不会随时间而改变时；</li>
+<li>当存储空间是个问题时，典型的案例是你有一大堆元组，并且每个元组都有相同的结构。</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(myconf)</span>.</span><br><span class="line"><span class="keyword">-record</span><span class="params">(server_opts, &#123;port, ip = <span class="string">"127.0.0.1"</span>, max_connections = <span class="number">10</span>&#125;)</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment">%%#server_opts&#123;port = 8000,ip = "192.168.56.101",</span></span><br><span class="line"><span class="comment">%%max_connections = 10&#125;</span></span><br><span class="line"><span class="comment">%%</span></span><br><span class="line"><span class="comment">%%Opts#server_opts.port.</span></span><br></pre></td></tr></table></figure>
+<h6 id="映射组适合以下的情形："><a href="#映射组适合以下的情形：" class="headerlink" title="映射组适合以下的情形："></a>映射组适合以下的情形：</h6><ul>
+<li>当键不能预先知道时用来表示键值数据结构；</li>
+<li>当存在大量不同的键时用来表示数据；</li>
+<li>当方便使用很重要而效率无关紧要时作为万能的数据结构使用；</li>
+<li>用作“自解释型”的数据结构，也就是说，用户容易从键名猜出值的含义；</li>
+<li>用来表示键值解析树，例如XML或配置文件；</li>
+<li>用JSON来和其他编程语言通信。</li>
+<li>映射组在系统内部是作为有序集合存储的，打印时总是使用各键排序后的顺序，与映射组的创建方式无关。</li>
+<li>使用映射组的最佳方式是在首次定义某个键时总是使用Key =&gt; Val，而在修改具体某个键的值时都使用Key := Val</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Facts = <span class="comment">#&#123;a =&gt;1, b=&gt;2&#125;.</span></span><br></pre></td></tr></table></figure>
+<h5 id="json"><a href="#json" class="headerlink" title="json"></a>json</h5><pre><code>maps:to_json(Map) -&gt;Bin
+maps:from_json(Bin) -&gt;Map
+maps:safe_from_json(Bin) -&gt;Map
+</code></pre><blockquote>
+<p>这样吧</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Erlang程序设计的读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/读书笔记/" class="article-tag-list-link color5">读书笔记</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/21/2017-11-21-erlang-05/">展开全文 >></a>
         </p>
       
 
@@ -1191,11 +1191,15 @@ X = true    | 成功：X = true
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1203,7 +1207,7 @@ X = true    | 成功：X = true
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
+                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1219,7 +1223,7 @@ X = true    | 成功：X = true
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1227,11 +1231,11 @@ X = true    | 成功：X = true
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elk</a>
+                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1259,11 +1263,7 @@ X = true    | 成功：X = true
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
               </li>
             
             <div class="clearfix"></div>

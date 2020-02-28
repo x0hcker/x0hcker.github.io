@@ -290,85 +290,6 @@ CGroup: /system.slice/nexus.service
 
 
   
-    <article id="post-2019-03-04-centos7-mysql-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/04/2019-03-04-centos7-mysql-02/">Centos7通过yum安装MySQL5.7</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/04/2019-03-04-centos7-mysql-02/" class="archive-article-date">
-  	<time datetime="2019-03-04T02:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="使用MySQL源"><a href="#使用MySQL源" class="headerlink" title="使用MySQL源"></a>使用MySQL源</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http:<span class="comment">//dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm</span></span><br><span class="line"></span><br><span class="line">yum -y install mysql57-community-release-el7-<span class="number">11</span><span class="selector-class">.noarch</span><span class="selector-class">.rpm</span></span><br></pre></td></tr></table></figure>
-<h3 id="安装MySQL服务器"><a href="#安装MySQL服务器" class="headerlink" title="安装MySQL服务器"></a>安装MySQL服务器</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install</span> mysql-community-<span class="keyword">server</span>  -y</span><br></pre></td></tr></table></figure>
-<h3 id="启动MySQL服务"><a href="#启动MySQL服务" class="headerlink" title="启动MySQL服务"></a>启动MySQL服务</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">systemctl</span> <span class="selector-tag">start</span>  <span class="selector-tag">mysqld</span><span class="selector-class">.service</span></span><br><span class="line"></span><br><span class="line">查看一下运行状态 </span><br><span class="line"></span><br><span class="line"><span class="selector-tag">systemctl</span> <span class="selector-tag">status</span> <span class="selector-tag">mysqld</span><span class="selector-class">.service</span></span><br></pre></td></tr></table></figure>
-<h3 id="查看一下初始密码"><a href="#查看一下初始密码" class="headerlink" title="查看一下初始密码"></a>查看一下初始密码</h3><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">"password"</span> /<span class="built_in">var</span>/<span class="keyword">log</span>/mysqld.<span class="keyword">log</span></span><br></pre></td></tr></table></figure>
-<h3 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="string">'root'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'Ilovedb@163.com'</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="建立远程账号"><a href="#建立远程账号" class="headerlink" title="建立远程账号"></a>建立远程账号</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'remote'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'Ilovedb@163.com'</span> <span class="keyword">WITH</span> <span class="keyword">GRANT</span> <span class="keyword">OPTION</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="设置自动启动"><a href="#设置自动启动" class="headerlink" title="设置自动启动"></a>设置自动启动</h3><p>systemctl enable mysqld</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/centos7/" class="article-tag-list-link color3">centos7</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/04/2019-03-04-centos7-mysql-02/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2019-03-04-elk-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -507,84 +428,6 @@ CGroup: /system.slice/nexus.service
 
 
   
-    <article id="post-2019-03-04-centos7-ntpdate-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/04/2019-03-04-centos7-ntpdate-01/">centos 7 时间与网络同步</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/04/2019-03-04-centos7-ntpdate-01/" class="archive-article-date">
-  	<time datetime="2019-03-04T02:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="将系统时区改为上海时间-亦即CST时区"><a href="#将系统时区改为上海时间-亦即CST时区" class="headerlink" title="将系统时区改为上海时间 (亦即CST时区)"></a>将系统时区改为上海时间 (亦即CST时区)</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -sf <span class="regexp">/usr/</span>share<span class="regexp">/zoneinfo/</span>Asia<span class="regexp">/Shanghai /</span>etc<span class="regexp">/localtime</span></span><br></pre></td></tr></table></figure>
-<h3 id="安装ntpdate工具"><a href="#安装ntpdate工具" class="headerlink" title="安装ntpdate工具"></a>安装ntpdate工具</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install<span class="built_in"> ntp </span>ntpdate</span><br></pre></td></tr></table></figure>
-<h3 id="设置系统时间与网络时间同步"><a href="#设置系统时间与网络时间同步" class="headerlink" title="设置系统时间与网络时间同步"></a>设置系统时间与网络时间同步</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ntpdate cn<span class="selector-class">.pool</span><span class="selector-class">.ntp</span><span class="selector-class">.org</span></span><br></pre></td></tr></table></figure>
-<h3 id="将系统时间写入硬件时间"><a href="#将系统时间写入硬件时间" class="headerlink" title="将系统时间写入硬件时间"></a>将系统时间写入硬件时间</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hwclock <span class="comment">--systohc</span></span><br></pre></td></tr></table></figure>
-<h3 id="将ntp服务设置为缺省启动"><a href="#将ntp服务设置为缺省启动" class="headerlink" title="将ntp服务设置为缺省启动"></a>将ntp服务设置为缺省启动</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="builtin-name">enable</span> ntpd</span><br></pre></td></tr></table></figure>
-<h3 id="查看系统时间"><a href="#查看系统时间" class="headerlink" title="查看系统时间"></a>查看系统时间</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost log]# timedatectl          </span><br><span class="line">      Local time: Thu 2019-05-09 14:28:30 CST</span><br><span class="line">  Universal time: Thu 2019-05-09 06:28:30 UTC</span><br><span class="line">        RTC time: Thu 2019-05-09 06:28:29</span><br><span class="line">       Time zone: Asia/Shanghai (CST, +0800)</span><br><span class="line">    <span class="built_in"> NTP </span>enabled: <span class="literal">no</span></span><br><span class="line">NTP synchronized: <span class="literal">no</span></span><br><span class="line"> RTC <span class="keyword">in</span> local TZ: <span class="literal">no</span></span><br><span class="line">      DST active: n/a</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/centos7/" class="article-tag-list-link color3">centos7</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/04/2019-03-04-centos7-ntpdate-01/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2019-03-04-centos7-python-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -647,6 +490,163 @@ yum install python36-devel -y
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/03/04/2019-03-04-centos7-python-03/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2019-03-04-centos7-mysql-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/04/2019-03-04-centos7-mysql-02/">Centos7通过yum安装MySQL5.7</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/04/2019-03-04-centos7-mysql-02/" class="archive-article-date">
+  	<time datetime="2019-03-04T02:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="使用MySQL源"><a href="#使用MySQL源" class="headerlink" title="使用MySQL源"></a>使用MySQL源</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http:<span class="comment">//dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm</span></span><br><span class="line"></span><br><span class="line">yum -y install mysql57-community-release-el7-<span class="number">11</span><span class="selector-class">.noarch</span><span class="selector-class">.rpm</span></span><br></pre></td></tr></table></figure>
+<h3 id="安装MySQL服务器"><a href="#安装MySQL服务器" class="headerlink" title="安装MySQL服务器"></a>安装MySQL服务器</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install</span> mysql-community-<span class="keyword">server</span>  -y</span><br></pre></td></tr></table></figure>
+<h3 id="启动MySQL服务"><a href="#启动MySQL服务" class="headerlink" title="启动MySQL服务"></a>启动MySQL服务</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">systemctl</span> <span class="selector-tag">start</span>  <span class="selector-tag">mysqld</span><span class="selector-class">.service</span></span><br><span class="line"></span><br><span class="line">查看一下运行状态 </span><br><span class="line"></span><br><span class="line"><span class="selector-tag">systemctl</span> <span class="selector-tag">status</span> <span class="selector-tag">mysqld</span><span class="selector-class">.service</span></span><br></pre></td></tr></table></figure>
+<h3 id="查看一下初始密码"><a href="#查看一下初始密码" class="headerlink" title="查看一下初始密码"></a>查看一下初始密码</h3><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">"password"</span> /<span class="built_in">var</span>/<span class="keyword">log</span>/mysqld.<span class="keyword">log</span></span><br></pre></td></tr></table></figure>
+<h3 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="string">'root'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'Ilovedb@163.com'</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="建立远程账号"><a href="#建立远程账号" class="headerlink" title="建立远程账号"></a>建立远程账号</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'remote'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'Ilovedb@163.com'</span> <span class="keyword">WITH</span> <span class="keyword">GRANT</span> <span class="keyword">OPTION</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="设置自动启动"><a href="#设置自动启动" class="headerlink" title="设置自动启动"></a>设置自动启动</h3><p>systemctl enable mysqld</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/centos7/" class="article-tag-list-link color3">centos7</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/04/2019-03-04-centos7-mysql-02/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2019-03-04-centos7-ntpdate-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/04/2019-03-04-centos7-ntpdate-01/">centos 7 时间与网络同步</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/04/2019-03-04-centos7-ntpdate-01/" class="archive-article-date">
+  	<time datetime="2019-03-04T02:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="将系统时区改为上海时间-亦即CST时区"><a href="#将系统时区改为上海时间-亦即CST时区" class="headerlink" title="将系统时区改为上海时间 (亦即CST时区)"></a>将系统时区改为上海时间 (亦即CST时区)</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -sf <span class="regexp">/usr/</span>share<span class="regexp">/zoneinfo/</span>Asia<span class="regexp">/Shanghai /</span>etc<span class="regexp">/localtime</span></span><br></pre></td></tr></table></figure>
+<h3 id="安装ntpdate工具"><a href="#安装ntpdate工具" class="headerlink" title="安装ntpdate工具"></a>安装ntpdate工具</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install<span class="built_in"> ntp </span>ntpdate</span><br></pre></td></tr></table></figure>
+<h3 id="设置系统时间与网络时间同步"><a href="#设置系统时间与网络时间同步" class="headerlink" title="设置系统时间与网络时间同步"></a>设置系统时间与网络时间同步</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ntpdate cn<span class="selector-class">.pool</span><span class="selector-class">.ntp</span><span class="selector-class">.org</span></span><br></pre></td></tr></table></figure>
+<h3 id="将系统时间写入硬件时间"><a href="#将系统时间写入硬件时间" class="headerlink" title="将系统时间写入硬件时间"></a>将系统时间写入硬件时间</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hwclock <span class="comment">--systohc</span></span><br></pre></td></tr></table></figure>
+<h3 id="将ntp服务设置为缺省启动"><a href="#将ntp服务设置为缺省启动" class="headerlink" title="将ntp服务设置为缺省启动"></a>将ntp服务设置为缺省启动</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="builtin-name">enable</span> ntpd</span><br></pre></td></tr></table></figure>
+<h3 id="查看系统时间"><a href="#查看系统时间" class="headerlink" title="查看系统时间"></a>查看系统时间</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost log]# timedatectl          </span><br><span class="line">      Local time: Thu 2019-05-09 14:28:30 CST</span><br><span class="line">  Universal time: Thu 2019-05-09 06:28:30 UTC</span><br><span class="line">        RTC time: Thu 2019-05-09 06:28:29</span><br><span class="line">       Time zone: Asia/Shanghai (CST, +0800)</span><br><span class="line">    <span class="built_in"> NTP </span>enabled: <span class="literal">no</span></span><br><span class="line">NTP synchronized: <span class="literal">no</span></span><br><span class="line"> RTC <span class="keyword">in</span> local TZ: <span class="literal">no</span></span><br><span class="line">      DST active: n/a</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/centos7/" class="article-tag-list-link color3">centos7</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/04/2019-03-04-centos7-ntpdate-01/">展开全文 >></a>
         </p>
       
 
@@ -1025,11 +1025,15 @@ yum install python36-devel -y
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ansible</a>
+                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1037,7 +1041,7 @@ yum install python36-devel -y
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gitlab</a>
+                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1053,7 +1057,7 @@ yum install python36-devel -y
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1061,11 +1065,11 @@ yum install python36-devel -y
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elk</a>
+                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1093,11 +1097,7 @@ yum install python36-devel -y
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">新人入职</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">培训管理</a>
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
               </li>
             
             <div class="clearfix"></div>
