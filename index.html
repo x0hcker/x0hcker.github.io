@@ -290,6 +290,242 @@ CGroup: /system.slice/nexus.service
 
 
   
+    <article id="post-2019-03-04-centos7-mysql-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/04/2019-03-04-centos7-mysql-02/">Centos7通过yum安装MySQL5.7</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/04/2019-03-04-centos7-mysql-02/" class="archive-article-date">
+  	<time datetime="2019-03-04T02:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="使用MySQL源"><a href="#使用MySQL源" class="headerlink" title="使用MySQL源"></a>使用MySQL源</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http:<span class="comment">//dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm</span></span><br><span class="line"></span><br><span class="line">yum -y install mysql57-community-release-el7-<span class="number">11</span><span class="selector-class">.noarch</span><span class="selector-class">.rpm</span></span><br></pre></td></tr></table></figure>
+<h3 id="安装MySQL服务器"><a href="#安装MySQL服务器" class="headerlink" title="安装MySQL服务器"></a>安装MySQL服务器</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install</span> mysql-community-<span class="keyword">server</span>  -y</span><br></pre></td></tr></table></figure>
+<h3 id="启动MySQL服务"><a href="#启动MySQL服务" class="headerlink" title="启动MySQL服务"></a>启动MySQL服务</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">systemctl</span> <span class="selector-tag">start</span>  <span class="selector-tag">mysqld</span><span class="selector-class">.service</span></span><br><span class="line"></span><br><span class="line">查看一下运行状态 </span><br><span class="line"></span><br><span class="line"><span class="selector-tag">systemctl</span> <span class="selector-tag">status</span> <span class="selector-tag">mysqld</span><span class="selector-class">.service</span></span><br></pre></td></tr></table></figure>
+<h3 id="查看一下初始密码"><a href="#查看一下初始密码" class="headerlink" title="查看一下初始密码"></a>查看一下初始密码</h3><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">"password"</span> /<span class="built_in">var</span>/<span class="keyword">log</span>/mysqld.<span class="keyword">log</span></span><br></pre></td></tr></table></figure>
+<h3 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="string">'root'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'Ilovedb@163.com'</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="建立远程账号"><a href="#建立远程账号" class="headerlink" title="建立远程账号"></a>建立远程账号</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'remote'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'Ilovedb@163.com'</span> <span class="keyword">WITH</span> <span class="keyword">GRANT</span> <span class="keyword">OPTION</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="设置自动启动"><a href="#设置自动启动" class="headerlink" title="设置自动启动"></a>设置自动启动</h3><p>systemctl enable mysqld</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/centos7/" class="article-tag-list-link color3">centos7</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/04/2019-03-04-centos7-mysql-02/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2019-03-04-centos7-python-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/04/2019-03-04-centos7-python-03/">Centos7通过yum安装MySQL5.7</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/04/2019-03-04-centos7-python-03/" class="archive-article-date">
+  	<time datetime="2019-03-04T02:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="安装EPEL和IUS软件源"><a href="#安装EPEL和IUS软件源" class="headerlink" title="安装EPEL和IUS软件源"></a>安装EPEL和IUS软件源</h3><pre><code>yum install epel-release -y
+yum install https://centos7.iuscommunity.org/ius-release.rpm -y
+</code></pre><h3 id="安装Python3-6"><a href="#安装Python3-6" class="headerlink" title="安装Python3.6"></a>安装Python3.6</h3><pre><code>yum install python36 -y
+yum install python36-devel -y
+</code></pre><h3 id="创建python3连接符"><a href="#创建python3连接符" class="headerlink" title="创建python3连接符"></a>创建python3连接符</h3><pre><code>ln -s /bin/python3.6 /bin/python3
+</code></pre><h3 id="安装pip3"><a href="#安装pip3" class="headerlink" title="安装pip3"></a>安装pip3</h3><pre><code>yum install python36-pip -y
+</code></pre><h3 id="创建pip3链接符"><a href="#创建pip3链接符" class="headerlink" title="创建pip3链接符"></a>创建pip3链接符</h3><pre><code>ln -s /bin/pip3.6 /bin/pip3
+</code></pre>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/centos7/" class="article-tag-list-link color3">centos7</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/04/2019-03-04-centos7-python-03/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2019-03-04-centos7-ntpdate-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/04/2019-03-04-centos7-ntpdate-01/">centos 7 时间与网络同步</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/04/2019-03-04-centos7-ntpdate-01/" class="archive-article-date">
+  	<time datetime="2019-03-04T02:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="将系统时区改为上海时间-亦即CST时区"><a href="#将系统时区改为上海时间-亦即CST时区" class="headerlink" title="将系统时区改为上海时间 (亦即CST时区)"></a>将系统时区改为上海时间 (亦即CST时区)</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -sf <span class="regexp">/usr/</span>share<span class="regexp">/zoneinfo/</span>Asia<span class="regexp">/Shanghai /</span>etc<span class="regexp">/localtime</span></span><br></pre></td></tr></table></figure>
+<h3 id="安装ntpdate工具"><a href="#安装ntpdate工具" class="headerlink" title="安装ntpdate工具"></a>安装ntpdate工具</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install<span class="built_in"> ntp </span>ntpdate</span><br></pre></td></tr></table></figure>
+<h3 id="设置系统时间与网络时间同步"><a href="#设置系统时间与网络时间同步" class="headerlink" title="设置系统时间与网络时间同步"></a>设置系统时间与网络时间同步</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ntpdate cn<span class="selector-class">.pool</span><span class="selector-class">.ntp</span><span class="selector-class">.org</span></span><br></pre></td></tr></table></figure>
+<h3 id="将系统时间写入硬件时间"><a href="#将系统时间写入硬件时间" class="headerlink" title="将系统时间写入硬件时间"></a>将系统时间写入硬件时间</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hwclock <span class="comment">--systohc</span></span><br></pre></td></tr></table></figure>
+<h3 id="将ntp服务设置为缺省启动"><a href="#将ntp服务设置为缺省启动" class="headerlink" title="将ntp服务设置为缺省启动"></a>将ntp服务设置为缺省启动</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="builtin-name">enable</span> ntpd</span><br></pre></td></tr></table></figure>
+<h3 id="查看系统时间"><a href="#查看系统时间" class="headerlink" title="查看系统时间"></a>查看系统时间</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost log]# timedatectl          </span><br><span class="line">      Local time: Thu 2019-05-09 14:28:30 CST</span><br><span class="line">  Universal time: Thu 2019-05-09 06:28:30 UTC</span><br><span class="line">        RTC time: Thu 2019-05-09 06:28:29</span><br><span class="line">       Time zone: Asia/Shanghai (CST, +0800)</span><br><span class="line">    <span class="built_in"> NTP </span>enabled: <span class="literal">no</span></span><br><span class="line">NTP synchronized: <span class="literal">no</span></span><br><span class="line"> RTC <span class="keyword">in</span> local TZ: <span class="literal">no</span></span><br><span class="line">      DST active: n/a</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/centos7/" class="article-tag-list-link color3">centos7</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/04/2019-03-04-centos7-ntpdate-01/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-2019-03-04-elk-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -428,242 +664,6 @@ CGroup: /system.slice/nexus.service
 
 
   
-    <article id="post-2019-03-04-centos7-python-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/04/2019-03-04-centos7-python-03/">Centos7通过yum安装MySQL5.7</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/04/2019-03-04-centos7-python-03/" class="archive-article-date">
-  	<time datetime="2019-03-04T02:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="安装EPEL和IUS软件源"><a href="#安装EPEL和IUS软件源" class="headerlink" title="安装EPEL和IUS软件源"></a>安装EPEL和IUS软件源</h3><pre><code>yum install epel-release -y
-yum install https://centos7.iuscommunity.org/ius-release.rpm -y
-</code></pre><h3 id="安装Python3-6"><a href="#安装Python3-6" class="headerlink" title="安装Python3.6"></a>安装Python3.6</h3><pre><code>yum install python36 -y
-yum install python36-devel -y
-</code></pre><h3 id="创建python3连接符"><a href="#创建python3连接符" class="headerlink" title="创建python3连接符"></a>创建python3连接符</h3><pre><code>ln -s /bin/python3.6 /bin/python3
-</code></pre><h3 id="安装pip3"><a href="#安装pip3" class="headerlink" title="安装pip3"></a>安装pip3</h3><pre><code>yum install python36-pip -y
-</code></pre><h3 id="创建pip3链接符"><a href="#创建pip3链接符" class="headerlink" title="创建pip3链接符"></a>创建pip3链接符</h3><pre><code>ln -s /bin/pip3.6 /bin/pip3
-</code></pre>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/centos7/" class="article-tag-list-link color3">centos7</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/04/2019-03-04-centos7-python-03/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2019-03-04-centos7-mysql-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/04/2019-03-04-centos7-mysql-02/">Centos7通过yum安装MySQL5.7</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/04/2019-03-04-centos7-mysql-02/" class="archive-article-date">
-  	<time datetime="2019-03-04T02:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="使用MySQL源"><a href="#使用MySQL源" class="headerlink" title="使用MySQL源"></a>使用MySQL源</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http:<span class="comment">//dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm</span></span><br><span class="line"></span><br><span class="line">yum -y install mysql57-community-release-el7-<span class="number">11</span><span class="selector-class">.noarch</span><span class="selector-class">.rpm</span></span><br></pre></td></tr></table></figure>
-<h3 id="安装MySQL服务器"><a href="#安装MySQL服务器" class="headerlink" title="安装MySQL服务器"></a>安装MySQL服务器</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install</span> mysql-community-<span class="keyword">server</span>  -y</span><br></pre></td></tr></table></figure>
-<h3 id="启动MySQL服务"><a href="#启动MySQL服务" class="headerlink" title="启动MySQL服务"></a>启动MySQL服务</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">systemctl</span> <span class="selector-tag">start</span>  <span class="selector-tag">mysqld</span><span class="selector-class">.service</span></span><br><span class="line"></span><br><span class="line">查看一下运行状态 </span><br><span class="line"></span><br><span class="line"><span class="selector-tag">systemctl</span> <span class="selector-tag">status</span> <span class="selector-tag">mysqld</span><span class="selector-class">.service</span></span><br></pre></td></tr></table></figure>
-<h3 id="查看一下初始密码"><a href="#查看一下初始密码" class="headerlink" title="查看一下初始密码"></a>查看一下初始密码</h3><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">"password"</span> /<span class="built_in">var</span>/<span class="keyword">log</span>/mysqld.<span class="keyword">log</span></span><br></pre></td></tr></table></figure>
-<h3 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="string">'root'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'Ilovedb@163.com'</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="建立远程账号"><a href="#建立远程账号" class="headerlink" title="建立远程账号"></a>建立远程账号</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'remote'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'Ilovedb@163.com'</span> <span class="keyword">WITH</span> <span class="keyword">GRANT</span> <span class="keyword">OPTION</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="设置自动启动"><a href="#设置自动启动" class="headerlink" title="设置自动启动"></a>设置自动启动</h3><p>systemctl enable mysqld</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/centos7/" class="article-tag-list-link color3">centos7</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/04/2019-03-04-centos7-mysql-02/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-2019-03-04-centos7-ntpdate-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/04/2019-03-04-centos7-ntpdate-01/">centos 7 时间与网络同步</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/04/2019-03-04-centos7-ntpdate-01/" class="archive-article-date">
-  	<time datetime="2019-03-04T02:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="将系统时区改为上海时间-亦即CST时区"><a href="#将系统时区改为上海时间-亦即CST时区" class="headerlink" title="将系统时区改为上海时间 (亦即CST时区)"></a>将系统时区改为上海时间 (亦即CST时区)</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -sf <span class="regexp">/usr/</span>share<span class="regexp">/zoneinfo/</span>Asia<span class="regexp">/Shanghai /</span>etc<span class="regexp">/localtime</span></span><br></pre></td></tr></table></figure>
-<h3 id="安装ntpdate工具"><a href="#安装ntpdate工具" class="headerlink" title="安装ntpdate工具"></a>安装ntpdate工具</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install<span class="built_in"> ntp </span>ntpdate</span><br></pre></td></tr></table></figure>
-<h3 id="设置系统时间与网络时间同步"><a href="#设置系统时间与网络时间同步" class="headerlink" title="设置系统时间与网络时间同步"></a>设置系统时间与网络时间同步</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ntpdate cn<span class="selector-class">.pool</span><span class="selector-class">.ntp</span><span class="selector-class">.org</span></span><br></pre></td></tr></table></figure>
-<h3 id="将系统时间写入硬件时间"><a href="#将系统时间写入硬件时间" class="headerlink" title="将系统时间写入硬件时间"></a>将系统时间写入硬件时间</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hwclock <span class="comment">--systohc</span></span><br></pre></td></tr></table></figure>
-<h3 id="将ntp服务设置为缺省启动"><a href="#将ntp服务设置为缺省启动" class="headerlink" title="将ntp服务设置为缺省启动"></a>将ntp服务设置为缺省启动</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="builtin-name">enable</span> ntpd</span><br></pre></td></tr></table></figure>
-<h3 id="查看系统时间"><a href="#查看系统时间" class="headerlink" title="查看系统时间"></a>查看系统时间</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost log]# timedatectl          </span><br><span class="line">      Local time: Thu 2019-05-09 14:28:30 CST</span><br><span class="line">  Universal time: Thu 2019-05-09 06:28:30 UTC</span><br><span class="line">        RTC time: Thu 2019-05-09 06:28:29</span><br><span class="line">       Time zone: Asia/Shanghai (CST, +0800)</span><br><span class="line">    <span class="built_in"> NTP </span>enabled: <span class="literal">no</span></span><br><span class="line">NTP synchronized: <span class="literal">no</span></span><br><span class="line"> RTC <span class="keyword">in</span> local TZ: <span class="literal">no</span></span><br><span class="line">      DST active: n/a</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/centos7/" class="article-tag-list-link color3">centos7</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/04/2019-03-04-centos7-ntpdate-01/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2018-12-04-k8s-01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -762,78 +762,6 @@ yum install python36-devel -y
 
 
   
-    <article id="post-2018-10-30-k8s-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/30/2018-10-30-k8s-02/">脚本安装harbor1.6.0</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/30/2018-10-30-k8s-02/" class="archive-article-date">
-  	<time datetime="2018-10-30T06:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># This script will pre-install everything needed to install Harbor on CentOS 7</span></span><br><span class="line"><span class="comment"># It will install Harbor using the Online Version which pulls images from DockerHub</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Python &amp; Docker Pre-reqs</span></span><br><span class="line">yum install gcc openssl-devel bzip2-devel wget yum-utils device-mapper-persistent-data lvm2 -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># Install Python 2.7.15</span></span><br><span class="line"><span class="built_in">cd</span> /usr/src</span><br><span class="line">wget https://www.python.org/ftp/python/2.7.15/Python-2.7.15.tgz</span><br><span class="line">tar xzf Python-2.7.15.tgz</span><br><span class="line"><span class="built_in">cd</span> Python-2.7.15</span><br><span class="line">./configure --<span class="built_in">enable</span>-optimizations</span><br><span class="line">make altinstall</span><br><span class="line">curl <span class="string">"https://bootstrap.pypa.io/get-pip.py"</span> -o <span class="string">"get-pip.py"</span></span><br><span class="line">python2.7 get-pip.py</span><br><span class="line"></span><br><span class="line"><span class="comment"># Install Docker</span></span><br><span class="line">yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line">yum install docker-ce -y</span><br><span class="line">systemctl <span class="built_in">enable</span> docker</span><br><span class="line">groupadd docker</span><br><span class="line">MAINUSER=$(logname)</span><br><span class="line">usermod -aG docker <span class="variable">$MAINUSER</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Create Self-Signed OpenSSL Certs</span></span><br><span class="line">mkdir -p /home/<span class="variable">$MAINUSER</span>/harbor_install</span><br><span class="line">mkdir -p /home/<span class="variable">$MAINUSER</span>/harbor_install/openssl</span><br><span class="line"><span class="built_in">cd</span> /home/<span class="variable">$MAINUSER</span>/harbor_install/openssl</span><br><span class="line">FQDN=<span class="string">"<span class="variable">$(hostname -f)</span>"</span></span><br><span class="line"><span class="built_in">echo</span> subjectAltName = IP:<span class="string">"<span class="variable">$(hostname --ip-address)</span>"</span> &gt; extfile.cnf</span><br><span class="line">openssl req -newkey rsa:4096 -nodes -sha256 -keyout ca.key -x509 -days 3650 -out ca.crt -subj <span class="string">"/C=US/ST=CA/L=San Francisco/O=VMware/OU=IT Department/CN=<span class="variable">$&#123;FQDN&#125;</span>"</span></span><br><span class="line">openssl req -newkey rsa:4096 -nodes -sha256 -keyout <span class="variable">$&#123;FQDN&#125;</span>.key -out <span class="variable">$&#123;FQDN&#125;</span>.csr -subj <span class="string">"/C=US/ST=CA/L=San Francisco/O=VMware/OU=IT Department/CN=<span class="variable">$&#123;FQDN&#125;</span>"</span></span><br><span class="line">openssl x509 -req -days 3650 -<span class="keyword">in</span> <span class="variable">$&#123;FQDN&#125;</span>.csr -CA ca.crt -CAkey ca.key -CAcreateserial -extfile extfile.cnf -out <span class="variable">$&#123;FQDN&#125;</span>.crt</span><br><span class="line"></span><br><span class="line"><span class="comment"># Copy certs to root for Harbor Inatallation</span></span><br><span class="line">mkdir -p /root/cert/</span><br><span class="line">cp <span class="variable">$&#123;FQDN&#125;</span>.crt /root/cert/</span><br><span class="line">cp <span class="variable">$&#123;FQDN&#125;</span>.key /root/cert/</span><br><span class="line"></span><br><span class="line"><span class="comment"># Copy certs to Docker to get around X509 unauthorized cert error</span></span><br><span class="line">mkdir -p /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/</span><br><span class="line">cp <span class="variable">$&#123;FQDN&#125;</span>.crt /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/</span><br><span class="line">cp <span class="variable">$&#123;FQDN&#125;</span>.key /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/</span><br><span class="line">cp ca.crt /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/</span><br><span class="line">cp ca.key /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/</span><br><span class="line">cp /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/<span class="variable">$&#123;FQDN&#125;</span>.crt /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/<span class="variable">$&#123;FQDN&#125;</span>.cert</span><br><span class="line">cp /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/ca.crt /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/ca.cert</span><br><span class="line"></span><br><span class="line"><span class="comment"># Copy certs to TLS for Notary usage</span></span><br><span class="line">mkdir -p /home/<span class="variable">$&#123;MAINUSER&#125;</span>/.docker/tls/<span class="variable">$&#123;FQDN&#125;</span>:4443/</span><br><span class="line">cp ca.crt /home/<span class="variable">$&#123;MAINUSER&#125;</span>/.docker/tls/<span class="variable">$&#123;FQDN&#125;</span>:4443/</span><br><span class="line">cp ca.key /home/<span class="variable">$&#123;MAINUSER&#125;</span>/.docker/tls/<span class="variable">$&#123;FQDN&#125;</span>:4443/</span><br><span class="line">cp /home/<span class="variable">$&#123;MAINUSER&#125;</span>/.docker/tls/<span class="variable">$&#123;FQDN&#125;</span>:4443/ca.crt /home/<span class="variable">$&#123;MAINUSER&#125;</span>/.docker/tls/<span class="variable">$&#123;FQDN&#125;</span>:4443/ca.cert</span><br><span class="line">chown <span class="variable">$&#123;MAINUSER&#125;</span>:<span class="variable">$&#123;MAINUSER&#125;</span> /home/<span class="variable">$&#123;MAINUSER&#125;</span>/.docker</span><br><span class="line"></span><br><span class="line"><span class="comment"># Start the Docker Service</span></span><br><span class="line">systemctl start docker</span><br><span class="line"></span><br><span class="line"><span class="comment"># Install Docker Compose</span></span><br><span class="line"><span class="comment">#  Can't use the standard docker method because the Harbor installation script is looking in the incorrect $PATH</span></span><br><span class="line"><span class="comment">#curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose</span></span><br><span class="line"><span class="comment">#chmod +x /usr/local/bin/docker-compose</span></span><br><span class="line"><span class="comment">#  Install Docker Compose using PIP</span></span><br><span class="line">yum install epel-release -y</span><br><span class="line">pip install docker-compose</span><br><span class="line"></span><br><span class="line"><span class="comment"># Install Docker Notary</span></span><br><span class="line">curl -L https://github.com/theupdateframework/notary/releases/download/v0.6.1/notary-$(uname -s)-amd64 -o /usr/<span class="built_in">local</span>/bin/notary</span><br><span class="line">chmod +x /usr/<span class="built_in">local</span>/bin/notary</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /home/<span class="variable">$MAINUSER</span>/harbor_install</span><br><span class="line">wget https://storage.googleapis.com/harbor-releases/release-1.6.0/harbor-online-installer-v1.6.0.tgz</span><br><span class="line">tar xvf harbor-online-installer-v1.6.0.tgz</span><br><span class="line"><span class="built_in">cd</span> harbor</span><br><span class="line">sed -i <span class="string">"s|hostname = reg.mydomain.com|hostname = <span class="variable">$FQDN</span>|g"</span> harbor.cfg</span><br><span class="line">sed -i <span class="string">"s|ui_url_protocol = http|ui_url_protocol = https|g"</span> harbor.cfg</span><br><span class="line">sed -i <span class="string">"s|ssl_cert = /data/cert/server.crt|ssl_cert = /root/cert/<span class="variable">$FQDN</span>.crt|g"</span> harbor.cfg</span><br><span class="line">sed -i <span class="string">"s|ssl_cert_key = /data/cert/server.key|ssl_cert_key = /root/cert/<span class="variable">$FQDN</span>.key|g"</span> harbor.cfg</span><br><span class="line"></span><br><span class="line"><span class="comment"># Prepare Harbor</span></span><br><span class="line">./prepare</span><br><span class="line"><span class="comment"># Install Harbor</span></span><br><span class="line">./install.sh --with-notary --with-clair</span><br></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">k8s容器化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/30/2018-10-30-k8s-02/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-2018-10-30-k8s-03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -889,6 +817,78 @@ yum install python36-devel -y
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/10/30/2018-10-30-k8s-03/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-2018-10-30-k8s-02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/30/2018-10-30-k8s-02/">脚本安装harbor1.6.0</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/30/2018-10-30-k8s-02/" class="archive-article-date">
+  	<time datetime="2018-10-30T06:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># This script will pre-install everything needed to install Harbor on CentOS 7</span></span><br><span class="line"><span class="comment"># It will install Harbor using the Online Version which pulls images from DockerHub</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Python &amp; Docker Pre-reqs</span></span><br><span class="line">yum install gcc openssl-devel bzip2-devel wget yum-utils device-mapper-persistent-data lvm2 -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># Install Python 2.7.15</span></span><br><span class="line"><span class="built_in">cd</span> /usr/src</span><br><span class="line">wget https://www.python.org/ftp/python/2.7.15/Python-2.7.15.tgz</span><br><span class="line">tar xzf Python-2.7.15.tgz</span><br><span class="line"><span class="built_in">cd</span> Python-2.7.15</span><br><span class="line">./configure --<span class="built_in">enable</span>-optimizations</span><br><span class="line">make altinstall</span><br><span class="line">curl <span class="string">"https://bootstrap.pypa.io/get-pip.py"</span> -o <span class="string">"get-pip.py"</span></span><br><span class="line">python2.7 get-pip.py</span><br><span class="line"></span><br><span class="line"><span class="comment"># Install Docker</span></span><br><span class="line">yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line">yum install docker-ce -y</span><br><span class="line">systemctl <span class="built_in">enable</span> docker</span><br><span class="line">groupadd docker</span><br><span class="line">MAINUSER=$(logname)</span><br><span class="line">usermod -aG docker <span class="variable">$MAINUSER</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Create Self-Signed OpenSSL Certs</span></span><br><span class="line">mkdir -p /home/<span class="variable">$MAINUSER</span>/harbor_install</span><br><span class="line">mkdir -p /home/<span class="variable">$MAINUSER</span>/harbor_install/openssl</span><br><span class="line"><span class="built_in">cd</span> /home/<span class="variable">$MAINUSER</span>/harbor_install/openssl</span><br><span class="line">FQDN=<span class="string">"<span class="variable">$(hostname -f)</span>"</span></span><br><span class="line"><span class="built_in">echo</span> subjectAltName = IP:<span class="string">"<span class="variable">$(hostname --ip-address)</span>"</span> &gt; extfile.cnf</span><br><span class="line">openssl req -newkey rsa:4096 -nodes -sha256 -keyout ca.key -x509 -days 3650 -out ca.crt -subj <span class="string">"/C=US/ST=CA/L=San Francisco/O=VMware/OU=IT Department/CN=<span class="variable">$&#123;FQDN&#125;</span>"</span></span><br><span class="line">openssl req -newkey rsa:4096 -nodes -sha256 -keyout <span class="variable">$&#123;FQDN&#125;</span>.key -out <span class="variable">$&#123;FQDN&#125;</span>.csr -subj <span class="string">"/C=US/ST=CA/L=San Francisco/O=VMware/OU=IT Department/CN=<span class="variable">$&#123;FQDN&#125;</span>"</span></span><br><span class="line">openssl x509 -req -days 3650 -<span class="keyword">in</span> <span class="variable">$&#123;FQDN&#125;</span>.csr -CA ca.crt -CAkey ca.key -CAcreateserial -extfile extfile.cnf -out <span class="variable">$&#123;FQDN&#125;</span>.crt</span><br><span class="line"></span><br><span class="line"><span class="comment"># Copy certs to root for Harbor Inatallation</span></span><br><span class="line">mkdir -p /root/cert/</span><br><span class="line">cp <span class="variable">$&#123;FQDN&#125;</span>.crt /root/cert/</span><br><span class="line">cp <span class="variable">$&#123;FQDN&#125;</span>.key /root/cert/</span><br><span class="line"></span><br><span class="line"><span class="comment"># Copy certs to Docker to get around X509 unauthorized cert error</span></span><br><span class="line">mkdir -p /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/</span><br><span class="line">cp <span class="variable">$&#123;FQDN&#125;</span>.crt /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/</span><br><span class="line">cp <span class="variable">$&#123;FQDN&#125;</span>.key /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/</span><br><span class="line">cp ca.crt /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/</span><br><span class="line">cp ca.key /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/</span><br><span class="line">cp /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/<span class="variable">$&#123;FQDN&#125;</span>.crt /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/<span class="variable">$&#123;FQDN&#125;</span>.cert</span><br><span class="line">cp /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/ca.crt /etc/docker/certs.d/<span class="variable">$&#123;FQDN&#125;</span>/ca.cert</span><br><span class="line"></span><br><span class="line"><span class="comment"># Copy certs to TLS for Notary usage</span></span><br><span class="line">mkdir -p /home/<span class="variable">$&#123;MAINUSER&#125;</span>/.docker/tls/<span class="variable">$&#123;FQDN&#125;</span>:4443/</span><br><span class="line">cp ca.crt /home/<span class="variable">$&#123;MAINUSER&#125;</span>/.docker/tls/<span class="variable">$&#123;FQDN&#125;</span>:4443/</span><br><span class="line">cp ca.key /home/<span class="variable">$&#123;MAINUSER&#125;</span>/.docker/tls/<span class="variable">$&#123;FQDN&#125;</span>:4443/</span><br><span class="line">cp /home/<span class="variable">$&#123;MAINUSER&#125;</span>/.docker/tls/<span class="variable">$&#123;FQDN&#125;</span>:4443/ca.crt /home/<span class="variable">$&#123;MAINUSER&#125;</span>/.docker/tls/<span class="variable">$&#123;FQDN&#125;</span>:4443/ca.cert</span><br><span class="line">chown <span class="variable">$&#123;MAINUSER&#125;</span>:<span class="variable">$&#123;MAINUSER&#125;</span> /home/<span class="variable">$&#123;MAINUSER&#125;</span>/.docker</span><br><span class="line"></span><br><span class="line"><span class="comment"># Start the Docker Service</span></span><br><span class="line">systemctl start docker</span><br><span class="line"></span><br><span class="line"><span class="comment"># Install Docker Compose</span></span><br><span class="line"><span class="comment">#  Can't use the standard docker method because the Harbor installation script is looking in the incorrect $PATH</span></span><br><span class="line"><span class="comment">#curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose</span></span><br><span class="line"><span class="comment">#chmod +x /usr/local/bin/docker-compose</span></span><br><span class="line"><span class="comment">#  Install Docker Compose using PIP</span></span><br><span class="line">yum install epel-release -y</span><br><span class="line">pip install docker-compose</span><br><span class="line"></span><br><span class="line"><span class="comment"># Install Docker Notary</span></span><br><span class="line">curl -L https://github.com/theupdateframework/notary/releases/download/v0.6.1/notary-$(uname -s)-amd64 -o /usr/<span class="built_in">local</span>/bin/notary</span><br><span class="line">chmod +x /usr/<span class="built_in">local</span>/bin/notary</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /home/<span class="variable">$MAINUSER</span>/harbor_install</span><br><span class="line">wget https://storage.googleapis.com/harbor-releases/release-1.6.0/harbor-online-installer-v1.6.0.tgz</span><br><span class="line">tar xvf harbor-online-installer-v1.6.0.tgz</span><br><span class="line"><span class="built_in">cd</span> harbor</span><br><span class="line">sed -i <span class="string">"s|hostname = reg.mydomain.com|hostname = <span class="variable">$FQDN</span>|g"</span> harbor.cfg</span><br><span class="line">sed -i <span class="string">"s|ui_url_protocol = http|ui_url_protocol = https|g"</span> harbor.cfg</span><br><span class="line">sed -i <span class="string">"s|ssl_cert = /data/cert/server.crt|ssl_cert = /root/cert/<span class="variable">$FQDN</span>.crt|g"</span> harbor.cfg</span><br><span class="line">sed -i <span class="string">"s|ssl_cert_key = /data/cert/server.key|ssl_cert_key = /root/cert/<span class="variable">$FQDN</span>.key|g"</span> harbor.cfg</span><br><span class="line"></span><br><span class="line"><span class="comment"># Prepare Harbor</span></span><br><span class="line">./prepare</span><br><span class="line"><span class="comment"># Install Harbor</span></span><br><span class="line">./install.sh --with-notary --with-clair</span><br></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/k8s容器化/" class="article-tag-list-link color2">k8s容器化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/30/2018-10-30-k8s-02/">展开全文 >></a>
         </p>
       
 
@@ -1021,15 +1021,15 @@ yum install python36-devel -y
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">devops</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Appium测试</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">ansible</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">devops</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1041,11 +1041,11 @@ yum install python36-devel -y
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+                <a href="javascript:void(0)" class="js-tag color5">ceph</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1053,7 +1053,11 @@ yum install python36-devel -y
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ceph</a>
+                <a href="javascript:void(0)" class="js-tag color2">k8s容器化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1094,10 +1098,6 @@ yum install python36-devel -y
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">技术管理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
               </li>
             
             <div class="clearfix"></div>
